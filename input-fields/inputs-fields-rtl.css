@@ -33,3 +33,7 @@
 	flex-direction: row;
 	justify-content: space-around;
 }
+
+.anony-tab-item{
+    float: right;
+}

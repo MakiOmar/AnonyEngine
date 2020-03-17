@@ -102,10 +102,10 @@ url('../../functions/options/fonts/raleway-thin-webfont.svg#ralewaythin') format
     font-size: 13px;
     height: 34px;
     line-height: 34px;
-    color: #787878;
+    color: #fff;
     border: 2px solid #ebecec;
     text-decoration: none;
-    background: #fff;
+    background: #6860bf;
     padding: 10px;
     font-weight: bold;
     border-radius: 10px;
@@ -128,13 +128,30 @@ url('../../functions/options/fonts/raleway-thin-webfont.svg#ralewaythin') format
 [id*='fieldset_anony']  .form-table input.sliderbar_input { width:44px;}  
 [id*='fieldset_anony']  tr td span.sliderbar_desc { float:left; width:163px;}
 
-.anony-input-lable,.anony-btn-close, .anony-remove-tab{
+.anony-input-lable{
     display: block!important;
     font-weight: bold;
 }
 
+.anony-btn-close, .anony-remove-tab{
+    font-weight: bold;
+    padding: 5px;
+    border: 1px solid #f25050;
+    max-width: 70px;
+    text-align: center;
+    text-decoration: none;
+    background: #f25050;
+    color: #fff;
+    border-radius: 5px;
+}
+
 .multi-text-btn:focus,.anony-btn-close:focus, .anony-remove-tab:focus{
     color:#b73a4c;
+}
+
+.multi-text-btn:hover,.anony-btn-close:hover, .anony-remove-tab:hover{
+    color:rgb(209, 53, 75);
+    background: #fff;
 }
 [id*='fieldset_anony']  .form-table input.small-text{
     min-width: 150px;
@@ -235,16 +252,14 @@ url('../../functions/options/fonts/raleway-thin-webfont.svg#ralewaythin') format
 	width: 70%;
 }
 .anony-radio-img input[type="radio"]{display: none}
+.anony-radio-img{padding: 5px;border:1px solid #d8d9d8;;}
 .anony-radio-item{
 	display: inline-flex;
 	flex-direction: column;
 	align-items: center;
 	margin: 5px;
 }
-.anony-radio-img-selected{
-	padding: 5px;
-	border: 1px solid #ff3600;
-}
+.anony-radio-img-selected{border: 1px solid #ff3600}
 
 .anony-section-group > h2{
 	padding: 50px 10px;
@@ -481,4 +496,28 @@ url('../../functions/options/fonts/raleway-thin-webfont.svg#ralewaythin') format
 .anony-flex-column{
     display: flex;
     flex-direction: column;
+}
+
+.tabs-ul{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.tabs-ul li{
+    position: relative;
+}
+
+.tabs-ul li label{
+    min-width: auto;
+}
+.anony-tabs div{
+    width: 100%;
+}
+.anony-tab-item{
+    width: 40% !important;
+    display: flex;
+    flex-direction: column;
+    float: left;
+    margin: 0 20px;
 }

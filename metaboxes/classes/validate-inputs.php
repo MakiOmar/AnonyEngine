@@ -261,6 +261,50 @@ if(!class_exists('ANONY_Validate_Inputs')){
 			$this->value =  wp_kses_post($this->value);
 		}//function
 
+
+		/**
+		 * validate multi-value input
+		 */
+		public function valid_multi_value(){
+			//nvd($this->value); die();
+
+			foreach ($this->value as $index => $value) {
+				//Check if all supplied values are empty
+				if(implode('', $value) == '') unset($this->value[$index]);
+			}
+			
+		}//function
+
+
+		/**
+		 * Accept html within input.
+		 */
+		public function valid_tabs(){
+			$count = array_shift($this->value);
+			if(!ctype_digit($count)) {
+				$count = count($this->value) + 1;
+			}
+			$temp = [];
+
+			$temp['count'] = $count;
+			foreach ($this->value as $name => $v) {
+				foreach ($v as $key => $value) {
+					$value = wp_strip_all_tags( $value );
+
+					$temp[$name][$key] = $value;
+				
+				}
+
+				$temp_name_values = array_values($temp[$name]);
+
+				//Check if all supplied values are empty
+				if(implode('', $temp_name_values) == '') unset($temp[$name]);
+			}
+			$temp['count'] = empty($temp) ? 2 : count($temp) + 1;
+
+			$this->value =  $temp;
+		}//function
+
 		/**
 		 * Date validation.
 		 */

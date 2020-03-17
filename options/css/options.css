@@ -126,10 +126,7 @@ url('../../functions/options/fonts/raleway-thin-webfont.svg#ralewaythin') format
 #anony-options-wrapper label{
     display: flex;
 }
-.anony-input-lable,.anony-btn-close, .anony-remove-tab{
-    display: block!important;
-    font-weight: bold;
-}
+
 
 .multi-text-btn:focus,.anony-btn-close:focus, .anony-remove-tab:focus{
     color:#b73a4c;

@@ -371,6 +371,9 @@ if (!class_exists('ANONY_Theme_Settings')) {
 			if(isset($field['type'])){
 				$array = [
 						'date_time', 
+						'sliderbar', 
+						'upload', 
+						'tabs', 
 						'color', 
 						'color_farbtastic',
 						'color_gradient_farbtastic',
@@ -381,6 +384,7 @@ if (!class_exists('ANONY_Theme_Settings')) {
 						'checkbox',
 						'switch',
 						'radio',
+						'radio_img',
 						'text',
 						'textarea',
 						'multi_text',

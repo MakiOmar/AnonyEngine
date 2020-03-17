@@ -277,6 +277,8 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
 				if (!is_admin() && (!isset($field['show_on_front']) || !$field['show_on_front']) ) continue;
 				$array = [
 						'date_time', 
+						'upload',
+						'tabs',
 						'color', 
 						'color_farbtastic',
 						'color_gradient_farbtastic',
@@ -291,6 +293,8 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
 						'select',
 						'number',
 						'checkbox',
+						'radio',
+						'radio_img',
 					];
 				if(in_array($field['type'], $array)){
 						
@@ -523,7 +527,14 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
 
 						}		
 					}
-					update_post_meta( $post_ID, $field_id, apply_filters( 'anony_nested_cf_validation', $_POST[$field_id] ) );
+
+					$args = array(
+						'field'         => $field,
+						'new_value'     => $_POST[$field_id],
+					);
+					$this->validate = new ANONY_Validate_Inputs($args);
+
+					update_post_meta( $post_ID, $field_id, apply_filters( 'anony_nested_cf_validation', $this->validate->value ) );
 
 				}else{
 					$args = array(

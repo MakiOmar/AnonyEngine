@@ -137,35 +137,31 @@ class ANONY_Date_time{
 		<script type="text/javascript">
 			jQuery(document).ready(function($){
 				var fieldClass = <?php echo '".anony-'.$this->parent->field['id'].'"' ?>;
+				//console.log(fieldClass);
+
+				var DateTimeOptions = {
+								    	<?php 
+								    		//Options for datetime picker
+								    		foreach ($this->picker_options as $key => $value) {
+								    			echo $key . ':' . '"' . $value . '",';
+								    		}
+
+								    	 ;?>
+								        
+								    };
+				var getWhat = '<?php echo $this->get?>picker';
 
 				<?php if(isset($this->parent->field['nested-to'])){?>
 					var nestedToId = <?php echo '".'.$this->parent->field['nested-to'].'"' ?>;
 					var nestedTo   = nestedToId + '-wrapper';
 				<?php } ?>
-
-				$.fn.<?php echo $this->parent->field['id'] ?> = function(){
-					//$this->get?>picker will be translated as timepicker , datepicker or datetimepicker
-				    $(fieldClass).each(function(){
-				    	var currentDate = $(this);
-				    	currentDate.<?php echo $this->get?>picker({
-					    	<?php 
-					    		//Options for datetime picker
-					    		foreach ($this->picker_options as $key => $value) {
-					    			echo $key . ':' . '"' . $value . '",';
-					    		}
-
-					    	 ;?>
-					        
-					    });
-				    });
-				};
 				
-				$.fn.<?php echo $this->parent->field['id'] ?>();
+				$.fn.AnonyDateTimePicker(fieldClass, getWhat, DateTimeOptions);
 
 				//$.fn.AnonyObserve is defined here (assets/js/jquery.helpme.js)
 				if (typeof nestedTo !== 'undefined') {
 				    $.fn.AnonyObserve(nestedTo, function(){
-				    	$.fn.<?php echo $this->parent->field['id'] ?>();
+				    	$.fn.AnonyDateTimePicker(fieldClass, getWhat, DateTimeOptions);
 					});
 				}
 
@@ -173,7 +169,7 @@ class ANONY_Date_time{
 
 				    $.fn.AnonyObserve(nestedToId + '-add', function(){
 
-				    	$.fn.<?php echo $this->parent->field['id'] ?>();
+				    	$.fn.AnonyDateTimePicker(fieldClass, getWhat, DateTimeOptions);
 					});
 				}
 			});

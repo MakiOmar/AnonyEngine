@@ -141,8 +141,15 @@ if( ! class_exists( 'ANONY_Input_Field' )){
 		 * Set metabox field data
 		 */
 		public function meta_field_data(){
-			$index = (isset($this->field['nested-to']) && !is_null($this->index) && $this->index  != '' ) ? $this->index : 0;
-			$this->input_name = isset($this->field['nested-to'])  ? $this->field['nested-to'].'['.$index.']'.'['.$this->field['id'].']' : $this->field['id'];
+			if (isset($this->field['nested-to']) && !empty($this->field['nested-to'])) {
+				$index = (is_integer($this->index)) ? $this->index : 0;
+
+				$this->input_name = $this->field['nested-to'].'['.$index.']'.'['.$this->field['id'].']';
+
+				$this->field['id'] = $this->field['id'].'-'.$index;
+			}else{
+				$this->input_name = $this->field['id'];
+			}
 
 			$single = (isset($this->field['multiple']) && $this->field['multiple']) ? false : true;
 			

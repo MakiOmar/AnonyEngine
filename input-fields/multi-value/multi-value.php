@@ -105,7 +105,7 @@ class ANONY_Multi_value{
 		foreach ($this->parent->field['fields'] as $nested_field) {
 
 			//render default template. Passed true as fourth parameter to ANONY_Input_Field
-			$render_default = new ANONY_Input_Field($nested_field, 'meta', $this->parent->post_id, true);
+			$render_default = new ANONY_Input_Field($nested_field, 'meta', $this->parent->post_id, true, '', ($counter + 1));
 			$default .= $render_default->field_init();
 		}
 

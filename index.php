@@ -17,3 +17,29 @@
 define('ANOE_DIR', wp_normalize_path(plugin_dir_path( __FILE__ )));
 
 require_once (wp_normalize_path( ANOE_DIR . 'config.php' ));
+
+/**
+ * Enqueue admin/frontend common scripts.
+ * 
+ * Looping through custom arrays of styles/scripts, and consider using filemtime
+ */
+function anonyCommonScripts(){
+
+	//Enqueue styles
+	$styles = [];
+	foreach($styles as $style){
+		wp_enqueue_style( $style , ANOE_URI .'assets/css/'.$style.'.css' , false, filemtime(wp_normalize_path(ANOE_DIR .'assets/css/'.$style.'.css')) );
+	}
+
+
+	$scripts = ['jquery.helpme'];
+	foreach($scripts as $script){
+		wp_enqueue_script( $script , ANOE_URI . 'assets/js/'.$script.'.js' ,array('jquery'),filemtime(wp_normalize_path( ANOE_DIR .'/assets/js/'.$script.'.js')),true);
+	}
+}
+
+/**
+ * AnonyEngine common scripts
+ */
+add_action('wp_enqueue_scripts','anonyCommonScripts');
+add_action('admin_enqueue_scripts','anonyCommonScripts');

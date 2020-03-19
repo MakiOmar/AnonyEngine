@@ -361,56 +361,13 @@ if (!class_exists('ANONY_Theme_Settings')) {
 		 */
 		public function field_input($field){
 
-
-			if(isset($field['callback']) && function_exists($field['callback'])){
-
-			}
-			//Array of inputs that have same HTML markup
-			$mixed_types = ['text','number','email', 'password','url'];
-
 			if(isset($field['type'])){
-				$array = [
-						'date_time', 
-						'sliderbar', 
-						'upload', 
-						'tabs', 
-						'color', 
-						'color_farbtastic',
-						'color_gradient_farbtastic',
-						'color_gradient', 
-						'date_time',
-						'font_select',
-						'info',
-						'checkbox',
-						'switch',
-						'radio',
-						'radio_img',
-						'text',
-						'textarea',
-						'multi_text',
-						'select',
-					];
-				if(in_array($field['type'], $array)){
 
-					$field['option_name'] = $this->args['opt_name'];
-					
-					$render_field = new ANONY_Input_Field($field);
+				$field['option_name'] = $this->args['opt_name'];
+				
+				$render_field = new ANONY_Input_Field($field);
 
-					echo $render_field->field_init();
-				}else{
-					$field_class = 'ANONY_optf__'.ucfirst($field['type']);
-
-					//Static class name for inputs that have same HTML markup
-					if(in_array($field['type'], $mixed_types)) $field_class = 'ANONY_optf__Mixed';
-					
-					if(class_exists($field_class)){
-
-						$field = new $field_class($field, $this);
-						
-						$field->render();
-
-					}
-				}
+				echo $render_field->field_init();
 				
 			}
  		}

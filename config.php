@@ -33,6 +33,8 @@ define('ANOE_AUTOLOADS' ,serialize(array(
 	ANONY_HLP_WP,
 	/*----Inputs-----------*/
 	ANONY_INPUT_FIELDS,
+	ANONY_FIELDS_DIR,
+	ANONY_FIELDS_URI,
 	/*----Options-----------*/
 	ANONY_OPTIONS_DIR , 
 	ANONY_OPTIONS_FIELDS, 

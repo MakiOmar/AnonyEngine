@@ -213,12 +213,12 @@ if( ! class_exists( 'ANONY_Input_Field' )){
 
 
 		function enqueue_scripts(){
-			wp_register_style( 'anony-inputs', ANONY_INPUT_FIELDS_URI.'inputs-fields.css', array('farbtastic'), time(), 'all');	
+			wp_register_style( 'anony-inputs', ANONY_INPUT_FIELDS_URI.'assets/css/inputs-fields.css', array('farbtastic'), time(), 'all');	
 
 			wp_enqueue_style( 'anony-inputs' );
 
 			if(is_rtl()){
-				wp_register_style( 'anony-inputs-rtl', ANONY_INPUT_FIELDS_URI.'inputs-fields-rtl.css', array('anony-inputs'), time(), 'all');
+				wp_register_style( 'anony-inputs-rtl', ANONY_INPUT_FIELDS_URI.'assets/css/inputs-fields-rtl.css', array('anony-inputs'), time(), 'all');
 				wp_enqueue_style( 'anony-inputs-rtl' );
 			}
 

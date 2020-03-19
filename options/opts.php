@@ -57,15 +57,13 @@ define('ANONY_OPTIONS_WIDGETS', wp_normalize_path(ANOE_DIR . "options/widgets/")
 *Options functions
 *---------------------------------------------------------------------------------*/
 
-require_once('fonts.php');
-
 /**
  * Theme Fonts list - system & Google Fonts.
  * @param mixed $type type of font ['system', 'default', 'popular', 'all']
  * @return array Array of fonts names
  */
 function anony_fonts( $type = false ){
-	$fonts = unserialize(THEME_FONTS);
+	$fonts = unserialize(ANOE_FONTS);
 	
 	if( $type ) {
 		return $fonts[$type];

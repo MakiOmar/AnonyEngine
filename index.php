@@ -16,6 +16,15 @@
  */ 
 define('ANOE_DIR', wp_normalize_path(plugin_dir_path( __FILE__ )));
 
+/**
+ * Holds libraries directory
+ * @const
+ */
+define('ANOE_LIBS_URI', ANOE_DIR . 'libs/');
+
+
+require_once( ANOE_LIBS_URI . 'fonts.php');
+
 require_once (wp_normalize_path( ANOE_DIR . 'config.php' ));
 
 /**

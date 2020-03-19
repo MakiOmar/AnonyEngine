@@ -34,7 +34,6 @@ class ANONY_Tabs{
 		
 		$count = isset($this->parent->value['count']) ? $this->parent->value['count'] + 1 : 1;
 		$html = '';
-		nvd($this->parent->value);
 		if(isset($this->parent->field['note'])){
 			$html  .= '<p class=anony-warning>'.$this->parent->field['note'].'<p>';
 		}

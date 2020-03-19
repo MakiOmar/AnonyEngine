@@ -18,6 +18,8 @@ class ANONY_Multi_value{
 
 		$this->parent = $parent;
 
+		if(!isset($this->parent->field['fields'])) return;
+
 		$this->enqueue();
 	}
 
@@ -28,8 +30,6 @@ class ANONY_Multi_value{
 	 * @return void
 	 */
 	function render(){
-
-		if(!isset($this->parent->field['fields'])) return;
 
 		$buttonText  = (isset($this->parent->field['button-text'])) ? ' '.$this->parent->field['button-text'] : esc_html__( 'Add', ANOE_TEXTDOM  );
 

@@ -52,3 +52,8 @@ function anonyCommonScripts(){
  */
 add_action('wp_enqueue_scripts','anonyCommonScripts');
 add_action('admin_enqueue_scripts','anonyCommonScripts');
+
+
+add_action( 'activated_plugin', function(){
+	flush_rewrite_rules();
+} );

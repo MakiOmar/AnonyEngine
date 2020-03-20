@@ -206,7 +206,7 @@ if( ! class_exists( 'ANONY_Input_Field' )){
 				//Options fields can't be on frontend
 				if($this->context == 'option') return $field->render();
 				
-				if($this->context == 'meta' ){
+				if($this->context == 'meta' && !is_admin()){
 					//If there is an insert Or edit front end action
 					if (isset($_GET['action']) && !empty($_GET['action']) && isset($_GET['_wpnonce'] )&& !empty($_GET['_wpnonce'])) {
 						
@@ -232,6 +232,8 @@ if( ! class_exists( 'ANONY_Input_Field' )){
 	 
 
 					if(method_exists($field, 'renderDisplay')) return $field->renderDisplay();
+				}else{
+					return $field->render();
 				}
 
 			}else{

@@ -266,7 +266,6 @@ if(!class_exists('ANONY_Validate_Inputs')){
 		 * validate multi-value input
 		 */
 		public function valid_multi_value(){
-			//nvd($this->value); die();
 
 			foreach ($this->value as $index => $value) {
 				//Check if all supplied values are empty

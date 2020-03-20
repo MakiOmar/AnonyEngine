@@ -44,6 +44,7 @@ class ANONY_Mixed{
 	/**
 	 * Text field render Function.
 	 *
+	 * Suitable if editing/submitting is enabled
 	 * @return void
 	 */
 	public function render(){
@@ -114,6 +115,45 @@ class ANONY_Mixed{
 		$html .= (isset($this->parent->field['desc']) && !empty($this->parent->field['desc']))?' <div class="description '.$this->parent->class_attr.'">'.$this->parent->field['desc'].'</div>':'';
 
 		$html .= '</fieldset>';
+
+		return $html;
+		
+	}
+
+
+	/**
+	 * Text field render Function.
+	 *
+	 * Suitable if editing/submitting is enabled
+	 * @return void
+	 */
+	public function renderDisplay(){
+
+		
+		$html = sprintf( 
+					'<div class="anony-row anony-row-inline" id="fieldset_%1$s">', 
+					$this->parent->field['id']
+					);
+
+
+		if($this->parent->context == 'meta' && isset($this->parent->field['title'])){
+			$html .= sprintf( 
+						'<label class="anony-label" for="%1$s">%2$s</label>', 
+						$this->parent->field['id'], 
+						$this->parent->field['title']
+					);
+		}
+		
+		
+
+		$html  .= sprintf(
+					'<span id="%1$s" class="%2$s">%3$s</span>', 
+					$this->parent->field['id'],
+					$this->parent->class_attr,
+					$this->parent->value
+				 );
+
+		$html .= '</div>';
 
 		return $html;
 		

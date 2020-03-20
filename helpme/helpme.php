@@ -23,3 +23,6 @@ define('ANONY_HLP_PHP', ANONY_HLP_PATH .'php/' );
  * @const
  */
 define( 'ANONY_HLP_WP', ANONY_HLP_PATH . 'wp/');
+
+
+require_once('wp-hooks.php');

@@ -123,99 +123,6 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
 		}
 
 		/**
-		 * Adds a shortcode for the metabox
-		 * @param  array  $atts An array of shortcode attributes
-		 * @return string The shortcode output
-		 */
-		public function metabox_shortcode($atts){
-
-			$this->insert_post_in_frontend();
-
-			do_action($this->id_as_hook.'_before_form');
-
-			/**
-			 * This parameter $this->id_as_hook is the shortcode name to be used as filter.
-			 * Filter name will be shortcode_atts_{$shortcode}
-			 */
-
-			$atts = shortcode_atts(
-						[], 
-						$atts, 
-						$this->id_as_hook );
-
-
-			$render = '<form method="post">';
-
-			/**
-			 * Usefull when neccessary hidden inputs are needed for the form
-			 */ 
-			$hiddens = apply_filters( $this->id_as_hook.'_shortcode_hiddens' , '', $atts );
-
-
-			$render .= $hiddens;
-
-			/**
-			 * Start metabox render
-			 */ 
-			ob_start();
-				
-				$this->meta_fields_callback();
-
-				$render .= ob_get_contents();
-
-				$render .= '<input name="save" type="submit" class="button button-primary button-large" id="publish" value="'.esc_html__( 'Save changes' ).'">';
-
-				$render .= '</form>';
-
-			ob_end_clean();
-
-			do_action($this->id_as_hook.'_after_form');
-
-			return $render;
-		}
-
-		/**
-		 * Renders metabox in front end. hooked to the_content filter
-		 * @param  string $content 
-		 * @return string
-		 */
-		public function show_on_front($content){
-			if (!is_user_logged_in() && is_single() && !is_admin()) {
-				esc_html_e( 'Sorry, you have to login first', ANOE_TEXTDOM  );
-			}
-
-			global $post;
-
-			$render = '';
-
-			if ( is_single() && in_array($post->post_type, $this->post_type) ) {
-				
-
-				$this->update_post_in_frontend();
-
-				$render .= '<form method="post">';
-
-				$render .= apply_filters( $this->id_as_hook.'_hiddens' , '');
-
-				ob_start();
-
-				$this->meta_fields_callback();
-
-				$render .= ob_get_contents();
-
-
-				$render .= '<input name="save" type="submit" class="button button-primary button-large" id="publish" value="'.esc_html__( 'Save changes' ).'">';
-
-				$render .= '</form>';
-
-				ob_end_clean();
-
-				return $content.'<br/>'.$render;
-			}
-				
-			return $content;	
-		}
-		/**
 		 * Add metaboxes.
 		 */
 		public function add_meta_box($postType, $post){
@@ -249,7 +156,170 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
 				
 			}
 		}
+
+		/**
+		 * Adds a shortcode for the metabox
+		 * @param  array  $atts An array of shortcode attributes
+		 * @return string The shortcode output
+		 */
+		public function metabox_shortcode($atts){
+
+			$render = '';
+
+			/**
+			 * This parameter $this->id_as_hook is the shortcode name to be used as filter.
+			 * Filter name will be shortcode_atts_{$shortcode}
+			 */
+
+			$atts = shortcode_atts(
+						[], 
+						$atts, 
+						$this->id_as_hook );
+
+			if (isset($_GET['action']) && $_GET['action'] == 'insert' && isset($_GET['_wpnonce']) && wp_verify_nonce( $_GET['_wpnonce'] , 'anonyinsert' ) ) {
+
+				$this->insert_post_in_frontend();
+
+				do_action($this->id_as_hook.'_before_form');
+
+				$render .= '<form method="post">';
+
+				/**
+				 * Usefull when neccessary hidden inputs are needed for the form
+				 */ 
+				$hiddens = apply_filters( $this->id_as_hook.'_shortcode_hiddens' , '', $atts );
+
+
+				$render .= $hiddens;
+
+				/**
+				 * Start metabox render
+				 */ 
+
+				$render .= $this->return_meta_fields();
+
+				$render .= '<input name="save" type="submit" class="button button-primary button-large" id="publish" value="'.esc_html__( 'Save changes' ).'">';
+
+				$render .= '</form>';
+
+				do_action($this->id_as_hook.'_after_form');
+			}else{
+
+				$render .= $this->return_meta_fields();
+			}
+
+			
+
+			return $render;
+		}
+		public function render_frontend_form(){
+
+			global $post;
+
+			$render = '<form method="post">';
+
+			$render .= apply_filters( $this->id_as_hook.'_hiddens' , '');
+
+			$render .= '<input type="hidden" id="post_type" name="postType" value="'.$post->post_type.'">';
+
+			$render .= '<input type="hidden" id="user_ID" name="user_ID" value="'.get_current_user_id().'">';
+
+			$render .= '<input type="hidden" id="post_ID" name="post_ID" value="'.$post->ID.'">';
+
+
+			$render .= $this->return_meta_fields();
+
+			$render .= '<input name="save" type="submit" class="button button-primary button-large" id="publish" value="'.esc_html__( 'Save changes' ).'">';
+
+			$render .= '</form>';
+
+			return $render;
+		}
+		public function front_add(){
+			global $post;
+			$render = '';
+			if (!is_user_logged_in() && is_single() && !is_admin()) {
+				$render .= esc_html__( 'Sorry, you have to login first', ANOE_TEXTDOM  );
+			}
+
+			if ( is_single() && in_array($post->post_type, $this->post_type) ) {
+				
+				if (isset($_GET['action']) && isset($_GET['_wpnonce']) && wp_verify_nonce( $_GET['_wpnonce'], 'anonyinsert_'.$post->ID )) {
+
+					switch ($_GET['action']) {
+						case 'insert':
+							$render .= $this->render_frontend_form();
+							break;
+
+						case 'edit':
+
+							if(get_current_user_id() == $post->post_author){
+
+								$render .= $this->render_frontend_form();
+							}
+						break;
+						
+						default:
+							$render .= $this->return_meta_fields();
+
+							$render .= sprintf('<a href="%1$s?action=edit&_wpnonce=%2$s" class="button button-primary button-large">%3$s</a>', get_permalink( ) ,wp_create_nonce( 'anonyinsert_'.$post->ID ), esc_html__( 'Edit' ));
+							break;
+					}
+
+				}else{
+					$render .= $this->return_meta_fields();
+
+					$render .= sprintf('<a href="%1$s?action=edit&_wpnonce=%2$s" class="button button-primary button-large">%3$s</a>', get_permalink( ) ,wp_create_nonce( 'anonyinsert_'.$post->ID ), esc_html__( 'Edit' ));
+				}
+				
+			}
+
+			return $render;
+		}
+		/**
+		 * Renders metabox in front end. hooked to the_content filter
+		 * @param  string $content 
+		 * @return string
+		 */
+		public function show_on_front($content){
+
+
+			global $post;
+
+			$render = '';
+
+			if ( is_single() && in_array($post->post_type, $this->post_type) ) {
+
+				$this->update_post_in_frontend();
+
+				do_action($this->id_as_hook.'_show_on_front');
+
+
+				$render .= $this->front_add();
+
+				return $content.'<br/>'.$render;
+			}
+				
+			return $content;	
+		}
+
+		/**
+		 * Returns metabox fields
+		 * @return string
+		 */
+		function return_meta_fields(){
+			ob_start();
+
+			$this->meta_fields_callback();
+
+			$render = ob_get_contents();
+
+			ob_end_clean();
+
+			return $render;
+		}
 		
+	
 		/**
 		 * Render metabox' fields.
 		 */
@@ -268,64 +338,36 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
 			$this->fields = apply_filters( 'anony_mb_frontend_fields', $this->fields);
 			
 			wp_nonce_field( $this->id.'_action', $this->id.'_nonce', false );
-
-			//Array of inputs that have same HTML markup
-			$mixed_types = ['text','number','email', 'password','url'];
 			
 			//Loop through inputs to render
 			foreach($this->fields as $field){
 				if (!is_admin() && (!isset($field['show_on_front']) || !$field['show_on_front']) ) continue;
-				$array = [
-						'date_time', 
-						'upload',
-						'tabs',
-						'color', 
-						'color_farbtastic',
-						'color_gradient_farbtastic',
-						'color_gradient', 
-						'font_select',
-						'info',
-						'text',
-						'hidden',
-						'multi_text',
-						'multi_value',
-						'div',
-						'select',
-						'number',
-						'checkbox',
-						'radio',
-						'radio_img',
-					];
-				if(in_array($field['type'], $array)){
+				
 						
-						$render_field = new ANONY_Input_Field($field, 'meta', $pID);
-					
-						echo $render_field->field_init();
-
-						if(isset($field['scripts']) && !empty($field['scripts'])){
-
-					        foreach($field['scripts'] as $script){
-
-					            $deps = (isset($script['dependancies']) && !empty($script['dependancies'])) ? $script['dependancies'] : [];
-
-					            $deps[] = 'anony-metaboxs';
-
-					            if(isset($script['file_name'])){
-
-					                $url = ANONY_MB_URI. 'assets/js/'.$script['file_name'].'.js';
-
-					            }elseif(isset($script['url'])){
-
-					                $url = $script['url'];
-					            }
-					            
-					            wp_enqueue_script($script['handle'], $url, $deps, false, true);
-					        }
-					    }
-					
-				}
+				$render_field = new ANONY_Input_Field($field, 'meta', $pID);
 			
-					
+				echo $render_field->field_init();
+
+				if(isset($field['scripts']) && !empty($field['scripts'])){
+
+			        foreach($field['scripts'] as $script){
+
+			            $deps = (isset($script['dependancies']) && !empty($script['dependancies'])) ? $script['dependancies'] : [];
+
+			            $deps[] = 'anony-metaboxs';
+
+			            if(isset($script['file_name'])){
+
+			                $url = ANONY_MB_URI. 'assets/js/'.$script['file_name'].'.js';
+
+			            }elseif(isset($script['url'])){
+
+			                $url = $script['url'];
+			            }
+			            
+			            wp_enqueue_script($script['handle'], $url, $deps, false, true);
+			        }
+			    }
 			}
 		}
 		
@@ -355,58 +397,61 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
 
 			}
 
-			
+			//Can be used to validate $_POST data befoore insertion
+			do_action( $this->id_as_hook.'_before_insert' );
+			/**
+			 * wp_insert_post() passes data through sanitize_post(), 
+			 * which itself handles all necessary sanitization and validation (kses, etc.).
+			 */
+			$title = wp_strip_all_tags( $_POST['post_title'] );
 
-				//Can be used to validate $_POST data befoore insertion
-				do_action( $this->id_as_hook.'_before_insert' );
-				/**
-				 * wp_insert_post() passes data through sanitize_post(), 
-				 * which itself handles all necessary sanitization and validation (kses, etc.).
-				 */
-				$title = wp_strip_all_tags( $_POST['post_title'] );
-
-				global $wpdb;
-				$post_id = $wpdb->get_col("select ID from $wpdb->posts where post_title LIKE '".$title."%' ");
+			global $wpdb;
+			$post_id = $wpdb->get_col("select ID from $wpdb->posts where post_title LIKE '".$title."%' ");
 
 
 
-				if(!empty($post_id)) {
-					//esc_html_e( 'Sorry! but you already have posted the same data before', ANOE_TEXTDOM  );
-					$this->start_update($_POST, intval($post_id[0]));
+			if(!empty($post_id)) {
+				//esc_html_e( 'Sorry! but you already have posted the same data before', ANOE_TEXTDOM  );
+				$this->start_update($_POST, intval($post_id[0]));
 
-					$url = add_query_arg('post', $post_id[0], get_the_permalink($post_id[0]));
+				$url = add_query_arg('post', $post_id[0], get_the_permalink($post_id[0]));
 
+			}else{
+				$insert_args = [
+					'post_title'   => wp_strip_all_tags( $_POST['post_title'] ), //required
+					'post_content' => '', //required
+					'post_type'    => $_POST['postType'],
+					'post_status'  => 'publish',
+				];
+
+
+				if (isset($_POST['parent_id'])) $insert_args['post_parent'] = $_POST['parent_id'];
+
+				$insert = wp_insert_post( $insert_args );
+
+				if (!is_wp_error( $insert )) {
+
+				    do_action( $this->id_as_hook.'_after_insert' );
+
+				    if (isset($set_parent_meta) && $set_parent_meta) {
+				    	$test = update_post_meta( $insert, 'parent_id',  $post_parent);
+				    }
+
+				    $this->start_update($_POST, $insert);
+
+				    $url = add_query_arg('post', $insert, get_the_permalink($insert)); 
+
+				    $url = add_query_arg('insert', 'succeed', $url);   
 				}else{
-					$insert = wp_insert_post( [
-						'post_title'   => wp_strip_all_tags( $_POST['post_title'] ), //required
-						'post_content' => '', //required
-						'post_type'    => $_POST['postType'],
-						'post_status'  => 'publish',
-					] );
 
-					if (!is_wp_error( $insert )) {
-
-					    do_action( $this->id_as_hook.'_after_insert' );
-
-					    if (isset($set_parent_meta) && $set_parent_meta) {
-					    	update_post_meta( $insert, 'parent_id',  $post_parent);
-					    }
-
-					    $this->start_update($_POST, $insert);
-
-					    $url = add_query_arg('post', $insert, get_the_permalink($insert)); 
-
-					    $url = add_query_arg('insert', 'succeed', $url);   
-					}else{
-
-						$url = add_query_arg('insert', 'failed', get_the_permalink()); 
-					}
+					$url = add_query_arg('insert', 'failed', get_the_permalink()); 
 				}
+			}
 
-				if (isset($url)) {
-					wp_redirect( $url );
-					 exit();
-				}
+			if (isset($url)) {
+				wp_redirect( $url );
+				 exit();
+			}
 				
 		}
 
@@ -424,11 +469,22 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
 			if (is_single()) {
 				global $post;
 				if (!in_array($post->post_type, $this->post_type) ) return;
+
+				if ($post->post_type != $_POST['postType']) return;
+
+				if($post->post_author != $_POST['user_ID'] ) return;
+
+				if($post->ID != $_POST['post_ID'] ) return;
 			
 			}
+
+
+			if (!isset($_POST[$this->id.'_nonce'])) return;
 			
 					
 			if (isset($_POST[$this->id.'_nonce']) && !wp_verify_nonce( $_POST[$this->id.'_nonce'], $this->id.'_action' )) return;
+
+
 			//Can be used to validate $_POST data befoore insertion
 			do_action( $this->id_as_hook.'_before_update' );
 
@@ -457,35 +513,22 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
 			
 		}
 
-		public function start_update($sent_data, $post_ID){
+		public function start_update($sent_data, $post_ID = null){
+			$postType = get_post_type( $post_ID );
 
-			if(empty($sent_data) || !is_array($sent_data)) return;
-
-			if (!isset($sent_data[$this->id.'_nonce'])) return;
-
-			if (!wp_verify_nonce( $sent_data[$this->id.'_nonce'], $this->id.'_action' )) return;
-
-
+			if(empty($sent_data) || !is_array($sent_data) || is_null($post_ID)) return;
 
 			//Can be used to validate $_POST data before insertion
 			do_action( $this->id_as_hook.'_before_meta_insert' );
 
-			$postType = get_post_type( $post_ID );
-
 			$this->fields = apply_filters( 'anony_mb_frontend_fields', $this->fields );
+
 			foreach($this->fields as $field){
+				if(!isset($_POST[$field['id']])) continue;
 
 				$field_id   = $field['id'];
 
 				$field_type = $field['type'];
-
-
-				//Something like a checkbox is not set if unchecked
-				if(!isset($_POST[$field_id])) {
-
-					delete_post_meta( $post_ID, $field_id );
-					continue;
-				}
 
 				$chech_meta = get_post_meta($post_ID , $field_id, true);
 

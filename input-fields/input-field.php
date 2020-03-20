@@ -203,8 +203,36 @@ if( ! class_exists( 'ANONY_Input_Field' )){
 
 				$field = new $field_class($this);
 
-				return $field->render();
+				//Options fields can't be on frontend
+				if($this->context == 'option') return $field->render();
 				
+				if($this->context == 'meta' ){
+					//If there is an insert Or edit front end action
+					if (isset($_GET['action']) && !empty($_GET['action']) && isset($_GET['_wpnonce'] )&& !empty($_GET['_wpnonce'])) {
+						
+						switch ($_GET['action']) {
+							case 'insert':
+
+								if (wp_verify_nonce( $_GET['_wpnonce'] , 'anonyinsert' )) {
+									return $field->render();
+								}
+								break;
+
+							case 'edit':
+								if (wp_verify_nonce( $_GET['_wpnonce'] , 'anonyinsert_'.$this->post_id )) {
+									return $field->render();
+								}
+								break;
+							
+							default:
+								if(method_exists($field, 'renderDisplay')) return $field->renderDisplay();
+								break;
+						}
+					}
+	 
+
+					if(method_exists($field, 'renderDisplay')) return $field->renderDisplay();
+				}
 
 			}else{
 				return sprintf(esc_html__('%s class doesn\'t exist'),$this->field_class);

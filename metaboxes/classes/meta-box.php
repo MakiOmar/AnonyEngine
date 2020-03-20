@@ -601,7 +601,18 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
 
 			}
 
-			if(!empty($this->errors)) set_transient('ANONY_errors_'.$postType.'_'.$post_ID, $this->errors);	
+			if(!empty($this->errors)){
+				set_transient('ANONY_errors_'.$postType.'_'.$post_ID, $this->errors);
+
+				$url = add_query_arg( 'error', 'incomplete_update', get_permalink($post_ID) );
+			}else{
+				$url = add_query_arg( 'status', 'complete_update', get_permalink($post_ID) );
+			}
+
+			if (isset($url)) {
+				wp_redirect( $url );
+				exit;
+			}
 			
 		}
 		

@@ -84,13 +84,13 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
 		 */
 		public function set_metabox_data($meta_box){
 			
-			$this->id            = $meta_box['id'];
+			$this->id            = apply_filters( 'anony_mb_frontend_id', $meta_box['id'] );
 			$this->label         = $meta_box['title'];
 			$this->context       = $meta_box['context'];
 			$this->priority      = $meta_box['priority'];
 			$this->hook_priority = isset($meta_box['hook_priority']) ? $meta_box['hook_priority'] : $this->hook_priority;
 			$this->post_type     = $meta_box['post_type'];
-			$this->fields        = $meta_box['fields'];
+			$this->fields        = apply_filters( 'anony_mb_frontend_fields', $meta_box['fields'] );
 
 			//To use id for hooks definitions
 			$this->id_as_hook    = str_replace('-', '_', $this->id);
@@ -128,20 +128,11 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
 		public function add_meta_box($postType, $post){
 
 			$this_post_metaboxes = apply_filters( 'anony_post_specific_metaboxes', '', $post );
-
 			
 
 			if (!empty($this_post_metaboxes) && (in_array($post->post_type, $this_post_metaboxes['post_type']) || $this_post_metaboxes['post_type'] === $post->post_type)) {
-				$this->id            = $this_post_metaboxes['id'];
-				$this->label         = $this_post_metaboxes['title'];
-				$this->context       = $this_post_metaboxes['context'];
-				$this->priority      = $this_post_metaboxes['priority'];
-				$this->hook_priority = isset($this_post_metaboxes['hook_priority']) ? $this_post_metaboxes['hook_priority'] : $this->hook_priority;
-				$this->post_type     = $this_post_metaboxes['post_type'];
-				$this->fields        = $this_post_metaboxes['fields'];
 
-				//To use id for hooks definitions
-				$this->id_as_hook    = str_replace('-', '_', $this->id);
+				$this->set_metabox_data($this_post_metaboxes);
 			}
 			
 			if( is_array( $this->post_type ) && in_array($postType, $this->post_type) ){
@@ -283,6 +274,7 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
 		 */
 		public function show_on_front($content){
 
+			$this->notices();
 
 			global $post;
 
@@ -334,9 +326,6 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
 
 			$pID = isset($_GET['post']) && !empty($_GET['post']) ? intval($_GET['post']) : $post->ID;
 
-
-			$this->fields = apply_filters( 'anony_mb_frontend_fields', $this->fields);
-			
 			wp_nonce_field( $this->id.'_action', $this->id.'_nonce', false );
 			
 			//Loop through inputs to render
@@ -371,6 +360,39 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
 			}
 		}
 		
+		/**
+		 * Update metabox inputs in database.
+		 */
+		public function update_post_meta($post_ID){
+			if(!in_array(get_post_type($post_ID), $this->post_type)) return;
+				
+			if ( ! current_user_can( 'edit_post', $post_ID )) return;
+			
+			if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE()) return;
+			
+			if( ( wp_is_post_revision( $post_ID) || wp_is_post_autosave( $post_ID ) ) ) return;
+
+			$parent_id = get_post_meta( $post_ID, 'parent_id', true );
+
+			//Sometime we change metaboxes through a hook, but still an object of this class holds the old metabox data, which will always make the nonce check fails. So we will check if this metabox has changed and get the new id if it has.
+			if(!empty($parent_id)){
+				$metaboxes =  get_post_meta( intval($parent_id), 'anony_this_project_metaboxes', true );
+				if (!empty($metaboxes) && is_array($metaboxes) && isset($metaboxes['id']) && !empty($metaboxes['id'])) {
+					$this->id = $metaboxes['id'];
+				}
+			}
+			
+
+			//To avoid undefined index for other meta boxes
+			if(!isset($_POST[$this->id.'_nonce'])) return;
+
+			//One nonce for a metabox
+			if (!wp_verify_nonce( $_POST[$this->id.'_nonce'], $this->id.'_action' )) return;
+
+			$this->start_update($_POST, $post_ID);
+			
+		}
+
 		public function insert_post_in_frontend(){
 			/**
 			 * Check if there are any posted data return if empty
@@ -472,7 +494,7 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
 
 				if ($post->post_type != $_POST['postType']) return;
 
-				if($post->post_author != $_POST['user_ID'] ) return;
+				if(($post->post_author != $_POST['user_ID']) || !current_user_can( 'administrator' ) ) return;
 
 				if($post->ID != $_POST['post_ID'] ) return;
 			
@@ -493,68 +515,62 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
 		}
 
 		/**
-		 * Update metabox inputs in database.
+		 * Validate field value
+		 * @param array $field     Field's data array
+		 * @param mixed $new_value Field's new value
+		 * @return object          Validation object
 		 */
-		public function update_post_meta($post_ID){
-				
-			if ( ! current_user_can( 'edit_post', $post_ID )) return;
-			
-			if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE()) return;
-			
-			if( ( wp_is_post_revision( $post_ID) || wp_is_post_autosave( $post_ID ) ) ) return;
+		public function validate_field($field, $new_value){
+			$args = array(
+						'field'         => $field,
+						'new_value'     => $new_value,
+					);
+			$validate = new ANONY_Validate_Inputs($args);
 
-			//To avoid undefined index for other meta boxes
-			if(!isset($_POST[$this->id.'_nonce'])) return;
-
-			//One nonce for a metabox
-			if (!wp_verify_nonce( $_POST[$this->id.'_nonce'], $this->id.'_action' )) return;
-
-			$this->start_update($_POST, $post_ID);
-			
+			return $validate;
 		}
 
+		/**
+		 * Updates post meta
+		 * @param array $sent_data An Array of sent data. Upon POST Request
+		 * @param int   $post_ID   Should be the id of being updated post
+		 */
 		public function start_update($sent_data, $post_ID = null){
 			$postType = get_post_type( $post_ID );
 
 			if(empty($sent_data) || !is_array($sent_data) || is_null($post_ID)) return;
 
-			//Can be used to validate $_POST data before insertion
+			//Can be used to validate $sent_data data before insertion
 			do_action( $this->id_as_hook.'_before_meta_insert' );
 
-			$this->fields = apply_filters( 'anony_mb_frontend_fields', $this->fields );
-
 			foreach($this->fields as $field){
-				if(!isset($_POST[$field['id']])) continue;
 
-				$field_id   = $field['id'];
+				if(!isset($sent_data[$field['id']])) continue;
 
-				$field_type = $field['type'];
+				$chech_meta = get_post_meta($post_ID , $field['id'], true);
 
-				$chech_meta = get_post_meta($post_ID , $field_id, true);
+				if ($chech_meta === $sent_data[$field['id']]) continue;
 
-				if ($chech_meta === $_POST[$field_id]) continue;
+
 				
 				//If this field is an array of other fields values
 				if(isset($field['fields'])){
 
 					foreach ($field['fields'] as  $nested_field) {
 
-						foreach ($_POST[$field_id] as $field_index => $posted_field) {
+						foreach ($sent_data[$field['id']] as $field_index => $posted_field) {
 
 							foreach ($posted_field as $fieldID => $value) {
-								if ($nested_field['id'] == $fieldID) {
-									$args = array(
-										'field'         => $nested_field,
-										'new_value'     => $value,
-									);
 
-									$this->validate = new ANONY_Validate_Inputs($args);
+								if ($nested_field['id'] == $fieldID) {
+
+									$this->validate = $this->validate_field($nested_field, $value);
 
 									if(!empty($this->validate->errors)){
 								
 										$this->errors =  array_merge((array)$this->errors, (array)$this->validate->errors);
 
-										$_POST[$field_id][$field_index][$fieldID] = (
+										$sent_data[$field_id][$field_index][$fieldID] = (
 											$chech_meta !== '' && 
 											isset($chech_meta[$field_index][$nested_field['id']])
 										) ? 
@@ -564,29 +580,19 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
 										continue;
 									}
 
-									$_POST[$field_id][$field_index][$fieldID] = $this->validate->value;
+									$sent_data[$field['id']][$field_index][$fieldID] = $this->validate->value;
 								}
 							}
 
 						}		
 					}
 
-					$args = array(
-						'field'         => $field,
-						'new_value'     => $_POST[$field_id],
-					);
-					$this->validate = new ANONY_Validate_Inputs($args);
-
-					update_post_meta( $post_ID, $field_id, apply_filters( 'anony_nested_cf_validation', $this->validate->value ) );
+					//For now this deals with multi values, which have been already validated individually, so the only validation required is to remove all value are empty in one row.
+					$this->validate = $this->validate_field($field, $sent_data[$field['id']]);
 
 				}else{
-					$args = array(
-							'field'            => $field,
-							'new_value'     => $_POST[$field_id],
-						);
 
-
-					$this->validate = new ANONY_Validate_Inputs($args);
+					$this->validate = $this->validate_field($field, $sent_data[$field['id']]);
 
 					if(!empty($this->validate->errors)){
 					
@@ -595,59 +601,52 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
 						continue;
 					}
 					
-					$update_meta = update_post_meta( $post_ID, $field_id, apply_filters( 'anony_cf_validation', $this->validate->value ) );
 				}
 
-
+				update_post_meta( $post_ID, $field['id'], $this->validate->value);
 			}
 
 			if(!empty($this->errors)){
 				set_transient('ANONY_errors_'.$postType.'_'.$post_ID, $this->errors);
-
-				$url = add_query_arg( 'error', 'incomplete_update', get_permalink($post_ID) );
-			}else{
-				$url = add_query_arg( 'status', 'complete_update', get_permalink($post_ID) );
-			}
-
-			if (isset($url)) {
-				wp_redirect( $url );
-				exit;
 			}
 			
 		}
+
+		/**
+		 * Render notices
+		 * @return string
+		 */
+		public function notices(){
+			global $post;
+
+			$postType = get_post_type();
+
+			if (is_single() && !in_array($postType, $this->post_type)) return;
+
+			$errors   = get_transient('ANONY_errors_'.$postType.'_'.$post->ID);
+			
+			if( $errors ){	
+
+				foreach($errors as $field => $data){?>
+
+					<div class="error <?php echo $field ?>">
+
+						<p><?php echo ANONY_Validate_Inputs::get_error_msg($data['code'], $field);?>
+
+					</div>
+
+
+				<?php  }
+			
+				delete_transient('ANONY_errors_'.$postType.'_'.$post->ID);
+			}
+		}
 		
 		/**
-		 * Show error messages
+		 * Show error messages in admin side
 		 */
 		public function admin_notices(){
-			if (isset($_GET['post'])) {
-
-				$postType = get_post_type();
-
-				$errors   = get_transient('ANONY_errors_'.$postType.'_'.$_GET['post']);
-				
-				if( $errors ){	
-
-					$validator = new ANONY_Validate_Inputs();
-
-					if($errors){
-
-						foreach($errors as $field => $data){?>
-
-							<div class="error <?php echo $field ?>">
-
-								<p><?php echo $validator->get_error_msg($data['code'], $field);?>
-
-							</div>
-
-
-						<?php  }
-					
-						delete_transient('ANONY_errors_'.$postType.'_'.$_GET['post']);
-					}
-
-				}
-			}
+			if (isset($_GET['post'])) $this->notices();
 			
 		}
 		

@@ -506,7 +506,7 @@ if(!class_exists('ANONY_Validate_Inputs')){
 		 * @param string $field_id Field id to be shown with message
 		 * @return string The error message
 		 */		
-		public function get_error_msg($code, $field_id){
+		public static function get_error_msg($code, $field_id){
 
 			if (empty($code)) return;
 

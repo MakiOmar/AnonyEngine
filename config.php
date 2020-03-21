@@ -4,6 +4,12 @@
  * Holds plugin text domain
  * @const
  */
+define('ANOENGINE', '');
+
+/**
+ * Holds plugin text domain
+ * @const
+ */
 define('ANOE_TEXTDOM', 'anonyengine');
 
 

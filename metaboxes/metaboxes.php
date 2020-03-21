@@ -45,6 +45,6 @@ add_action( 'init', function(){
 	if (!is_array($metaboxes) || empty($metaboxes)) return;
 
 	foreach ($metaboxes as $metabox) {
-		new ANONY_Meta_Box($metabox);
+		if(is_singular()) new ANONY_Meta_Box($metabox);
 	}
 });

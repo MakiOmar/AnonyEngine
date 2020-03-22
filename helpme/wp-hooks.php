@@ -76,7 +76,7 @@ add_action('wp_head', function () {
     if ($post) {
         setup_postdata($post);
         $content = get_the_content();
-        preg_match('/\[anony_shcode_rplaceit\]/', $content, $matches);
+        preg_match('/\[anony_shcode_rplaceit\s*.*\]/', $content, $matches);
         if ($matches) {
             echo '<style>.some_style { font-weight:800; }</style>';
         }

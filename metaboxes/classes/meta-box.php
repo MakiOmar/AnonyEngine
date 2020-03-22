@@ -61,11 +61,11 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
 			if(empty($meta_box) || !is_array($meta_box)) return;
 
 			$this->localize_scripts = array(
-    			'ajaxURL'         => function_exists('anony_get_ajax_url') ? anony_get_ajax_url() : admin_url( 'admin-ajax.php' ),
-    			'textDir'         => (is_rtl() ? 'rtl' : 'ltr'),
-    			'themeLang'       => get_bloginfo('language'),
-    			'MbUri'      => ANONY_MB_URI,
-    			'MbPath'     => ANONY_MB_PATH,
+    			'ajaxURL'   => ANONY_WPML_HELP:: getAjaxUrl(),
+    			'textDir'   => (is_rtl() ? 'rtl' : 'ltr'),
+    			'themeLang' => get_bloginfo('language'),
+    			'MbUri'     => ANONY_MB_URI,
+    			'MbPath'    => ANONY_MB_PATH,
     			
     		);
 			

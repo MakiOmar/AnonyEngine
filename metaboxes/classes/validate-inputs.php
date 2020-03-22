@@ -510,14 +510,14 @@ if(!class_exists('ANONY_Validate_Inputs')){
 
 			if (empty($code)) return;
 
-			$accepted_tags = array('strong'=>array(), 'a'=> array('href'=> array()));
+			$accepted_tags = array('strong'=>array(), 'a'=> array('href'=> array(), 'class' => array(), 'rel-id' => array()));
 
 			switch($code){
 				case "unsupported":
 					
 					return sprintf(
 						wp_kses(
-							__( '<a href="#anony-%1$s"><strong>%2$s:</strong></a> Sorry!! Please select another file, the selected file type is not supported. <a>', ANOE_TEXTDOM  ), 
+							__( '<a href="#%1$s" rel-id="%1$s" class="meta-error"><strong>%2$s:</strong></a> Sorry!! Please select another file, the selected file type is not supported. <a>', ANOE_TEXTDOM  ), 
 							$accepted_tags
 						), 
 						$field_id,
@@ -531,7 +531,7 @@ if(!class_exists('ANONY_Validate_Inputs')){
 					
 					return sprintf(
 						wp_kses(
-							__( '<a href="#anony-%1$s"><strong>%2$s:</strong></a> Sorry!! The entered date is not valid', ANOE_TEXTDOM  ), 
+							__( '<a href="#%1$s" rel-id="%1$s" class="meta-error"><strong>%2$s:</strong></a> Sorry!! The entered date is not valid', ANOE_TEXTDOM  ), 
 							$accepted_tags
 						), 
 						$field_id,
@@ -545,7 +545,7 @@ if(!class_exists('ANONY_Validate_Inputs')){
 					
 					return sprintf(
 						wp_kses(
-							__( '<a href="#anony-%1$s"><strong>%2$s:</strong></a> Sorry!! Date format is not supported', ANOE_TEXTDOM  ),
+							__( '<a href="#%1$s" rel-id="%1$s" class="meta-error"><strong>%2$s:</strong></a> Sorry!! Date format is not supported', ANOE_TEXTDOM  ),
 							$accepted_tags
 						), 
 						$field_id,
@@ -559,7 +559,7 @@ if(!class_exists('ANONY_Validate_Inputs')){
 					
 					return sprintf(
 						wp_kses(
-							__('<a href="#anony-%1$s"><strong>%2$s:</strong></a> Please enter a valid number (e.g. 1,2,-5)', ANOE_TEXTDOM ), 
+							__('<a href="#%1$s" rel-id="%1$s" class="meta-error"><strong>%2$s:</strong></a> Please enter a valid number (e.g. 1,2,-5)', ANOE_TEXTDOM ), 
 							$accepted_tags
 						), 
 						$field_id,
@@ -573,7 +573,7 @@ if(!class_exists('ANONY_Validate_Inputs')){
 					
 					return sprintf(
 						wp_kses(
-							__('<a href="#anony-%1$s"><strong>%2$s:</strong></a> You must provide a valid URL', ANOE_TEXTDOM ),
+							__('<a href="#%1$s" rel-id="%1$s" class="meta-error"><strong>%2$s:</strong></a> You must provide a valid URL', ANOE_TEXTDOM ),
 							$accepted_tags
 						),
 						$field_id,
@@ -587,7 +587,7 @@ if(!class_exists('ANONY_Validate_Inputs')){
 					
 					return sprintf(
 						wp_kses(
-							__('<a href="#anony-%1$s"><strong>%2$s:</strong></a> You must enter a valid email address.', ANOE_TEXTDOM ), 
+							__('<a href="#%1$s" rel-id="%1$s" class="meta-error"><strong>%2$s:</strong></a> You must enter a valid email address.', ANOE_TEXTDOM ), 
 							$accepted_tags
 						), 
 						$field_id,
@@ -601,7 +601,7 @@ if(!class_exists('ANONY_Validate_Inputs')){
 					
 					return sprintf(
 						wp_kses(
-							__('<a href="#anony-%1$s"><strong>%2$s:</strong></a> HTML is not allowed', ANOE_TEXTDOM ), 
+							__('<a href="#%1$s" rel-id="%1$s" class="meta-error"><strong>%2$s:</strong></a> HTML is not allowed', ANOE_TEXTDOM ), 
 							$accepted_tags
 						), 
 						$field_id,
@@ -615,7 +615,7 @@ if(!class_exists('ANONY_Validate_Inputs')){
 					
 					return sprintf(
 						wp_kses(
-							__('<a href="#anony-%1$s"><strong>%2$s:</strong></a> You must enter an absolute integer', ANOE_TEXTDOM ), 
+							__('<a href="#%1$s" rel-id="%1$s" class="meta-error"><strong>%2$s:</strong></a> You must enter an absolute integer', ANOE_TEXTDOM ), 
 							$accepted_tags
 							   ), 
 						$field_id,
@@ -629,7 +629,7 @@ if(!class_exists('ANONY_Validate_Inputs')){
 					
 					return sprintf(
 						wp_kses(
-							__('<a href="#anony-%1$s"><strong>%2$s:</strong></a> You must enter a valid hex color', ANOE_TEXTDOM ), 
+							__('<a href="#%1$s" rel-id="%1$s" class="meta-error"><strong>%2$s:</strong></a> You must enter a valid hex color', ANOE_TEXTDOM ), 
 							$accepted_tags
 							   ), 
 						$field_id,
@@ -643,7 +643,7 @@ if(!class_exists('ANONY_Validate_Inputs')){
 					
 					return sprintf(
 						wp_kses(
-							__('<a href="#anony-%1$s"><strong>%2$s:</strong></a> Unvalid option/s', ANOE_TEXTDOM ), 
+							__('<a href="#%1$s" rel-id="%1$s" class="meta-error"><strong>%2$s:</strong></a> Unvalid option/s', ANOE_TEXTDOM ), 
 							$accepted_tags
 							   ), 
 						$field_id,

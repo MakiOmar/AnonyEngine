@@ -112,12 +112,16 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
 				add_action( 'post_updated', array(&$this, 'update_post_meta'));
 				
 				add_action( 'admin_notices', array(&$this, 'admin_notices') );
+
+				add_action( 'admin_footer', array(&$this, 'wp_footer') );
 			}else{
 				add_action( 'wp_enqueue_scripts', array(&$this, 'wp_enqueue_scripts'));
 
 				add_action( 'wp_head', array(&$this, 'head_styles'));
 
 				add_filter( 'the_content', array(&$this, 'show_on_front') );
+
+				add_action( 'wp_footer', array(&$this, 'wp_footer') );
 			}	
 	
 		}
@@ -660,7 +664,12 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
 		 * Show error messages in admin side
 		 */
 		public function admin_notices(){
-			if (isset($_GET['post'])) $this->notices();	
+			$screen = get_current_screen();
+
+			if ($screen->base == 'post' && (in_array($screen->post_type, $this->post_type) || $screen->post_type == $this->post_type))
+			{
+				$this->notices();	
+			} 
 		}
 		
 		/**
@@ -757,6 +766,36 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
 				</style>
 			<?php }
 		}
+
+		public function wp_footer(){?>
+			<script type="text/javascript">
+				jQuery(document).ready(function($){
+					'use strict';
+					$('.meta-error').on('click', function(e){
+						e.preventDefault();
+						var obj = $.browser.webkit ? $('body') : $('html');
+						var id = $(this).attr('rel-id');
+						var elHeight = $('#fieldset_' + id).height();
+						var paddingTop = parseInt($('#fieldset_' + id).css("padding-top"));
+						var paddingBottom = parseInt($('#fieldset_' + id).css("padding-bottom"));
+
+						var totalHeight = elHeight + paddingTop + paddingBottom;
+
+						obj.animate(
+								      {
+								        scrollTop: $("#" + id).offset().top - totalHeight
+								      },
+								      1000 //speed
+								    );
+					});
+
+					$('.meta-error').each(function(){
+						var metaFieldId = $(this).attr('rel-id');
+						$('#fieldset_' + metaFieldId).css('border', '1px solid red');
+					});
+				});
+			</script>
+		<?php }
 		
 	}
 }

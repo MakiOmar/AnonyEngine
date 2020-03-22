@@ -90,7 +90,9 @@ add_action('wp_head', function () {
  * Also you have to replace the YOUR_API_KEY by your google map api key.
  * To force map language you shoud use language&region query vars with the map url
  */ 
-add_action( 'wp_print_footer_scripts', function(){?>
+add_action( 'wp_print_footer_scripts', function(){
+	if (!is_single()) return;
+	?>
 	<!--API should be always before map script-->
 	<script type='text/javascript' src='https://maps.googleapis.com/maps/api/js?v=3.exp&key=YOUR_API_KEY&ver=4.9.10&language=ar&region=EG'></script> 
 

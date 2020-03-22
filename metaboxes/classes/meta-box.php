@@ -149,6 +149,38 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
 		}
 
 		/**
+		 * Update metabox inputs in database.
+		 */
+		public function update_post_meta($post_ID){
+			if(!in_array(get_post_type($post_ID), $this->post_type)) return;
+				
+			if ( ! current_user_can( 'edit_post', $post_ID )) return;
+			
+			if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE()) return;
+			
+			if( ( wp_is_post_revision( $post_ID) || wp_is_post_autosave( $post_ID ) ) ) return;
+
+			$parent_id = get_post_meta( $post_ID, 'parent_id', true );
+
+			//Sometime we change metaboxes through a hook, but still an object of this class holds the old metabox data, which will always make the nonce check fails. So we will check if this metabox has changed and get the new id if it has.
+			if(!empty($parent_id)){
+				$metaboxes =  get_post_meta( intval($parent_id), 'anony_this_project_metaboxes', true );
+				if (!empty($metaboxes) && is_array($metaboxes) && isset($metaboxes['id']) && !empty($metaboxes['id'])) {
+					$this->id = $metaboxes['id'];
+				}
+			}
+
+			//To avoid undefined index for other meta boxes
+			if(!isset($_POST[$this->id.'_nonce'])) return;
+
+			//One nonce for a metabox
+			if (!wp_verify_nonce( $_POST[$this->id.'_nonce'], $this->id.'_action' )) return;
+
+			$this->start_update($_POST, $post_ID);
+			
+		}
+
+		/**
 		 * Adds a shortcode for the metabox
 		 * @param  array  $atts An array of shortcode attributes
 		 * @return string The shortcode output
@@ -274,8 +306,6 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
 		 */
 		public function show_on_front($content){
 
-			$this->notices();
-
 			global $post;
 
 			$render = '';
@@ -283,6 +313,8 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
 			if ( is_single() && in_array($post->post_type, $this->post_type) ) {
 
 				$this->update_post_in_frontend();
+
+				$render .= $this->getNotices();
 
 				do_action($this->id_as_hook.'_show_on_front');
 
@@ -360,38 +392,6 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
 			}
 		}
 		
-		/**
-		 * Update metabox inputs in database.
-		 */
-		public function update_post_meta($post_ID){
-			if(!in_array(get_post_type($post_ID), $this->post_type)) return;
-				
-			if ( ! current_user_can( 'edit_post', $post_ID )) return;
-			
-			if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE()) return;
-			
-			if( ( wp_is_post_revision( $post_ID) || wp_is_post_autosave( $post_ID ) ) ) return;
-
-			$parent_id = get_post_meta( $post_ID, 'parent_id', true );
-
-			//Sometime we change metaboxes through a hook, but still an object of this class holds the old metabox data, which will always make the nonce check fails. So we will check if this metabox has changed and get the new id if it has.
-			if(!empty($parent_id)){
-				$metaboxes =  get_post_meta( intval($parent_id), 'anony_this_project_metaboxes', true );
-				if (!empty($metaboxes) && is_array($metaboxes) && isset($metaboxes['id']) && !empty($metaboxes['id'])) {
-					$this->id = $metaboxes['id'];
-				}
-			}
-			
-
-			//To avoid undefined index for other meta boxes
-			if(!isset($_POST[$this->id.'_nonce'])) return;
-
-			//One nonce for a metabox
-			if (!wp_verify_nonce( $_POST[$this->id.'_nonce'], $this->id.'_action' )) return;
-
-			$this->start_update($_POST, $post_ID);
-			
-		}
 
 		public function insert_post_in_frontend(){
 			/**
@@ -551,8 +551,6 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
 
 				if ($chech_meta === $sent_data[$field['id']]) continue;
 
-
-				
 				//If this field is an array of other fields values
 				if(isset($field['fields'])){
 
@@ -613,6 +611,22 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
 		}
 
 		/**
+		 * Return notices
+		 * @return string
+		 */
+		public function getNotices(){
+			ob_start();
+
+			$this->notices();
+
+			$render = ob_get_contents();
+
+			ob_end_clean();
+
+			return $render;
+		}
+
+		/**
 		 * Render notices
 		 * @return string
 		 */
@@ -646,8 +660,7 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
 		 * Show error messages in admin side
 		 */
 		public function admin_notices(){
-			if (isset($_GET['post'])) $this->notices();
-			
+			if (isset($_GET['post'])) $this->notices();	
 		}
 		
 		/**

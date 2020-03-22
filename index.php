@@ -35,7 +35,7 @@ require_once (wp_normalize_path( ANOE_DIR . 'config.php' ));
 function anonyCommonScripts(){
 
 	//Enqueue styles
-	$styles = [];
+	$styles = ['anonyengine'];
 	foreach($styles as $style){
 		wp_enqueue_style( $style , ANOE_URI .'assets/css/'.$style.'.css' , false, filemtime(wp_normalize_path(ANOE_DIR .'assets/css/'.$style.'.css')) );
 	}

@@ -10,7 +10,21 @@
 if ( ! class_exists( 'ANONY_POST_HELP' ) ) {
 	class ANONY_POST_HELP extends ANONY_HELP{
 		
+		/**
+		 * Checks if a shortcode exists in page/post
+		 * @param  obj  $post 
+		 * @return bool True if shortcode exist, otherwise false
+		 */
+		static function isPageHasShortcode($post, $shortcode_tag){
+			if ($post instanceof WP_Post ) {
+		        setup_postdata($post);
+		        $content = get_the_content();
+		        preg_match('/\['.$shortcode_tag.'\s*.*\]/', $content, $matches);
+		        if ($matches) return true;
+		    }
 
+		    return false;
+		}
 		/**
 		 * Get posts IDs and titles
 		 * @param string $post_type 

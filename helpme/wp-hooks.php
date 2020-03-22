@@ -67,21 +67,6 @@ function anony_htaccess_https(){
 	return $rewrite;
 }
 
-/**
- * Add styles to head if a shortcode exists within post content.
- * You should replace the anony_shcode_rplaceit with your shortcode
- */
-add_action('wp_head', function () {
-    global $post;
-    if ($post) {
-        setup_postdata($post);
-        $content = get_the_content();
-        preg_match('/\[anony_shcode_rplaceit\s*.*\]/', $content, $matches);
-        if ($matches) {
-            echo '<style>.some_style { font-weight:800; }</style>';
-        }
-    }
-});
 
 /**
  * Google map

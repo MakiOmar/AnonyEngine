@@ -767,7 +767,10 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
 			<?php }
 		}
 
-		public function wp_footer(){?>
+		public function wp_footer(){
+			$screen = get_current_screen();
+			if( $screen->base == 'post'  &&  in_array( $screen->post_type, $this->post_type)){
+			?>
 			<script type="text/javascript">
 				jQuery(document).ready(function($){
 					'use strict';
@@ -795,7 +798,7 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
 					});
 				});
 			</script>
-		<?php }
+		<?php } }
 		
 	}
 }

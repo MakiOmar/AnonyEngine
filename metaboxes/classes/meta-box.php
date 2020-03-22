@@ -74,6 +74,8 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
 			
 			//add metabox needed hooks
 			$this->hooks();
+
+			new ANONY_Mb_Shortcode($this, $meta_box);
 			
 		}
 		
@@ -100,7 +102,7 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
 		 * Add metabox hooks.
 		 */
 		public function hooks(){
-			add_shortcode($this->id_as_hook  , array($this, 'metabox_shortcode') );
+			
 			
 			if(is_admin()){
 				add_action( 'admin_head', array(&$this, 'head_styles'));
@@ -184,61 +186,7 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
 			
 		}
 
-		/**
-		 * Adds a shortcode for the metabox
-		 * @param  array  $atts An array of shortcode attributes
-		 * @return string The shortcode output
-		 */
-		public function metabox_shortcode($atts){
-
-			$render = '';
-
-			/**
-			 * This parameter $this->id_as_hook is the shortcode name to be used as filter.
-			 * Filter name will be shortcode_atts_{$shortcode}
-			 */
-
-			$atts = shortcode_atts(
-						[], 
-						$atts, 
-						$this->id_as_hook );
-
-			if (isset($_GET['action']) && $_GET['action'] == 'insert' && isset($_GET['_wpnonce']) && wp_verify_nonce( $_GET['_wpnonce'] , 'anonyinsert' ) ) {
-
-				$this->insert_post_in_frontend();
-
-				do_action($this->id_as_hook.'_before_form');
-
-				$render .= '<form method="post">';
-
-				/**
-				 * Usefull when neccessary hidden inputs are needed for the form
-				 */ 
-				$hiddens = apply_filters( $this->id_as_hook.'_shortcode_hiddens' , '', $atts );
-
-
-				$render .= $hiddens;
-
-				/**
-				 * Start metabox render
-				 */ 
-
-				$render .= $this->return_meta_fields();
-
-				$render .= '<input name="save" type="submit" class="button button-primary button-large" id="publish" value="'.esc_html__( 'Save changes' ).'">';
-
-				$render .= '</form>';
-
-				do_action($this->id_as_hook.'_after_form');
-			}else{
-
-				$render .= $this->return_meta_fields();
-			}
-
-			
-
-			return $render;
-		}
+		
 		public function render_frontend_form(){
 
 			global $post;
@@ -394,91 +342,6 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
 			        }
 			    }
 			}
-		}
-		
-
-		public function insert_post_in_frontend(){
-			/**
-			 * Check if there are any posted data return if empty
-			 */ 
-			if (empty($_POST)) return;
-
-			if(!isset($_POST['postType'])) return;
-
-			if(is_array($this->post_type) && !in_array($_POST['postType'], $this->post_type)) return;
-
-			if( !is_array($this->post_type) && $_POST['postType'] !== $this->post_type) return;
-
-			if(!isset($_POST['post_title']) ||empty('post_title')) return;
-					
-			if (isset($_POST[$this->id.'_nonce']) && !wp_verify_nonce( $_POST[$this->id.'_nonce'], $this->id.'_action' )) return;
-
-
-			if (isset($_POST['parent_id']) && !empty($_POST['parent_id'])) {
-				$post_parent = intval($_POST['parent_id']);
-
-				$post_parent_data = get_post($post_parent);
-
-				$set_parent_meta = ($post_parent_data instanceof WP_Post) ? true : false;
-
-			}
-
-			//Can be used to validate $_POST data befoore insertion
-			do_action( $this->id_as_hook.'_before_insert' );
-			/**
-			 * wp_insert_post() passes data through sanitize_post(), 
-			 * which itself handles all necessary sanitization and validation (kses, etc.).
-			 */
-			$title = wp_strip_all_tags( $_POST['post_title'] );
-
-			global $wpdb;
-			$post_id = $wpdb->get_col("select ID from $wpdb->posts where post_title LIKE '".$title."%' ");
-
-
-
-			if(!empty($post_id)) {
-				//esc_html_e( 'Sorry! but you already have posted the same data before', ANOE_TEXTDOM  );
-				$this->start_update($_POST, intval($post_id[0]));
-
-				$url = add_query_arg('post', $post_id[0], get_the_permalink($post_id[0]));
-
-			}else{
-				$insert_args = [
-					'post_title'   => wp_strip_all_tags( $_POST['post_title'] ), //required
-					'post_content' => '', //required
-					'post_type'    => $_POST['postType'],
-					'post_status'  => 'publish',
-				];
-
-
-				if (isset($_POST['parent_id'])) $insert_args['post_parent'] = $_POST['parent_id'];
-
-				$insert = wp_insert_post( $insert_args );
-
-				if (!is_wp_error( $insert )) {
-
-				    do_action( $this->id_as_hook.'_after_insert' );
-
-				    if (isset($set_parent_meta) && $set_parent_meta) {
-				    	$test = update_post_meta( $insert, 'parent_id',  $post_parent);
-				    }
-
-				    $this->start_update($_POST, $insert);
-
-				    $url = add_query_arg('post', $insert, get_the_permalink($insert)); 
-
-				    $url = add_query_arg('insert', 'succeed', $url);   
-				}else{
-
-					$url = add_query_arg('insert', 'failed', get_the_permalink()); 
-				}
-			}
-
-			if (isset($url)) {
-				wp_redirect( $url );
-				 exit();
-			}
-				
 		}
 
 		public function update_post_in_frontend(){
@@ -767,13 +630,13 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
 			<?php }
 		}
 
-		public function wp_footer(){
-			$screen = get_current_screen();
-			if( $screen->base == 'post'  &&  in_array( $screen->post_type, $this->post_type)){
+		public function footer_scripts(){
+
 			?>
 			<script type="text/javascript">
 				jQuery(document).ready(function($){
 					'use strict';
+					console.log('ggg');
 					$('.meta-error').on('click', function(e){
 						e.preventDefault();
 						var obj = $.browser.webkit ? $('body') : $('html');
@@ -798,7 +661,29 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
 					});
 				});
 			</script>
-		<?php } }
-		
+		<?php }
+
+		public function wp_footer(){
+			$loadFooterScripts = false;
+			if(is_admin()){
+				$screen = get_current_screen();
+				if( $screen->base == 'post'  &&  (in_array( $screen->post_type, $this->post_type) || $screen->post_type == $this->post_type)){
+					$loadFooterScripts = true;
+				}
+			}else{
+				if (is_single()) {
+
+					$post_type = get_post_type();
+					if( in_array( $post_type, $this->post_type) || $post_type == $this->post_type ){
+						$loadFooterScripts = true;
+					}
+					
+				}
+			}
+
+			
+			if($loadFooterScripts) $this->footer_scripts();
+			
+		} 
 	}
 }

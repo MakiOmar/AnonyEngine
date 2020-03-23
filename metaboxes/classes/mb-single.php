@@ -23,11 +23,11 @@
 		public function hooks(){
 			add_action( 'wp_enqueue_scripts', array($this->parent, 'frontScripts'));
 
-			add_action( 'wp_head', array($this->parent, 'headStyles'));
+			add_action( 'wp_head', array($this, 'headStyles'));
 
 			add_filter( 'the_content', array($this, 'showOnFront') );
 
-			add_action( 'wp_footer', array($this->parent, 'wpFooter') );
+			add_action( 'wp_footer', array($this, 'singleFooterScripts') );
 		}
 
 		/**
@@ -61,7 +61,7 @@
 		 */
 		public function renderForAction(){
 			global $post;
-			
+
 			if (!is_user_logged_in() && !is_admin()) {
 				return esc_html__( 'Sorry, you have to login first', ANOE_TEXTDOM  );
 			}
@@ -109,6 +109,35 @@
 
 			$this->parent->startUpdate($_POST, $_POST['post_ID']);
 				
+		}
+
+		public function singleFooterScripts(){
+			
+			if (is_single()) {
+
+				$post_type = get_post_type();
+				if( in_array( $post_type, $this->parent->post_type) || $post_type == $this->parent->post_type ){
+					$this->parent->footerScripts();
+				}
+				
+			}
+
+						
+		}
+
+		/**
+		 * Add style tag to head
+		 * @return type
+		 */
+		public function headStyles(){
+			if (is_single( ) && !is_admin()) {?>
+				<style type="text/css">
+					#anony_map{
+						width:100%;
+						height: 480px;
+					}
+				</style>
+			<?php }
 		}
 
  	}

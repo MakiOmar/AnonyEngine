@@ -72,10 +72,13 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
 			//Set metabox's data
 			$this->setMetaboxData($meta_box);
 			
+			new ANONY_Mb_Shortcode($this, $meta_box);
+
+			new ANONY_Mb_Single($this, $meta_box);
+			
 			//add metabox needed hooks
 			$this->hooks();
 
-			new ANONY_Mb_Shortcode($this, $meta_box);
 			
 		}
 		
@@ -103,28 +106,17 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
 		 */
 		public function hooks(){
 			
+			add_action( 'admin_head', array(&$this, 'headStyles'));
+
+			add_action( 'admin_enqueue_scripts', array(&$this, 'adminEnqueueScripts'));
+
+			add_action( 'add_meta_boxes' , array( &$this, 'addMetaBox' ), $this->hook_priority, 2 );
 			
-			if(is_admin()){
-				add_action( 'admin_head', array(&$this, 'headStyles'));
+			add_action( 'post_updated', array(&$this, 'updatePostMeta'));
+			
+			add_action( 'admin_notices', array(&$this, 'adminNotices') );
 
-				add_action( 'admin_enqueue_scripts', array(&$this, 'adminEnqueueScripts'));
-
-				add_action( 'add_meta_boxes' , array( &$this, 'addMetaBox' ), $this->hook_priority, 2 );
-				
-				add_action( 'post_updated', array(&$this, 'updatePostMeta'));
-				
-				add_action( 'admin_notices', array(&$this, 'adminNotices') );
-
-				add_action( 'admin_footer', array(&$this, 'wpFooter') );
-			}else{
-				add_action( 'wp_enqueue_scripts', array(&$this, 'wpEnqueueScripts'));
-
-				add_action( 'wp_head', array(&$this, 'headStyles'));
-
-				add_filter( 'the_content', array(&$this, 'showOnFront') );
-
-				add_action( 'wp_footer', array(&$this, 'wpFooter') );
-			}	
+			add_action( 'admin_footer', array(&$this, 'wpFooter') );	
 	
 		}
 
@@ -156,6 +148,8 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
 
 		/**
 		 * Update metabox inputs in database.
+		 * 
+		 * For admin side
 		 */
 		public function updatePostMeta($post_ID){
 			if(!in_array(get_post_type($post_ID), $this->post_type)) return;
@@ -209,80 +203,6 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
 			$render .= '</form>';
 
 			return $render;
-		}
-
-		/**
-		 * Render frontend form according to action
-		 * @return type
-		 */
-		public function renderForAction(){
-			global $post;
-			$render = '';
-			if (!is_user_logged_in() && is_single() && !is_admin()) {
-				$render .= esc_html__( 'Sorry, you have to login first', ANOE_TEXTDOM  );
-			}
-
-			if ( is_single() && in_array($post->post_type, $this->post_type) ) {
-				
-				if (isset($_GET['action']) && isset($_GET['_wpnonce']) && wp_verify_nonce( $_GET['_wpnonce'], 'anonyinsert_'.$post->ID )) {
-
-					switch ($_GET['action']) {
-						case 'insert':
-							$render .= $this->renderFrontendForm();
-							break;
-
-						case 'edit':
-
-							if(get_current_user_id() == $post->post_author){
-
-								$render .= $this->renderFrontendForm();
-							}
-						break;
-						
-						default:
-							$render .= $this->returnMetaFields();
-
-							$render .= sprintf('<a href="%1$s?action=edit&_wpnonce=%2$s" class="button button-primary button-large">%3$s</a>', get_permalink( ) ,wp_create_nonce( 'anonyinsert_'.$post->ID ), esc_html__( 'Edit' ));
-							break;
-					}
-
-				}else{
-					$render .= $this->returnMetaFields();
-
-					$render .= sprintf('<a href="%1$s?action=edit&_wpnonce=%2$s" class="button button-primary button-large">%3$s</a>', get_permalink( ) ,wp_create_nonce( 'anonyinsert_'.$post->ID ), esc_html__( 'Edit' ));
-				}
-				
-			}
-
-			return $render;
-		}
-
-		/**
-		 * Renders metabox in frontend. hooked to the_content filter
-		 * @param  string $content 
-		 * @return string
-		 */
-		public function showOnFront($content){
-
-			global $post;
-
-			$render = '';
-
-			if ( is_single() && in_array($post->post_type, $this->post_type) ) {
-
-				$this->updatePostInFront();
-
-				$render .= $this->getNotices();
-
-				do_action($this->id_as_hook.'_show_on_front');
-
-
-				$render .= $this->renderForAction();
-
-				return $content.'<br/>'.$render;
-			}
-				
-			return $content;	
 		}
 
 		/**
@@ -347,46 +267,6 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
 			        }
 			    }
 			}
-		}
-
-		/**
-		 * Update metafields if updated from frontend. (in a single post)
-		 */
-		public function updatePostInFront(){
-			/**
-			 * Check if there are any posted data return if empty
-			 */ 
-			if (empty($_POST)) return;
-
-			/**
-			 * Metabox should be used within a single post. But
-			 * Sometime may be used as a shortcode, which can be added to a singular page.
-			 * So we do this check to be mede if it is a single post
-			 */ 
-			if (is_single()) {
-				global $post;
-				if (!in_array($post->post_type, $this->post_type) ) return;
-
-				if ($post->post_type != $_POST['postType']) return;
-
-				if(($post->post_author != $_POST['user_ID']) || !current_user_can( 'administrator' ) ) return;
-
-				if($post->ID != $_POST['post_ID'] ) return;
-			
-			}
-
-
-			if (!isset($_POST[$this->id.'_nonce'])) return;
-			
-					
-			if (isset($_POST[$this->id.'_nonce']) && !wp_verify_nonce( $_POST[$this->id.'_nonce'], $this->id.'_action' )) return;
-
-
-			//Can be used to validate $_POST data befoore insertion
-			do_action( $this->id_as_hook.'_before_update' );
-
-			$this->startUpdate($_POST, $_POST['post_ID']);
-				
 		}
 
 		/**
@@ -571,45 +451,6 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
 			}
 	
 		}
-		/**
-		 * Load fields scripts on front if `also_on_front_scripts` is set to true
-		 */
-		public function enqueueFrontScripts(){
-			wp_enqueue_script('metaboxes-front', ANONY_MB_URI. 'assets/js/metaboxes-front.js', ['jquery'], false, true);
-			foreach($this->fields as $field){
-
-				if(isset($field['scripts']) && !empty($field['scripts'])){
-					if(isset($field['show_on_front']) && $field['show_on_front'] == true){
-				        foreach($field['scripts'] as $script){
-
-				            $deps = (isset($script['dependancies']) && !empty($script['dependancies'])) ? $script['dependancies'] : [];
-
-				            if(isset($script['file_name'])){
-
-				                $url = ANONY_MB_URI. 'assets/js/'.$script['file_name'].'.js';
-
-				            }elseif(isset($script['url'])){
-
-				                $url = $script['url'];
-				            }
-				            
-				            wp_enqueue_script($script['handle'], $url, $deps, false, true);
-				        }
-				        $post_id = get_the_ID();
-				        $anony__entry_lat  = get_post_meta($post_id,'anony__entry_lat',true);
-				        $anony__entry_long = get_post_meta($post_id,'anony__entry_long',true);
-
-				        if($anony__entry_lat && $anony__entry_long){
-
-				        	$this->localize_scripts['geolat'] = $anony__entry_lat;
-							$this->localize_scripts['geolong']= $anony__entry_long;
-				        }
-						
-						wp_localize_script( 'metaboxes-front', 'AnonyMB', $this->localize_scripts );
-				    }
-				}
-			}
-		}
 
 		/**
 		 * Enqueue scripts for admin side
@@ -620,11 +461,45 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
 		}
 
 		/**
-		 * Enqueue scripts for frontend side
-		 * @return void
+		 * Load fields scripts on front if `show_on_front` is set to true
 		 */
-		public function wpEnqueueScripts(){
-			$this->enqueueFrontScripts();
+		public function frontScripts(){
+
+			wp_enqueue_script('metaboxes-front', ANONY_MB_URI. 'assets/js/metaboxes-front.js', ['jquery'], false, true);
+
+			foreach($this->fields as $field){
+
+				if(isset($field['scripts']) && !empty($field['scripts']) & isset($field['show_on_front']) && $field['show_on_front'] == true){
+					
+			        foreach($field['scripts'] as $script){
+
+			            $deps = (isset($script['dependancies']) && !empty($script['dependancies'])) ? $script['dependancies'] : [];
+
+			            if(isset($script['file_name'])){
+
+			                $url = ANONY_MB_URI. 'assets/js/'.$script['file_name'].'.js';
+
+			            }elseif(isset($script['url'])){
+
+			                $url = $script['url'];
+			            }
+			            
+			            wp_enqueue_script($script['handle'], $url, $deps, false, true);
+			        }
+			        $post_id = get_the_ID();
+			        $anony__entry_lat  = get_post_meta($post_id,'anony__entry_lat',true);
+			        $anony__entry_long = get_post_meta($post_id,'anony__entry_long',true);
+
+			        if($anony__entry_lat && $anony__entry_long){
+
+			        	$this->localize_scripts['geolat'] = $anony__entry_lat;
+						$this->localize_scripts['geolong']= $anony__entry_long;
+			        }
+					
+					wp_localize_script( 'metaboxes-front', 'AnonyMB', $this->localize_scripts );
+				    
+				}
+			}
 		}
 
 		public function headStyles(){

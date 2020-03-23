@@ -1,6 +1,6 @@
 <?php
 /**
- * Metaboxe shortcode
+ * Metabox shortcode
  *
  * @package Anonymous theme
  * @author Makiomar
@@ -15,8 +15,18 @@
 		public function __construct($parent, $meta_box = array()){
 			$this->parent = $parent;
 
+			$this->hooks();
+		}
+
+		/**
+		 * Shortcode hooks
+		 */
+		public function hooks(){
 			add_shortcode($this->parent->id_as_hook  , array($this, 'metaboxShortcode') );
-			add_action( 'wp_footer', array($this, 'loadShortcodeScripts') );
+
+			add_action( 'wp_enqueue_scripts', array($this, 'enqueueShortcodeScripts'));
+
+			add_action( 'wp_footer', array($this, 'shortcodeFooterScripts') );
 		}
 
 		/**
@@ -156,12 +166,23 @@
 				
 		}
 
-		public function loadShortcodeScripts () {
-				global $post;
+		public function enqueueShortcodeScripts(){
+			global $post;
 
-				if(ANONY_POST_HELP::isPageHasShortcode($post, $this->parent->id_as_hook)){
-					$this->parent->footerScripts();
-				}
+			if(ANONY_POST_HELP::isPageHasShortcode($post, $this->parent->id_as_hook)){
+				$this->parent->frontScripts();
+			}
+		}
+
+		/**
+		 * Load footer scripts if page has metabox shortcode
+		 */
+		public function shortcodeFooterScripts () {
+			global $post;
+
+			if(ANONY_POST_HELP::isPageHasShortcode($post, $this->parent->id_as_hook)){
+				$this->parent->footerScripts();
+			}
 		    
 		}
  	}

@@ -38,13 +38,12 @@ define( 'ANONY_MB_FIELDS', ANONY_MB_PATH . 'fields/');
 
 
 add_action( 'init', function(){
-	$metaboxes = [];
 
-	$metaboxes = apply_filters( 'anony_metaboxes', (array) $metaboxes );
+	$metaboxes = apply_filters( 'anony_metaboxes', [] );
 
 	if (!is_array($metaboxes) || empty($metaboxes)) return;
 
 	foreach ($metaboxes as $metabox) {
-		new ANONY_Meta_Box($metabox);
+		return new ANONY_Meta_Box($metabox);
 	}
 });

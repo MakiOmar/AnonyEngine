@@ -77,14 +77,18 @@ function anony_htaccess_https(){
  */ 
 add_action( 'wp_print_footer_scripts', function(){
 	if (!is_single()) return;
+	$lat  = get_post_meta(get_the_ID(),'geolat',true);
+	$lang = get_post_meta(get_the_ID(),'geolong',true);
+
+	if(empty($lat) || empty($long)) return;
 	?>
 	<!--API should be always before map script-->
 	<script type='text/javascript' src='https://maps.googleapis.com/maps/api/js?v=3.exp&key=YOUR_API_KEY&ver=4.9.10&language=ar&region=EG'></script> 
 
 	<script type="text/javascript">
 		var Gisborne = new google.maps.LatLng(
-	        <?php echo get_post_meta(get_the_ID(),'location_lat',true); ?>,
-	        <?php echo get_post_meta(get_the_ID(),'location_lang',true); ?>
+	        <?php echo $lat; ?>,
+	        <?php echo $long; ?>
 	    );
 	    
 	    function initialize(){

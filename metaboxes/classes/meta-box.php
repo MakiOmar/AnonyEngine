@@ -60,7 +60,7 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
 
 			if(empty($meta_box) || !is_array($meta_box)) return;
 
-			$this->localize_scripts = array(
+			$localize_scripts = array(
     			'ajaxURL'   => ANONY_WPML_HELP:: getAjaxUrl(),
     			'textDir'   => (is_rtl() ? 'rtl' : 'ltr'),
     			'themeLang' => get_bloginfo('language'),
@@ -68,6 +68,8 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
     			'MbPath'    => ANONY_MB_PATH,
     			
     		);
+
+			$this->localize_scripts = apply_filters( 'anony_mb_loc_scripts', $localize_scripts ) ;
 			
 			//Set metabox's data
 			$this->setMetaboxData($meta_box);
@@ -331,9 +333,10 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
 		/**
 		 * Enqueue needed scripts|styles
 		 */
-		public function enqueueMainScripts(){		
-        		
-        	if(in_array( get_current_screen()->base , array('post') ) &&  in_array( get_current_screen()->post_type, $this->post_type)){
+		public function enqueueMainScripts(){	
+        	$screen = get_current_screen();
+        	if(in_array( $screen->base , array('post') ) &&  in_array( $screen->post_type, $this->post_type)){
+
 				wp_enqueue_style( 
 					'anony-metaboxs' , 
 					ANONY_MB_URI. 'assets/css/metaboxes.css', 
@@ -347,9 +350,6 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
 					false, 
 					filemtime(wp_normalize_path(ANONY_MB_PATH . 'assets/js/metaboxes.js')) 
 				);
-				$post_id = get_the_ID();
-				$this->localize_scripts['geolat'] = get_post_meta($post_id,'anony__entry_lat',true);
-				$this->localize_scripts['geolong']= get_post_meta($post_id,'anony__entry_long',true);
 
 				//Don't remove outside the if statement
         		wp_localize_script( 'anony-metaboxs', 'AnonyMB', $this->localize_scripts );
@@ -383,17 +383,6 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
 			            
 			            wp_enqueue_script($script['handle'], $url, $deps, false, true);
 			        }
-			        $post_id = get_the_ID();
-			        $anony__entry_lat  = get_post_meta($post_id,'anony__entry_lat',true);
-			        $anony__entry_long = get_post_meta($post_id,'anony__entry_long',true);
-
-			        if($anony__entry_lat && $anony__entry_long){
-
-			        	$this->localize_scripts['geolat'] = $anony__entry_lat;
-						$this->localize_scripts['geolong']= $anony__entry_long;
-			        }
-					
-					wp_localize_script( 'metaboxes-front', 'AnonyMB', $this->localize_scripts );
 				    
 				}
 			}

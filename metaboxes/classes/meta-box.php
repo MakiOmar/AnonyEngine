@@ -72,13 +72,11 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
 			//Set metabox's data
 			$this->setMetaboxData($meta_box);
 			
+			new ANONY_Mb_Admin($this, $meta_box);
+
 			new ANONY_Mb_Shortcode($this, $meta_box);
 
 			new ANONY_Mb_Single($this, $meta_box);
-			
-			//add metabox needed hooks
-			$this->hooks();
-
 			
 		}
 		
@@ -101,86 +99,6 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
 			$this->id_as_hook    = str_replace('-', '_', $this->id);
 		}
 
-		/**
-		 * Add metabox hooks.
-		 */
-		public function hooks(){
-			
-			add_action( 'admin_head', array(&$this, 'headStyles'));
-
-			add_action( 'admin_enqueue_scripts', array(&$this, 'adminEnqueueScripts'));
-
-			add_action( 'add_meta_boxes' , array( &$this, 'addMetaBox' ), $this->hook_priority, 2 );
-			
-			add_action( 'post_updated', array(&$this, 'updatePostMeta'));
-			
-			add_action( 'admin_notices', array(&$this, 'adminNotices') );
-
-			add_action( 'admin_footer', array(&$this, 'wpFooter') );	
-	
-		}
-
-		/**
-		 * Add metaboxes.
-		 */
-		public function addMetaBox($postType, $post){
-
-			$this_post_metaboxes = apply_filters( 'anony_post_specific_metaboxes', '', $post );
-			
-
-			if (!empty($this_post_metaboxes) && (in_array($post->post_type, $this_post_metaboxes['post_type']) || $this_post_metaboxes['post_type'] === $post->post_type)) {
-
-				$this->setMetaboxData($this_post_metaboxes);
-			}
-			
-			if( is_array( $this->post_type ) && in_array($postType, $this->post_type) ){
-				
-				foreach ( $this->post_type as $post_type ) {
-					add_meta_box( $this->id, $this->label, array( $this, 'metaFieldsCallback' ), $post_type, $this->context, $this->priority );
-				}
-				
-			}elseif($this->post_type == $postType){
-				
-				add_meta_box( $this->id, $this->label, array( $this, 'metaFieldsCallback' ), $this->post_type, $this->context, $this->priority );
-				
-			}
-		}
-
-		/**
-		 * Update metabox inputs in database.
-		 * 
-		 * For admin side
-		 */
-		public function updatePostMeta($post_ID){
-			if(!in_array(get_post_type($post_ID), $this->post_type)) return;
-				
-			if ( ! current_user_can( 'edit_post', $post_ID )) return;
-			
-			if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE()) return;
-			
-			if( ( wp_is_post_revision( $post_ID) || wp_is_post_autosave( $post_ID ) ) ) return;
-
-			$parent_id = get_post_meta( $post_ID, 'parent_id', true );
-
-			//Sometime we change metaboxes through a hook, but still an object of this class holds the old metabox data, which will always make the nonce check fails. So we will check if this metabox has changed and get the new id if it has.
-			if(!empty($parent_id)){
-				$metaboxes =  get_post_meta( intval($parent_id), 'anony_this_project_metaboxes', true );
-				if (!empty($metaboxes) && is_array($metaboxes) && isset($metaboxes['id']) && !empty($metaboxes['id'])) {
-					$this->id = $metaboxes['id'];
-				}
-			}
-
-			//To avoid undefined index for other meta boxes
-			if(!isset($_POST[$this->id.'_nonce'])) return;
-
-			//One nonce for a metabox
-			if (!wp_verify_nonce( $_POST[$this->id.'_nonce'], $this->id.'_action' )) return;
-
-			$this->startUpdate($_POST, $post_ID);
-			
-		}
-
-		
 		public function renderFrontendForm(){
 
 			global $post;
@@ -361,8 +279,7 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
 
 			if(!empty($this->errors)){
 				set_transient('ANONY_errors_'.$postType.'_'.$post_ID, $this->errors);
-			}
-			
+			}	
 		}
 
 		/**
@@ -412,18 +329,6 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
 		}
 		
 		/**
-		 * Show error messages in admin side
-		 */
-		public function adminNotices(){
-			$screen = get_current_screen();
-
-			if ($screen->base == 'post' && (in_array($screen->post_type, $this->post_type) || $screen->post_type == $this->post_type))
-			{
-				$this->notices();	
-			} 
-		}
-		
-		/**
 		 * Enqueue needed scripts|styles
 		 */
 		public function enqueueMainScripts(){		
@@ -450,14 +355,6 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
         		wp_localize_script( 'anony-metaboxs', 'AnonyMB', $this->localize_scripts );
 			}
 	
-		}
-
-		/**
-		 * Enqueue scripts for admin side
-		 * @return void
-		 */
-		public function adminEnqueueScripts(){
-			$this->enqueueMainScripts();
 		}
 
 		/**
@@ -502,17 +399,6 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
 			}
 		}
 
-		public function headStyles(){
-			if (is_single( )) {?>
-				<style type="text/css">
-					#anony_map{
-						width:100%;
-						height: 480px;
-					}
-				</style>
-			<?php }
-		}
-
 		public function footerScripts(){
 
 			?>
@@ -545,28 +431,5 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
 				});
 			</script>
 		<?php }
-
-		public function wpFooter(){
-			$loadFooterScripts = false;
-			if(is_admin()){
-				$screen = get_current_screen();
-				if( $screen->base == 'post'  &&  (in_array( $screen->post_type, $this->post_type) || $screen->post_type == $this->post_type)){
-					$loadFooterScripts = true;
-				}
-			}else{
-				if (is_single()) {
-
-					$post_type = get_post_type();
-					if( in_array( $post_type, $this->post_type) || $post_type == $this->post_type ){
-						$loadFooterScripts = true;
-					}
-					
-				}
-			}
-
-			
-			if($loadFooterScripts) $this->footerScripts();
-			
-		} 
 	}
 }

@@ -70,7 +70,7 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
     		);
 			
 			//Set metabox's data
-			$this->set_metabox_data($meta_box);
+			$this->setMetaboxData($meta_box);
 			
 			//add metabox needed hooks
 			$this->hooks();
@@ -84,7 +84,7 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
 		 * @param array $meta_box Array of meta box data
 		 * @return void
 		 */
-		public function set_metabox_data($meta_box){
+		public function setMetaboxData($meta_box){
 			
 			$this->id            = apply_filters( 'anony_mb_frontend_id', $meta_box['id'] );
 			$this->label         = $meta_box['title'];
@@ -105,25 +105,25 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
 			
 			
 			if(is_admin()){
-				add_action( 'admin_head', array(&$this, 'head_styles'));
+				add_action( 'admin_head', array(&$this, 'headStyles'));
 
-				add_action( 'admin_enqueue_scripts', array(&$this, 'admin_enqueue_scripts'));
+				add_action( 'admin_enqueue_scripts', array(&$this, 'adminEnqueueScripts'));
 
-				add_action( 'add_meta_boxes' , array( &$this, 'add_meta_box' ), $this->hook_priority, 2 );
+				add_action( 'add_meta_boxes' , array( &$this, 'addMetaBox' ), $this->hook_priority, 2 );
 				
-				add_action( 'post_updated', array(&$this, 'update_post_meta'));
+				add_action( 'post_updated', array(&$this, 'updatePostMeta'));
 				
-				add_action( 'admin_notices', array(&$this, 'admin_notices') );
+				add_action( 'admin_notices', array(&$this, 'adminNotices') );
 
-				add_action( 'admin_footer', array(&$this, 'wp_footer') );
+				add_action( 'admin_footer', array(&$this, 'wpFooter') );
 			}else{
-				add_action( 'wp_enqueue_scripts', array(&$this, 'wp_enqueue_scripts'));
+				add_action( 'wp_enqueue_scripts', array(&$this, 'wpEnqueueScripts'));
 
-				add_action( 'wp_head', array(&$this, 'head_styles'));
+				add_action( 'wp_head', array(&$this, 'headStyles'));
 
-				add_filter( 'the_content', array(&$this, 'show_on_front') );
+				add_filter( 'the_content', array(&$this, 'showOnFront') );
 
-				add_action( 'wp_footer', array(&$this, 'wp_footer') );
+				add_action( 'wp_footer', array(&$this, 'wpFooter') );
 			}	
 	
 		}
@@ -131,25 +131,25 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
 		/**
 		 * Add metaboxes.
 		 */
-		public function add_meta_box($postType, $post){
+		public function addMetaBox($postType, $post){
 
 			$this_post_metaboxes = apply_filters( 'anony_post_specific_metaboxes', '', $post );
 			
 
 			if (!empty($this_post_metaboxes) && (in_array($post->post_type, $this_post_metaboxes['post_type']) || $this_post_metaboxes['post_type'] === $post->post_type)) {
 
-				$this->set_metabox_data($this_post_metaboxes);
+				$this->setMetaboxData($this_post_metaboxes);
 			}
 			
 			if( is_array( $this->post_type ) && in_array($postType, $this->post_type) ){
 				
 				foreach ( $this->post_type as $post_type ) {
-					add_meta_box( $this->id, $this->label, array( $this, 'meta_fields_callback' ), $post_type, $this->context, $this->priority );
+					add_meta_box( $this->id, $this->label, array( $this, 'metaFieldsCallback' ), $post_type, $this->context, $this->priority );
 				}
 				
 			}elseif($this->post_type == $postType){
 				
-				add_meta_box( $this->id, $this->label, array( $this, 'meta_fields_callback' ), $this->post_type, $this->context, $this->priority );
+				add_meta_box( $this->id, $this->label, array( $this, 'metaFieldsCallback' ), $this->post_type, $this->context, $this->priority );
 				
 			}
 		}
@@ -157,7 +157,7 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
 		/**
 		 * Update metabox inputs in database.
 		 */
-		public function update_post_meta($post_ID){
+		public function updatePostMeta($post_ID){
 			if(!in_array(get_post_type($post_ID), $this->post_type)) return;
 				
 			if ( ! current_user_can( 'edit_post', $post_ID )) return;
@@ -182,12 +182,12 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
 			//One nonce for a metabox
 			if (!wp_verify_nonce( $_POST[$this->id.'_nonce'], $this->id.'_action' )) return;
 
-			$this->start_update($_POST, $post_ID);
+			$this->startUpdate($_POST, $post_ID);
 			
 		}
 
 		
-		public function render_frontend_form(){
+		public function renderFrontendForm(){
 
 			global $post;
 
@@ -202,7 +202,7 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
 			$render .= '<input type="hidden" id="post_ID" name="post_ID" value="'.$post->ID.'">';
 
 
-			$render .= $this->return_meta_fields();
+			$render .= $this->returnMetaFields();
 
 			$render .= '<input name="save" type="submit" class="button button-primary button-large" id="publish" value="'.esc_html__( 'Save changes' ).'">';
 
@@ -210,7 +210,12 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
 
 			return $render;
 		}
-		public function front_add(){
+
+		/**
+		 * Render frontend form according to action
+		 * @return type
+		 */
+		public function renderForAction(){
 			global $post;
 			$render = '';
 			if (!is_user_logged_in() && is_single() && !is_admin()) {
@@ -223,26 +228,26 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
 
 					switch ($_GET['action']) {
 						case 'insert':
-							$render .= $this->render_frontend_form();
+							$render .= $this->renderFrontendForm();
 							break;
 
 						case 'edit':
 
 							if(get_current_user_id() == $post->post_author){
 
-								$render .= $this->render_frontend_form();
+								$render .= $this->renderFrontendForm();
 							}
 						break;
 						
 						default:
-							$render .= $this->return_meta_fields();
+							$render .= $this->returnMetaFields();
 
 							$render .= sprintf('<a href="%1$s?action=edit&_wpnonce=%2$s" class="button button-primary button-large">%3$s</a>', get_permalink( ) ,wp_create_nonce( 'anonyinsert_'.$post->ID ), esc_html__( 'Edit' ));
 							break;
 					}
 
 				}else{
-					$render .= $this->return_meta_fields();
+					$render .= $this->returnMetaFields();
 
 					$render .= sprintf('<a href="%1$s?action=edit&_wpnonce=%2$s" class="button button-primary button-large">%3$s</a>', get_permalink( ) ,wp_create_nonce( 'anonyinsert_'.$post->ID ), esc_html__( 'Edit' ));
 				}
@@ -251,12 +256,13 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
 
 			return $render;
 		}
+
 		/**
-		 * Renders metabox in front end. hooked to the_content filter
+		 * Renders metabox in frontend. hooked to the_content filter
 		 * @param  string $content 
 		 * @return string
 		 */
-		public function show_on_front($content){
+		public function showOnFront($content){
 
 			global $post;
 
@@ -264,14 +270,14 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
 
 			if ( is_single() && in_array($post->post_type, $this->post_type) ) {
 
-				$this->update_post_in_frontend();
+				$this->updatePostInFront();
 
 				$render .= $this->getNotices();
 
 				do_action($this->id_as_hook.'_show_on_front');
 
 
-				$render .= $this->front_add();
+				$render .= $this->renderForAction();
 
 				return $content.'<br/>'.$render;
 			}
@@ -283,10 +289,10 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
 		 * Returns metabox fields
 		 * @return string
 		 */
-		function return_meta_fields(){
+		public function returnMetaFields(){
 			ob_start();
 
-			$this->meta_fields_callback();
+			$this->metaFieldsCallback();
 
 			$render = ob_get_contents();
 
@@ -294,12 +300,11 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
 
 			return $render;
 		}
-		
-	
+			
 		/**
 		 * Render metabox' fields.
 		 */
-		public function meta_fields_callback(){
+		public function metaFieldsCallback(){
 
 			if(!class_exists('ANONY_Input_Field')){
 						esc_html_e( 'Input fields plugin is required', ANOE_TEXTDOM );
@@ -344,7 +349,10 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
 			}
 		}
 
-		public function update_post_in_frontend(){
+		/**
+		 * Update metafields if updated from frontend. (in a single post)
+		 */
+		public function updatePostInFront(){
 			/**
 			 * Check if there are any posted data return if empty
 			 */ 
@@ -377,7 +385,7 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
 			//Can be used to validate $_POST data befoore insertion
 			do_action( $this->id_as_hook.'_before_update' );
 
-			$this->start_update($_POST, $_POST['post_ID']);
+			$this->startUpdate($_POST, $_POST['post_ID']);
 				
 		}
 
@@ -387,7 +395,7 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
 		 * @param mixed $new_value Field's new value
 		 * @return object          Validation object
 		 */
-		public function validate_field($field, $new_value){
+		public function validateField($field, $new_value){
 			$args = array(
 						'field'         => $field,
 						'new_value'     => $new_value,
@@ -402,7 +410,7 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
 		 * @param array $sent_data An Array of sent data. Upon POST Request
 		 * @param int   $post_ID   Should be the id of being updated post
 		 */
-		public function start_update($sent_data, $post_ID = null){
+		public function startUpdate($sent_data, $post_ID = null){
 			$postType = get_post_type( $post_ID );
 
 			if(empty($sent_data) || !is_array($sent_data) || is_null($post_ID)) return;
@@ -429,7 +437,7 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
 
 								if ($nested_field['id'] == $fieldID) {
 
-									$this->validate = $this->validate_field($nested_field, $value);
+									$this->validate = $this->validateField($nested_field, $value);
 
 									if(!empty($this->validate->errors)){
 								
@@ -453,11 +461,11 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
 					}
 
 					//For now this deals with multi values, which have been already validated individually, so the only validation required is to remove all value are empty in one row.
-					$this->validate = $this->validate_field($field, $sent_data[$field['id']]);
+					$this->validate = $this->validateField($field, $sent_data[$field['id']]);
 
 				}else{
 
-					$this->validate = $this->validate_field($field, $sent_data[$field['id']]);
+					$this->validate = $this->validateField($field, $sent_data[$field['id']]);
 
 					if(!empty($this->validate->errors)){
 					
@@ -526,7 +534,7 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
 		/**
 		 * Show error messages in admin side
 		 */
-		public function admin_notices(){
+		public function adminNotices(){
 			$screen = get_current_screen();
 
 			if ($screen->base == 'post' && (in_array($screen->post_type, $this->post_type) || $screen->post_type == $this->post_type))
@@ -538,7 +546,7 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
 		/**
 		 * Enqueue needed scripts|styles
 		 */
-		public function enqueue_main_scripts(){		
+		public function enqueueMainScripts(){		
         		
         	if(in_array( get_current_screen()->base , array('post') ) &&  in_array( get_current_screen()->post_type, $this->post_type)){
 				wp_enqueue_style( 
@@ -566,7 +574,7 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
 		/**
 		 * Load fields scripts on front if `also_on_front_scripts` is set to true
 		 */
-		public function enqueue_front_scripts(){
+		public function enqueueFrontScripts(){
 			wp_enqueue_script('metaboxes-front', ANONY_MB_URI. 'assets/js/metaboxes-front.js', ['jquery'], false, true);
 			foreach($this->fields as $field){
 
@@ -607,19 +615,19 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
 		 * Enqueue scripts for admin side
 		 * @return void
 		 */
-		public function admin_enqueue_scripts(){
-			$this->enqueue_main_scripts();
+		public function adminEnqueueScripts(){
+			$this->enqueueMainScripts();
 		}
 
 		/**
 		 * Enqueue scripts for frontend side
 		 * @return void
 		 */
-		public function wp_enqueue_scripts(){
-			$this->enqueue_front_scripts();
+		public function wpEnqueueScripts(){
+			$this->enqueueFrontScripts();
 		}
 
-		public function head_styles(){
+		public function headStyles(){
 			if (is_single( )) {?>
 				<style type="text/css">
 					#anony_map{
@@ -630,13 +638,13 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
 			<?php }
 		}
 
-		public function footer_scripts(){
+		public function footerScripts(){
 
 			?>
 			<script type="text/javascript">
 				jQuery(document).ready(function($){
 					'use strict';
-					console.log('ggg');
+
 					$('.meta-error').on('click', function(e){
 						e.preventDefault();
 						var obj = $.browser.webkit ? $('body') : $('html');
@@ -663,7 +671,7 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
 			</script>
 		<?php }
 
-		public function wp_footer(){
+		public function wpFooter(){
 			$loadFooterScripts = false;
 			if(is_admin()){
 				$screen = get_current_screen();
@@ -682,7 +690,7 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
 			}
 
 			
-			if($loadFooterScripts) $this->footer_scripts();
+			if($loadFooterScripts) $this->footerScripts();
 			
 		} 
 	}

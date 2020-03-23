@@ -15,7 +15,7 @@
 		public function __construct($parent, $meta_box = array()){
 			$this->parent = $parent;
 
-			add_shortcode($this->parent->id_as_hook  , array($this, 'metabox_shortcode') );
+			add_shortcode($this->parent->id_as_hook  , array($this, 'metaboxShortcode') );
 			add_action( 'wp_footer', array($this, 'loadShortcodeScripts') );
 		}
 
@@ -24,7 +24,7 @@
 		 * @param  array  $atts An array of shortcode attributes
 		 * @return string The shortcode output
 		 */
-		public function metabox_shortcode($atts){
+		public function metaboxShortcode($atts){
 
 			$render = '';
 
@@ -40,7 +40,7 @@
 
 			if (isset($_GET['action']) && $_GET['action'] == 'insert' && isset($_GET['_wpnonce']) && wp_verify_nonce( $_GET['_wpnonce'] , 'anonyinsert' ) ) {
 
-				$this->insert_post_in_frontend();
+				$this->insertPostInFront();
 
 				do_action($this->parent->id_as_hook.'_before_form');
 
@@ -58,7 +58,7 @@
 				 * Start metabox render
 				 */ 
 
-				$render .= $this->parent->return_meta_fields();
+				$render .= $this->parent->returnMetaFields();
 
 				$render .= '<input name="save" type="submit" class="button button-primary button-large" id="publish" value="'.esc_html__( 'Save changes' ).'">';
 
@@ -72,7 +72,7 @@
 			return $render;
 		}
 
-		public function insert_post_in_frontend(){
+		public function insertPostInFront(){
 			/**
 			 * Check if there are any posted data return if empty
 			 */ 
@@ -113,7 +113,7 @@
 
 			if(!empty($post_id)) {
 				//esc_html_e( 'Sorry! but you already have posted the same data before', ANOE_TEXTDOM  );
-				$this->parent->start_update($_POST, intval($post_id[0]));
+				$this->parent->startUpdate($_POST, intval($post_id[0]));
 
 				$url = add_query_arg('post', $post_id[0], get_the_permalink($post_id[0]));
 
@@ -138,7 +138,7 @@
 				    	$test = update_post_meta( $insert, 'parent_id',  $post_parent);
 				    }
 
-				    $this->parent->start_update($_POST, $insert);
+				    $this->parent->startUpdate($_POST, $insert);
 
 				    $url = add_query_arg('post', $insert, get_the_permalink($insert)); 
 
@@ -160,7 +160,7 @@
 				global $post;
 
 				if(ANONY_POST_HELP::isPageHasShortcode($post, $this->parent->id_as_hook)){
-					$this->parent->footer_scripts();
+					$this->parent->footerScripts();
 				}
 		    
 		}

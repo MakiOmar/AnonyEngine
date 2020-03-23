@@ -27,13 +27,13 @@
 			
 			add_action( 'admin_head', array($this, 'headStyles'));
 
-			add_action( 'admin_enqueue_scripts', array(&$this, 'adminEnqueueScripts'));
+			add_action( 'admin_enqueue_scripts', array($this, 'adminEnqueueScripts'));
 
-			add_action( 'add_meta_boxes' , array( &$this, 'addMetaBox' ), $this->hook_priority, 2 );
+			add_action( 'add_meta_boxes' , array( $this, 'addMetaBox' ), $this->hook_priority, 2 );
 			
-			add_action( 'post_updated', array(&$this, 'updatePostMeta'));
+			add_action( 'post_updated', array($this, 'updatePostMeta'));
 			
-			add_action( 'admin_notices', array(&$this, 'adminNotices') );
+			add_action( 'admin_notices', array($this, 'adminNotices') );
 
 			add_action( 'admin_footer', array($this, 'adminFooterScripts') );	
 	

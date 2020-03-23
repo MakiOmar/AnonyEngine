@@ -28,6 +28,8 @@
 			add_filter( 'the_content', array($this, 'showOnFront') );
 
 			add_action( 'wp_footer', array($this, 'singleFooterScripts') );
+
+			add_filter( 'anony_mb_loc_scripts', array($this, 'localizeScripts'));
 		}
 
 		/**
@@ -138,6 +140,28 @@
 					}
 				</style>
 			<?php }
+		}
+
+		/**
+		 * Filter metabox localize scripts
+		 * @param  array $locScripts 
+		 * @return array
+		 */
+		public function localizeScripts($locScripts){
+			if (is_single()) {
+				$post_id = get_the_ID();
+		        $anony__entry_lat  = get_post_meta($post_id,'anony__entry_lat',true);
+		        $anony__entry_long = get_post_meta($post_id,'anony__entry_long',true);
+
+		        if(!empty($anony__entry_lat) && !empty($anony__entry_long)){
+
+		        	$locScripts['geolat'] = $anony__entry_lat;
+					$locScripts['geolong']= $anony__entry_long;
+		        }
+			}
+
+			return $locScripts;
+				
 		}
 
  	}

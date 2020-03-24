@@ -60,6 +60,8 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
 
 			if(empty($meta_box) || !is_array($meta_box)) return;
 
+			$this->metabox = $meta_box;
+
 			$localize_scripts = array(
     			'ajaxURL'   => ANONY_WPML_HELP:: getAjaxUrl(),
     			'textDir'   => (is_rtl() ? 'rtl' : 'ltr'),
@@ -72,13 +74,13 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
 			$this->localize_scripts = apply_filters( 'anony_mb_loc_scripts', $localize_scripts ) ;
 			
 			//Set metabox's data
-			$this->setMetaboxData($meta_box);
+			$this->setMetaboxData($this->metabox);
 			
-			new ANONY_Mb_Admin($this, $meta_box);
+			new ANONY_Mb_Admin($this, $this->metabox);
 
-			new ANONY_Mb_Shortcode($this, $meta_box);
+			new ANONY_Mb_Shortcode($this, $this->metabox);
 
-			new ANONY_Mb_Single($this, $meta_box);
+			new ANONY_Mb_Single($this, $this->metabox);
 			
 		}
 		
@@ -87,18 +89,19 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
 		 * @param array $meta_box Array of meta box data
 		 * @return void
 		 */
-		public function setMetaboxData($meta_box){
+		public function setMetaboxData($metabox){
 			
-			$this->id            = apply_filters( 'anony_mb_frontend_id', $meta_box['id'] );
-			$this->label         = $meta_box['title'];
-			$this->context       = $meta_box['context'];
-			$this->priority      = $meta_box['priority'];
-			$this->hook_priority = isset($meta_box['hook_priority']) ? $meta_box['hook_priority'] : $this->hook_priority;
-			$this->post_type     = $meta_box['post_type'];
-			$this->fields        = apply_filters( 'anony_mb_frontend_fields', $meta_box['fields'] );
+			$this->id            = $metabox['id'];
+			$this->label         = $metabox['title'];
+			$this->context       = $metabox['context'];
+			$this->priority      = $metabox['priority'];
+			$this->hook_priority = isset($metabox['hook_priority']) ? $metabox['hook_priority'] : $this->hook_priority;
+			$this->post_type     = $metabox['post_type'];
 
 			//To use id for hooks definitions
 			$this->id_as_hook    = str_replace('-', '_', $this->id);
+
+			$this->fields        = $metabox['fields'];
 		}
 
 		public function renderFrontendForm(){

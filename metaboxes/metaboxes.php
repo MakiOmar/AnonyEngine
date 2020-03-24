@@ -44,6 +44,6 @@ add_action( 'init', function(){
 	if (!is_array($metaboxes) || empty($metaboxes)) return;
 
 	foreach ($metaboxes as $metabox) {
-		return new ANONY_Meta_Box($metabox);
+		$mbObj = new ANONY_Meta_Box($metabox);
 	}
 });

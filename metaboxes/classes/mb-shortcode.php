@@ -12,7 +12,9 @@
  		/**
 		 * Constructor
 		 */ 
-		public function __construct($parent, $meta_box = array()){
+		public function __construct($parent, $metabox = array()){
+			$this->metabox = $metabox;
+
 			$this->parent = $parent;
 
 			$this->hooks();
@@ -35,6 +37,17 @@
 		 * @return string The shortcode output
 		 */
 		public function metaboxShortcode($atts){
+			$mbID = $this->parent->id;
+
+			$this->parent->metabox = apply_filters( 'anony_shortcode_specific_metaboxes', $this->parent->metabox);
+
+			//make sure metabox has the same id to match the shortcode
+			$this->parent->metabox['id'] = $mbID; 
+
+			//Set metabox's data
+			$this->parent->setMetaboxData($this->parent->metabox);
+
+			$current_user = wp_get_current_user();
 
 			$render = '';
 
@@ -44,7 +57,7 @@
 			 */
 
 			$atts = shortcode_atts(
-						[], 
+						['post_type' => 'post'], 
 						$atts, 
 						$this->parent->id_as_hook );
 
@@ -59,7 +72,13 @@
 				/**
 				 * Usefull when neccessary hidden inputs are needed for the form
 				 */ 
-				$hiddens = apply_filters( $this->parent->id_as_hook.'_shortcode_hiddens' , '', $atts );
+				$hiddens = apply_filters( 'anony_mb_shortcode_hiddens' , '', $atts,  $this->parent->id_as_hook);
+
+				$hiddens .= '<input type="hidden" id="post_type" name="postType" value="'.$atts['post_type'].'">';
+
+				$hiddens .= '<input type="hidden" id="user_ID" name="user_ID" value="'.$current_user->ID.'">';
+
+				$hiddens .= '<input type="hidden" id="action" name="action" value="insert">';
 
 
 				$render .= $hiddens;

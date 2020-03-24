@@ -39,10 +39,30 @@
 		 */
 		public function showOnFront($content){
 
+			if (!is_user_logged_in() && !is_admin() && is_singular() && isset($_GET['action'])) {
+				return esc_html__( 'Sorry, you have to login first', ANOE_TEXTDOM  );
+			}
+
 			global $post;
 
-			if (!is_single() || !in_array($post->post_type, $this->parent->post_type) || (!is_array($this->parent->post_type) && $post->post_type !== $this->parent->post_type) ) return $content;
+			if(
+				!is_single() ||
+				( is_array($this->parent->post_type) && !in_array($post->post_type, $this->parent->post_type)) ||
+				(!is_array($this->parent->post_type) && $post->post_type !== $this->parent->post_type)
+			 ) return $content;
 
+
+
+			$mbID = $this->parent->id;
+
+			$this->parent->metabox = apply_filters( 'anony_post_specific_metaboxes', $this->parent->metabox, $post );
+
+			//make sure metabox has the same id to match the shortcode
+			$this->parent->metabox['id'] = $mbID; 
+
+			//Set metabox's data
+			$this->parent->setMetaboxData($this->parent->metabox);
+				
 			$this->updatePost();
 
 			$render = $this->parent->getNotices();
@@ -50,7 +70,7 @@
 			do_action($this->parent->id_as_hook.'_show_on_front');
 
 
-			$render .= $this->renderForAction();
+			$render .= $this->renderForAction($post);
 
 			return $content.'<br/>'.$render;	
 				
@@ -61,12 +81,7 @@
 		 * Render frontend form according to action
 		 * @return type
 		 */
-		public function renderForAction(){
-			global $post;
-
-			if (!is_user_logged_in() && !is_admin()) {
-				return esc_html__( 'Sorry, you have to login first', ANOE_TEXTDOM  );
-			}
+		public function renderForAction($post){
 				
 			if (isset($_GET['action']) && isset($_GET['_wpnonce']) && wp_verify_nonce( $_GET['_wpnonce'], 'anonyinsert_'.$post->ID ) && get_current_user_id() == $post->post_author) {
 
@@ -76,7 +91,10 @@
 			}else{
 				$render = $this->parent->returnMetaFields();
 
-				$render .= sprintf('<a href="%1$s?action=edit&_wpnonce=%2$s" class="button button-primary button-large">%3$s</a>', get_permalink( ) ,wp_create_nonce( 'anonyinsert_'.$post->ID ), esc_html__( 'Edit' ));
+				if (get_current_user_id() == $post->post_author) {
+					
+					$render .= sprintf('<a href="%1$s?action=edit&_wpnonce=%2$s" class="button button-primary button-large">%3$s</a>', get_permalink( ) ,wp_create_nonce( 'anonyinsert_'.$post->ID ), esc_html__( 'Edit' ));
+				}
 			}
 				
 
@@ -87,6 +105,7 @@
 		 * Update metafields if updated from frontend. (in a single post)
 		 */
 		public function updatePost(){
+			if (!is_user_logged_in()) return;
 			/**
 			 * Check if there are any posted data return if empty
 			 */ 
@@ -97,6 +116,9 @@
 			if ($post->post_type !== $_POST['postType']) return;
 
 			if(($post->post_author != $_POST['user_ID']) || !current_user_can( 'administrator' ) ) return;
+
+			/*nvd($this->parent->metabox);
+			die();*/
 
 			if($post->ID != $_POST['post_ID'] ) return;
 

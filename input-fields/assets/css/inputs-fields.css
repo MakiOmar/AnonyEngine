@@ -35,7 +35,9 @@
 
 .anony-input-field{
 	min-width: 120px;
+    text-align: center;
 }
+
 /* -------------- .multi-text -------------- */
 [id*='fieldset_anony']  input.multi-text-add { margin-right:10px;}
 [id*='fieldset_anony']  .multi-text-btn { float:left;}
@@ -131,6 +133,7 @@
 }
 .anony-multi-value-flex{
     display: flex;
+    flex-wrap: wrap;
 }
 .anony-multi-value-wrapper{
     display: block;
@@ -445,6 +448,12 @@
 .anony-flex-column{
     display: flex;
     flex-direction: column;
+}
+
+.anony-flex-column-center{
+    display: flex;
+    flex-direction: column;
+    align-items: center!important;
 }
 
 .tabs-ul{

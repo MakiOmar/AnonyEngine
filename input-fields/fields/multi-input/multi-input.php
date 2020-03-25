@@ -70,7 +70,7 @@ class ANONY_Multi_input{
 					foreach ($this->parent->field['fields'] as $nested_field) {
 
 						if ($nested_field['id'] == $field_id) {
-							$render_field = new ANONY_Input_Field($nested_field, 'meta', $this->parent->post_id, false, $field_value, $index);
+							$render_field = new ANONY_Input_Field($nested_field,$this->parent->metabox_id, 'meta', $this->parent->post_id, false, $field_value, $index);
 
 							$html    .= $render_field->field_init();
 

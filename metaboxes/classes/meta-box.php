@@ -169,7 +169,7 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
 				if (!is_admin() && (!isset($field['show_on_front']) || !$field['show_on_front']) ) continue;
 				
 						
-				$render_field = new ANONY_Input_Field($field, 'meta', $pID);
+				$render_field = new ANONY_Input_Field($field,$this->id, 'meta', $pID);
 			
 				echo $render_field->field_init();
 
@@ -229,14 +229,26 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
 
 				if(!isset($sent_data[$field['id']])) continue;
 
-				$chech_meta = get_post_meta($post_ID , $field['id'], true);
 
-				if ($chech_meta === $sent_data[$field['id']]) continue;
+				$metaboxOptions = get_post_meta($post_ID , $this->id, true);
+
+				if(!is_array($metaboxOptions)) $metaboxOptions = [];
+
+
+				$chech_meta = isset($metaboxOptions[$field['id']]) ? $metaboxOptions[$field['id']] : '';
+
+				if(!empty($metaboxOptions)){
+					if ($chech_meta === $sent_data[$field['id']]) continue;
+				}
 
 				//If this field is an array of other fields values
 				if(isset($field['fields'])){
-
+					//$nested_field : The nested field inside the multi-value
 					foreach ($field['fields'] as  $nested_field) {
+
+						nvd($sent_data[$field['id']]);
+
+				die();
 
 						foreach ($sent_data[$field['id']] as $field_index => $posted_field) {
 
@@ -270,6 +282,8 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
 					//For now this deals with multi values, which have been already validated individually, so the only validation required is to remove all value are empty in one row.
 					$this->validate = $this->validateField($field, $sent_data[$field['id']]);
 
+
+
 				}else{
 
 					$this->validate = $this->validateField($field, $sent_data[$field['id']]);
@@ -283,8 +297,18 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
 					
 				}
 
-				update_post_meta( $post_ID, $field['id'], $this->validate->value);
+				$metaboxOptions[$this->id][$field['id']] = $this->validate->value;
+
 			}
+
+			
+			nvd($this->id);
+			nvd($metaboxOptions);
+
+			die();
+			
+
+			update_post_meta( $post_ID, $this->id, $metaboxOptions);
 
 			if(!empty($this->errors)){
 				set_transient('ANONY_errors_'.$postType.'_'.$post_ID, $this->errors);

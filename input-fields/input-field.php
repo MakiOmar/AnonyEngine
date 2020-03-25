@@ -77,7 +77,7 @@ if( ! class_exists( 'ANONY_Input_Field' )){
 		 * @param string   $context  The context of where the field is used
 		 * @param int|null $post_id  Should be an integer if the context is meta box
 		 */
-		function __construct($field, $context = 'option', $post_id = null, $as_template = false, $field_value = null, $index = null)
+		function __construct($field, $metabox_id, $context = 'option', $post_id = null, $as_template = false, $field_value = null, $index = null)
 		{
 			
 
@@ -90,6 +90,8 @@ if( ! class_exists( 'ANONY_Input_Field' )){
 			$this->options     = (isset($field['option_name']) && class_exists('ANONY_Options_Model')) ? ANONY_Options_Model::get_instance( $field['option_name']) : '';
 
 			$this->field       = $field;
+
+			$this->metabox_id  = $metabox_id;
 
 			$this->post_id     = $post_id;
 
@@ -161,7 +163,8 @@ if( ! class_exists( 'ANONY_Input_Field' )){
 
 			}else{
 
-				$meta = get_post_meta( $this->post_id, $this->field['id'], $single);
+				$metabox_options = get_post_meta( $this->post_id, $this->metabox_id, $single);
+				$meta = (is_array($metabox_options) && isset($metabox_options[$this->field['id']])) ? $metabox_options[$this->field['id']] : '';
 			}
 
 			$this->value = ($meta  != '') ? $meta : $this->default;

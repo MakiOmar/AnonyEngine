@@ -60,7 +60,11 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
 
 			if(empty($meta_box) || !is_array($meta_box)) return;
 
+			global $anoe_metaboxes;
+
 			$this->metabox = $meta_box;
+
+			$anoe_metaboxes[] = $this->metabox;
 
 			$localize_scripts = array(
     			'ajaxURL'   => ANONY_WPML_HELP:: getAjaxUrl(),

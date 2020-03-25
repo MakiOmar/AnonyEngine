@@ -36,6 +36,7 @@ define( 'ANONY_MB_FIELDS', ANONY_MB_PATH . 'fields/');
  * @const
  */
 
+$GLOBALS['anoe_metaboxes'] = [];
 
 add_action( 'init', function(){
 
@@ -47,3 +48,4 @@ add_action( 'init', function(){
 		$mbObj = new ANONY_Meta_Box($metabox);
 	}
 });
+

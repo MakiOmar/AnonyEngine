@@ -86,7 +86,7 @@ class ANONY_Multi_input{
 			$html .= "<div class='anony-multi-value-flex'>";
 			foreach ($this->parent->field['fields'] as $nested_field) {
 
-				$render_field = new ANONY_Input_Field($nested_field, 'meta', $this->parent->post_id, false);
+				$render_field = new ANONY_Input_Field($nested_field,$this->parent->metabox_id, 'meta', $this->parent->post_id, false);
 
 				$html    .= $render_field->field_init();
 

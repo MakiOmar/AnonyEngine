@@ -47,6 +47,8 @@
 			//Set metabox's data
 			$this->parent->setMetaboxData($this->parent->metabox);
 
+			
+
 			$current_user = wp_get_current_user();
 
 			$render = '';

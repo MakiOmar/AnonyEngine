@@ -146,11 +146,11 @@ if( ! class_exists( 'ANONY_Input_Field' )){
 			if (isset($this->field['nested-to']) && !empty($this->field['nested-to'])) {
 				$index = (is_integer($this->index)) ? $this->index : 0;
 
-				$this->input_name = $this->field['nested-to'].'['.$index.']'.'['.$this->field['id'].']';
+				$this->input_name = $this->metabox_id.'['.$this->field['nested-to'].']'.'['.$index.']'.'['.$this->field['id'].']';
 
 				$this->field['id'] = $this->field['id'].'-'.$index;
 			}else{
-				$this->input_name = $this->field['id'];
+				$this->input_name =  $this->metabox_id.'['.$this->field['id'].']';
 			}
 
 			$single = (isset($this->field['multiple']) && $this->field['multiple']) ? false : true;
@@ -164,7 +164,8 @@ if( ! class_exists( 'ANONY_Input_Field' )){
 			}else{
 
 				$metabox_options = get_post_meta( $this->post_id, $this->metabox_id, $single);
-				$meta = (is_array($metabox_options) && isset($metabox_options[$this->field['id']])) ? $metabox_options[$this->field['id']] : '';
+				//nvd($metabox_options);
+				$meta = (is_array($metabox_options) && isset($metabox_options[$this->metabox_id][$this->field['id']])) ? $metabox_options[$this->metabox_id][$this->field['id']] : '';
 			}
 
 			$this->value = ($meta  != '') ? $meta : $this->default;

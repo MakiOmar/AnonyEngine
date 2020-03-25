@@ -43,16 +43,17 @@
 		 * Add metaboxes.
 		 */
 		public function addMetaBox($postType, $post){
+			if( is_array( $this->parent->post_type ) && in_array($postType, $this->parent->post_type) ){
+
+			$mbID = $this->parent->id;
 
 			$this_post_metaboxes = apply_filters( 'anony_post_specific_metaboxes', '', $post );
-			
+			$this_post_metaboxes['id'] = $mbID;
 
 			if (!empty($this_post_metaboxes) && (in_array($post->post_type, $this_post_metaboxes['post_type']) || $this_post_metaboxes['post_type'] === $post->post_type)) {
 
 				$this->parent->setMetaboxData($this_post_metaboxes);
 			}
-			
-			if( is_array( $this->parent->post_type ) && in_array($postType, $this->parent->post_type) ){
 				
 				foreach ( $this->parent->post_type as $post_type ) {
 					add_meta_box( $this->parent->id, $this->parent->label, array( $this->parent, 'metaFieldsCallback' ), $post_type, $this->parent->context, $this->parent->priority );

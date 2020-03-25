@@ -169,7 +169,7 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
 				if (!is_admin() && (!isset($field['show_on_front']) || !$field['show_on_front']) ) continue;
 				
 						
-				$render_field = new ANONY_Input_Field($field,$this->id, 'meta', $pID);
+				$render_field = new ANONY_Input_Field($field, $this->id, 'meta', $pID);
 			
 				echo $render_field->field_init();
 
@@ -227,18 +227,18 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
 
 			foreach($this->fields as $field){
 
-				if(!isset($sent_data[$field['id']])) continue;
 
+
+				if(!isset($sent_data[$this->id][$field['id']])) continue;
 
 				$metaboxOptions = get_post_meta($post_ID , $this->id, true);
 
 				if(!is_array($metaboxOptions)) $metaboxOptions = [];
 
-
 				$chech_meta = isset($metaboxOptions[$field['id']]) ? $metaboxOptions[$field['id']] : '';
 
 				if(!empty($metaboxOptions)){
-					if ($chech_meta === $sent_data[$field['id']]) continue;
+					if ($chech_meta === $sent_data[$this->id][$field['id']]) continue;
 				}
 
 				//If this field is an array of other fields values
@@ -246,11 +246,7 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
 					//$nested_field : The nested field inside the multi-value
 					foreach ($field['fields'] as  $nested_field) {
 
-						nvd($sent_data[$field['id']]);
-
-				die();
-
-						foreach ($sent_data[$field['id']] as $field_index => $posted_field) {
+						foreach ($sent_data[$this->id][$field['id']] as $field_index => $posted_field) {
 
 							foreach ($posted_field as $fieldID => $value) {
 
@@ -262,7 +258,7 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
 								
 										$this->errors =  array_merge((array)$this->errors, (array)$this->validate->errors);
 
-										$sent_data[$field_id][$field_index][$fieldID] = (
+										$sent_data[$this->id][$field_id][$field_index][$fieldID] = (
 											$chech_meta !== '' && 
 											isset($chech_meta[$field_index][$nested_field['id']])
 										) ? 
@@ -272,7 +268,7 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
 										continue;
 									}
 
-									$sent_data[$field['id']][$field_index][$fieldID] = $this->validate->value;
+									$sent_data[$this->id][$field['id']][$field_index][$fieldID] = $this->validate->value;
 								}
 							}
 
@@ -280,7 +276,7 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
 					}
 
 					//For now this deals with multi values, which have been already validated individually, so the only validation required is to remove all value are empty in one row.
-					$this->validate = $this->validateField($field, $sent_data[$field['id']]);
+					$this->validate = $this->validateField($field, $sent_data[$this->id][$field['id']]);
 
 
 
@@ -300,14 +296,7 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
 				$metaboxOptions[$this->id][$field['id']] = $this->validate->value;
 
 			}
-
 			
-			nvd($this->id);
-			nvd($metaboxOptions);
-
-			die();
-			
-
 			update_post_meta( $post_ID, $this->id, $metaboxOptions);
 
 			if(!empty($this->errors)){

@@ -86,7 +86,7 @@
 			if (isset($_GET['action']) && isset($_GET['_wpnonce']) && wp_verify_nonce( $_GET['_wpnonce'], 'anonyinsert_'.$post->ID ) && get_current_user_id() == $post->post_author) {
 
 
-					$render = $this->parent->renderFrontendForm();
+					$render = $this->renderFrontendForm();
 
 			}else{
 				$render = $this->parent->returnMetaFields();
@@ -97,6 +97,31 @@
 				}
 			}
 				
+
+			return $render;
+		}
+
+
+		public function renderFrontendForm(){
+
+			global $post;
+
+			$render = '<form method="post">';
+
+			$render .= apply_filters( $this->id_as_hook.'_hiddens' , '');
+
+			$render .= '<input type="hidden" id="post_type" name="postType" value="'.$post->post_type.'">';
+
+			$render .= '<input type="hidden" id="user_ID" name="user_ID" value="'.get_current_user_id().'">';
+
+			$render .= '<input type="hidden" id="post_ID" name="post_ID" value="'.$post->ID.'">';
+
+
+			$render .= $this->parent->returnMetaFields();
+
+			$render .= '<input name="save" type="submit" class="button button-primary button-large" id="publish" value="'.esc_html__( 'Save changes' ).'">';
+
+			$render .= '</form>';
 
 			return $render;
 		}

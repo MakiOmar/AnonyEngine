@@ -108,30 +108,6 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
 			$this->fields        = $metabox['fields'];
 		}
 
-		public function renderFrontendForm(){
-
-			global $post;
-
-			$render = '<form method="post">';
-
-			$render .= apply_filters( $this->id_as_hook.'_hiddens' , '');
-
-			$render .= '<input type="hidden" id="post_type" name="postType" value="'.$post->post_type.'">';
-
-			$render .= '<input type="hidden" id="user_ID" name="user_ID" value="'.get_current_user_id().'">';
-
-			$render .= '<input type="hidden" id="post_ID" name="post_ID" value="'.$post->ID.'">';
-
-
-			$render .= $this->returnMetaFields();
-
-			$render .= '<input name="save" type="submit" class="button button-primary button-large" id="publish" value="'.esc_html__( 'Save changes' ).'">';
-
-			$render .= '</form>';
-
-			return $render;
-		}
-
 		/**
 		 * Returns metabox fields
 		 * @return string

@@ -77,7 +77,7 @@ if( ! class_exists( 'ANONY_Input_Field' )){
 		 * @param string   $context  The context of where the field is used
 		 * @param int|null $post_id  Should be an integer if the context is meta box
 		 */
-		function __construct($field, $metabox_id, $context = 'option', $post_id = null, $as_template = false, $field_value = null, $index = null)
+		function __construct($field, $metabox_id = null, $context = 'option', $post_id = null, $as_template = false, $field_value = null, $index = null)
 		{
 			
 

@@ -95,7 +95,7 @@ if ( ! class_exists( 'ANONY_HELP' ) ) {
 
 				echo '<pre dir="ltr">';
 					var_dump($r);
-				 echo '</pre>';
+				echo '</pre>';
 		}
 
 	}

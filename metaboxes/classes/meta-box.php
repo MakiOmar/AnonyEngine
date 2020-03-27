@@ -338,6 +338,8 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
         	$screen = get_current_screen();
         	if(in_array( $screen->base , array('post') ) &&  in_array( $screen->post_type, $this->post_type)){
 
+        		wp_enqueue_style( 'select2', ANONY_FIELDS_URI.'select2/css/select2.min.css' );
+
 				wp_enqueue_style( 
 					'anony-metaboxs' , 
 					ANONY_MB_URI. 'assets/css/metaboxes.css', 
@@ -362,6 +364,8 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
 		 * Load fields scripts on front if `show_on_front` is set to true
 		 */
 		public function frontScripts(){
+
+			wp_enqueue_style( 'select2', ANONY_FIELDS_URI.'select2/css/select2.min.css' );
 
 			wp_enqueue_script('metaboxes-front', ANONY_MB_URI. 'assets/js/metaboxes-front.js', ['jquery'], false, true);
 

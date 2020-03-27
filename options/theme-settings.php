@@ -540,7 +540,9 @@ if (!class_exists('ANONY_Theme_Settings')) {
 		 */		
 		public function page_scripts(){
 			if(isset($_GET['page']) && $_GET['page'] == $this->args['opt_name']){
-			
+				
+				wp_enqueue_style( 'select2', ANONY_FIELDS_URI.'select2/css/select2.min.css' );
+
 				wp_register_style( 'anony-options-css', ANONY_OPTIONS_URI.'css/options.css', array('farbtastic'), time(), 'all');	
 
 				wp_enqueue_style( 'anony-options-css' );

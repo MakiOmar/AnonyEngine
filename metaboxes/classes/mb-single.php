@@ -25,6 +25,8 @@
 
 			add_action( 'wp_head', array($this, 'headStyles'));
 
+			add_action( 'wp_enqueue_scripts', array($this, 'wpEnqueueScripts'));
+
 			add_filter( 'the_content', array($this, 'showOnFront') );
 
 			add_action( 'wp_footer', array($this, 'singleFooterScripts') );
@@ -209,6 +211,12 @@
 
 			return $locScripts;
 				
+		}
+
+		public function wpEnqueueScripts(){
+			if (is_single()) {
+				$this->parent->footerScripts();
+			}
 		}
 
  	}

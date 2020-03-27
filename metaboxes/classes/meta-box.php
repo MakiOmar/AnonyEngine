@@ -149,27 +149,32 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
 			
 				echo $render_field->field_init();
 
-				if(isset($field['scripts']) && !empty($field['scripts'])){
-
-			        foreach($field['scripts'] as $script){
-
-			            $deps = (isset($script['dependancies']) && !empty($script['dependancies'])) ? $script['dependancies'] : [];
-
-			            $deps[] = 'anony-metaboxs';
-
-			            if(isset($script['file_name'])){
-
-			                $url = ANONY_MB_URI. 'assets/js/'.$script['file_name'].'.js';
-
-			            }elseif(isset($script['url'])){
-
-			                $url = $script['url'];
-			            }
-			            
-			            wp_enqueue_script($script['handle'], $url, $deps, false, true);
-			        }
-			    }
+				$this->enqueueFieldScripts($field);
+				
 			}
+		}
+
+		public function enqueueFieldScripts($field){
+			if(isset($field['scripts']) && !empty($field['scripts'])){
+
+		        foreach($field['scripts'] as $script){
+
+		            $deps = (isset($script['dependancies']) && !empty($script['dependancies'])) ? $script['dependancies'] : [];
+
+		            $deps[] = 'anony-metaboxs';
+
+		            if(isset($script['file_name'])){
+
+		                $url = ANONY_MB_URI. 'assets/js/'.$script['file_name'].'.js';
+
+		            }elseif(isset($script['url'])){
+
+		                $url = $script['url'];
+		            }
+		            
+		           wp_enqueue_script($script['handle'], $url, $deps, false, true);
+		        }
+		    }
 		}
 
 		/**
@@ -360,28 +365,6 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
 
 			wp_enqueue_script('metaboxes-front', ANONY_MB_URI. 'assets/js/metaboxes-front.js', ['jquery'], false, true);
 
-			foreach($this->fields as $field){
-
-				if(isset($field['scripts']) && !empty($field['scripts']) & isset($field['show_on_front']) && $field['show_on_front'] == true){
-					
-			        foreach($field['scripts'] as $script){
-
-			            $deps = (isset($script['dependancies']) && !empty($script['dependancies'])) ? $script['dependancies'] : [];
-
-			            if(isset($script['file_name'])){
-
-			                $url = ANONY_MB_URI. 'assets/js/'.$script['file_name'].'.js';
-
-			            }elseif(isset($script['url'])){
-
-			                $url = $script['url'];
-			            }
-			            
-			            wp_enqueue_script($script['handle'], $url, $deps, false, true);
-			        }
-				    
-				}
-			}
 		}
 
 		public function footerScripts(){

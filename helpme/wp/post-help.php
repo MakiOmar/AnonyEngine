@@ -11,6 +11,22 @@ if ( ! class_exists( 'ANONY_POST_HELP' ) ) {
 	class ANONY_POST_HELP extends ANONY_HELP{
 		
 		/**
+		 * Get all meta keys for post by id
+		 * @param int    $post_id 
+		 * @return array An array of meta keys 
+		 */
+		public static function getPostMetaKeys($post_id){
+			$clause = [
+				'select'   => 'meta_key',
+				'from'     => 'postmeta',
+				'where'    => 'post_id',
+				'operator' => '=',
+				'value'    => $post_id,
+			];
+
+			return ANONY_WPDB_HELP::DirectSelect($clause);
+		}
+		/**
 		 * Checks if a shortcode exists in page/post
 		 * @param  obj  $post 
 		 * @return bool True if shortcode exist, otherwise false

@@ -9,6 +9,40 @@
 
 if ( ! class_exists( 'ANONY_ARRAY_HELP' ) ) {
 	class ANONY_ARRAY_HELP extends ANONY_HELP{
+ 		
+ 		/**
+ 		 * Checks if an array is sequentially indexed
+ 		 * @param  array $arr 
+ 		 * @return bool
+ 		 */
+		static function isSequentiallyIndexed (array $arr){
+
+		    if (array() === $arr) return false;
+
+
+		    return array_keys($arr) === range(0, count($arr) - 1);
+		}
+
+		/**
+		 * Checks if an array is indexed
+ 		 * @param  array $arr 
+ 		 * @return bool
+		 */
+		static function isIndexed($array){
+			if( empty(array_filter(array_keys($array) ,'is_string' ) ) ) return true;
+			return false;
+		}
+
+		/**
+		 * Checks if an array is associative
+ 		 * @param  array $arr 
+ 		 * @return bool
+		 */
+		static function isAssoc($array){
+			if (!self::isIndexed($array)) return true;
+			if (!self::isSequentiallyIndexed($array)) return true;
+			return false;
+		}
 		/**
 		 * Gets an associative array as key/value pairs from any object properties.
 		 * 
@@ -18,7 +52,6 @@ if ( ! class_exists( 'ANONY_ARRAY_HELP' ) ) {
 		 * @param string $value         The property that should be used as a value
 		 * @return array                An array of properties as key/value pairs    
 		 */
-
 		static function ObjToAssoc($objects_array, $key, $value, $assoc = true){
 
 			$arr = [];
@@ -136,6 +169,5 @@ if ( ! class_exists( 'ANONY_ARRAY_HELP' ) ) {
 
 			return false;
 		}
-
 	}
 }

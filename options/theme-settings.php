@@ -368,6 +368,10 @@ if (!class_exists('ANONY_Theme_Settings')) {
 				$render_field = new ANONY_Input_Field($field);
 
 				echo $render_field->field_init();
+
+				if (isset($field['callback']) && function_exists($field['callback'])) {
+					call_user_func_array($field['callback'], $field);
+				}
 				
 			}
  		}

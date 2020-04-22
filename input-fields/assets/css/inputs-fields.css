@@ -482,3 +482,17 @@
     float: left;
     margin: 0 20px;
 }
+
+.anony-term-meta-wrap fieldset .anony-gallery-thumbs-wrap{
+    background-color: #fff;
+    padding: 10px;
+    border: 1px solid #b5afaf;
+    border-radius: 10px;
+    position: relative;
+    text-align: center;
+}
+.anony-opts-gallery, .anony-opts-clear-gallery{
+    margin: 10px!important;
+    max-width: 100px;
+    text-align: center;
+}

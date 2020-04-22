@@ -86,6 +86,8 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
 
 			new ANONY_Mb_Single($this, $this->metabox);
 			
+			
+			
 		}
 		
 		/**
@@ -207,21 +209,19 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
 			do_action( $this->id_as_hook.'_before_meta_insert' );
 
 			foreach($this->fields as $field){
-
-
-
+				
 				if(!isset($sent_data[$this->id][$field['id']])) continue;
+
 
 				$metaboxOptions = get_post_meta($post_ID , $this->id, true);
 
 				if(!is_array($metaboxOptions)) $metaboxOptions = [];
 
-				$chech_meta = isset($metaboxOptions[$field['id']]) ? $metaboxOptions[$field['id']] : '';
+				$chech_meta = isset($metaboxOptions[$this->id][$field['id']]) ? $metaboxOptions[$this->id][$field['id']] : '';
 
 				if(!empty($metaboxOptions)){
 					if ($chech_meta === $sent_data[$this->id][$field['id']]) continue;
 				}
-
 				//If this field is an array of other fields values
 				if(isset($field['fields'])){
 					//$nested_field : The nested field inside the multi-value
@@ -263,7 +263,7 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
 
 				}else{
 
-					$this->validate = $this->validateField($field, $sent_data[$field['id']]);
+					$this->validate = $this->validateField($field, $sent_data[$this->id][$field['id']]);
 
 					if(!empty($this->validate->errors)){
 					
@@ -275,6 +275,7 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
 				}
 
 				$metaboxOptions[$this->id][$field['id']] = $this->validate->value;
+
 
 			}
 			

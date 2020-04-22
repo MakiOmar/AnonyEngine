@@ -1,16 +1,30 @@
-jQuery(document).ready(function(){
+jQuery(document).ready(function($){
 	
-	jQuery('.sliderbar').each(function(){
+	$('.sliderbar').each(function(){
 		
-		var field_id = jQuery(this).attr('rel');
-		var value = jQuery(this).siblings('#' + field_id).attr('value');
-		
-		jQuery(this).slider({ range: "min", min:1, max:60, value: value,
+		var field_id = $(this).attr('rel');
+		var currentValue = $(this).siblings('#' + field_id).attr('value');
+
+		var siderValues;
+
+		if(currentValue !== ''){
+			currentValue = currentValue.replace(/\$/g, '').replace(/\s+/gm,'');
+
+			siderValues = currentValue.split('-');
+		}else{
+			siderValues = [100 , 400];
+		}
+				
+		$(this).slider({
+			isRTL: true, 
+			range: true, 
+			min:0, 
+			max:1000, 
+			values: siderValues,
 			slide: function(event, ui){
-				jQuery(this).siblings('#' + field_id).attr('value',ui.value);
+				$(this).siblings('#' + field_id).val("$" + ui.values[ 0 ] + " - $" + ui.values[ 1 ]);
 			}
-		});
-		
+		});		
 	});
 
 });

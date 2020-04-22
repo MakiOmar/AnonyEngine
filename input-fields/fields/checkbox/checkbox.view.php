@@ -9,19 +9,14 @@
 extract($this->data);
 
 if($note):?>
-<!--@if ($note === true)--> 
 
 <p class=anony-warning><?= $note ?><p>
-<!--<p class=anony-warning>{{ $note }}<p>-->
 
 <?php endif ?>
-<!--@endif-->
 
 <fieldset class="anony-row anony-row-inline" id="fieldset_<?= $id?>">
-<!--<fieldset class="anony-row anony-row-inline" id="fieldset_{{ $id }}">-->
 				 
 	<?php if($context == 'meta' && $title ) :?>
-	<!--@if ($context == 'meta' && $title)-->
 
 		<label class="anony-label" for="<?= $id ?>"><?= $title ?></label>
 
@@ -29,7 +24,6 @@ if($note):?>
 
 	// fix for WordPress 3.6 meta options
 	if(strpos( $id ,'[]') === false) :?>
-	<!--@if (strpos( $id ,'[]') === false)-->
 
 		<input type="hidden" name="<?= $name?>" value="0"/>
 
@@ -40,7 +34,6 @@ if($note):?>
 	<?php if($options && is_array($options)):
 
 		foreach($options as $opt => $title):
-		//@foreach ($options as $opt = $title)
 
 			$checked = (is_array($value) && in_array($opt, $value)) ? ' checked="checked"' : '';?>
 
@@ -56,13 +49,13 @@ if($note):?>
 
 	<?php else: $checked = checked($value, 1, false);?>
 
-		<input type="checkbox" id="<?= $id ?>" name="<?= $$name ?>" class="checkbox <?= $class ?>" value="1"<?= $checked ?><?= $disabled ?>/>
+		<input type="checkbox" id="<?= $id ?>" name="<?= $name ?>" class="checkbox <?= $class ?>" value="1"<?= $checked.$disabled ?>/>
 
 	<?php endif;
 
 	if($desc && !empty($desc)):?>
 
-		&nbsp;&nbsp;<div class="description btn-desc"><?= $desc?></div>
+		<div class="description btn-desc"><?= $desc?></div>
 
 	<?php endif ?>
 

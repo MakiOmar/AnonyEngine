@@ -48,3 +48,21 @@ url('../fonts/raleway-thin-webfont.svg#ralewaythin') format('svg');
     font-weight: 100;
     font-style: normal;
 }
+
+.file-upload-override-button{
+    display: inline-block;
+}
+
+#download-file{
+    padding: 10px;
+}
+
+.anony-label{
+    font-weight: bold;
+    margin: 15px;
+    min-width: 150px;
+    display: inline-block;
+}
+.anony-middle{
+    vertical-align: middle!important;
+}

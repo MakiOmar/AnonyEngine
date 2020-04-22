@@ -78,11 +78,16 @@ class ANONY_Sliderbar{
 	public function enqueue(){
 		
 		wp_enqueue_style('anony-opts-jquery-ui-css');
+
+		if (is_rtl()) {
+			wp_enqueue_style ( 'jquery.ui.slider-rtl' );
+			wp_enqueue_script( 'jquery.ui.slider-rtl.min' );
+		}
 		
 		wp_enqueue_script(
-			'jquery-slider', 
+			'jquery-ui-slider', 
 			ANONY_FIELDS_URI.'sliderbar/jquery.ui.slider.js', 
-			array('jquery', 'jquery-ui-core', 'jquery-ui-slider'), 
+			array('jquery', 'jquery-ui-core'), 
 			time(), 
 			true
 		);
@@ -90,7 +95,7 @@ class ANONY_Sliderbar{
 		wp_enqueue_script(
 			'anony-opts-field-sliderbar-js', 
 			ANONY_FIELDS_URI.'sliderbar/field_sliderbar.js', 
-			array('jquery', 'jquery-ui-core', 'jquery-ui-dialog'),
+			array('jquery', 'jquery-ui-core', 'jquery-ui-dialog', 'jquery-ui-slider'),
 			time(),
 			true
 		);

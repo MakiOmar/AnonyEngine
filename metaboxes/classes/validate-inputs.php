@@ -67,6 +67,8 @@ if(!class_exists('ANONY_Validate_Inputs')){
 				//Set field's value to the new value before validation
 				$this->value = $args['new_value'];
 
+				//var_dump($this->value); die();
+
 				if(empty($this->value)) return;//if level 2-1
 
 
@@ -79,7 +81,7 @@ if(!class_exists('ANONY_Validate_Inputs')){
 					$this->validation = $this->field['validate'];
 					
 					$this->validate_inputs();
-				}//if level 2-2
+				}
 
 			}//if level 1
 

@@ -1,0 +1,153 @@
+#anony-share-msg{
+    padding: 5px;
+    margin: auto;
+    max-width: 75%;
+    margin-top: 5px;
+    border-radius: 5px;
+}
+
+#anony-share-msg p{
+    color: #fff;
+    margin: 0;
+    text-align: center;
+    font-weight: bold;
+}
+
+.anony-success{background: #88b900}
+
+.anony-fail{background: #e36066;}
+
+
+#anony-share-email-form{
+    position: fixed;
+    display: none;
+    height: 250px;
+    width: 550px;
+    padding: 20px;
+    background: #ddd;
+    border-radius: 5px;
+    top: 50%;
+    left: 50%;
+    z-index: 200;
+    -moz-transform: translateX(-50%) translateY(-50%);
+    -webkit-transform: translateX(-50%) translateY(-50%);
+    transform: translateX(-50%) translateY(-50%);
+    box-shadow: 0px 0px 35px rgba(0,0,0,0.6);
+
+}
+@keyframes slidedown
+{
+    from {top: 0;}
+    to {top: 50%;}
+}
+
+@keyframes slideup
+{
+    from {top: 50%;}
+    to {top: -50%;}
+}
+.transition-ease-bottom{
+    -webkit-animation: slidedown 2s;
+    -moz-animation: slidedown 2s;
+    -o-animation: slidedown 2s;
+    -animation: slidedown 2s;
+}
+
+.transition-ease-top{
+    -webkit-animation: slideup 2s;
+    -moz-animation: slideup 2s;
+    -o-animation: slideup 2s;
+    -animation: slideup 2s;
+}
+#anony-close-share{
+    position: relative;
+    display: block;
+    height: 30px;
+    width: 30px;
+    background: rgba(255,255,255,0.2);
+    text-align: center;
+    border-radius: 50%;
+}
+
+#anony-close-share span{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    margin: auto;
+    height: 25px;
+    width: 25px;
+    background:rgba(255,255,255,0.4);
+    text-align: center;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+#anony-close-share i{
+    vertical-align: middle;
+}
+#anony-share-container p{
+    font-weight: 300;
+}
+
+input[type='email']{
+    outline: none;
+    display: inline-block;
+    width: 65%;
+    padding: 10px;
+    border: 2px solid transparent;
+    border-radius: 5px;
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -o-box-sizing: border-box;
+    -ms-box-sizing: border-box;
+}
+
+input[type='email']:focus{
+    border: 2px solid #aaa;
+}
+
+.anony-email-share{
+    color: rgba(0,0,0,0.6);
+    text-decoration: none;
+    border-radius: 5px;
+    width: 27%;
+    display: inline-block;
+    padding: 8px;
+    background: #fff;
+    text-align: center;
+    border: 2px solid transparent;
+}
+
+.anony-email-share:hover{
+    border: 2px solid #aaa;
+}
+
+@media screen and (max-width: 736px){
+    input[type='email']{
+        display: block;
+        width: 100%;
+    }
+    .anony-email-share{
+        box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        -o-box-sizing: border-box;
+        -ms-box-sizing: border-box;
+        width: 100%;
+        display: block;
+        margin-top: 5px;
+    }
+}
+
+@media screen and (max-width: 599px){
+   #anony-share-container{
+       max-width: 350px;
+   }
+    
+}

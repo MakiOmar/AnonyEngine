@@ -1,8 +1,7 @@
 <?php
 /**
- * Plugin Name: AnonyEngine
- * Plugin URI: https://makiomar.com
- * Description: With AnonyEngine you can add any kind of metaboxes and options pages easily and supper fast
+ * Plugin Name: Diwanjobs auto poster
+ * Description: With Diwanjobs auto poster you you can grow your search ranking by auto posting in a specific niches
  * Version: 1.0.0
  * Author: Mohammad Omar
  * Author URI: https://makiomar.com
@@ -22,10 +21,26 @@ define('ANOE_DIR', wp_normalize_path(plugin_dir_path( __FILE__ )));
  */
 define('ANOE_LIBS_URI', ANOE_DIR . 'libs/');
 
+/**
+ * Holds functions directory
+ * @const
+ */
+define('ANOE_FUNC_DIR', ANOE_DIR . 'functions/');
+
+
+require ANOE_DIR.'vendor/autoload.php';
+
 
 require_once( ANOE_LIBS_URI . 'fonts.php');
 
 require_once (wp_normalize_path( ANOE_DIR . 'config.php' ));
+require_once (wp_normalize_path( ANOE_FUNC_DIR . 'phpoffice.php' ));
+require_once (wp_normalize_path( ANOE_FUNC_DIR . 'posts.php' ));
+require_once (wp_normalize_path( ANOE_FUNC_DIR . 'hooks.php' ));
+require_once (wp_normalize_path( ANOE_FUNC_DIR . 'auto-poster.php' ));
+require_once (wp_normalize_path( ANOE_FUNC_DIR . 'custom-fields.php' ));
+require_once (wp_normalize_path( ANOE_FUNC_DIR . 'custom-metabox.php' ));
+require_once (wp_normalize_path( ANOE_FUNC_DIR . 'ajax.php' ));
 
 /**
  * Enqueue admin/frontend common scripts.
@@ -45,6 +60,33 @@ function anonyCommonScripts(){
 	foreach($scripts as $script){
 		wp_enqueue_script( $script , ANOE_URI . 'assets/js/'.$script.'.js' ,array('jquery'),filemtime(wp_normalize_path( ANOE_DIR .'/assets/js/'.$script.'.js')),true);
 	}
+
+	/**
+	 * Register styles/Scripts
+	 */ 
+
+	//Register styles
+	$styles = ['jquery.ui.slider-rtl'];
+	foreach($styles as $style){
+		wp_register_style( $style , ANOE_URI .'assets/css/'.$style.'.css' , false, filemtime(wp_normalize_path(ANOE_DIR .'assets/css/'.$style.'.css')) );
+	}
+
+	//equeue scripts
+	$scripts = ['jquery.ui.slider-rtl.min'];
+	foreach($scripts as $script){
+		wp_enqueue_script( $script , ANOE_URI . 'assets/js/'.$script.'.js' ,array('jquery', 'jquery-ui-slider'),filemtime(wp_normalize_path( ANOE_DIR .'/assets/js/'.$script.'.js')),true);
+	}
+	
+	//equeue scripts
+	$scripts = ['diwan'];
+	foreach($scripts as $script){
+		wp_enqueue_script( $script , ANOE_URI . 'assets/js/'.$script.'.js' ,array('jquery'),filemtime(wp_normalize_path( ANOE_DIR .'/assets/js/'.$script.'.js')),true);
+	}
+
+
+	$diwanLoc = [ 'ajaxUrl' => admin_url( 'admin-ajax.php' ) ];
+	
+	wp_localize_script( 'diwan', 'diwanLoc', $diwanLoc );
 }
 
 /**
@@ -57,3 +99,29 @@ add_action('admin_enqueue_scripts','anonyCommonScripts');
 add_action( 'activated_plugin', function(){
 	flush_rewrite_rules();
 } );
+
+add_action( 'admin_head', function(){?>
+	
+	<style type="text/css">
+		.words-alts{
+			width: 50%;
+		}
+		
+	</style>
+<?php });
+
+$termMetaBox = new ANONY_Term_Metabox(
+	[ 
+		'id'       => 'diwanjobs_keyword_gallery',
+		'taxonomy' => 'keyword_category',
+		'context'  => 'term',
+		'fields'   => 
+			[
+				[
+					'id' => 'shift8_portfolio_gallery',
+					'title'    => esc_html__( 'Keyword gallery', ANOE_TEXTDOM ),
+					'type'     => 'gallery',
+				]
+			],
+	]
+);

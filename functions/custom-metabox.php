@@ -1,4 +1,10 @@
-<?php
+<?php 
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit; // Exit if accessed directly
+}
+
+
 
 add_action("admin_enqueue_scripts", function (){
     wp_enqueue_media();
@@ -11,17 +17,16 @@ add_action("admin_enqueue_scripts", function (){
 
 //Add download's upload meta box
 add_action('add_meta_boxes', function () {
-    add_meta_box('diwn_keywords_excel', __('Add your keywords Excel sheet',ANOE_TEXTDOM), 'diwn_read_keywords_excel', 'keyword', 'normal', 'high');
+    add_meta_box('diwn_keywords_excel', esc_html__('Add your keywords Excel sheet',ANOE_TEXTDOM), 'diwn_read_keywords_excel', 'keyword', 'normal', 'high');
     
-    add_meta_box('diwn_keywords_template_alts', __('Template words alternatives',ANOE_TEXTDOM), 'diwn_words_alts', 'keyword_template', 'normal', 'high');  
+    add_meta_box('diwn_keywords_template_alts', esc_html__('Template words alternatives',ANOE_TEXTDOM), 'diwn_words_alts', 'keyword_template', 'normal', 'high');  
 });  
 
 function diwn_words_alts($post){
 	do_action('parse_words_alts', $post);
 	$groups_meta = get_post_meta( $post->ID, 'keyword_groups', true );
-	echo '<pre dir="ltr">';
-	//print_r($groups_meta);
-	echo '</pre>';
+	$success_msg = esc_html__('Alternatives have been successfully updated',ANOE_TEXTDOM);
+	$failed_msg  = esc_html__('Nothing changed',ANOE_TEXTDOM);
 	
 	if ($groups_meta && !empty($groups_meta)) {
 		

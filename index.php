@@ -107,6 +107,21 @@ add_action( 'admin_head', function(){?>
 			width: 50%;
 		}
 		
+		.words-alts-select{
+			width: 150px;
+		}
+		
+		.success-msg{
+			color: green;
+		}
+		
+		.failed-msg{
+			color: red;
+		}
+		.alt-msg{
+			display: none;
+		}
+		
 	</style>
 <?php });
 

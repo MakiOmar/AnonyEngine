@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @return array
  */
 function diwan_read_keyword_groups($content){
-	preg_match_all('/{%(.*?)%}/i', $content, $matches);
+	preg_match_all('/\(%(.*?)%\)/i', $content, $matches);
 	
 	$groups = [];
 	
@@ -27,50 +27,56 @@ function diwan_read_keyword_groups($content){
 	return $groups;
 }
 
+/**
+ * Replace alternatives
+ * @return string Content after replacing alternatives
+ */
 function diwan_template_content(){
-	/**-------------------------------------------------
-	 *               Replace alternatives
-	 * ------------------------------------------------*/
 	
 	$templates = get_posts( ['post_type' => 'keyword_template'] );
 	
 	$content = '';
 	
-	if (!empty($templates) && is_array($templates)) {
+	if (empty($templates) || !is_array($templates)) return $content;
 		
-		//get random template index from array $templates
-		$tempIndex = array_rand($templates);
+	//get random template index from array $templates
+	$tempIndex = array_rand($templates);
+	
+	//get random template from $templates array
+	$template = $templates[$tempIndex];
+	
+	//Get template contents
+	$content = $template->post_content;
+	
+	//Get template list of alternatives
+	$word_list = get_post_meta( $template->ID, 'keyword_groups', true );
+	
+	if (empty($word_list) || !is_array($word_list)) return;
+	
+	foreach ($word_list as $pattern => $data) {
 		
-		//get random template from $templates array
-		$template = $templates[$tempIndex];
+		extract($data);
 		
-		//Get template contents
-		$content = $template->post_content;
+		$pattern = str_replace('(', '\(', $pattern);
+		$pattern = str_replace(')', '\)', $pattern);
 		
-		//Get template list of alternatives
-		$word_list = get_post_meta( $template->ID, 'keyword_groups', true );
+		preg_match('/'.$pattern.'/i', $content, $matches);
 		
-		foreach ($word_list as $pattern => $data) {
+		if (!empty($matches)) {
 			
-			extract($data);
+			//get random index from array $alts.$alt is extracted fro $data
+			$randIndex = array_rand($alts);
 			
-			preg_match('/'.$pattern.'/i', $content, $matches);
+			//get random alternative from alts array
+			$alt = $alts[$randIndex];
 			
-			if (!empty($matches)) {
-				
-				//get random index from array $alts
-				$randIndex = array_rand($alts);
-				
-				//get random alternative from alts array
-				$alt = $alts[$randIndex];
-				
-				
-				$content = preg_replace('/'.$pattern.'/i', $alt , $content);
-			}
 			
+			$content = preg_replace('/'.$pattern.'/i', $alt , $content);
 		}
-			
+		
 	}
+			
+
 	
 	return $content;
 }
@@ -108,7 +114,7 @@ function diwan_post_data($post, $word){
 	
 	if(empty($content)) return false;
 	
-	$content = preg_replace('/{#.*#}/i', $word , $content);
+	$content = preg_replace('/\(#.*#\)/i', $word , $content);
 	
 	$title = $word . ' ' . date( 'Y-m-d' );
 	
@@ -130,8 +136,10 @@ function diwan_auto_postert(){
 			$keywords_list = get_post_meta( $keyword_post->ID , 'diwan_keywords_list', true );
 			
 			
-			$i = 1;
+			$i = 0;
 			foreach ($keywords_list as $word) {
+				
+				$i++;
 				
 				$data = diwan_post_data($keyword_post, $word);
 				
@@ -139,7 +147,7 @@ function diwan_auto_postert(){
 				
 				extract($data);
 				
-				if($i <= 10){
+				if($i == 0){
 					$insert = wp_insert_post( 
 								[
 									'post_type'    => 'post',
@@ -156,7 +164,6 @@ function diwan_auto_postert(){
 					
 				}
 				
-				$i++;
 				/**echo '<pre dir="ltr">';
 					print($content);
 				echo '</pre>';*/
@@ -165,15 +172,12 @@ function diwan_auto_postert(){
 		}
 	}
 }
-add_action( 'wp_footer', function(){
-	if(!current_user_can( 'administrator' )) return;
-	
-	diwan_auto_postert();
 
-} );
-
-add_action( 'parse_words_alts', function($post){
-			
+/**
+ * To be hooked before rendering diwn_keywords_template_alts metabox
+ * @param object $post 
+ */
+function diwan_parse_words_alts($post){
 	$content = get_post_field('post_content', $post->ID);
 	
 	if (!empty($content)) {
@@ -190,13 +194,14 @@ add_action( 'parse_words_alts', function($post){
 		}
 		
 	}
+}
 
-	$groups_meta = get_post_meta( $post->ID, 'keyword_groups', true );
+add_action( 'parse_words_alts', 'diwan_parse_words_alts' );
+
+
+add_action( 'wp_footer', function(){
+	if(!current_user_can( 'administrator' )) return;
 	
-	/*echo '<pre dir="ltr">';
-	print_r($groups_meta);
-	echo '</pre>';*/
-		
-		
+	diwan_auto_postert();
 
 } );

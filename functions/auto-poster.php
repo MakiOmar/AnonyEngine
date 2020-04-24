@@ -27,39 +27,148 @@ function diwan_read_keyword_groups($content){
 	return $groups;
 }
 
-add_action( 'wp_footer', function(){
-	if(!current_user_can( 'administrator' )) return;
-
-	$word_alternatives = 
-[
-	'السلام عليكم' => ['مرحباً', ' أهلاً بكم']
-];
-	$keywords = ['وظائف محاسبين'];
+function diwan_template_content(){
+	/**-------------------------------------------------
+	 *               Replace alternatives
+	 * ------------------------------------------------*/
 	
 	$templates = get_posts( ['post_type' => 'keyword_template'] );
-
-	$first_template = array_shift($templates);
-
-	$first_template_content = $first_template->post_content;
 	
-	$groups = diwan_read_keyword_groups($first_template_content);
+	$content = '';
 	
-	
-	foreach ($word_alternatives as $word => $alternatives) {
-		preg_match_all('/{%'.$word.'%}/i', $first_template_content, $matches);
-
-		if (!empty($matches)) {
-
-			// get random index from array $arrX
-			$randIndex = array_rand($alternatives);
-
-			$alternative = $alternatives[$randIndex];
-
-			$content = preg_replace('/{%'.$word.'%}/i', $alternative , $first_template_content);
-
+	if (!empty($templates) && is_array($templates)) {
+		
+		//get random template index from array $templates
+		$tempIndex = array_rand($templates);
+		
+		//get random template from $templates array
+		$template = $templates[$tempIndex];
+		
+		//Get template contents
+		$content = $template->post_content;
+		
+		//Get template list of alternatives
+		$word_list = get_post_meta( $template->ID, 'keyword_groups', true );
+		
+		foreach ($word_list as $pattern => $data) {
+			
+			extract($data);
+			
+			preg_match('/'.$pattern.'/i', $content, $matches);
+			
+			if (!empty($matches)) {
+				
+				//get random index from array $alts
+				$randIndex = array_rand($alts);
+				
+				//get random alternative from alts array
+				$alt = $alts[$randIndex];
+				
+				
+				$content = preg_replace('/'.$pattern.'/i', $alt , $content);
+			}
 			
 		}
-	}	
+			
+	}
+	
+	return $content;
+}
+
+/**
+ * Select post thumbnail id randomly
+ * @param  object $post An object of post
+ * @param  string $word Keyword string
+ * @return mixed        thumbnail ID on success or false on failure
+ */
+function diwan_post_thumb($post){
+	
+	$keyword_gallery = get_post_meta( $post->ID , 'diwanjobs_keyword_gallery', true );
+	
+	$thumb_id = false;
+	
+	if(!empty($keyword_gallery) && is_array($keyword_gallery)){
+		
+		$gallery = $keyword_gallery['diwanjobs_keyword_gallery']['shift8_portfolio_gallery'];
+		
+		//get random thumb index from array $gallery
+		$thumbIndex = array_rand($gallery);
+		
+		//get random thumb id
+		$thumb_id = $gallery[$thumbIndex];
+	}
+	
+	return $thumb_id;
+}
+
+function diwan_post_data($post, $word){
+	$thumb_id = diwan_post_thumb($post);
+				
+	$content = diwan_template_content();
+	
+	if(empty($content)) return false;
+	
+	$content = preg_replace('/{#.*#}/i', $word , $content);
+	
+	$title = $word . ' ' . date( 'Y-m-d' );
+	
+	return ['content' => $content, 'title' => $title, 'thumb_id' => $thumb_id ];
+}
+
+/**
+ * Auto poster
+ */
+function diwan_auto_postert(){
+	
+	$keywords_post = get_posts( ['post_type' => 'keyword'] );
+	
+	
+	if (!empty($keywords_post) && is_array($keywords_post)) {
+		
+		foreach ($keywords_post as $keyword_post) {
+			//Get keywords list
+			$keywords_list = get_post_meta( $keyword_post->ID , 'diwan_keywords_list', true );
+			
+			
+			$i = 1;
+			foreach ($keywords_list as $word) {
+				
+				$data = diwan_post_data($keyword_post, $word);
+				
+				if(!$data) continue;
+				
+				extract($data);
+				
+				if($i <= 10){
+					$insert = wp_insert_post( 
+								[
+									'post_type'    => 'post',
+									'post_title'   => wp_strip_all_tags( $title ),
+									'post_content' => wp_kses_post( $content ),
+									'post_status'  => 'publish',
+								] 
+							);
+					if ($insert && !is_wp_error( $insert )) {
+						
+						$set = set_post_thumbnail( $insert , intval($thumb_id) );
+
+					}
+					
+				}
+				
+				$i++;
+				/**echo '<pre dir="ltr">';
+					print($content);
+				echo '</pre>';*/
+			}
+			
+		}
+	}
+}
+add_action( 'wp_footer', function(){
+	if(!current_user_can( 'administrator' )) return;
+	
+	diwan_auto_postert();
 
 } );
 

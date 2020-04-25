@@ -10,21 +10,26 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 function diwan_read_keyword_groups($content){
 	preg_match_all('/\(%(.*?)%\)/i', $content, $matches);
+
 	
-	$groups = [];
-	
-	if(empty($matches)) return $groups;
+	if(empty($matches)) return [];
 		
 	$placeholders = $matches[0];
 	
-	$matched      = $matches[1];
+	$matchings    = $matches[1];
 	
-	foreach ($placeholders as $index => $placeholder) {
-		$groups[$placeholder]['index'] = $index;
-		$groups[$placeholder]['alts']  = [$matched[$index]];
+	$temp =[];
+	
+	foreach ($matchings as $matching) {
+		$temp[] = [$matching];
 	}
 	
-	return $groups;
+	$matchings = $temp;
+	
+	$matches = [$placeholders, $matchings];
+	
+
+	return $matches;
 }
 
 /**
@@ -51,14 +56,20 @@ function diwan_template_content(){
 	//Get template list of alternatives
 	$word_list = get_post_meta( $template->ID, 'keyword_groups', true );
 	
+	
 	if (empty($word_list) || !is_array($word_list)) return;
 	
-	foreach ($word_list as $pattern => $data) {
+	$patterns      = $word_list[0];
+ 	$alternatives  = $word_list[1];
+ 	
+	
+	foreach ($patterns as $index => $pattern) {
 		
-		extract($data);
 		
 		$pattern = str_replace('(', '\(', $pattern);
 		$pattern = str_replace(')', '\)', $pattern);
+		
+		$alts = $alternatives[$index];
 		
 		preg_match('/'.$pattern.'/i', $content, $matches);
 		
@@ -71,7 +82,7 @@ function diwan_template_content(){
 			$alt = $alts[$randIndex];
 			
 			
-			$content = preg_replace('/'.$pattern.'/i', $alt , $content);
+			$content = preg_replace('/'.$pattern.'/i', $alt , $content, 1);
 		}
 		
 	}
@@ -186,9 +197,7 @@ function diwan_parse_words_alts($post){
 		
 		
 		if(empty($groups_meta)){
-			$groups = diwan_read_keyword_groups($content);
-			
-			
+			$groups = diwan_read_keyword_groups($content);			
 			
 			add_post_meta( $post->ID, 'keyword_groups', $groups );
 		}

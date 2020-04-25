@@ -25,23 +25,26 @@ function diwan_update_alts(){
     if(!isset($word_element_alt)           ||  $word_element_index === '') return;
     if(!isset($word_element_alternatives)  ||  $word_element_alternatives === '') return;
     
-    if (isset($keywords_list[$word_element_alt] ) && $keywords_list[$word_element_alt]['index'] == $word_element_index ) {
-        
-        $oldAlts = $keywords_list[$word_element_alt]['alts'];
-        $newAlts = array_map('trim', explode(',', $word_element_alternatives));
-        
-        $keywords_list[$word_element_alt]['alts'] = array_merge($oldAlts, $newAlts) ;
-        
-        $updated =  update_post_meta( intval($post_id), 'keyword_groups', $keywords_list );
-        
-        $msg = ($updated) ? 'success' : 'failed';
-        
-        wp_send_json(
-                [
-                    'result' => $msg,
-                ]
-            ); die();
-    }
+    $patterns      = $keywords_list[0];
+    $alternatives  = $keywords_list[1];
     
-
+    $oldAlts = $alternatives[$word_element_index];
+    
+    $newAlts = array_map('trim', explode(',', $word_element_alternatives));
+    
+    $alternatives[$word_element_index] = array_merge($oldAlts, $newAlts);
+    
+    $keywords_list = [$patterns, $alternatives];
+    
+    $updated =  update_post_meta( intval($post_id), 'keyword_groups', $keywords_list );
+    
+    $msg = ($updated) ? 'success' : 'failed';
+        
+    wp_send_json(
+            [
+                'result' => $msg,
+            ]
+        );
+    
+    die();
 }

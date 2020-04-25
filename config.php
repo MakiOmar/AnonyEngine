@@ -89,3 +89,11 @@ spl_autoload_register( function ( $class_name ) {
 	}
 } );
 
+function nvd($arr){
+	echo '<pre dir="ltr">';
+ 	var_dump($arr);
+	 echo '</pre>';
+	 
+	 die();
+	}
+

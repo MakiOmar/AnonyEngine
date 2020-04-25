@@ -32,27 +32,34 @@ add_action('add_meta_boxes', function () {
  * @param object $post 
  */
 function diwn_words_alts($post){
+	
  do_action('parse_words_alts', $post);
+ 
  $groups_meta = get_post_meta( $post->ID, 'keyword_groups', true );
+ 
+ if (!$groups_meta || empty($groups_meta)) return;
+ 
  $success_msg = esc_html__('Alternatives have been successfully updated',ANOE_TEXTDOM);
  $failed_msg  = esc_html__('Nothing changed',ANOE_TEXTDOM);
  
- if ($groups_meta && !empty($groups_meta)) {
-  
-  foreach ($groups_meta as $word => $data) {
-   extract($data);
+ $patterns      = $groups_meta[0];
+ $alternatives  = $groups_meta[1];
+ 
+ 
+ foreach ($patterns as $index => $pattern) {
+ 	$rel_id = 'word-element-'.$index;
+ 	
+ 	$alts = $alternatives[$index];
+ 	
+ 	$value = implode(',', $alts);
+ 	
+ 	$label = esc_html__('Words alternatives',ANOE_TEXTDOM);
    
-   $rel_id = 'word-element-'.$index;
-   
-   $value = implode(',', $alts);
-   
-   $label = esc_html__('Words alternatives',ANOE_TEXTDOM);
-   
-   $button_text = esc_html__('Save',ANOE_TEXTDOM);
-      
-   include ANOE_DIR .'templates/word-alts.php';
-  }
+    $button_text = esc_html__('Save',ANOE_TEXTDOM);
+    
+    include ANOE_DIR .'templates/word-alts.php';
  }
+ 
 }
 
 /**
@@ -119,14 +126,20 @@ add_action('save_post_keyword', function ($id) {
     
     if($keywords === $keywords_list) return;
   
- update_post_meta($id, 'diwan_keywords_list', $keywords);
+ 	update_post_meta($id, 'diwan_keywords_list', $keywords);
     
 });
 
 add_action('save_post_keyword_template', function ($id, $post) {
+
  $content = $post->post_content;
  
  $new_word_list = diwan_read_keyword_groups($content);
+ 
+ if(empty($new_word_list)) return;
+ 
+ $new_patterns     = $new_word_list[0];
+ $new_alternatives = $new_word_list[1];
  
  //Get template list of alternatives
  $old_word_list = get_post_meta( $id, 'keyword_groups', true );
@@ -137,37 +150,61 @@ add_action('save_post_keyword_template', function ($id, $post) {
  
  if($new_word_list === $old_word_list) return;
  
+ $old_patterns     = $old_word_list[0];
+ $old_alternatives = $old_word_list[1];
+ 
+
+ 
  //Note: array_diff checks if something in array1 that is not existed in array2
  
  //So we check if something new has been added to the content
- $array_diff_new = array_diff(array_keys($new_word_list), array_keys($old_word_list));
+ $array_diff_new = array_diff(array_keys($new_patterns), array_keys($old_patterns));
+ 
+ 
  
  $word_list_update = $new_word_list;
  
  if (!empty($array_diff_new)) {
-  $new_word_list = array_merge($new_word_list, $old_word_list);
+ 	
+ 	foreach ($array_diff_new as $index) {
+ 		$index = $index - 1;
+ 		
+ 		array_splice($old_patterns, $index, 0, [$new_patterns[$index]]);
+ 		array_splice($old_alternatives, $index, 0, [$new_alternatives[$index]]);
+ 	}
+
+  
+  $new_word_list = [];
+  $new_word_list[] = $old_patterns;
+  $new_word_list[] = $old_alternatives;
   
   $word_list_update = $new_word_list;
+  
  }
   
  
- //So we check if something missing the content
- $array_diff_missing = array_diff(array_keys($old_word_list), array_keys($new_word_list));
+ //So we check if something missing from the content
+ $array_diff_missing = array_diff(array_keys($old_patterns), array_keys($new_patterns));
  
  if(!empty($array_diff_missing)){
-  foreach ($array_diff_missing as $missing) {
-   unset($old_word_list[$missing]);
-  }
-  $word_list_update = $old_word_list;
+ 	
+ 	$old_patterns     = $old_word_list[0];
+ 	$old_alternatives = $old_word_list[1];
+ 	
+ 	foreach ($array_diff_missing as $index) {
+ 		$index = $index - 1;
+ 		
+ 		unset($old_patterns[$index]);
+ 		unset($old_alternatives[$index]);
+ 	}
+ 	
+	$new_word_list = [];
+	$new_word_list[] = $old_patterns;
+	$new_word_list[] = $old_alternatives;
+
+	$word_list_update = $new_word_list;
  }
- 
- /*echo '<pre dir="ltr">';
-  //var_dump(array_diff(array_keys($old_word_list), array_keys($new_word_list)));
- var_dump($word_list_update);
- echo '</pre>'; die();
- 
- */
- 
+  
  return update_post_meta( $id, 'keyword_groups', $word_list_update);
  
 }, 10, 2);

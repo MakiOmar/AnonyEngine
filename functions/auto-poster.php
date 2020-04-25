@@ -205,7 +205,7 @@ function diwan_parse_words_alts($post){
 	}
 }
 
-add_action( 'parse_words_alts', 'diwan_parse_words_alts' );
+//add_action( 'parse_words_alts', 'diwan_parse_words_alts' );
 
 
 add_action( 'wp_footer', function(){

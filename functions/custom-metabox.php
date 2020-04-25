@@ -134,7 +134,10 @@ add_action('save_post_keyword_template', function ($id, $post) {
 
  $content = $post->post_content;
  
+ if($content === '') return;
+ 
  $new_word_list = diwan_read_keyword_groups($content);
+
  
  if(empty($new_word_list)) return;
  
@@ -143,9 +146,10 @@ add_action('save_post_keyword_template', function ($id, $post) {
  
  //Get template list of alternatives
  $old_word_list = get_post_meta( $id, 'keyword_groups', true );
- 
- if (empty($old_word_list) || !is_array($old_word_list)){
-  return update_post_meta( $id, 'keyword_groups', $new_word_list );
+  
+ if(empty($old_word_list) || !is_array($old_word_list)){
+ 	
+   return update_post_meta( $id, 'keyword_groups', $new_word_list );
  }
  
  if($new_word_list === $old_word_list) return;
@@ -153,26 +157,21 @@ add_action('save_post_keyword_template', function ($id, $post) {
  $old_patterns     = $old_word_list[0];
  $old_alternatives = $old_word_list[1];
  
-
- 
  //Note: array_diff checks if something in array1 that is not existed in array2
  
  //So we check if something new has been added to the content
- $array_diff_new = array_diff(array_keys($new_patterns), array_keys($old_patterns));
- 
- 
+ $array_diff_new = array_diff($new_patterns, $old_patterns);
  
  $word_list_update = $new_word_list;
  
  if (!empty($array_diff_new)) {
  	
- 	foreach ($array_diff_new as $index) {
- 		$index = $index - 1;
+ 	foreach ($array_diff_new as $index => $pattern) {
+ 		$index = intval($index);
  		
  		array_splice($old_patterns, $index, 0, [$new_patterns[$index]]);
  		array_splice($old_alternatives, $index, 0, [$new_alternatives[$index]]);
  	}
-
   
   $new_word_list = [];
   $new_word_list[] = $old_patterns;
@@ -180,19 +179,20 @@ add_action('save_post_keyword_template', function ($id, $post) {
   
   $word_list_update = $new_word_list;
   
- }
   
+ }
  
  //So we check if something missing from the content
- $array_diff_missing = array_diff(array_keys($old_patterns), array_keys($new_patterns));
+ $array_diff_missing = array_diff($old_patterns, $new_patterns);
  
  if(!empty($array_diff_missing)){
  	
  	$old_patterns     = $old_word_list[0];
  	$old_alternatives = $old_word_list[1];
  	
- 	foreach ($array_diff_missing as $index) {
- 		$index = $index - 1;
+ 	foreach ($array_diff_missing as $index => $pattern) {
+ 		
+ 		$index = intval($index);
  		
  		unset($old_patterns[$index]);
  		unset($old_alternatives[$index]);
@@ -204,7 +204,7 @@ add_action('save_post_keyword_template', function ($id, $post) {
 
 	$word_list_update = $new_word_list;
  }
-  
  return update_post_meta( $id, 'keyword_groups', $word_list_update);
+
  
 }, 10, 2);

@@ -58,9 +58,9 @@ class ANONY_Gallery{
 				$this->parent->class_attr
 			);
 		$html .= '<div class="anony-gallery-thumbs-wrap" id="anony-gallery-thumbs-'.$this->parent->field['id'].'">';
-
+		$style = 'display:none;';
 		if (is_array($this->parent->value) && !empty($this->parent->value)) {
-
+			$style = 'display:inline-block;';
 			$html .= '<div class="anony-gallery-thumbs">';
 			foreach ($this->parent->value as $attachment_id) {
 
@@ -79,7 +79,7 @@ class ANONY_Gallery{
 				);
 
 		$html .= sprintf(
-					' <a href="javascript:void(0);" class="anony-opts-clear-gallery button button-primary button-large" style="display:none"><span></span>%1$s</a>', 
+					' <a href="javascript:void(0);" class="anony-opts-clear-gallery button button-primary button-large" style="'.$style.'"><span></span>%1$s</a>', 
 					esc_html__('Remove all', ANOE_TEXTDOM )
 				);
 		$html .= '</div>';

@@ -47,7 +47,8 @@
 
 			$mbID = $this->parent->id;
 
-			$this_post_metaboxes = apply_filters( 'anony_post_specific_metaboxes', '', $post );
+			$this_post_metaboxes = apply_filters( 'anony_post_specific_metaboxes', $this->parent->metabox, $post );
+
 			$this_post_metaboxes['id'] = $mbID;
 
 			if (!empty($this_post_metaboxes) && (in_array($post->post_type, $this_post_metaboxes['post_type']) || $this_post_metaboxes['post_type'] === $post->post_type)) {

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<dwsync>
+<file name="01_Simple_file_reader_using_IOFactory.php" server="cloud210.hostgator.com//" local="132201778892487072" remote="132317757000000000" Dst="0" />
+<file name="02_Simple_file_reader_using_a_specified_reader.php" server="cloud210.hostgator.com//" local="132201778892487072" remote="132317757000000000" Dst="0" />
+<file name="04_Simple_file_reader_using_the_IOFactory_to_identify_a_reader_to_use.php" server="cloud210.hostgator.com//" local="132201778892493202" remote="132317757000000000" Dst="0" />
+<file name="05_Simple_file_reader_using_the_read_data_only_option.php" server="cloud210.hostgator.com//" local="132201778892498219" remote="132317757000000000" Dst="0" />
+<file name="03_Simple_file_reader_using_the_IOFactory_to_return_a_reader.php" server="cloud210.hostgator.com//" local="132201778892493202" remote="132317757000000000" Dst="0" />
+<file name="07_Simple_file_reader_loading_a_single_named_worksheet.php" server="cloud210.hostgator.com//" local="132201778892503392" remote="132317757000000000" Dst="0" />
+<file name="08_Simple_file_reader_loading_several_named_worksheets.php" server="cloud210.hostgator.com//" local="132201778892503392" remote="132317757000000000" Dst="0" />
+<file name="06_Simple_file_reader_loading_all_worksheets.php" server="cloud210.hostgator.com//" local="132201778892498219" remote="132317757000000000" Dst="0" />
+<file name="10_Simple_file_reader_using_a_configurable_read_filter.php" server="cloud210.hostgator.com//" local="132201778892508396" remote="132317757000000000" Dst="0" />
+<file name="11_Reading_a_workbook_in_chunks_using_a_configurable_read_filter_(version_1).php" server="cloud210.hostgator.com//" local="132201778892513397" remote="132317757000000000" Dst="0" />
+<file name="09_Simple_file_reader_using_a_read_filter.php" server="cloud210.hostgator.com//" local="132201778892508396" remote="132317757000000000" Dst="0" />
+<file name="14_Reading_a_large_CSV_file_in_chunks_to_split_across_multiple_worksheets.php" server="cloud210.hostgator.com//" local="132201778892520298" remote="132317757000000000" Dst="0" />
+<file name="12_Reading_a_workbook_in_chunks_using_a_configurable_read_filter_(version_2).php" server="cloud210.hostgator.com//" local="132201778892513397" remote="132317757000000000" Dst="0" />
+<file name="13_Simple_file_reader_for_multiple_CSV_files.php" server="cloud210.hostgator.com//" local="132201778892520298" remote="132317757000000000" Dst="0" />
+<file name="16_Handling_loader_exceptions_using_TryCatch.php" server="cloud210.hostgator.com//" local="132201778892525487" remote="132317757000000000" Dst="0" />
+<file name="17_Simple_file_reader_loading_several_named_worksheets.php" server="cloud210.hostgator.com//" local="132201778892530492" remote="132317757000000000" Dst="0" />
+<file name="15_Simple_file_reader_for_tab_separated_value_file_using_the_Advanced_Value_Binder.php" server="cloud210.hostgator.com//" local="132201778892525487" remote="132317757000000000" Dst="0" />
+<file name="19_Reading_worksheet_information_without_loading_entire_file.php" server="cloud210.hostgator.com//" local="132201778892535492" remote="132317757600000000" Dst="0" />
+<file name="20_Reader_worksheet_hyperlink_image.php" server="cloud210.hostgator.com//" local="132201778892539142" remote="132317757600000000" Dst="0" />
+<file name="18_Reading_list_of_worksheets_without_loading_entire_file.php" server="cloud210.hostgator.com//" local="132201778892530492" remote="132317757600000000" Dst="0" />
+<file name="21_Reader_CSV_Long_Integers_with_String_Value_Binder.php" server="cloud210.hostgator.com//" local="132201778892539142" remote="132317757600000000" Dst="0" />
+</dwsync>

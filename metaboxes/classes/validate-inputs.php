@@ -79,7 +79,7 @@ if(!class_exists('ANONY_Validate_Inputs')){
 					$this->validation = $this->field['validate'];
 					
 					$this->validate_inputs();
-				}//if level 2-2
+				}
 
 			}//if level 1
 

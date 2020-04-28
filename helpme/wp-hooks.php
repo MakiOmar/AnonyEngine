@@ -1,5 +1,35 @@
 <?php
 /**
+ * Callback for WordPress 'post_edit_form_tag' action.
+ * 
+ * Append enctype - multipart/form-data and encoding - multipart/form-data
+ * to allow image uploads for post type 'post'
+ * 
+ * @global type $post
+ * @return type
+ */
+
+add_action('post_edit_form_tag', function (){
+    
+    global $post;
+    
+    //  if invalid $post object, return
+    if(!$post)
+        return;
+    
+    /*//  get the current post type
+    $post_type = get_post_type($post->ID);
+    
+    //  if post type is not 'post', return
+    if('keyword' != $post_type)
+        return;
+    
+    //  append our form attributes
+    printf(' enctype="multipart/form-data" encoding="multipart/form-data" ');
+    */
+    
+});
+/**
  * Add required scripts in footer
  */
 add_action('wp_print_footer_scripts', function(){

@@ -9,6 +9,14 @@
 if ( ! class_exists( 'ANONY_HELP' ) ) {
 	class ANONY_HELP{
 
+		static function obGet($function, $args=[]){
+			ob_start();
+			call_user_func_array($function, $args);
+			$x = ob_get_contents();
+			ob_end_clean();
+			return $x;
+		}
+
 		/**
 		 * trims a string to a custom number of words
 		 * @param string $text 

@@ -35,8 +35,7 @@ if ( ! class_exists( 'ANONY_POST_HELP' ) ) {
 			if ($post instanceof WP_Post ) {
 		        setup_postdata($post);
 		        $content = get_the_content();
-		        preg_match('/\['.$shortcode_tag.'\s*.*\]/', $content, $matches);
-		        if ($matches) return true;
+		        if (has_shortcode(  $content, $shortcode_tag )) return true;
 		    }
 
 		    return false;

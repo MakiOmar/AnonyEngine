@@ -45,6 +45,25 @@ function anonyCommonScripts(){
 	foreach($scripts as $script){
 		wp_enqueue_script( $script , ANOE_URI . 'assets/js/'.$script.'.js' ,array('jquery'),filemtime(wp_normalize_path( ANOE_DIR .'/assets/js/'.$script.'.js')),true);
 	}
+
+	/**
+	 * Register styles/Scripts
+	 */ 
+
+	//Register styles
+	$styles = ['jquery.ui.slider-rtl'];
+	foreach($styles as $style){
+		wp_register_style( $style , ANOE_URI .'assets/css/'.$style.'.css' , false, filemtime(wp_normalize_path(ANOE_DIR .'assets/css/'.$style.'.css')) );
+	}
+
+	//Register scripts
+	$scripts = ['jquery.ui.slider-rtl.min'];
+	foreach($scripts as $script){
+		wp_enqueue_script( $script , ANOE_URI . 'assets/js/'.$script.'.js' ,array('jquery', 'jquery-ui-slider'),filemtime(wp_normalize_path( ANOE_DIR .'/assets/js/'.$script.'.js')),true);
+	}
+
+
+
 }
 
 /**

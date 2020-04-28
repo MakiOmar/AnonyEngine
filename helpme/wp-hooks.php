@@ -1,5 +1,26 @@
 <?php
 /**
+ * Add required scripts in footer
+ */
+add_action('wp_print_footer_scripts', function(){
+    $scripts  = apply_filters( 'anony_print_footer_scripts', '' );
+    $domReady = apply_filters( 'anony_document_ready_jquery', '' );//For jQuery document ready scripts
+
+    if (empty($scripts) && empty($domReady)) return;
+    ?>
+    <script type="text/javascript">
+    	jQuery(document).ready(function($){
+			"use strict";
+			<?= $domReady  ?>
+		});
+
+    	<?= $scripts  ?>
+
+    </script>
+
+<?php });
+
+/**
 * Link all post thumbnails to the post permalink and remove width and height atrr from img
 *
 * @param  string $html          Post thumbnail HTML.
@@ -14,7 +35,9 @@ add_filter( 'post_thumbnail_html', function ( $html, $post_id, $post_image_id ) 
 	return preg_replace('/(width|height)="\d+"\s/', "", $html);
 }, 10, 3 ); 
 
-
+/**
+ * Define new rewrite tag, permastruct and rewrite rule for cross parent post type.
+ */
 add_action( 'init', function() {
 	$post_parents = apply_filters( 'anony_cross_parent_rewrite', [] );
 
@@ -30,7 +53,10 @@ add_action( 'init', function() {
 	}
 });
 
-
+/**
+ * Rewrite the permalink for cross parent post type.
+ * @return string Post's permalink
+ */
 add_filter('post_type_link', function ($permalink, $post, $leavename) {
 
 	/**
@@ -38,7 +64,7 @@ add_filter('post_type_link', function ($permalink, $post, $leavename) {
 	 */ 
 	$post_parents = apply_filters( 'anony_cross_parent_permalink', [] );
 
-	if(empty($post_parents) || !is_array($post_parents)) return;
+	if(empty($post_parents) || !is_array($post_parents)) return $permalink;
 
 
 	if(!in_array($post->post_type , array_keys($post_parents)) || empty($permalink) || in_array($post->post_status, array('draft', 'pending', 'auto-draft')))
@@ -103,44 +129,12 @@ add_action( 'wp_print_footer_scripts', function(){
 	        
 	        var marker=new google.maps.Marker({
 	                  position:Gisborne,
-	                  icon:'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png'
+	                  icon:"https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png"
 	            });
 	        marker.setMap(map);
 	    }
-	    google.maps.event.addDomListener(window, 'load', initialize);
+	    google.maps.event.addDomListener(window, "load", initialize);
 	</script>
 	
 
 <?php });
-
-/**
- * Filter the mail content type.
- */
-add_filter( 'wp_mail_content_type', function() {
-    return 'text/html';
-} );
-
-//set page direction in email template
-add_filter(
-	'wp_mail',
-	function ($args){
-
-
-	    if(function_exists('is_rtl') && is_rtl()){
-	      $dir   = 'rtl';
-	      $align = 'right';
-	    }else{
-	      $dir   = 'ltr';
-	      $align = 'left';
-	    }
-
-		$message = sprintf(
-					'<div dir="%1$s" style="text-align:%2$s">'. $args['message']. '</div>', 
-					$dir, 
-					$align
-				);
-		$args['message'] = $message;
-		
-		return $args;
-	}
-, 99,1);

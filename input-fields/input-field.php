@@ -29,7 +29,7 @@ if( ! class_exists( 'ANONY_Input_Field' )){
 		/**
 		 * @var int Post id for field that should be shown inside a post
 		 */
-		public $post_id;
+		public $object_id;
 
 		/**
 		 * @var string The context of where the field is used
@@ -75,9 +75,9 @@ if( ! class_exists( 'ANONY_Input_Field' )){
 		 * Inpud field constructor That decides field context
 		 * @param array    $field    An array of field's data
 		 * @param string   $context  The context of where the field is used
-		 * @param int|null $post_id  Should be an integer if the context is meta box
+		 * @param int|null $object_id  Should be an integer if the context is meta box
 		 */
-		function __construct($field, $metabox_id = null, $context = 'option', $post_id = null, $as_template = false, $field_value = null, $index = null)
+		function __construct($field, $metabox_id = null, $context = 'option', $object_id = null, $as_template = false, $field_value = null, $index = null)
 		{
 			
 
@@ -93,7 +93,7 @@ if( ! class_exists( 'ANONY_Input_Field' )){
 
 			$this->metabox_id  = $metabox_id;
 
-			$this->post_id     = $post_id;
+			$this->object_id     = $object_id;
 
 			$this->context     = $context;
 
@@ -119,6 +119,7 @@ if( ! class_exists( 'ANONY_Input_Field' )){
 					break;
 
 				case 'meta':
+				case 'term':
 						$this->meta_field_data();
 					break;
 				
@@ -127,6 +128,8 @@ if( ! class_exists( 'ANONY_Input_Field' )){
 					break;
 			}
 		}
+
+
 
 		/**
 		 * Set options field data
@@ -163,8 +166,12 @@ if( ! class_exists( 'ANONY_Input_Field' )){
 
 			}else{
 
-				$metabox_options = get_post_meta( $this->post_id, $this->metabox_id, $single);
-				//nvd($metabox_options);
+				if ($this->context == 'term') {
+					$metabox_options = get_term_meta( $this->object_id, $this->metabox_id, true);
+				}else{
+					$metabox_options = get_post_meta( $this->object_id, $this->metabox_id, $single);
+				}
+								
 				$meta = (is_array($metabox_options) && isset($metabox_options[$this->metabox_id][$this->field['id']])) ? $metabox_options[$this->metabox_id][$this->field['id']] : '';
 			}
 
@@ -223,7 +230,7 @@ if( ! class_exists( 'ANONY_Input_Field' )){
 								break;
 
 							case 'edit':
-								if (wp_verify_nonce( $_GET['_wpnonce'] , 'anonyinsert_'.$this->post_id )) {
+								if (wp_verify_nonce( $_GET['_wpnonce'] , 'anonyinsert_'.$this->object_id )) {
 									return $field->render();
 								}
 								break;

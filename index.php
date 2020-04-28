@@ -22,6 +22,12 @@ define('ANOE_DIR', wp_normalize_path(plugin_dir_path( __FILE__ )));
  */
 define('ANOE_LIBS_URI', ANOE_DIR . 'libs/');
 
+/**
+ * Holds functions directory
+ * @const
+ */
+define('ANOE_FUNC_DIR', ANOE_DIR . 'functions/');
+
 
 require_once( ANOE_LIBS_URI . 'fonts.php');
 
@@ -56,14 +62,11 @@ function anonyCommonScripts(){
 		wp_register_style( $style , ANOE_URI .'assets/css/'.$style.'.css' , false, filemtime(wp_normalize_path(ANOE_DIR .'assets/css/'.$style.'.css')) );
 	}
 
-	//Register scripts
+	//equeue scripts
 	$scripts = ['jquery.ui.slider-rtl.min'];
 	foreach($scripts as $script){
 		wp_enqueue_script( $script , ANOE_URI . 'assets/js/'.$script.'.js' ,array('jquery', 'jquery-ui-slider'),filemtime(wp_normalize_path( ANOE_DIR .'/assets/js/'.$script.'.js')),true);
 	}
-
-
-
 }
 
 /**

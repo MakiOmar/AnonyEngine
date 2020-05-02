@@ -197,6 +197,10 @@
 	display: none;
 }
 
+.slider_{
+    display: none;
+}
+
 .show-in-table{
 	display: table-row;
 }

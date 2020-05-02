@@ -23,8 +23,6 @@ class ANONY_File_upload{
 
 		$this->parent = $parent;
 		
-		$this->parent->value = intval($this->parent->value);
-		
 		$this->enqueue();
 	}
 
@@ -50,8 +48,12 @@ class ANONY_File_upload{
 		$name = $this->parent->input_name;
 		$class_attr = $this->parent->class_attr;
 		$value  = $this->parent->value;
-		$file_url = wp_get_attachment_url( intval($value) ) ?  esc_url( wp_get_attachment_url( intval($value) ) )  : flase;
-		$basename      = basename($file_url);
+		$file_url = false;
+		if($value !== ''){
+			$file_url = wp_get_attachment_url( intval($value) ) ?  esc_url( wp_get_attachment_url( intval($value) ) )  : flase;
+			$basename = basename($file_url);
+		}
+		
 		$desc  = (isset($this->parent->field['desc']) && !empty($this->parent->field['desc'])) ? $this->parent->field['desc'] : '';
 
 
@@ -59,9 +61,7 @@ class ANONY_File_upload{
 
 		include 'file-upload.view.php';
 
-		$html = ob_get_contents();
-
-		ob_end_clean();
+		$html = ob_get_clean();
 
 		return $html;
 

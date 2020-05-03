@@ -149,12 +149,12 @@ if ( ! class_exists( 'ANONY_WPML_HELP' ) ) {
 		 */
 		static function queryPostType($post_type = 'post'){
 			$wpml_plugin = 'sitepress-multilingual-cms/sitepress.php';
-
-			if ( ANONY_WPPLUGIN_HELP::isActive( $wpml_plugin) || function_exists('icl_get_languages') ) {
+			
+			if ( (ANONY_WPPLUGIN_HELP::isActive( $wpml_plugin) || function_exists('icl_get_languages')) ) {
 			
 				global $wpdb;
 
-				$lang = ICL_LANGUAGE_CODE;
+				$lang = defined('ICL_LANGUAGE_CODE') ? ICL_LANGUAGE_CODE :  apply_filters( 'wpml_current_language', NULL );
 
 				$query = "SELECT * FROM {$wpdb->prefix}posts JOIN {$wpdb->prefix}icl_translations t ON {$wpdb->prefix}posts.ID = t.element_id AND t.element_type = CONCAT('post_', {$wpdb->prefix}posts.post_type)  WHERE {$wpdb->prefix}posts.post_type = '$post_type' AND {$wpdb->prefix}posts.post_status = 'publish' AND ( ( t.language_code = '$lang' AND {$wpdb->prefix}posts.post_type = '$post_type' ) )  ORDER BY {$wpdb->prefix}posts.post_date DESC";
 

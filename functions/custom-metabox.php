@@ -14,7 +14,13 @@ add_action("admin_enqueue_scripts", function (){
  
  foreach($scripts as $script){
  	
-	wp_register_script( $script ,ANOE_URI.'assets/js/wordpress-media-uploader/dist/jquery.'.$script.'.js' ,array('jquery'),filemtime(ANOE_DIR.'assets/js/wordpress-media-uploader/dist/jquery.'.$script.'.js'),true);
+	wp_register_script( 
+    $script ,
+    ANOE_URI.'assets/js/wordpress-media-uploader/dist/jquery.'.$script.'.js' ,
+    array('jquery'),
+    filemtime(ANOE_DIR.'assets/js/wordpress-media-uploader/dist/jquery.'.$script.'.js'),
+    true
+  );
    
 	wp_enqueue_script($script);
   }

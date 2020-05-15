@@ -177,13 +177,17 @@
 .anony-nav-link{
 	padding: 0 20px;
 }
-.anony-nav-item{
-	display: block;
-	padding: 0 5px;
-	width: 100%;
-	border-bottom: 1px solid;
-	box-sizing: border-box;
+.anony-nav-item {
+    display: flex;
+    padding: 0 5px;
+    width: 100%;
+    border-bottom: 1px solid;
+    box-sizing: border-box;
+    align-items: center;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
 }
+
 
 .anony-nav-item:hover{
 	color: #ffffff;

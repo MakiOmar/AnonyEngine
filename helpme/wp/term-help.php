@@ -153,5 +153,22 @@ if ( ! class_exists( 'ANONY_TERM_HELP' ) ) {
 			}
 		}
 		
+		/**
+		 * Get term by id
+		 * @param int    $term_id 
+		 * @param string $taxonomy 
+		 * @return mixed
+		 */
+		static function getTermBy($term_id, $taxonomy){
+			
+			if(ANONY_WPML_HELP::isActive()){
+				
+				return ANONY_WPML_HELP::getTranslatedTerm($term_id, $taxonomy);
+			}
+			
+			return get_term_by( 'id', $term_id, $taxonomy );
+			
+		}
+		
 	}
 }

@@ -52,5 +52,22 @@ if ( ! class_exists( 'ANONY_DATE_HELP' ) ) {
 			
 			return $diff;
 		}
+		
+		/**
+		 * Calculate the difference between to dates in days.
+		 * 
+		 * @param  string $new_date Date/Time string
+		 * @param  string $old_date Date/Time string
+		 * @param  int    $round    The optional number of decimal digits to round to.(Round percision).
+		 * @return float            The date difference
+		 */
+		static function dateDiffInDays($new_date, $old_date, $round = 3){
+			$new_date_timestamp = strtotime($new_date);
+			$old_date_timestamp = strtotime($old_date);
+			
+			$date_diff = $new_date_timestamp - $old_date_timestamp;
+			
+			return round($date_diff / (60 * 60 * 24), $round);
+		}
 	}
 }

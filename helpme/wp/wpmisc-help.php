@@ -13,7 +13,6 @@ if ( ! class_exists( 'ANONY_WPMISC_HELP' ) ) {
 		 * Gets revolution slider list of silders
 		 * @return array  Associative array of slider id = name
 		 */
-
 		static function getRevSliders(){
 			$sliders = array();
 			
@@ -53,6 +52,48 @@ if ( ! class_exists( 'ANONY_WPMISC_HELP' ) ) {
 			  LIKE '%_transient_timeout_$transient%'
 			" );
 			return $transient_timeout[0];
+		}
+		
+		/**
+		 * list all functions which are hooked to afilter
+		 * @param string $hook hook name of a substring of the hook nmae 
+		 */
+		static function listHookFilters($hook){
+		    global $wp_filter;
+
+		    $filters = [];
+		    
+		    $h1  = '<h1>Current Filters</h1>';
+		    $out = '';
+		    $toc = '<ul>';
+
+		    foreach ( $wp_filter as $key => $val )
+		    {
+		        if ( FALSE !== strpos( $key, $hook ) )
+		        {
+		            $filters[$key][] = var_export( $val, TRUE );
+		        }
+		    }
+
+		    foreach ( $filters as $name => $arr_vals )
+		    {
+		        $out .= "<h2 id=$name>$name</h2><pre>" . implode( "\n\n", $arr_vals ) . '</pre>';
+		        $toc .= "<li><a href='#$name'>$name</a></li>";
+		    }
+
+		    print "$h1$toc</ul>$out";
+		}
+		
+		/**
+		 * Get current page url.
+		 *
+		 * **Description: ** Gets current page url and takes in account the ssl.
+		 *
+		 * @return string
+		 */
+		static function getPageUrl() {
+			global $wp;
+		 	return home_url($wp->request);
 		}
 	}
 }

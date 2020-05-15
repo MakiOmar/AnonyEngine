@@ -138,8 +138,9 @@ if( ! class_exists( 'ANONY_Input_Field' )){
 			$this->input_name = isset($this->field['name'])  ? $this->field['option_name'].'['.$this->field['name'].']' : $this->field['option_name'].'['.$this->field['id'].']';
 
 			$fieldID      = $this->field['id'];
-
-			$this->value = (isset($this->options->$fieldID))? $this->options->$fieldID : $this->default;
+			
+			$this->value = (isset($this->options->$fieldID) && !empty($this->options->$fieldID)) ? $this->options->$fieldID : $this->default;
+			
 		}
 
 		/**

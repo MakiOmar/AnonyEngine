@@ -168,3 +168,20 @@ add_action( 'wp_print_footer_scripts', function(){
 	
 
 <?php });
+
+/**
+ * Multilingual options
+ */
+add_action( 'init', function(){
+	
+	if (!ANONY_WPML_HELP::isActive()) return;
+	
+	$options = apply_filters( 'anony_wpml_multilingual_options', ['wpml_multilingual_options'] );
+	
+	$index = array_search('wpml_multilingual_options', $options);
+	
+	if (is_array($options) && $options != [] && $index == 0)
+		call_user_func_array('do_action', $options);
+		
+	
+} );

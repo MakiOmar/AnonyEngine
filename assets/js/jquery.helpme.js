@@ -44,13 +44,13 @@ jQuery(document).ready(function($){
 
 		var docViewTop = $(window).scrollTop();
 
-		var docViewBottom = docViewTop + $(window).height();
+		var docViewBottom = docViewTop + $(window).height();	
 
 		var elemTop = elem.offset().top;
 
 		return ((elemTop <= docViewBottom) && (elemTop >= docViewTop));
 
-	}
+	};
 	/**
 	 * Slide element to top if been into view.
 	 *
@@ -59,7 +59,7 @@ jQuery(document).ready(function($){
 	 */
 	$.fn.slideToTop = function (element, slideClass){
 		$(element).each(function(){
-
+	
 			if($.fn.elementScrolled($(this))) {
 
 			  if(!$(this).hasClass(slideClass)){
@@ -69,6 +69,19 @@ jQuery(document).ready(function($){
 			  }
 			}
 		});
-	}
+		
+	};
+	
+	/**
+	 * Check if element is empty
+	 *
+	 * @param object el  Element object
+	 * @return bool
+	 */
+	$.fn.isEmpty = function( el ){
+		
+      return !$.trim(el.html());
+		
+	};
 });
 

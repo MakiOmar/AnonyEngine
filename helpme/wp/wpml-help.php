@@ -106,9 +106,9 @@ if ( ! class_exists( 'ANONY_WPML_HELP' ) ) {
 		static function getAjaxUrl(){
 			$ajax_url = admin_url( 'admin-ajax.php' );
 
-			if(ANONY_WPML_HELP::isActive()){
+			if(self::isActive()){
 
-				$wpml_active_lang = apply_filters('wpml_current_language',NULL);
+				$wpml_active_lang = self::gatActiveLang();
 
 				if($wpml_active_lang){
 
@@ -120,6 +120,16 @@ if ( ! class_exists( 'ANONY_WPML_HELP' ) ) {
 			}
 
 			return $ajax_url;
+		}
+		
+		/**
+		 * Return active language's code
+		 * @return string
+		 */
+		static function gatActiveLang(){
+			if(defined('ICL_LANGUAGE_CODE')) return ICL_LANGUAGE_CODE;
+			
+			return apply_filters('wpml_current_language',NULL);
 		}
 
 		/**
@@ -133,10 +143,10 @@ if ( ! class_exists( 'ANONY_WPML_HELP' ) ) {
 		 */
 		static function ActiveLangClass($lang){
 
-			if (  ANONY_WPML_HELP::isActive() ) {
+			if (  self::isActive() ) {
 				global $sitepress;
 				
-				if($lang == ICL_LANGUAGE_CODE){
+				if($lang == self::gatActiveLang()){
 					return 'active-lang';
 				}
 			}
@@ -148,23 +158,18 @@ if ( ! class_exists( 'ANONY_WPML_HELP' ) ) {
 		 * @return mixed                An array of posts objects
 		 */
 		static function queryPostType($post_type = 'post'){
-			$wpml_plugin = 'sitepress-multilingual-cms/sitepress.php';
 			
-			if ( (ANONY_WPPLUGIN_HELP::isActive( $wpml_plugin) || function_exists('icl_get_languages')) ) {
+			if ( !self::isActive()) return [];
 			
-				global $wpdb;
+			global $wpdb;
 
-				$lang = defined('ICL_LANGUAGE_CODE') ? ICL_LANGUAGE_CODE :  apply_filters( 'wpml_current_language', NULL );
+			$lang = self::gatActiveLang();
 
-				$query = "SELECT * FROM {$wpdb->prefix}posts JOIN {$wpdb->prefix}icl_translations t ON {$wpdb->prefix}posts.ID = t.element_id AND t.element_type = CONCAT('post_', {$wpdb->prefix}posts.post_type)  WHERE {$wpdb->prefix}posts.post_type = '$post_type' AND {$wpdb->prefix}posts.post_status = 'publish' AND ( ( t.language_code = '$lang' AND {$wpdb->prefix}posts.post_type = '$post_type' ) )  ORDER BY {$wpdb->prefix}posts.post_date DESC";
+			$query = "SELECT * FROM {$wpdb->prefix}posts JOIN {$wpdb->prefix}icl_translations t ON {$wpdb->prefix}posts.ID = t.element_id AND t.element_type = CONCAT('post_', {$wpdb->prefix}posts.post_type)  WHERE {$wpdb->prefix}posts.post_type = '$post_type' AND {$wpdb->prefix}posts.post_status = 'publish' AND ( ( t.language_code = '$lang' AND {$wpdb->prefix}posts.post_type = '$post_type' ) )  ORDER BY {$wpdb->prefix}posts.post_date DESC";
 
-				$results = $wpdb->get_results($query);
+			$results = $wpdb->get_results($query);
 
-				return $results;
-			}
-			
-			return [];
-			
+			return $results;
 		}
 
 		/**
@@ -185,6 +190,30 @@ if ( ! class_exists( 'ANONY_WPML_HELP' ) ) {
 			}
 			
 			return $postIDs;
+		}
+		
+		/**
+		 * Get translated term object
+		 * @param  int    $term_id 
+		 * @param  string $taxonomy 
+		 * @return Mixed  Term object on success or null on failure
+		 */
+		static function getTranslatedTerm($term_id, $taxonomy) {
+
+			global $sitepress;
+	 
+		    $translated_term_id = icl_object_id(intval($term_id), $taxonomy, false, self::gatActiveLang());
+		    
+		    if (is_null($translated_term_id)) return $translated_term_id;
+		    
+		    remove_filter( 'get_term', array( $sitepress, 'get_term_adjust_id' ), 1 );
+		    
+		    $translated_term_object = get_term_by('id', intval($translated_term_id), $taxonomy);
+		    
+		    add_filter( 'get_term', array( $sitepress, 'get_term_adjust_id' ), 1, 1 );
+		 
+		    return $translated_term_object;	
+		    
 		}
 	}
 }

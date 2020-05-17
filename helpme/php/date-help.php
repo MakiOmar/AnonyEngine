@@ -52,5 +52,14 @@ if ( ! class_exists( 'ANONY_DATE_HELP' ) ) {
 			
 			return $diff;
 		}
+		
+		static function dateDiffInDays($new_date, $old_date){
+			$new_date_timestamp = strtotime($new_date);
+			$old_date_timestamp = strtotime($old_date);
+			
+			$date_diff = $new_date_timestamp - $old_date_timestamp;
+			
+			return round($date_diff / (60 * 60 * 24), 3);
+		}
 	}
 }

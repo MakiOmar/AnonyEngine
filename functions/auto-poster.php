@@ -101,10 +101,11 @@ function diwan_template_content(){
 function diwan_post_thumb($post){
 	
 	$keyword_gallery = get_post_meta( $post->ID , 'diwanjobs_keyword_gallery', true );
+	//nvd($post->post_title);
 	
 	$thumb_id = false;
 	
-	if(!empty($keyword_gallery) && is_array($keyword_gallery)){
+	if(!empty($keyword_gallery) && is_array($keyword_gallery) && !empty($keyword_gallery['diwanjobs_keyword_gallery']['shift8_portfolio_gallery'])){
 		
 		$gallery = $keyword_gallery['diwanjobs_keyword_gallery']['shift8_portfolio_gallery'];
 		
@@ -118,6 +119,12 @@ function diwan_post_thumb($post){
 	return $thumb_id;
 }
 
+/**
+ * Array of data required to insert a post
+ * @param object $post 
+ * @param string $word the word to be replaced
+ * @return mixed An array of post data on success or false on failure
+ */
 function diwan_post_data($post, $word){
 	$thumb_id = diwan_post_thumb($post);
 				
@@ -133,6 +140,32 @@ function diwan_post_data($post, $word){
 }
 
 /**
+ * Set post terms after insertion
+ * @param  int    $post_id 
+ * @param  array  $terms 
+ * @param  string $taxonomy 
+ * @return mixed
+ */
+function diwan_set_post_terms($post_id, $terms, $taxonomy){
+	
+	foreach ($terms as $term) {
+		$slug = sanitize_title_with_dashes($term, '', 'save');
+		
+		if(!term_exists( $slug, $taxonomy)){
+			$term_id = wp_insert_term($term, $taxonomy, [ 'slug' => $slug ]);
+		}else{
+			$termData   = get_term_by( 'slug', $slug, $taxonomy);
+			
+			$term_id = $termData->term_id;
+		}
+		
+		$term_ids[] = $term_id; 
+	}
+	
+	wp_set_post_terms($post_id, $term_ids, $taxonomy);
+	
+}
+/**
  * Auto poster
  */
 function diwan_auto_postert(){
@@ -140,48 +173,77 @@ function diwan_auto_postert(){
 	$keywords_post = get_posts( ['post_type' => 'keyword'] );
 	
 	
-	if (!empty($keywords_post) && is_array($keywords_post)) {
+	if (empty($keywords_post) && is_array($keywords_post)) return;
 		
-		foreach ($keywords_post as $keyword_post) {
-			//Get keywords list
-			$keywords_list = get_post_meta( $keyword_post->ID , 'diwan_keywords_list', true );
-			
-			
-			$i = 0;
-			foreach ($keywords_list as $word) {
-				
-				$i++;
-				
-				$data = diwan_post_data($keyword_post, $word);
-				
-				if(!$data) continue;
-				
-				extract($data);
-				
-				if($i == 0){
-					$insert = wp_insert_post( 
-								[
-									'post_type'    => 'post',
-									'post_title'   => wp_strip_all_tags( $title ),
-									'post_content' => wp_kses_post( $content ),
-									'post_status'  => 'publish',
-								] 
-							);
-					if ($insert && !is_wp_error( $insert )) {
-						
-						$set = set_post_thumbnail( $insert , intval($thumb_id) );
+	foreach ($keywords_post as $keyword_post) {
+		//Get keywords list
+		$keywords_list = get_post_meta( $keyword_post->ID , 'diwan_keywords_list', true );
+		
+		$current_date = current_time('Y-m-d H:i:s');
 
+		$i = 0;
+		foreach ($keywords_list as $word) {
+			extract($word);
+			
+			$trimmed_title = str_replace(' ', '', $title);
+			
+			$transient = get_transient( md5($trimmed_title).'_interval' );
+			if ($transient){
+				
+				$publish_date = str_replace('published_', '', $transient);
+				
+				$date_diff = ANONY_DATE_HELP::dateDiffInDays($current_date, $publish_date);
+			}else{
+				
+				$main_keyword_date = get_the_date('Y-m-d H:i:s', $keyword_post->ID );
+				
+				$date_diff = ANONY_DATE_HELP::dateDiffInDays($current_date, $main_keyword_date);
+				
+			}
+			
+			if($date_diff < $interval) continue;
+						 
+			$i++;
+			
+			$data = diwan_post_data($keyword_post, $title);
+			
+			if(!$data) continue;
+			
+			extract($data);
+			
+			if($i <= 1){
+				$insert = wp_insert_post( 
+							[
+								'post_type'    => 'post',
+								'post_title'   => wp_strip_all_tags( $title ),
+								'post_content' => wp_kses_post( $content ),
+								'post_status'  => 'publish',
+							] 
+						);
+				if ($insert && !is_wp_error( $insert )) {
+					
+					$set = set_post_thumbnail( $insert , intval($thumb_id) );
+					
+					set_transient( md5($trimmed_title).'_interval'  , 'published_'.current_time('Y-m-d H:i:s') );
+					
+					if (isset($categories) && is_array($categories) && !empty($categories)) {
+						
+						diwan_set_post_terms($insert, $categories, 'category');
 					}
 					
+					if (isset($tags) && is_array($tags) && !empty($tags)) {
+						
+						diwan_set_post_terms($insert, $tags, 'post_tag');
+					}
+
 				}
 				
-				/**echo '<pre dir="ltr">';
-					print($content);
-				echo '</pre>';*/
 			}
 			
 		}
+		
 	}
+	
 }
 
 /**

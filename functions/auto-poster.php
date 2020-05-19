@@ -170,9 +170,17 @@ function diwan_set_post_terms($post_id, $terms, $taxonomy){
  */
 function diwan_auto_postert(){
 	
+	global $diwanOptions;
+	
+	if (!isset($diwanOptions->activate_publish) || $diwanOptions->activate_publish == '' || $diwanOptions->activate_publish == '0' )  return;
+	
+	$post_type = 'post';
+	
+	if (isset($diwanOptions->test_mode) && $diwanOptions->test_mode == '1' )  $post_type = 'diwan_test';
+	
 	$keywords_post = get_posts( ['post_type' => 'keyword'] );
 	
-	
+	//nvd($keywords_post);
 	if (empty($keywords_post) && is_array($keywords_post)) return;
 		
 	foreach ($keywords_post as $keyword_post) {
@@ -200,7 +208,7 @@ function diwan_auto_postert(){
 				$date_diff = ANONY_DATE_HELP::dateDiffInDays($current_date, $main_keyword_date);
 				
 			}
-			
+	
 			if($date_diff < $interval) continue;
 						 
 			$i++;
@@ -211,15 +219,16 @@ function diwan_auto_postert(){
 			
 			extract($data);
 			
-			if($i <= 1){
+			if($i <= 1 ){
 				$insert = wp_insert_post( 
 							[
-								'post_type'    => 'post',
+								'post_type'    => $post_type,
 								'post_title'   => wp_strip_all_tags( $title ),
 								'post_content' => wp_kses_post( $content ),
 								'post_status'  => 'publish',
 							] 
 						);
+				
 				if ($insert && !is_wp_error( $insert )) {
 					
 					$set = set_post_thumbnail( $insert , intval($thumb_id) );

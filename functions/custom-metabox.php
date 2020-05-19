@@ -128,7 +128,7 @@ add_action('save_post_keyword', function ($id) {
    
     if(empty($keywords) || !is_array($keywords)) return;
     
-    $keywords_list = get_post_meta( $post->ID, 'diwan_keywords_list', true );
+    $keywords_list = get_post_meta( $id, 'diwan_keywords_list', true );
     
     if($keywords === $keywords_list) return;
   

@@ -5,8 +5,14 @@ jQuery(document).ready(function($){
 	$('.save-alt').on('click', function(e){
 		
 		e.preventDefault();
-		var relId = $(this).attr('rel-id');
-		var elParent = $(this).parent();
+		var clicked = $(this);
+		clicked.addClass('loading');
+		clicked.find('span').addClass('save_loader');
+		
+		
+		var relId     = clicked.attr('rel-id');
+		var elParent  = clicked.parent();
+		var elWrapper = $('#' + relId + '-wrapper');
 		
 		var altWord  = elParent.find('.word-element').val();
 		var altIndex = elParent.find('.word-element-index').val();
@@ -31,34 +37,36 @@ jQuery(document).ready(function($){
 			success:function(response) {
 				
 				if (response.result === 'success') {
-					elParent.find('.success-msg').show();
-					elParent.find('.failed-msg').hide();
-					
 					elParent.find('.words-alts-select').append(htmlOpt);
 					
+					elWrapper.find('label > .success-msg').show();
+					elWrapper.find('label > .failed-msg').hide();
+					
 					setTimeout(function(){
-						elParent.find('.success-msg').fadeOut('slow');
+						elWrapper.find('label > .success-msg').fadeOut('slow');
 						$('#' + relId).val('');
 					}, 1000);
 					
 					setTimeout(function(){
-						elParent.find('.success-msg').hide();
+						elWrapper.find('label > .success-msg').hide();
+						clicked.removeClass('loading');
+						clicked.find('span').removeClass('save_loader');
 					}, 2000);
 				}
 				
 				if (response.result === 'failed') {
-					elParent.find('.success-msg').hide();
-					elParent.find('.failed-msg').show();
+					elWrapper.find('label > .success-msg').hide();
+					elWrapper.find('label > .failed-msg').show();
 					setTimeout(function(){
-						elParent.find('.failed-msg').fadeOut('slow');
+						elWrapper.find('label > .failed-msg').fadeOut('slow');
 					}, 1000);
 					
 					setTimeout(function(){
-						elParent.find('.failed-msg').fadeOut('slow');
-						elParent.find('.failed-msg').hide();
+						elWrapper.find('label > .failed-msg').hide();
+						clicked.removeClass('loading');
+						clicked.find('span').removeClass('save_loader');
 					}, 2000);
 				}
-				console.log(response.result);
 			}
     	});
 	});

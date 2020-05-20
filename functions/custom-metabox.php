@@ -140,11 +140,15 @@ add_action('save_post_keyword_template', function ($id, $post) {
 
  $content = $post->post_content;
  
- if($content === '') return;
+ $title   = $post->post_title;
+ 
+ if($content === '' ) return;
  
  $new_word_list = diwan_read_keyword_groups($content);
-
  
+ $title_new_word_list = diwan_read_keyword_groups($title);
+
+
  if(empty($new_word_list)) return;
  
  $new_patterns     = $new_word_list[0];
@@ -162,16 +166,22 @@ add_action('save_post_keyword_template', function ($id, $post) {
  
  $old_patterns     = $old_word_list[0];
  $old_alternatives = $old_word_list[1];
+
  
  //Note: array_diff checks if something in array1 that is not existed in array2
  
  //So we check if something new has been added to the content
  $array_diff_new = array_diff($new_patterns, $old_patterns);
  
+ 
  $word_list_update = $new_word_list;
+ 
+ $added_new = false;
  
  if (!empty($array_diff_new)) {
  	
+  $added_new = true;
+  
  	foreach ($array_diff_new as $index => $pattern) {
  		$index = intval($index);
  		
@@ -187,14 +197,16 @@ add_action('save_post_keyword_template', function ($id, $post) {
   
   
  }
+$old_word_list_update = ($added_new ) ? $word_list_update : $old_word_list;
+$old_patterns = $old_word_list_update[0];
  
  //So we check if something missing from the content
  $array_diff_missing = array_diff($old_patterns, $new_patterns);
- 
+  
  if(!empty($array_diff_missing)){
  	
- 	$old_patterns     = $old_word_list[0];
- 	$old_alternatives = $old_word_list[1];
+ 	$old_patterns     = $old_word_list_update[0];
+ 	$old_alternatives = $old_word_list_update[1];
  	
  	foreach ($array_diff_missing as $index => $pattern) {
  		

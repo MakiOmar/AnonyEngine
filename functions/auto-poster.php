@@ -8,7 +8,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @param string $content 
  * @return array
  */
-function diwan_read_keyword_groups($content){
+function diwan_read_content_keyword_groups($content){
 	preg_match_all('/\(%(.*?)%\)/i', $content, $matches);
 
 	if(empty($matches)) return [];
@@ -53,7 +53,7 @@ function diwan_template_content(){
 	$content = $template->post_content;
 	
 	//Get template list of alternatives
-	$word_list = get_post_meta( $template->ID, 'keyword_groups', true );
+	$word_list = get_post_meta( $template->ID, 'content_keyword_groups', true );
 	
 	
 	if (empty($word_list) || !is_array($word_list)) return;
@@ -263,14 +263,14 @@ function diwan_parse_words_alts($post){
 	$content = get_post_field('post_content', $post->ID);
 	
 	if (!empty($content)) {
-		$groups_meta = get_post_meta( $post->ID, 'keyword_groups', true );
+		$groups_meta = get_post_meta( $post->ID, 'content_keyword_groups', true );
 		
 		
 		
 		if(empty($groups_meta)){
-			$groups = diwan_read_keyword_groups($content);			
+			$groups = diwan_read_content_keyword_groups($content);			
 			
-			add_post_meta( $post->ID, 'keyword_groups', $groups );
+			add_post_meta( $post->ID, 'content_keyword_groups', $groups );
 		}
 		
 	}

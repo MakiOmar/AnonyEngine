@@ -41,7 +41,7 @@ function diwn_words_alts($post){
 	
  do_action('parse_words_alts', $post);
  
- $groups_meta = get_post_meta( $post->ID, 'keyword_groups', true );
+ $groups_meta = get_post_meta( $post->ID, 'content_keyword_groups', true );
  
  if (!$groups_meta || empty($groups_meta)) return;
  
@@ -144,9 +144,9 @@ add_action('save_post_keyword_template', function ($id, $post) {
  
  if($content === '' ) return;
  
- $new_word_list = diwan_read_keyword_groups($content);
+ $new_word_list = diwan_read_content_keyword_groups($content);
  
- $title_new_word_list = diwan_read_keyword_groups($title);
+ $title_new_word_list = diwan_read_content_keyword_groups($title);
 
 
  if(empty($new_word_list)) return;
@@ -155,11 +155,11 @@ add_action('save_post_keyword_template', function ($id, $post) {
  $new_alternatives = $new_word_list[1];
  
  //Get template list of alternatives
- $old_word_list = get_post_meta( $id, 'keyword_groups', true );
+ $old_word_list = get_post_meta( $id, 'content_keyword_groups', true );
   
  if(empty($old_word_list) || !is_array($old_word_list)){
  	
-   return update_post_meta( $id, 'keyword_groups', $new_word_list );
+   return update_post_meta( $id, 'content_keyword_groups', $new_word_list );
  }
  
  if($new_word_list === $old_word_list) return;
@@ -222,7 +222,7 @@ $old_patterns = $old_word_list_update[0];
 
 	$word_list_update = $new_word_list;
  }
- return update_post_meta( $id, 'keyword_groups', $word_list_update);
+ return update_post_meta( $id, 'content_keyword_groups', $word_list_update);
 
  
 }, 10, 2);

@@ -16,7 +16,7 @@ function diwan_update_alts(){
     if(!isset($post_id) || $post_id === '') return;
 
     
-    $keywords_list = get_post_meta( intval($post_id), 'keyword_groups', true );
+    $keywords_list = get_post_meta( intval($post_id), 'content_keyword_groups', true );
     
     if(empty($keywords_list)) return;
     
@@ -36,7 +36,7 @@ function diwan_update_alts(){
     
     $keywords_list = [$patterns, $alternatives];
     
-    $updated =  update_post_meta( intval($post_id), 'keyword_groups', $keywords_list );
+    $updated =  update_post_meta( intval($post_id), 'content_keyword_groups', $keywords_list );
     
     $msg = ($updated) ? 'success' : 'failed';
         

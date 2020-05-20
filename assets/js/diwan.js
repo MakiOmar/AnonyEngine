@@ -6,10 +6,10 @@ jQuery(document).ready(function($){
 		
 		e.preventDefault();
 		var clicked = $(this);
+		var action = $(this).attr('data-action');
 		clicked.addClass('loading');
 		clicked.find('span').addClass('save_loader');
-		
-		
+	
 		var relId     = clicked.attr('rel-id');
 		var elParent  = clicked.parent();
 		var elWrapper = $('#' + relId + '-wrapper');
@@ -17,6 +17,7 @@ jQuery(document).ready(function($){
 		var altWord  = elParent.find('.word-element').val();
 		var altIndex = elParent.find('.word-element-index').val();
 		var wordAlts = $('#' + relId).val();
+		console.log();
 		var wordAltsArr = $('#' + relId).val().split(',');
 		var postId   = $('#post_ID').val();
 		
@@ -29,12 +30,13 @@ jQuery(document).ready(function($){
 			});
 		}		
 	
-		var dataString = 'action=diwan_update_alts&post_id='+postId+'&word_element_index=' + altIndex +'&word_element_alt=' + altWord +'&word_element_alternatives=' + wordAlts;
+		var dataString = 'action='+action+'&post_id='+postId+'&word_element_index=' + altIndex +'&word_element_alt=' + altWord +'&word_element_alternatives=' + wordAlts;
 		$.ajax({
 			type:'POST',
 			data:dataString,
 			url : ajaxUrl,
 			success:function(response) {
+				console.log(response.result);
 				
 				if (response.result === 'success') {
 					elParent.find('.words-alts-select').append(htmlOpt);

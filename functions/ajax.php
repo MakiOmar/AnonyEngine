@@ -4,11 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit; // Exit if accessed directly
 }
 
-
-//Update words alternatives
-add_action('wp_ajax_diwan_update_alts', 'diwan_update_alts');
-
-function diwan_update_alts(){
+function diwan_ajax_word_alts($meta_key){
     if(empty($_POST) ) return;
     
     extract($_POST);
@@ -16,13 +12,13 @@ function diwan_update_alts(){
     if(!isset($post_id) || $post_id === '') return;
 
     
-    $keywords_list = get_post_meta( intval($post_id), 'content_keyword_groups', true );
+    $keywords_list = get_post_meta( intval($post_id), $meta_key , true );//'content_keyword_groups'
     
     if(empty($keywords_list)) return;
     
     
     if(!isset($word_element_index)         || $word_element_index === '') return;
-    if(!isset($word_element_alt)           ||  $word_element_index === '') return;
+    if(!isset($word_element_alt)           ||  $word_element_alt === '') return;
     if(!isset($word_element_alternatives)  ||  $word_element_alternatives === '') return;
     
     $patterns      = $keywords_list[0];
@@ -36,7 +32,8 @@ function diwan_update_alts(){
     
     $keywords_list = [$patterns, $alternatives];
     
-    $updated =  update_post_meta( intval($post_id), 'content_keyword_groups', $keywords_list );
+    
+    $updated =  update_post_meta( intval($post_id), $meta_key, $keywords_list );
     
     $msg = ($updated) ? 'success' : 'failed';
         
@@ -48,3 +45,15 @@ function diwan_update_alts(){
     
     die();
 }
+//Update words alternatives
+add_action('wp_ajax_content_keyword_groups', function(){
+    
+    diwan_ajax_word_alts('content_keyword_groups');
+});
+
+//Update words alternatives
+add_action('wp_ajax_title_keyword_groups', function(){
+    
+    diwan_ajax_word_alts('title_keyword_groups');
+});
+

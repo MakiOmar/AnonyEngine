@@ -31,40 +31,46 @@ add_action('add_meta_boxes', function () {
     add_meta_box('diwn_keywords_excel', esc_html__('Add your keywords Excel sheet',ANOE_TEXTDOM), 'diwn_read_keywords_excel', 'keyword', 'normal', 'high');
     
     add_meta_box('diwn_keywords_template_alts', esc_html__('Template words alternatives',ANOE_TEXTDOM), 'diwn_words_alts', 'keyword_template', 'normal', 'high');  
-});  
+}); 
 
-/**
- * Callback to add metabox for alternative words
- * @param object $post 
- */
-function diwn_words_alts($post){
-	
- do_action('parse_words_alts', $post);
- 
- $groups_meta = get_post_meta( $post->ID, 'content_keyword_groups', true );
+function diwan_content_words_alts($post, $meta_key){
+  $groups_meta = get_post_meta( $post->ID, $meta_key, true );
  
  if (!$groups_meta || empty($groups_meta)) return;
  
  $success_msg = esc_html__('Alternatives have been successfully updated',ANOE_TEXTDOM);
  $failed_msg  = esc_html__('Nothing changed',ANOE_TEXTDOM);
  
+ $group_title  = ucfirst(str_replace('_', ' ', $meta_key));
+ $save_action = $meta_key;
+ 
  $patterns      = $groups_meta[0];
  $alternatives  = $groups_meta[1];
  
- 
+ echo '<h1>'.$group_title . '</h1>';
  foreach ($patterns as $index => $pattern) {
- 	$rel_id = 'word-element-'.$index;
- 	
- 	$alts = $alternatives[$index];
- 	
- 	$value = implode(',', $alts);
- 	
- 	$label = esc_html__('Words alternatives',ANOE_TEXTDOM);
+  $rel_id = $meta_key.'-'.$index;
+  
+  $alts = $alternatives[$index];
+  
+  $value = implode(',', $alts);
+  
+  $label = esc_html__('Words alternatives',ANOE_TEXTDOM);
    
     $button_text = esc_html__('Save',ANOE_TEXTDOM);
     
     include ANOE_DIR .'templates/word-alts.php';
  }
+}
+
+/**
+ * Callback to add metabox for alternative words
+ * @param object $post 
+ */
+function diwn_words_alts($post){
+	 
+  diwan_content_words_alts($post, 'title_keyword_groups');
+  diwan_content_words_alts($post, 'content_keyword_groups');
  
 }
 
@@ -121,33 +127,11 @@ function diwn_read_keywords_excel($post) {
  include ANOE_DIR .'templates/file-read.php';
 }
 
-add_action('save_post_keyword', function ($id) {
-    if(!isset($_FILES['diwn_keywords_excel']) || empty($_FILES['diwn_keywords_excel'])) return;
-    
-    $keywords = read_excel_data('diwn_keywords_excel');
-   
-    if(empty($keywords) || !is_array($keywords)) return;
-    
-    $keywords_list = get_post_meta( $id, 'diwan_keywords_list', true );
-    
-    if($keywords === $keywords_list) return;
+function diwan_update_content_alts($id, $content, $meta_key){
+  if($content === '' ) return;
   
- 	update_post_meta($id, 'diwan_keywords_list', $keywords);
-    
-});
-
-add_action('save_post_keyword_template', function ($id, $post) {
-
- $content = $post->post_content;
+  $new_word_list = diwan_read_content_keyword_groups($content);
  
- $title   = $post->post_title;
- 
- if($content === '' ) return;
- 
- $new_word_list = diwan_read_content_keyword_groups($content);
- 
- $title_new_word_list = diwan_read_content_keyword_groups($title);
-
 
  if(empty($new_word_list)) return;
  
@@ -155,11 +139,11 @@ add_action('save_post_keyword_template', function ($id, $post) {
  $new_alternatives = $new_word_list[1];
  
  //Get template list of alternatives
- $old_word_list = get_post_meta( $id, 'content_keyword_groups', true );
+ $old_word_list = get_post_meta( $id, $meta_key, true );
   
  if(empty($old_word_list) || !is_array($old_word_list)){
- 	
-   return update_post_meta( $id, 'content_keyword_groups', $new_word_list );
+  
+   return update_post_meta( $id, $meta_key, $new_word_list );
  }
  
  if($new_word_list === $old_word_list) return;
@@ -179,15 +163,15 @@ add_action('save_post_keyword_template', function ($id, $post) {
  $added_new = false;
  
  if (!empty($array_diff_new)) {
- 	
+  
   $added_new = true;
   
- 	foreach ($array_diff_new as $index => $pattern) {
- 		$index = intval($index);
- 		
- 		array_splice($old_patterns, $index, 0, [$new_patterns[$index]]);
- 		array_splice($old_alternatives, $index, 0, [$new_alternatives[$index]]);
- 	}
+  foreach ($array_diff_new as $index => $pattern) {
+    $index = intval($index);
+    
+    array_splice($old_patterns, $index, 0, [$new_patterns[$index]]);
+    array_splice($old_alternatives, $index, 0, [$new_alternatives[$index]]);
+  }
   
   $new_word_list = [];
   $new_word_list[] = $old_patterns;
@@ -204,25 +188,52 @@ $old_patterns = $old_word_list_update[0];
  $array_diff_missing = array_diff($old_patterns, $new_patterns);
   
  if(!empty($array_diff_missing)){
- 	
- 	$old_patterns     = $old_word_list_update[0];
- 	$old_alternatives = $old_word_list_update[1];
- 	
- 	foreach ($array_diff_missing as $index => $pattern) {
- 		
- 		$index = intval($index);
- 		
- 		unset($old_patterns[$index]);
- 		unset($old_alternatives[$index]);
- 	}
- 	
-	$new_word_list = [];
-	$new_word_list[] = $old_patterns;
-	$new_word_list[] = $old_alternatives;
+  
+  $old_patterns     = $old_word_list_update[0];
+  $old_alternatives = $old_word_list_update[1];
+  
+  foreach ($array_diff_missing as $index => $pattern) {
+    
+    $index = intval($index);
+    
+    unset($old_patterns[$index]);
+    unset($old_alternatives[$index]);
+  }
+  
+  $new_word_list = [];
+  $new_word_list[] = $old_patterns;
+  $new_word_list[] = $old_alternatives;
 
-	$word_list_update = $new_word_list;
+  $word_list_update = $new_word_list;
  }
- return update_post_meta( $id, 'content_keyword_groups', $word_list_update);
+ update_post_meta( $id, $meta_key, $word_list_update);
+}
+
+add_action('save_post_keyword', function ($id) {
+    if(!isset($_FILES['diwn_keywords_excel']) || empty($_FILES['diwn_keywords_excel'])) return;
+    
+    $keywords = read_excel_data('diwn_keywords_excel');
+   
+    if(empty($keywords) || !is_array($keywords)) return;
+    
+    $keywords_list = get_post_meta( $id, 'diwan_keywords_list', true );
+    
+    if($keywords === $keywords_list) return;
+  
+ 	update_post_meta($id, 'diwan_keywords_list', $keywords);
+    
+});
+
+add_action('save_post_keyword_template', function ($id, $post) {
+
+ $content = $post->post_content;
+ 
+ diwan_update_content_alts($id, $content, 'content_keyword_groups');
+ 
+ $content = $post->post_title;
+ 
+ diwan_update_content_alts($id, $content, 'title_keyword_groups');
+ 
 
  
 }, 10, 2);

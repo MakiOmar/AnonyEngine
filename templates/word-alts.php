@@ -26,6 +26,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 		
 		<input type="hidden" class="word-element-index" value="<?= $index ?>"/>
 			
-		<a href="#" rel-id="<?= $rel_id ?>" class="anony-middle save-alt button button-primary"><span></span><?= $button_text ?></a>
+		<a href="#" rel-id="<?= $rel_id ?>" class="anony-middle save-alt button button-primary" data-action="<?= $save_action ?>"><span></span><?= $button_text ?></a>
 	</div>
 </fieldset>

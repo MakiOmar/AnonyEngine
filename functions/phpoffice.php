@@ -49,18 +49,7 @@ function read_excel_data($input_name){
 	$spreadsheet = $reader->load( $_FILES[$input_name]['tmp_name'] );
 	$worksheet   = $spreadsheet->getActiveSheet();
 	$rows        = $worksheet->toArray();
-	
-	
-	
-	//Remove Nulls (empty cells)
-	/*$temp = [];
-	foreach ($rows as $row) {
-		$row = array_filter($row);
-		
-		if(!empty($row)) $temp[] = $row;
-	}
-	
-	*/
+
 	$temp = $rows;
 	$rows = [];
 	foreach ($temp as $trow) {

@@ -31,32 +31,15 @@ function diwan_read_content_keyword_groups($content){
 	return $matches;
 }
 
-/**
- * Replace alternatives
- * @return string Content after replacing alternatives
- */
-function diwan_template_content(){
-	
-	$templates = get_posts( ['post_type' => 'keyword_template'] );
-	
-	$content = '';
-	
-	if (empty($templates) || !is_array($templates)) return $content;
-		
-	//get random template index from array $templates
-	$tempIndex = array_rand($templates);
-	
-	//get random template from $templates array
-	$template = $templates[$tempIndex];
-	
+function diwan_replace_alts($template, $content, $meta_key){
 	//Get template contents
-	$content = $template->post_content;
+	$content = $template->$content;
 	
 	//Get template list of alternatives
-	$word_list = get_post_meta( $template->ID, 'content_keyword_groups', true );
+	$word_list = get_post_meta( $template->ID, $meta_key , true );
 	
 	
-	if (empty($word_list) || !is_array($word_list)) return;
+	if (empty($word_list) || !is_array($word_list)) return false;
 	
 	$patterns      = $word_list[0];
  	$alternatives  = $word_list[1];
@@ -89,6 +72,36 @@ function diwan_template_content(){
 
 	
 	return $content;
+}
+
+/**
+ * Replace alternatives
+ * @return string Content after replacing alternatives
+ */
+function diwan_template_content(){
+	
+	$templates = get_posts( ['post_type' => 'keyword_template'] );
+	
+	
+	if (empty($templates) || !is_array($templates)) return [];
+		
+	//get random template index from array $templates
+	$tempIndex = array_rand($templates);
+	
+	//get random template from $templates array
+	$template = $templates[$tempIndex];
+	
+	$data = [];
+	
+	$content = diwan_replace_alts($template,'post_content', 'content_keyword_groups');
+	
+	if($content) $data['content'] = $content;
+	
+	$title = diwan_replace_alts($template,'post_title', 'title_keyword_groups');
+	
+	if($title) $data['title'] = $title;
+	
+	return $data;
 }
 
 /**
@@ -127,13 +140,18 @@ function diwan_post_thumb($post){
 function diwan_post_data($post, $word){
 	$thumb_id = diwan_post_thumb($post);
 				
-	$content = diwan_template_content();
+	$data = diwan_template_content();
 	
-	if(empty($content)) return false;
+	if(empty($data)) return false;
+	
+	extract($data);
+	
+	if(!isset($content) || empty($content)) return false;
+	if(!isset($title)   || empty($title)) return false;
 	
 	$content = preg_replace('/\(#.*#\)/i', $word , $content);
 	
-	$title = $word . ' ' . date( 'Y-m-d' );
+	$title = preg_replace('/\(#.*#\)/i', $word , $title) . ' ' . date( 'Y-m-d' );
 	
 	return ['content' => $content, 'title' => $title, 'thumb_id' => $thumb_id ];
 }

@@ -11,7 +11,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 function diwan_read_keyword_groups($content){
 	preg_match_all('/\(%(.*?)%\)/i', $content, $matches);
 
-	
 	if(empty($matches)) return [];
 		
 	$placeholders = $matches[0];
@@ -226,6 +225,7 @@ function diwan_auto_postert(){
 								'post_title'   => wp_strip_all_tags( $title ),
 								'post_content' => wp_kses_post( $content ),
 								'post_status'  => 'publish',
+								'post_author'  => 1,
 							] 
 						);
 				
@@ -279,9 +279,18 @@ function diwan_parse_words_alts($post){
 //add_action( 'parse_words_alts', 'diwan_parse_words_alts' );
 
 
-add_action( 'wp_footer', function(){
-	if(!current_user_can( 'administrator' )) return;
-	
-	diwan_auto_postert();
+add_filter( 'cron_schedules', function ( $schedules ) { 
+    $schedules['one_minute'] = array(
+        'interval' => 60,
+        'display'  => esc_html__( 'Every one minute' ), );
+    return $schedules;
+} );
 
+
+
+add_action('diwan_autoposter', 'diwan_auto_postert');
+
+add_action( 'init', function(){
+	if (! wp_next_scheduled ( 'diwan_autoposter' ))
+		wp_schedule_event( time(), 'one_minute', 'diwan_autoposter');
 } );

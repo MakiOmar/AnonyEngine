@@ -9,6 +9,28 @@
 
 if ( ! class_exists( 'ANONY_ARRAY_HELP' ) ) {
 	class ANONY_ARRAY_HELP extends ANONY_HELP{
+		
+		/**
+		 * Get duplicates indexes
+		 * @param  array $array 
+		 * @return array
+		 */
+ 		static function duplicateValuesIndex($array){
+ 			return array_diff_assoc($array, array_unique($array));
+ 		}
+ 		
+ 		/**
+ 		 * Git difference between two arrays but keep duplicates
+ 		 * @param  array $array2 
+ 		 * @param  array $array1 
+ 		 * @return array
+ 		 */
+ 		static function diffWithDupplicate($array2, $array1, $assoc = false){
+ 			
+ 			$function = ($assoc) ? 'array_diff_assoc' : 'array_diff';
+ 			
+ 			return call_user_func_array($assoc, [$array2, $array1]) + self::duplicateValuesIndex($array2);
+ 		}
  		
  		/**
  		 * Checks if an array is sequentially indexed

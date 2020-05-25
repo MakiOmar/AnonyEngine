@@ -77,7 +77,7 @@
 				
 			if ( ! current_user_can( 'edit_post', $post_ID )) return;
 			
-			if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE()) return;
+			if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE) return;
 			
 			if( ( wp_is_post_revision( $post_ID) || wp_is_post_autosave( $post_ID ) ) ) return;
 

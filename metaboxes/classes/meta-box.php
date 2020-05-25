@@ -207,21 +207,19 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
 
 			//Can be used to validate $sent_data data before insertion
 			do_action( $this->id_as_hook.'_before_meta_insert' );
-
+			
+			$metaboxOptions = get_post_meta($post_ID , $this->id, true);
+			
+			if(!is_array($metaboxOptions)) $metaboxOptions = [];
+			
 			foreach($this->fields as $field){
 				
 				if(!isset($sent_data[$this->id][$field['id']])) continue;
 
+				$chech_meta = (!empty($metaboxOptions) && isset($metaboxOptions[$this->id][$field['id']])) ? $metaboxOptions[$this->id][$field['id']] : '';
 
-				$metaboxOptions = get_post_meta($post_ID , $this->id, true);
-
-				if(!is_array($metaboxOptions)) $metaboxOptions = [];
-
-				$chech_meta = isset($metaboxOptions[$this->id][$field['id']]) ? $metaboxOptions[$this->id][$field['id']] : '';
-
-				if(!empty($metaboxOptions)){
-					if ($chech_meta === $sent_data[$this->id][$field['id']]) continue;
-				}
+				if($chech_meta === $sent_data[$this->id][$field['id']]) continue;
+				
 				//If this field is an array of other fields values
 				if(isset($field['fields'])){
 					//$nested_field : The nested field inside the multi-value
@@ -259,12 +257,10 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
 					//For now this deals with multi values, which have been already validated individually, so the only validation required is to remove all value are empty in one row.
 					$this->validate = $this->validateField($field, $sent_data[$this->id][$field['id']]);
 
-
-
 				}else{
 
 					$this->validate = $this->validateField($field, $sent_data[$this->id][$field['id']]);
-
+					
 					if(!empty($this->validate->errors)){
 					
 						$this->errors =  array_merge((array)$this->errors, (array)$this->validate->errors);
@@ -274,10 +270,13 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
 					
 				}
 
-				$metaboxOptions[$this->id][$field['id']] = $this->validate->value;
 
+				$metaboxOptions[$this->id][$field['id']] = $this->validate->value;
+				
 
 			}
+			
+			
 			
 			update_post_meta( $post_ID, $this->id, $metaboxOptions);
 

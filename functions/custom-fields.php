@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 add_filter('anony_metaboxes', function($metaboxes){
 	$metaboxes[] = 
 		[
-			'id'            => 'diwanjobs_keyword_gallery',//Meta box ID
+			'id'            => 'diwanjobs_keyword_meta',//Meta box ID
 			'title'         => esc_html__( 'Keyword gallery', ANOE_TEXTDOM ),
 			'context'       => 'normal',
 			'priority'      =>  'high', // high|low
@@ -24,11 +24,18 @@ add_filter('anony_metaboxes', function($metaboxes){
 			'fields'        => 
 				[
 					[
-						'id'       => 'shift8_portfolio_gallery',
+						'id'       => 'gallery',
 						'title'    => esc_html__( 'Keyword gallery', ANOE_TEXTDOM ),
 						'type'     => 'gallery',
 						//'validate' => 'url',
-					]
+					],
+					[
+						'id'       => 'template',
+						'title'    => esc_html__( 'Keyword template', ANOE_TEXTDOM ),
+						'type'     => 'select',
+						'options'  => ANONY_POST_HELP::queryPostTypeSimple('keyword_template'),
+						'validate' => 'multiple_options',
+					],
 				]
 		];
 

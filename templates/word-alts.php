@@ -12,10 +12,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<p class="alt-msg failed-msg" style="margin: 0 1em"><?= $failed_msg ?></p>
 	</label>
 	<div>
-		<select class="words-alts-select">
+		<select class="words-alts-select" data-key="<?= $save_action ?>">
 					
-				<?php foreach ($alts as $alt) :?>
-					<option value="><?= $alt ?>"><?= $alt ?></option>
+				<?php foreach ($alts as $index => $alt) :?>
+					<option value="<?= $parent_index?>-<?= $index ?>"><?= $alt ?></option>
 				<?php endforeach ?>
 
 		</select>
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		
 		<input type="hidden" class="word-element" value="<?= $pattern ?>"/>
 		
-		<input type="hidden" class="word-element-index" value="<?= $index ?>"/>
+		<input type="hidden" class="word-element-index" value="<?= $parent_index ?>"/>
 			
 		<a href="#" rel-id="<?= $rel_id ?>" class="anony-middle save-alt button button-primary" data-action="<?= $save_action ?>"><span></span><?= $button_text ?></a>
 	</div>

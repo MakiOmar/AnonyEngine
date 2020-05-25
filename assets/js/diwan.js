@@ -17,18 +17,8 @@ jQuery(document).ready(function($){
 		var altWord  = elParent.find('.word-element').val();
 		var altIndex = elParent.find('.word-element-index').val();
 		var wordAlts = $('#' + relId).val();
-		console.log();
 		var wordAltsArr = $('#' + relId).val().split(',');
-		var postId   = $('#post_ID').val();
-		
-		var htmlOpt = '';
-		
-		if(Array.isArray(wordAltsArr) && wordAltsArr.length){
-			$.each(wordAltsArr, function( index, value ){
-				
-				htmlOpt = htmlOpt.concat('<option value=' + value + '>' + value + '</option>');
-			});
-		}		
+		var postId   = $('#post_ID').val();		
 	
 		var dataString = 'action='+action+'&post_id='+postId+'&word_element_index=' + altIndex +'&word_element_alt=' + altWord +'&word_element_alternatives=' + wordAlts;
 		$.ajax({
@@ -36,10 +26,16 @@ jQuery(document).ready(function($){
 			data:dataString,
 			url : ajaxUrl,
 			success:function(response) {
-				console.log(response.result);
 				
 				if (response.result === 'success') {
-					elParent.find('.words-alts-select').append(htmlOpt);
+					var htmlOpt = '';
+
+					$.each(response.alt_list, function( index, value ){
+						
+						htmlOpt = htmlOpt.concat('<option value=' + altIndex + '-' +index + '>' + value + '</option>');
+					});
+					
+					elParent.find('.words-alts-select').html(htmlOpt);
 					
 					elWrapper.find('label > .success-msg').show();
 					elWrapper.find('label > .failed-msg').hide();
@@ -71,6 +67,41 @@ jQuery(document).ready(function($){
 				}
 			}
     	});
+	});
+	
+	$('.words-alts-select').change(function(){ 
+		if (confirm('Are you sure you want to remove this alternative?')) {
+			var clicked = $(this);
+			var value = clicked.val();
+		    var indexes = value.split('-');
+		    var parentIndex = indexes[0];
+		    var childIndex = indexes[1];
+		    var metaKey = $(this).attr('data-key');
+		    
+		    var postId   = $('#post_ID').val();
+		    
+		    var dataString = 'action=keyword_alt_delete'+'&post_id='+postId+'&word_element_index=' + parentIndex +'&word_element_alt_index=' + childIndex + '&meta_key=' + metaKey;
+
+		    $.ajax({
+			type:'POST',
+			data:dataString,
+			url : ajaxUrl,
+			success:function(response) {
+				var htmlOpt = '';
+				
+				$.each(response.alt_list, function( index, value ){
+				
+					htmlOpt = htmlOpt.concat('<option value=' + parentIndex + '-' + index + '>' + value + '</option>');
+				});
+				
+				clicked.html(htmlOpt);
+				
+				console.log(response.message, response.alt_list, clicked);
+			
+			}
+    	});
+		}
+	    
 	});
 	
 });

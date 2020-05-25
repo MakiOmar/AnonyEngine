@@ -94,8 +94,6 @@ function nvd($arr)
 	echo '<pre dir="ltr">';
  		var_dump($arr);
 	echo '</pre>';
-	 
-	die();
 }
 function npr($arr)
 {
@@ -104,5 +102,20 @@ function npr($arr)
 	echo '</pre>';
 	 
 	die();
+}
+
+function nvd_compare($input1, $input2 ){
+	
+	echo '<table>';
+		echo '<tr>';
+			echo '<td>';
+				nvd($input1);
+			echo '</td>';
+			
+			echo '<td>';
+				nvd($input2);
+			echo '</td>';
+		echo '</tr>';
+	echo '</table>';
 }
 

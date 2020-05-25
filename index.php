@@ -189,13 +189,13 @@ add_action( 'admin_head', function(){?>
 
 $termMetaBox = new ANONY_Term_Metabox(
 	[ 
-		'id'       => 'diwanjobs_keyword_gallery',
+		'id'       => 'diwanjobs_keyword_meta',
 		'taxonomy' => 'keyword_category',
 		'context'  => 'term',
 		'fields'   => 
 			[
 				[
-					'id' => 'shift8_portfolio_gallery',
+					'id' => 'gallery',
 					'title'    => esc_html__( 'Keyword gallery', ANOE_TEXTDOM ),
 					'type'     => 'gallery',
 				]

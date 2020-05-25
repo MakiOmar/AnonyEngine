@@ -78,18 +78,15 @@ function diwan_replace_alts($template, $content, $meta_key){
  * Replace alternatives
  * @return string Content after replacing alternatives
  */
-function diwan_template_content(){
+function diwan_template_content($post_id){
+	$template = get_post_meta( $post_id, 'diwanjobs_keyword_meta', $single = true );
 	
-	$templates = get_posts( ['post_type' => 'keyword_template'] );
+	if(!$template || empty($template)) return [];
 	
+	$template_id = intval($template['diwanjobs_keyword_meta']['template']);
 	
-	if (empty($templates) || !is_array($templates)) return [];
-		
-	//get random template index from array $templates
-	$tempIndex = array_rand($templates);
-	
-	//get random template from $templates array
-	$template = $templates[$tempIndex];
+	//get connected template data
+	$template = get_post( $template_id );
 	
 	$data = [];
 	
@@ -112,14 +109,14 @@ function diwan_template_content(){
  */
 function diwan_post_thumb($post){
 	
-	$keyword_gallery = get_post_meta( $post->ID , 'diwanjobs_keyword_gallery', true );
+	$keyword_gallery = get_post_meta( $post->ID , 'diwanjobs_keyword_meta', true );
 	//nvd($post->post_title);
 	
 	$thumb_id = false;
 	
-	if(!empty($keyword_gallery) && is_array($keyword_gallery) && !empty($keyword_gallery['diwanjobs_keyword_gallery']['shift8_portfolio_gallery'])){
+	if(!empty($keyword_gallery) && is_array($keyword_gallery) && !empty($keyword_gallery['diwanjobs_keyword_meta']['gallery'])){
 		
-		$gallery = $keyword_gallery['diwanjobs_keyword_gallery']['shift8_portfolio_gallery'];
+		$gallery = $keyword_gallery['diwanjobs_keyword_meta']['gallery'];
 		
 		//get random thumb index from array $gallery
 		$thumbIndex = array_rand($gallery);
@@ -140,7 +137,7 @@ function diwan_post_thumb($post){
 function diwan_post_data($post, $word){
 	$thumb_id = diwan_post_thumb($post);
 				
-	$data = diwan_template_content();
+	$data = diwan_template_content($post->ID);
 	
 	if(empty($data)) return false;
 	
@@ -185,7 +182,7 @@ function diwan_set_post_terms($post_id, $terms, $taxonomy){
 /**
  * Auto poster
  */
-function diwan_auto_postert(){
+function diwan_auto_poster(){
 	
 	global $diwanOptions;
 	
@@ -273,29 +270,9 @@ function diwan_auto_postert(){
 	
 }
 
-/**
- * To be hooked before rendering diwn_keywords_template_alts metabox
- * @param object $post 
- */
-function diwan_parse_words_alts($post){
-	$content = get_post_field('post_content', $post->ID);
-	
-	if (!empty($content)) {
-		$groups_meta = get_post_meta( $post->ID, 'content_keyword_groups', true );
-		
-		
-		
-		if(empty($groups_meta)){
-			$groups = diwan_read_content_keyword_groups($content);			
-			
-			add_post_meta( $post->ID, 'content_keyword_groups', $groups );
-		}
-		
-	}
-}
-
-//add_action( 'parse_words_alts', 'diwan_parse_words_alts' );
-
+add_action('wp_footer', function(){
+	//diwan_auto_poster();
+});
 
 add_filter( 'cron_schedules', function ( $schedules ) { 
     $schedules['one_minute'] = array(
@@ -306,7 +283,7 @@ add_filter( 'cron_schedules', function ( $schedules ) {
 
 
 
-add_action('diwan_autoposter', 'diwan_auto_postert');
+add_action('diwan_autoposter', 'diwan_auto_poster');
 
 add_action( 'init', function(){
 	if (! wp_next_scheduled ( 'diwan_autoposter' ))

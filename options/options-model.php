@@ -40,9 +40,9 @@ if (!class_exists('ANONY_Options_Model')) {
         
         public static function get_instance($option_name = ANONY_OPTIONS) {
             if (self::$instance == null ) {
-                
-                self::$instance = new ANONY_Options_Model();
+                self::$instance = new ANONY_Options_Model($option_name);
             }elseif (self::$instance != null && self::$object_changed_to !== $option_name) {
+                
                 self::$object_changed_to = $option_name;
                 self::$instance = new ANONY_Options_Model($option_name);
             }
@@ -56,7 +56,6 @@ if (!class_exists('ANONY_Options_Model')) {
         public function __construct($option_name = ANONY_OPTIONS.' ') {
             $this->option_group      = trim($option_name);
             self::$object_changed_to = trim($option_name);
-            
             // get the current value of this option
             $existed = get_option($this->option_group);
             

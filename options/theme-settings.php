@@ -85,16 +85,16 @@ if (!class_exists('ANONY_Theme_Settings')) {
 		 * @param array $widgets array of widgets to be registered
 		 */
 		public function __construct($menu = array(), $sections = array(), $widgets = array(), $options_page = null){
-
-			$this->options = ANONY_Options_Model::get_instance();
-
+			
 			$this->options_page = $options_page;
 			
 			$this->menu = $menu;
 
 			//get page defaults
 			$this->args = $this->opt_page_defaults();
-
+			
+			$this->options = ANONY_Options_Model::get_instance($this->args['opt_name']);
+			
 			//Set option groups
 			$this->OptionGroup = $this->args['opt_name'].'_group';
 			
@@ -130,7 +130,7 @@ if (!class_exists('ANONY_Theme_Settings')) {
 
 			$defaults['page_cap'] = 'manage_options';
 			
-			$defaults['menu_slug'] = 'Anony_Options';
+			$defaults['menu_slug'] = ANONY_OPTIONS;
 
 			$defaults['icon_url'] = 'dashicons-welcome-widgets-menus';
 			
@@ -172,13 +172,6 @@ if (!class_exists('ANONY_Theme_Settings')) {
 			//Show admin notices
 			add_action('admin_notices', array(&$this, 'admin_notices'));
 
-			//Runs after the option with name "option_name" has been updated.
-			add_action('update_option_'.$this->args['opt_name'], array($this, 'after_option_update'), 10, 2);
-
-		}
-
-		function after_option_update( $old_value, $value ){
-			
 		}
 		
 		/**
@@ -382,7 +375,7 @@ if (!class_exists('ANONY_Theme_Settings')) {
 		 * return  array  $validated     array of form values after validation
 		 */
 		public function options_validate($notValidated){
-
+			
 			self::$called++;
 
 			//Make sure this code runs once to prevent error messages duplication

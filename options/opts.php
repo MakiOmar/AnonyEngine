@@ -71,31 +71,3 @@ function anony_fonts( $type = false ){
 		return $fonts;
 	}
 }
-
-
-//controls add query strings to scripts/styles
-function anony_control_query_strings($src, $handle){
-	if(is_admin()) return $src;
-
-	$anonyOptions = ANONY_Options_Model::get_instance();
-	
-	//Keep query string for these items
-	$neglected = array();
-	
-	if(!empty($anonyOptions->keep_query_string)){
-		$neglected = explode(',',$anonyOptions->keep_query_string);
-	}
-	
-	if($anonyOptions->query_string != '0' && !in_array( $handle, $neglected )){
-		$src = remove_query_arg('ver', $src);
-	}
-	return $src;
-	
-}
-
-
-//controls add query strings to scripts
-add_filter( 'script_loader_src', 'anony_control_query_strings', 15, 2 );
-
-//controls add query strings to styles
-add_filter( 'style_loader_src', 'anony_control_query_strings', 15, 2);

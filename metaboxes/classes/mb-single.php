@@ -144,9 +144,6 @@
 
 			if(($post->post_author != $_POST['user_ID']) || !current_user_can( 'administrator' ) ) return;
 
-			/*nvd($this->parent->metabox);
-			die();*/
-
 			if($post->ID != $_POST['post_ID'] ) return;
 
 			if (!isset($_POST[$this->parent->id.'_nonce'])) return;

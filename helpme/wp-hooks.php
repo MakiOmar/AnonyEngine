@@ -172,16 +172,18 @@ add_action( 'wp_print_footer_scripts', function(){
 /**
  * Multilingual options
  */
-add_action( 'init', function(){
-	
+add_action( 'after_setup_theme', function(){
+		
 	if (!ANONY_WPML_HELP::isActive()) return;
 	
-	$options = apply_filters( 'anony_wpml_multilingual_options', ['wpml_multilingual_options'] );
-	
-	$index = array_search('wpml_multilingual_options', $options);
-	
-	if (is_array($options) && $options != [] && $index == 0)
-		call_user_func_array('do_action', $options);
+	$options = apply_filters( 'anony_wpml_multilingual_options', [] );
+		
+	if (is_array($options) && $options != [] ){
+		
+		foreach ($options as $option) {
+			do_action('wpml_multilingual_options', $option);
+		}
+	}
 		
 	
-} );
+}, 1);

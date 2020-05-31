@@ -29,7 +29,7 @@ if ( ! class_exists( 'ANONY_ARRAY_HELP' ) ) {
  			
  			$function = ($assoc) ? 'array_diff_assoc' : 'array_diff';
  			
- 			return call_user_func_array($assoc, [$array2, $array1]) + self::duplicateValuesIndex($array2);
+ 			return call_user_func_array($function, [$array2, $array1]) + self::duplicateValuesIndex($array2);
  		}
  		
  		/**

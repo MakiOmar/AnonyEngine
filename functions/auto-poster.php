@@ -13,22 +13,14 @@ function diwan_read_content_keyword_groups($content){
 
 	if(empty($matches)) return [];
 		
-	$placeholders = $matches[0];
+	$placeholders = array_unique($matches[0]);
 	
-	$matchings    = $matches[1];
-	
-	$temp =[];
-	
-	foreach ($matchings as $matching) {
-		$temp[] = [$matching];
-	}
-	
-	$matchings = $temp;
-	
-	$matches = [$placeholders, $matchings];
-	
+	//Convert matched regex groups to arrays, so we can extend alternatives later
+	$matchings    = array_map( function($element){
+		return [str_replace('_', '', $element)];
+	}, array_unique($matches[1]));
 
-	return $matches;
+	return [$placeholders, $matchings];
 }
 
 function diwan_replace_alts($template, $content, $meta_key){
@@ -53,19 +45,20 @@ function diwan_replace_alts($template, $content, $meta_key){
 		
 		$alts = $alternatives[$index];
 		
+		//Check if at least has one match
 		preg_match('/'.$pattern.'/i', $content, $matches);
 		
-		if (!empty($matches)) {
+		if (empty($matches)) continue;
 			
-			//get random index from array $alts.$alt is extracted fro $data
-			$randIndex = array_rand($alts);
-			
-			//get random alternative from alts array
-			$alt = $alts[$randIndex];
-			
-			
-			$content = preg_replace('/'.$pattern.'/i', $alt , $content, 1);
-		}
+		//get random index from array $alts.$alt is extracted fro $data
+		$randIndex = array_rand($alts);
+		
+		//get random alternative from alts array
+		$alt = $alts[$randIndex];
+		
+		
+		$content = preg_replace('/'.$pattern.'/i', $alt , $content);
+		
 		
 	}
 			
@@ -166,7 +159,11 @@ function diwan_set_post_terms($post_id, $terms, $taxonomy){
 		$slug = sanitize_title_with_dashes($term, '', 'save');
 		
 		if(!term_exists( $slug, $taxonomy)){
-			$term_id = wp_insert_term($term, $taxonomy, [ 'slug' => $slug ]);
+			
+			$term_inserted = wp_insert_term($term, $taxonomy, [ 'slug' => $slug ]);
+			
+			$term_id = $term_inserted['term_id'];
+			
 		}else{
 			$termData   = get_term_by( 'slug', $slug, $taxonomy);
 			
@@ -175,6 +172,7 @@ function diwan_set_post_terms($post_id, $terms, $taxonomy){
 		
 		$term_ids[] = $term_id; 
 	}
+	
 	
 	wp_set_post_terms($post_id, $term_ids, $taxonomy);
 	
@@ -210,6 +208,7 @@ function diwan_auto_poster(){
 			$trimmed_title = str_replace(' ', '', $title);
 			
 			$transient = get_transient( md5($trimmed_title).'_interval' );
+			
 			if ($transient){
 				
 				$publish_date = str_replace('published_', '', $transient);
@@ -222,7 +221,7 @@ function diwan_auto_poster(){
 				$date_diff = ANONY_DATE_HELP::dateDiffInDays($current_date, $main_keyword_date);
 				
 			}
-	
+			
 			if($date_diff < $interval) continue;
 						 
 			$i++;

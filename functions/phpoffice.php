@@ -21,7 +21,7 @@ function diwan_tax_terms(&$trow){
 	$terms = [];
 	
 	if($terms_string != '' && !is_null($terms_string)){
-		$terms = explode(',', $terms_string);
+		$terms = explode('-', $terms_string);
 	
 		$terms = array_map('trim', $terms);
 	}
@@ -71,49 +71,3 @@ function read_excel_data($input_name){
 		
 	return $rows;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

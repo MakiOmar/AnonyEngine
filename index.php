@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: Diwanjobs auto poster
- * Description: With Diwanjobs auto poster you you can grow your search ranking by auto posting in a specific niches
+ * Description: With Diwanjobs auto poster you can grow your search ranking by auto posting in specific niches
  * Version: 1.0.0
  * Author: Mohammad Omar
  * Author URI: https://makiomar.com

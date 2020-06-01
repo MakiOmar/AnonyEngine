@@ -21,6 +21,7 @@ define('ANOE_URI', plugin_dir_url( __FILE__ ));
 
 /*----------------------required sub-configs----------------*/
 
+require_once( wp_normalize_path( ANOE_FUNC_DIR . 'post.php' ) );
 require_once( wp_normalize_path( ANOE_DIR . 'metaboxes/metaboxes.php' ) );
 require_once( wp_normalize_path( ANOE_DIR . 'helpme/helpme.php') );
 require_once( wp_normalize_path( ANOE_DIR . 'input-fields/index.php') );

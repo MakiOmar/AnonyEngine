@@ -364,6 +364,8 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
 		 * Load fields scripts on front if `show_on_front` is set to true
 		 */
 		public function frontScripts(){
+			
+			if(is_home() || is_front_page()) return;
 
 			wp_enqueue_style( 'select2', ANONY_FIELDS_URI.'select2/css/select2.min.css' );
 

@@ -2,6 +2,7 @@
 if ( ! defined( 'ABSPATH' ) ) {
     exit; // Exit if accessed directly
 }
+
 /**
  * Get post type for a taxonomy  
  *
@@ -12,10 +13,10 @@ function anony_taxonomy_posts($tax){
 	$tax_posts = apply_filters( 'anony_taxonomy_posts', [] );
 
 	if(!empty($tax_posts) && array_key_exists($tax, $tax_posts)){
-		$tax_posts[$tax];
+		return $tax_posts[$tax];
 	}
 
-	return $tax_posts;
+	return [];
 }
 
 /**
@@ -30,10 +31,10 @@ function anony_post_taxonomies($post_type){
 
 	if(!empty($post_taxonomies) && array_key_exists($post_type, $post_taxonomies))
 	{
-		$post_taxonomies[$post_type];
+		return $post_taxonomies[$post_type];
 	}
 
-	return $post_taxonomies;
+	return [];
 }
 
 /**

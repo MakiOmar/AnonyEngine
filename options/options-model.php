@@ -46,6 +46,7 @@ if (!class_exists('ANONY_Options_Model')) {
                 self::$object_changed_to = $option_name;
                 self::$instance = new ANONY_Options_Model($option_name);
             }
+            //if($option_name == ANONY_OPTIONS ) debug_print_backtrace();
             return self::$instance;
         }
         
@@ -61,6 +62,7 @@ if (!class_exists('ANONY_Options_Model')) {
             
             // if there is an existed value, assign it to the array
             if ($existed) $this->options_arr = $existed;
+            
         }
         
         /**

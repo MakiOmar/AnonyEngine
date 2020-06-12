@@ -141,11 +141,6 @@
 	text-decoration: none;
 	font-family: 'Anton'
 }
-.anony-nav-link:hover{
-	color: #ffffff;
-    font-size: 20px;
-	padding: 10px;
-}
 .anony-nav-link{
 	padding: 0 20px;
 }

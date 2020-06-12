@@ -1,0 +1,5 @@
+---
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/prosentra/public_html/wp-content/plugins/anonyengine
+    - /bin/cp -R * $DEPLOYPATH

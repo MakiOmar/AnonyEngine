@@ -61,16 +61,16 @@ spl_autoload_register( function ( $class_name ) {
 		$class_name = preg_replace('/ANONY_/', '', $class_name);
 
 		$class_name  = strtolower(str_replace('_', '-', $class_name));
+		
+		$class_file = $class_name .'.php';
+		
+		if(file_exists($class_file)){
 
-		if(file_exists($class_name)){
-
-			require_once($class_name);
+			require_once($class_file);
 		}else{
 			foreach(unserialize( ANOE_AUTOLOADS ) as $path){
 
 				$class_file = wp_normalize_path($path) .$class_name . '.php';
-
-				//var_dump($class_name.': '. $class_file.'<br/>') ;
 
 				if(file_exists($class_file)){
 

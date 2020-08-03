@@ -1,4 +1,5 @@
 <?php
+if ( !defined('ABSPATH') ) exit();
 /**
  * Plugin Name: AnonyEngine
  * Plugin URI: https://makiomar.com

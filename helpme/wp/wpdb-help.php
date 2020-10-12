@@ -37,5 +37,45 @@ if ( ! class_exists( 'ANONY_WPDB_HELP' ) ) {
 			
 			return $data;
 		}
+		
+		/**
+		 * Delete term's posts with all connected meta
+		 * @param string $post_type 
+		 * @param int    $term_id 
+		 * @param int    $limit 
+		 * @return Mixed
+		 */
+		public static function deleteTermPostsCompletely($post_type, $term_id, $limit){
+			
+			global $wpdb;
+			
+			$select = $wpdb->get_results( 
+		       "SELECT ID FROM wp_posts WHERE post_type='$post_type' LIMIT $term_id", ARRAY_A
+		    );
+		    
+		   foreach( $select as $selected){
+		       $temp[] = $selected['ID'];
+		   }
+		   
+		   $temp = array_map('intval',  $temp);
+   			
+   		   $query = implode(',', $temp);
+   
+			$result = $wpdb->query( 
+			    $wpdb->prepare("
+			    	DELETE posts,pt,pm
+			        FROM wp_posts posts
+			        LEFT JOIN wp_postmeta pm ON pm.post_id IN ('".$query."')
+			        LEFT JOIN wp_term_relationships pt ON ( pt.object_id IN ('".$query."') AND pt.term_taxonomy_id = %d)
+			        WHERE posts.ID IN ('".$query."')
+			        ",
+			        $term_id,
+			        $post_type,
+			        
+			    ) 
+			);
+			
+			return $result;
+		}
 	}
 }

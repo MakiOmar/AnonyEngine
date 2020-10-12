@@ -83,5 +83,38 @@ jQuery(document).ready(function($){
       return !$.trim(el.html());
 		
 	};
-});
+	
+	/**
+	 * Find largest integer in an array
+	 *
+	 * @param array arr
+	 * @return int
+	 */
+	$.fn.findLargest = function( arr ){
+		
+		var largest= 0;
 
+		for (i=0; i<=largest;i++){
+			if (arr[i]>largest) {
+				var largest=arr[i];
+			}
+		}
+		
+		return largest;
+		
+	};
+	
+	/**
+	 * Converts an array to json object
+	 *
+	 * @param array arr
+	 * @return object
+	 */
+	$.fn.arrayToJson = function( arr ){
+		
+		var arrayToString = JSON.stringify(Object.assign({}, arr));
+		var stringToJsonObject = JSON.parse(arrayToString);  // convert string to json object
+		
+		return stringToJsonObject;
+	};
+});

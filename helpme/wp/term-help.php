@@ -169,6 +169,42 @@ if ( ! class_exists( 'ANONY_TERM_HELP' ) ) {
 			return get_term_by( 'id', $term_id, $taxonomy );
 			
 		}
+
+		/**
+		 * Create pagination for terms list
+		 * @param string $taxonomy 
+		 * @param int    $per_page 
+		 */
+		static function termsPagination($taxonomy, $per_page){
+			/*
+				You should filter get_term args where the code that gets terms exists
+				
+		
+				$page = ( get_query_var('paged') ) ? get_query_var( 'paged' ) : 1;
+				
+				$per_page = 50;
+				
+				$offset = ( $page-1 ) * $per_page;
+				
+				$args['number'] = $per_page;
+				$args['offset'] = $offset;
+				
+			*/
+			$pagination = '';
+			$total_terms = wp_count_terms( $taxonomy );
+	    	$pages = ceil($total_terms/$per_page);
+
+			// if there's more than one page
+			if( $pages > 1 ):
+				$pagination .= '<ul class="pagination col-md-8 col-sm-8 col-xs-8" style="margin:auto;float: none;display: block;">';
+
+				for ($pagecount=1; $pagecount <= $pages; $pagecount++):
+					$pagination .= '<li><a href="'.get_permalink().'page/'.$pagecount.'/">'.$pagecount.'</a></li>';
+				endfor;
+
+				$pagination .= '</ul>';
+			endif;
+		}
 		
 	}
 }

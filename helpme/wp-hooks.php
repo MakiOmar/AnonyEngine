@@ -187,3 +187,22 @@ add_action( 'after_setup_theme', function(){
 		
 	
 }, 1);
+
+/**
+ * Display only children terms
+ * 
+ * @return array
+ */
+add_filter( 'terms_clauses', function (  $pieces, $taxonomies, $args )
+{
+    // Check if our custom arguments is set and set to 1, if not bail
+    if (    !isset( $args['anony_exclude_top'] ) 
+         || 1 !== $args['anony_exclude_top']
+    )
+        return $pieces;
+
+    // Everything checks out, lets remove parents
+    $pieces['where'] .= ' AND tt.parent > 0';
+
+    return $pieces;
+}, 10, 3 );

@@ -169,5 +169,25 @@ if ( ! class_exists( 'ANONY_ARRAY_HELP' ) ) {
 
 			return false;
 		}
+		
+		/**
+		 * Insertes new key/value pairs after a specific key
+		 * @param  string $key 
+		 * @param  array $insert_array 
+		 * @param  array $original_array 
+		 * @return array
+		 */
+		static function insertAfterAssocKey($key, $insert_array, $original_array){
+			
+			$offset = array_search($key, array_keys($original_array));
+
+			$result = array_merge(
+			            array_slice($original_array, 0, $offset),
+			            $insert_array,
+			            array_slice($original_array, $offset, null)
+			        );
+			
+			return $resutl;
+		}
 	}
 }

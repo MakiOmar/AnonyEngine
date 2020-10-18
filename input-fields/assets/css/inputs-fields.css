@@ -171,10 +171,11 @@
 }
 .anony-nav-link:hover{
 	color: #ffffff;
-	padding: 10px;
 }
 .anony-nav-link{
-	padding: 0 20px;
+	padding: 0 5px;
+    display: block;
+    width: 100%;
 }
 .anony-nav-item {
     display: flex;

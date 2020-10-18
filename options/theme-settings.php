@@ -167,13 +167,14 @@ if (!class_exists('ANONY_Theme_Settings')) {
 			add_action('admin_init', array(&$this, 'settings_init'));
 		
 			//set option with defaults		
-			add_action('after_setup_theme', array(&$this, 'set_default_options'));
-
+			add_action('admin_init', array(&$this, 'set_default_options'));
+			
+			
 			//Show admin notices
 			add_action('admin_notices', array(&$this, 'admin_notices'));
 
 		}
-		
+
 		/**
 		 * Get default options into an array suitable for the settings API
 		 */
@@ -196,6 +197,7 @@ if (!class_exists('ANONY_Theme_Settings')) {
 			}
 			
 			$this->defaultOptions = $defaults;
+			
 		}
 		
 		/**
@@ -203,27 +205,18 @@ if (!class_exists('ANONY_Theme_Settings')) {
 		 */
 		public function set_default_options(){
 			
+			
 			if( empty(get_option($this->args['opt_name']))){
+				
 				delete_option($this->args['opt_name']);
+				
 			}
 			
 			if(!get_option($this->args['opt_name'])){
 				
 				add_option($this->args['opt_name'], $this->defaultOptions);
 								
-			}else{
-				
-				foreach(array_keys($this->defaultOptions)  as $defaultsKey){
-					
-					if(!in_array($defaultsKey, array_keys($this->options->get_all_current_options()))){
-						
-						$this->options->add_option($defaultsKey, $this->defaultOptions[$defaultsKey]);
-						
-					}
-					
-				}
-				
-			}	
+			}
 		}
 		
 		/**
@@ -375,7 +368,7 @@ if (!class_exists('ANONY_Theme_Settings')) {
 		 * return  array  $validated     array of form values after validation
 		 */
 		public function options_validate($notValidated){
-			
+			//nvd($notValidated); die();
 			self::$called++;
 
 			//Make sure this code runs once to prevent error messages duplication

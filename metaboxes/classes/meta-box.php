@@ -216,7 +216,7 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
 				
 				if(!isset($sent_data[$this->id][$field['id']])) continue;
 
-				$chech_meta = (!empty($metaboxOptions) && isset($metaboxOptions[$this->id][$field['id']])) ? $metaboxOptions[$this->id][$field['id']] : '';
+				$chech_meta = (!empty($metaboxOptions) && isset($metaboxOptions[$field['id']])) ? $metaboxOptions[$field['id']] : '';
 
 				if($chech_meta === $sent_data[$this->id][$field['id']]) continue;
 				
@@ -254,7 +254,7 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
 						}		
 					}
 
-					//For now this deals with multi values, which have been already validated individually, so the only validation required is to remove all value are empty in one row.
+					//For now this deals with multi values, which have been already validated individually, so the only validation required is to remove all values that are empty in one row.
 					$this->validate = $this->validateField($field, $sent_data[$this->id][$field['id']]);
 
 				}else{
@@ -271,7 +271,7 @@ if( ! class_exists( 'ANONY_Meta_Box' )){
 				}
 
 
-				$metaboxOptions[$this->id][$field['id']] = $this->validate->value;
+				$metaboxOptions[$field['id']] = $this->validate->value;
 				
 
 			}

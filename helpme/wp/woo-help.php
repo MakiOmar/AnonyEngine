@@ -59,5 +59,21 @@ if ( ! class_exists( 'ANONY_WOO_HELP' ) ) {
 
 		    delete_transient('wc_attribute_taxonomies');
 		}
+		
+		public function addProductReview($comment_data){
+			global $post, $product;
+			
+			if($post->post_type !== "product") return;
+			
+			if(!get_comment_meta('rating')){
+				
+				$comment_id = wp_insert_comment($comment_data);
+
+				// HERE inserting the rating (an integer from 1 to 5)
+				update_comment_meta( $comment_id, 'rating', 3 );
+			}
+			
+			
+		}
 	}
 }

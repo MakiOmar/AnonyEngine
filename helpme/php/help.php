@@ -8,13 +8,30 @@
  */
 if ( ! class_exists( 'ANONY_HELP' ) ) {
 	class ANONY_HELP{
+		
+		/**
+		 * Output buffer included file
+		 * @param  string $file_path 
+		 * @return string
+		 */
+		static function obInclude($file_path){
+			ob_start();
 
+			include $file_path;
+
+			return ob_get_clean();
+		}
+		
+		/**
+		 * Output buffer function
+		 * @param string $function 
+		 * @param array  $args 
+		 * @return string
+		 */
 		static function obGet($function, $args=[]){
 			ob_start();
 			call_user_func_array($function, $args);
-			$x = ob_get_contents();
-			ob_end_clean();
-			return $x;
+			return ob_get_clean();
 		}
 
 		/**

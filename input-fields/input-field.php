@@ -80,7 +80,6 @@ if( ! class_exists( 'ANONY_Input_Field' )){
 		function __construct($field, $metabox_id = null, $context = 'option', $object_id = null, $as_template = false, $field_value = null, $index = null)
 		{
 			
-
 			$this->as_template = $as_template;
 
 			$this->field_value = $field_value;
@@ -172,8 +171,8 @@ if( ! class_exists( 'ANONY_Input_Field' )){
 				}else{
 					$metabox_options = get_post_meta( $this->object_id, $this->metabox_id, $single);
 				}
-								
-				$meta = (is_array($metabox_options) && isset($metabox_options[$this->metabox_id][$this->field['id']])) ? $metabox_options[$this->metabox_id][$this->field['id']] : '';
+		
+				$meta = (is_array($metabox_options) && isset($metabox_options[$this->field['id']])) ? $metabox_options[$this->field['id']] : '';
 			}
 
 			$this->value = ($meta  != '') ? $meta : $this->default;
@@ -199,7 +198,6 @@ if( ! class_exists( 'ANONY_Input_Field' )){
 				}
 				
 			}
-
 			return $this->field_class;
 		}
 
@@ -207,12 +205,12 @@ if( ! class_exists( 'ANONY_Input_Field' )){
 		 * Initialize options field
 		 */
 		function field_init(){
-
 			if(!is_null($this->field_class) && class_exists($this->field_class))
 			{
 				
 				$field_class = $this->field_class;
-
+				
+							
 				$field = new $field_class($this);
 
 				//Options fields can't be on frontend

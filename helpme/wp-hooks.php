@@ -234,3 +234,65 @@ add_action('admin_bar_menu', function ($wp_admin_bar) {
 
 
 }, 999);
+
+/**
+ * Dequeue not required styles
+ * @param string   'wp_print_styles' Hook to be used for dequeue
+ * @param callback
+ * @return void
+ */
+add_action( 'wp_print_styles',  function(){
+    $dequeued_styles = apply_filters( 'anony_deprint_styles', [] );
+
+    foreach($dequeued_styles as $style){
+        wp_dequeue_style( $style );
+        wp_deregister_style( $style );
+    }
+    
+}, 99);
+
+/**
+ * Dequeue not required scripts
+ * @param string   'wp_print_scripts' Hook to be used for dequeue
+ * @param callback
+ * @return void
+ */
+add_action( 'wp_print_scripts', function(){
+    $dequeued_stcripts =  apply_filters( 'anony_deprint_scripts', [] );
+
+    foreach($dequeued_stcripts as $stcript){
+        wp_dequeue_script( $stcript );
+        wp_deregister_script( $stcript );
+    }
+}, 99 );
+
+
+/**
+ * Load proper thumbnail size within loops. should be hooked to post_thumbnail_html filter
+ */
+function anony_loop_proper_thumb_size ($html, $post_id, $post_thumbnail_id, $size, $attr) {
+    
+    $thumb_size = '';
+    
+    $post_type = '';
+    
+    if(is_single() || empty($thumb_size) || empty($post_type) || get_post_type() !== $post_type) return $html;
+    
+    
+    // gets the id of the current post_thumbnail (in the loop)
+    $id = get_post_thumbnail_id();
+    
+     // gets the image url specific to the passed in size (aka. custom image size)
+    $src = wp_get_attachment_image_src($id, $thumb_size);
+    
+    // gets the post thumbnail title
+    $alt = get_the_title($id);
+    
+    // gets classes passed to the post thumbnail, defined here for easier function access
+    $class = $attr['class']; 
+
+
+        $html = '<img src="' . $src[0] . '" alt="' . $alt . '" class="' . $class . '" width="277" height="316" />';
+
+    return $html;
+}

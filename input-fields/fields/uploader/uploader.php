@@ -7,7 +7,7 @@
  * @link http://makiomar.com
  */
 
-class ANONY_Upload{
+class ANONY_Uploader{
 
 	/**
 	 * Field Constructor.
@@ -32,7 +32,7 @@ class ANONY_Upload{
 	 *
 	 * @return void
 	 */
-	function render( $meta = false ){
+	function render(){
 		
 		
 		$html = '';
@@ -96,7 +96,7 @@ class ANONY_Upload{
         if ( $wp_version < "3.5" ) {
             wp_enqueue_script(
                 'anony-opts-field-upload-js', 
-                ANONY_FIELDS_URI . 'upload/field_upload_3_4.js', 
+                ANONY_FIELDS_URI . 'uploader/field_upload_3_4.js', 
                 array('jquery', 'thickbox', 'media-upload'),
                 time(),
                 true
@@ -105,13 +105,13 @@ class ANONY_Upload{
         } else {
             wp_enqueue_script(
                 'anony-opts-field-upload-js', 
-                ANONY_FIELDS_URI . 'upload/field_upload.js', 
+                ANONY_FIELDS_URI . 'uploader/field_upload.js', 
                 array('jquery'),
                 time(),
                 true
             );
             wp_enqueue_media();
         }
-        wp_localize_script('anony-opts-field-upload-js', 'anony_upload', array('url' => ANONY_FIELDS_URI.'upload/blank.png'));
+        wp_localize_script('anony-opts-field-upload-js', 'anony_upload', array('url' => ANONY_FIELDS_URI.'uploader/blank.png'));
     }
 }

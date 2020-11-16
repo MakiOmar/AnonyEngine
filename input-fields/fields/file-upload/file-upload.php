@@ -76,7 +76,7 @@ class ANONY_File_upload{
 
 		foreach($scripts as $script){
 
-			wp_register_script( $script ,ANONY_FIELDS_URI.'file-upload/'.$script.'.js' ,array('jquery'),filemtime(ANONY_FIELDS_URI.'file-upload/'.$script.'.js'),true);
+			wp_register_script( $script ,ANONY_FIELDS_URI.'file-upload/'.$script.'.js' ,array('jquery'),filemtime(ANONY_FIELDS_DIR.'file-upload/'.$script.'.js'),true);
 
 			wp_enqueue_script($script);
 		}

@@ -51,8 +51,9 @@ $diwanOptionsPage['page_title'] = esc_html__('Auto-poster Options', ANOE_TEXTDOM
 $diwanOptionsPage['menu_slug'] = 'Diwan_Options';
 $diwanOptionsPage['page_cap'] = 'manage_options';
 $diwanOptionsPage['icon_url'] = 'dashicons-admin-settings';
-$diwanOptionsPage['page_position'] = 100;
-$diwanOptionsPage['page_type'] = 'menu';
+$diwanOptionsPage['page_position'] = 5;
+$diwanOptionsPage['page_type'] = 'submenu';
+$diwanOptionsPage['parent_slug'] = 'options-general.php';
 
 
 

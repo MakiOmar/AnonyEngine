@@ -202,3 +202,49 @@ $termMetaBox = new ANONY_Term_Metabox(
 			],
 	]
 );
+
+add_action( 'admin_head', 'wptuts_buttons' );
+function wptuts_buttons() {
+	// check user permissions
+    if ( !current_user_can( 'edit_posts' ) &&  !current_user_can( 'edit_pages' ) ) return;
+    // check if WYSIWYG is enabled
+    if ( 'true' == get_user_option( 'rich_editing' ) ) {           
+    add_filter( "mce_external_plugins", "wptuts_add_buttons" );
+    add_filter( 'mce_buttons', 'wptuts_register_buttons' );
+	}
+}
+function wptuts_add_buttons( $plugin_array ) {
+    $plugin_array['keywords'] = ANOE_URI . 'assets/js/tinymce.js?ver=' . time();
+    return $plugin_array;
+}
+function wptuts_register_buttons( $buttons ) {
+	$mybuttons = array('kalt', 'keyword');
+	foreach($mybuttons as $b){
+		$buttons[] = $b;
+	}
+    return $buttons;
+}
+
+add_action('admin_print_footer_scripts', function(){ ?>
+	<script type="text/javascript">
+		function isTinyMCEactive(){ //check if editor is active
+			is_tinyMCE_active = false;
+			if (typeof(tinyMCE) != "undefined") {
+				if (tinyMCE.activeEditor == null || tinyMCE.activeEditor.isHidden() != false) {
+					is_tinyMCE_active = true;
+				}
+			}
+			return is_tinyMCE_active;
+		}
+		
+		function tinyMCEhotkeys(before, after){
+			if (isTinyMCEactive()){
+
+			}
+		}
+			jQuery(document).ready(function($){
+				
+			});
+
+</script>
+<?php },999);

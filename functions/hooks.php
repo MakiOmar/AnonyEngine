@@ -119,33 +119,51 @@ add_filter( 'anony_keyword_supports', function($support){
 add_action( 'admin_menu', function () {
   // add_menu_page( $page_title, $menu_title, $capability, $menu_slug, $function, $icon_url, $position );
   add_menu_page( 'Diwan auto poster', 'AutoPoster', 'manage_options', 'diwan-autoposter', function(){?>
-      <div class="keywords-post-type">
-          <a href="<?= admin_url('edit.php?post_type=keyword') ?>"><?= esc_html__('Keywords') ?></a><br>
-          
-          <a href="<?= admin_url('post-new.php?post_type=keyword') ?>"><?= esc_html__('Add new keywords') ?></a><br>
-          
-          <a href="<?= admin_url('edit-tags.php?taxonomy=keyword_category&post_type=keyword') ?>"><?= esc_html__('Keywords categories') ?></a><br>
+  	<div class="diwan-page-sections">
+      <div class="keywords-post-type diwan-page-section">
+		  <h1>
+			  <?= esc_html__('keywords') ?>
+		  </h1>
+		  <ul>
+		  	<li><a href="<?= admin_url('edit.php?post_type=keyword') ?>"><?= esc_html__('Keywords') ?></a></li>
+			<li><a href="<?= admin_url('post-new.php?post_type=keyword') ?>"><?= esc_html__('Add new keywords') ?></a></li>
+			<li><a href="<?= admin_url('edit-tags.php?taxonomy=keyword_category&post_type=keyword') ?>"><?= esc_html__('Keywords categories') ?></a></li>
+		  </ul>
+   
       </div>
       
-      <div class="keyword-templates-post-type">
-          <a href="<?= admin_url('edit.php?post_type=keyword_template') ?>"><?= esc_html__('Templates') ?></a><br>
-          
-          <a href="<?= admin_url('post-new.php?post_type=keyword_template') ?>"><?= esc_html__('Add new Template') ?></a><br>
-          
-          <a href="<?= admin_url('edit-tags.php?taxonomy=template_category&post_type=keyword_template') ?>"><?= esc_html__('Templates categories') ?></a><br>
+      <div class="keyword-templates-post-type diwan-page-section">
+		  <h1>
+			  <?= esc_html__('Templates') ?>
+		  </h1>
+		  <ul>
+		  	<li><a href="<?= admin_url('edit.php?post_type=keyword_template') ?>"><?= esc_html__('Templates') ?></a></li>
+			  <li><a href="<?= admin_url('post-new.php?post_type=keyword_template') ?>"><?= esc_html__('Add new Template') ?></a></li>
+			  <li><a href="<?= admin_url('edit-tags.php?taxonomy=template_category&post_type=keyword_template') ?>"><?= esc_html__('Templates categories') ?></a></li>
+		  </ul>
       </div>
       
-      <div class="diwan-test-post-type">
-          <a href="<?= admin_url('edit.php?post_type=diwan_test') ?>"><?= esc_html__('Diwan test') ?></a><br>
-          
-          <a href="<?= admin_url('post-new.php?post_type=diwan_test') ?>"><?= esc_html__('Add new test') ?></a><br>
-          
-          <a href="<?= admin_url('edit-tags.php?taxonomy=category&post_type=diwan_test') ?>"><?= esc_html__('Test categories') ?></a><br>
+      <div class="diwan-test-post-type diwan-page-section">
+		  <h1>
+			  <?= esc_html__('Test') ?>
+		  </h1>
+		  <ul>
+			  <li><a href="<?= admin_url('edit.php?post_type=diwan_test') ?>"><?= esc_html__('Diwan test') ?></a></li>
+			  <li><a href="<?= admin_url('post-new.php?post_type=diwan_test') ?>"><?= esc_html__('Add new test') ?></a></li>
+			  <li><a href="<?= admin_url('edit-tags.php?taxonomy=category&post_type=diwan_test') ?>"><?= esc_html__('Test categories') ?></a></li>
+		  </ul>     
       </div>
       
-      <div class="diwan-options">
-          <a href="<?= admin_url('options-general.php?page=Diwan_Options') ?>"><?= esc_html__('Diwanjobs Options') ?></a><br>
+      <div class="diwan-options diwan-page-section">
+		  <h1>
+			  <?= esc_html__('Options') ?>
+		  </h1>
+		  <ul>
+			  <li><a href="<?= admin_url('options-general.php?page=Diwan_Options') ?>"><?= esc_html__('Diwanjobs Options') ?></a></li>
+		  </ul>
       </div>
+  	</div>
+      
  <?php }, 'dashicons-welcome-widgets-menus', 2 );
 });
 

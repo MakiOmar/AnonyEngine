@@ -105,6 +105,59 @@ add_action( 'activated_plugin', function(){
 add_action( 'admin_head', function(){?>
 	
 	<style type="text/css">
+		.wp-person a:focus .gravatar, a:focus, a:focus .media-icon img {
+	box-shadow: none;
+	outline: none;
+}
+		.diwan-page-sections{
+			padding: 20px;
+			background-color: #fff;
+			border-radius: 25px;
+			margin: 10px;
+		}
+		.diwan-page-section{
+			margin: 10px;
+			width: 48%;
+			display: inline-block;
+		}
+		.diwan-page-section h1{
+			color: #797979;
+			border-bottom: 1px solid #d2d2d2;
+			padding: 10px;
+		}
+		.diwan-page-section ul{
+			display: flex
+		}
+		.diwan-page-section ul li a{
+			text-decoration:none;
+			text-align: center;
+			color:#fff;
+			font-weight:bold;
+			display: flex;
+			height: 100%;
+			width: 100%;
+			justify-content: center;
+			align-items: center;
+			padding: 10px;
+		}
+		.diwan-page-section ul li{
+			display: inline-flex;
+			margin: 10px;
+			height: 80px;
+			width: 120px;	
+			justify-content: center;
+			align-items: center;
+			border-radius:10px;
+			-webkit-box-shadow: 0px 0px 5px 0px rgba(168,168,168,1);
+			-moz-box-shadow: 0px 0px 5px 0px rgba(168,168,168,1);
+			box-shadow: 0px 0px 5px 0px rgba(168,168,168,1);
+		}
+		.diwan-page-section ul li:nth-child(odd){
+			background-color: #d74106;
+		}
+		.diwan-page-section ul li:nth-child(even){
+			background-color: #444;
+		}
 		.words-alts{
 			width: 50%;
 		}
@@ -203,48 +256,24 @@ $termMetaBox = new ANONY_Term_Metabox(
 	]
 );
 
-add_action( 'admin_head', 'wptuts_buttons' );
-function wptuts_buttons() {
+add_action( 'admin_head', function() {
 	// check user permissions
     if ( !current_user_can( 'edit_posts' ) &&  !current_user_can( 'edit_pages' ) ) return;
     // check if WYSIWYG is enabled
     if ( 'true' == get_user_option( 'rich_editing' ) ) {           
-    add_filter( "mce_external_plugins", "wptuts_add_buttons" );
-    add_filter( 'mce_buttons', 'wptuts_register_buttons' );
+    add_filter( "mce_external_plugins", "diwan_add_buttons" );
+    add_filter( 'mce_buttons', 'diwan_register_buttons' );
 	}
-}
-function wptuts_add_buttons( $plugin_array ) {
+} );
+
+function diwan_add_buttons( $plugin_array ) {
     $plugin_array['keywords'] = ANOE_URI . 'assets/js/tinymce.js?ver=' . time();
     return $plugin_array;
 }
-function wptuts_register_buttons( $buttons ) {
-	$mybuttons = array('kalt', 'keyword');
+function diwan_register_buttons( $buttons ) {
+	$mybuttons = array('patterns_menu');
 	foreach($mybuttons as $b){
 		$buttons[] = $b;
 	}
     return $buttons;
 }
-
-add_action('admin_print_footer_scripts', function(){ ?>
-	<script type="text/javascript">
-		function isTinyMCEactive(){ //check if editor is active
-			is_tinyMCE_active = false;
-			if (typeof(tinyMCE) != "undefined") {
-				if (tinyMCE.activeEditor == null || tinyMCE.activeEditor.isHidden() != false) {
-					is_tinyMCE_active = true;
-				}
-			}
-			return is_tinyMCE_active;
-		}
-		
-		function tinyMCEhotkeys(before, after){
-			if (isTinyMCEactive()){
-
-			}
-		}
-			jQuery(document).ready(function($){
-				
-			});
-
-</script>
-<?php },999);

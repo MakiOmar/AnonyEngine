@@ -14,7 +14,7 @@ function diwan_ajax_word_alts($meta_key){
     if(!isset($word_element_index)         || $word_element_index === '') return;
     if(!isset($word_element_alt)           ||  $word_element_alt === '') return;
     if(!isset($word_element_alternatives)  ||  $word_element_alternatives === '') return;
-
+    
     $keywords_list = get_post_meta( intval($post_id), $meta_key , true );
     
     if(empty($keywords_list)) return;
@@ -27,12 +27,25 @@ function diwan_ajax_word_alts($meta_key){
     
     $newAlts = array_map('trim', explode(',', $word_element_alternatives));
     
-    $alternatives[$word_element_index] = array_merge($oldAlts, $newAlts);
+    $alternatives[$word_element_index] = array_unique(array_merge($oldAlts, $newAlts), SORT_REGULAR);
     
     $keywords_list = [$patterns, $alternatives];
     
     
     $updated =  update_post_meta( intval($post_id), $meta_key, $keywords_list );
+    
+    if($updated) {
+        $opt_keywords_list = get_option('diwan_alts_main_store');
+    
+        if(isset($opt_keywords_list[$word_element_alt])){
+            $opt_oldAlts = $opt_keywords_list[$word_element_alt];
+            $opt_newAlts = array_map('trim', explode(',', $word_element_alternatives));
+            
+            $opt_keywords_list[$word_element_alt] = array_unique(array_merge($opt_oldAlts, $opt_newAlts), SORT_REGULAR);
+            
+            update_option('diwan_alts_main_store', $opt_keywords_list);
+        }
+    }
     
     $msg = ($updated) ? 'success' : 'failed';
         

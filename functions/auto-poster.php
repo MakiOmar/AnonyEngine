@@ -23,6 +23,19 @@ function diwan_read_content_keyword_groups($content){
 	return [$placeholders, $matchings];
 }
 
+function diwan_merged_keywords_groups($content){
+    $groups = diwan_read_content_keyword_groups($content);
+    $placeholders = $groups[0];
+    $matchings    = $groups[1];
+    
+    $temp = [];
+    foreach($placeholders as $index => $value){
+        $temp[$value] = $matchings[$index];
+    }
+    
+    return $temp;
+}
+
 function diwan_replace_alts($template, $content, $meta_key){
 	//Get template contents
 	$content = $template->$content;

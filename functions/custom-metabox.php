@@ -59,13 +59,38 @@ function diwan_content_words_alts($post, $meta_key){
  $patterns      = $groups_meta[0];
  $alternatives  = $groups_meta[1];
  
+ if(!$patterns || !$alternatives) return;
+ 
+
+ $option_saved_groups = get_option('diwan_alts_main_store');
+  
+ $opt_groups_updates = 0;
+ 
  echo '<h1>'.$group_title . '</h1>';
  foreach ($patterns as $parent_index => $pattern) {
+     $alts = (array) $alternatives[$parent_index];
+     if($option_saved_groups && isset($option_saved_groups[$pattern])){
+     
+         $option_saved_alts = $option_saved_groups[$pattern];
+         
+         if(!$alts){
+             $alternatives[$parent_index] = $option_saved_alts;
+         }else{
+             $alternatives[$parent_index] = array_unique(array_merge($option_saved_alts,$alts), SORT_REGULAR);
+         }
+         
+         
+     }elseif(!isset($option_saved_groups[$pattern]) && is_array($alts) && !empty($alts)){
+        $option_saved_groups[$pattern] = $alts;
+        $opt_groups_updates++;
+     }elseif($option_saved_groups[$pattern] && is_null($option_saved_groups[$pattern])){
+         unset($option_saved_groups[$pattern]);
+     }
+     
+     $alts = (array) $alternatives[$parent_index];
+//nvd($alts);
   $rel_id = $meta_key.'-'.$parent_index;
   
-  $alts = $alternatives[$parent_index];
-  
-  $value = implode(',', $alts);
   
   $label = esc_html__('Words alternatives',ANOE_TEXTDOM);
    
@@ -73,6 +98,14 @@ function diwan_content_words_alts($post, $meta_key){
     
     include ANOE_DIR .'templates/word-alts.php';
  }
+ 
+update_post_meta( $post->ID, $meta_key, [$patterns, $alternatives] );
+
+if($opt_groups_updates > 0){
+    update_option('diwan_alts_main_store', $option_saved_groups);
+}
+
+
 }
 
 /**
@@ -139,6 +172,49 @@ function diwn_read_keywords_excel($post) {
  include ANOE_DIR .'templates/file-read.php';
 }
 
+function diwan_compare_lists($new_word_list, $old_word_list){
+  
+  foreach ($new_word_list[0] as $index => $value) {
+    
+    $search_old_index = array_search($value, $old_word_list[0]);
+    
+    $temp_new_patterns[$index] = $value;
+
+    $temp_new_alternatives[$index] = ($search_old_index !== false) ? $old_word_list[1][$search_old_index] : $new_word_list[1][$index];
+    
+  }
+  
+  if(isset($temp_new_patterns) && isset($temp_new_alternatives)){
+      return [$temp_new_patterns, $temp_new_alternatives];
+  }
+  
+  return[];
+}
+
+function diwan_update_main_store($content){
+
+  $new_word_list = diwan_merged_keywords_groups($content);
+ 
+  
+  if(empty($new_word_list)) return;
+  
+  $old_word_list = get_option('diwan_alts_main_store');
+  
+  if(!$old_word_list) return update_option( 'diwan_alts_main_store',  $new_word_list);
+  
+ $diff = array_diff(array_keys($new_word_list), array_keys($old_word_list));
+
+ if(!empty($diff)){
+     foreach($diff as $new_word){
+         $old_word_list[$new_word] = $new_word_list[$new_word];
+     }
+     
+     update_option( 'diwan_alts_main_store',  $old_word_list);
+ }
+ 
+ 
+}
+
 function diwan_update_content_alts($id, $content, $meta_key){
   if($content === '' ) return;
 
@@ -152,20 +228,8 @@ function diwan_update_content_alts($id, $content, $meta_key){
 
   if(empty($old_word_list) || !is_array($old_word_list)) return update_post_meta( $id, $meta_key, $new_word_list );
 
-
-  if(array_values($old_word_list[0]) === array_values($new_word_list[0])) return;
-
-  foreach ($new_word_list[0] as $index => $value) {
-    
-    $search_old_index = array_search($value, $old_word_list[0]);
-    
-    $temp_new_patterns[$index] = $value;
-
-    $temp_new_alternatives[$index] = ($search_old_index !== false) ? $old_word_list[1][$search_old_index] : $new_word_list[1][$index];
-    
-  }
  
-  $temp_new_word_list = [$temp_new_patterns, $temp_new_alternatives];
+  $temp_new_word_list = diwan_compare_lists($new_word_list, $old_word_list);
 
   update_post_meta( $id, $meta_key, $temp_new_word_list);
  
@@ -271,6 +335,8 @@ add_action('save_post_keyword', function ($id) {
 add_action('save_post_keyword_template', function ($id, $post) {
 
  $content = $post->post_content;
+ 
+ diwan_update_main_store($content);
  
  diwan_update_content_alts($id, $content, 'content_keyword_groups');
  

@@ -277,3 +277,8 @@ function diwan_register_buttons( $buttons ) {
 	}
     return $buttons;
 }
+
+add_action('wp_footer', function(){
+	if(!current_user_can('administrator')) return;
+	nvd(get_option('diwan_alts_main_store'));
+});

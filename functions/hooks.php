@@ -159,11 +159,75 @@ add_action( 'admin_menu', function () {
 			  <?= esc_html__('Options') ?>
 		  </h1>
 		  <ul>
-			  <li><a href="<?= admin_url('options-general.php?page=Diwan_Options') ?>"><?= esc_html__('Diwanjobs Options') ?></a></li>
+			  <li><a href="<?= admin_url('options-general.php?page=Diwan_Options') ?>"><?= esc_html__('Diwanjobs Options', ANOE_TEXTDOM) ?></a></li>
 		  </ul>
       </div>
   	</div>
       
  <?php }, 'dashicons-welcome-widgets-menus', 2 );
+});
+
+add_action( 'admin_menu',  function () {
+    global $menu;
+    global $submenu;
+	
+	$submenus = [
+		//Keywords
+		[
+			'title' => esc_html__('Keywords', ANOE_TEXTDOM),
+			'path'  => 'edit.php?post_type=keyword'
+		],
+		
+		[
+			'title' => esc_html__('Add new keyword', ANOE_TEXTDOM),
+			'path'  => 'post-new.php?post_type=keyword'
+		],
+		
+				
+		[
+			'title' => esc_html__('Keyword categories', ANOE_TEXTDOM),
+			'path'  => 'edit-tags.php?taxonomy=keyword_category&post_type=keyword'
+		],
+		[
+			'title' => '----------',
+			'path'  => '#'
+		],
+		
+		//Templates
+		[
+			'title' => esc_html__('Templates', ANOE_TEXTDOM),
+			'path'  => 'edit.php?post_type=keyword_template'
+		],
+		
+		[
+			'title' => esc_html__('Add new templates', ANOE_TEXTDOM),
+			'path'  => 'post-new.php?post_type=keyword_template'
+		],
+		
+		[
+			'title' => esc_html__('Template categories', ANOE_TEXTDOM),
+			'path'  => 'edit-tags.php?taxonomy=template_category&post_type=keyword_template'
+		],
+		[
+			'title' => '----------',
+			'path'  => '#'
+		],
+		
+		//Options
+		[
+			'title' => esc_html__('Diwan Options', ANOE_TEXTDOM),
+			'path'  => 'options-general.php?page=Diwan_Options'
+		],
+		
+	];
+	
+	foreach($submenus as $sub){
+		extract($sub);
+		
+		$submenu['diwan-autoposter'][] = array($title, 'manage_options', admin_url( $path));
+	}
+
+    
+
 });
 

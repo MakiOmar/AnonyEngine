@@ -47,7 +47,7 @@ add_action('add_meta_boxes', function () {
 
 function diwan_content_words_alts($post, $meta_key){
   $groups_meta = get_post_meta( $post->ID, $meta_key, true );
- 
+	
  if (!$groups_meta || empty($groups_meta)) return;
  
  $success_msg = esc_html__('Alternatives have been successfully updated',ANOE_TEXTDOM);
@@ -83,7 +83,7 @@ function diwan_content_words_alts($post, $meta_key){
      }elseif(!isset($option_saved_groups[$pattern]) && is_array($alts) && !empty($alts)){
         $option_saved_groups[$pattern] = $alts;
         $opt_groups_updates++;
-     }elseif($option_saved_groups[$pattern] && is_null($option_saved_groups[$pattern])){
+     }elseif(isset($option_saved_groups[$pattern]) && is_null($option_saved_groups[$pattern])){
          unset($option_saved_groups[$pattern]);
      }
      
@@ -177,10 +177,10 @@ function diwan_compare_lists($new_word_list, $old_word_list){
   foreach ($new_word_list[0] as $index => $value) {
     
     $search_old_index = array_search($value, $old_word_list[0]);
-    
     $temp_new_patterns[$index] = $value;
-
-    $temp_new_alternatives[$index] = ($search_old_index !== false) ? $old_word_list[1][$search_old_index] : $new_word_list[1][$index];
+	
+	  $temp_new_alt = $old_word_list[1][$search_old_index];
+    $temp_new_alternatives[$index] = ($search_old_index !== false && !is_null($temp_new_alt)) ? $old_word_list[1][$search_old_index] : $new_word_list[1][$index];
     
   }
   
@@ -214,13 +214,11 @@ function diwan_update_main_store($content){
  
  
 }
-
 function diwan_update_content_alts($id, $content, $meta_key){
   if($content === '' ) return;
 
   $new_word_list = diwan_read_content_keyword_groups($content);
-
-
+	
   if(empty($new_word_list)) return delete_post_meta( $id, $meta_key);
 
   //Get template list of alternatives
@@ -230,92 +228,18 @@ function diwan_update_content_alts($id, $content, $meta_key){
 
  
   $temp_new_word_list = diwan_compare_lists($new_word_list, $old_word_list);
-
-  update_post_meta( $id, $meta_key, $temp_new_word_list);
+	/*if($meta_key == 'title_keyword_groups'){
+        nvd($temp_new_word_list); die();
+    }*/
+    if(!empty($temp_new_word_list)){
+        update_post_meta( $id, $meta_key, $temp_new_word_list);
+    }else{
+        delete_post_meta( $id, $meta_key);
+    }
+  
  
 }
 
-
-function diwan_update_content_alts_2($id, $content, $meta_key){
-  if($content === '' ) return;
-
-  $new_word_list = diwan_read_content_keyword_groups($content);
-
-  if(empty($new_word_list)) return;
-
-  //Get template list of alternatives
-  $old_word_list = get_post_meta( $id, $meta_key, true );
-
-  if(empty($old_word_list) || !is_array($old_word_list)) return update_post_meta( $id, $meta_key, $new_word_list );
-  
-  //Check patterns match
-  if(array_values($old_word_list[0]) === array_values($new_word_list[0])) return;
-  
-  /*-------------------------------------------------------------------------------*/
-  
-  if (count($old_word_list[0]) == count($new_word_list[0])) {
-    foreach ($new_word_list[0] as $index => $value) {
-
-      $temp_new_patterns[$index] = $value;
-       
-      if ($old_word_list[0][$index] == $value) {
-        $temp_new_alternatives[$index] = $old_word_list[1][$index];
-      }else{
-        $temp_new_alternatives[$index] = $new_word_list[1][$index];
-      }
-
-    }
-
-    $temp_new_word_list = [$temp_new_patterns, $temp_new_alternatives];
-    
-    return update_post_meta( $id, $meta_key, $temp_new_word_list);
-    
-  }else{
-    //We check if something new has been added to the content 
-    
-    $array_diff_new = ANONY_ARRAY_HELP::diffWithDupplicate( $old_word_list[0], $new_word_list[0]);
-    
-    nvd($array_diff_new); 
-
-    nvd_compare($old_word_list[0], $new_word_list[0]);
-
-    die();
-    
-  }
-
-  
-  
-  
- 
-  if (!empty($array_diff_new)) {
-    
-    foreach ($array_diff_new as $index => $pattern) {      
-      //injecting newly added words, to be in the same order
-      array_splice($old_word_list[0], $index, 0, [$new_word_list[0][$index]]);
-      array_splice($old_word_list[1], $index, 0, [$new_word_list[1][$index]]);
-    }
-    
-    $old_word_list = [array_values($old_word_list[0]), array_values($old_word_list[1])];
-      
-  }
-  
-  //Note: array_diff checks if something in array1 that is not existed in array2
-  //So we check if something missing from the content
-  $array_diff_missing = array_diff($old_word_list[0], $new_word_list[0]);
-
-  if(!empty($array_diff_missing)){
-    
-    foreach ($array_diff_missing as $index => $pattern) {
-      
-      $index = intval($index);
-      
-      unset($old_word_list[0][$index]);
-      unset($old_word_list[1][$index]);
-    }
-  }
-
-  update_post_meta( $id, $meta_key, $old_word_list);
-}
 
 add_action('save_post_keyword', function ($id) {
     if(!isset($_FILES['diwn_keywords_excel']) || empty($_FILES['diwn_keywords_excel'])) return;

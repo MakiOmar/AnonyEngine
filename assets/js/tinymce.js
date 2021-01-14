@@ -84,9 +84,9 @@ function insertPatternAll(editor,shortCut,description,command, before, after){
          });
 	   // here I add the shortcut.
       insertPattern(editor,'ctrl+1', 'description', 'shkalt', '(%', '%)');
+	  insertPatternAll(editor,'ctrl+shift+1', 'description', 'shkaltall', '(%', '%)');
 	  insertPattern(editor,'ctrl+2', 'description', 'shkeyword', '(#', '#)');
-	  insertPatternAll(editor,'ctrl+shift+1', 'description', 'shkalt', '(%', '%)');
-	  insertPatternAll(editor,'ctrl+shift+2', 'description', 'shkeyword', '(#', '#)');
+	  insertPatternAll(editor,'ctrl+shift+2', 'description', 'shkeywordall', '(#', '#)');
    });
        
        

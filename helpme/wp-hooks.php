@@ -296,3 +296,44 @@ function anony_loop_proper_thumb_size ($html, $post_id, $post_thumbnail_id, $siz
 
     return $html;
 }
+
+/**
+ * Search products by meta value OR title
+ */
+add_action( 'pre_get_posts',  function ($query){
+   if ( ! is_admin() && is_search() ) {
+   		$meta_or_title = apply_filters( 'meta_key_or', false );
+		$meta_key = apply_filters( 'meta_key_or', '' );
+		
+		if(!$meta_or_title || $meta_key == '') return;
+		
+		$query->set( '_meta_or_title', get_search_query() );
+		$query->set( 'meta_key', $meta_key );
+		$query->set( 'meta_query', array(
+			'relation' => 'OR',
+		    array(
+		        'key'     => $meta_key,
+		        'compare' => 'LIKE',
+		        'value'   => get_search_query(),
+		    )
+		) );
+		if( $title = $query->get( '_meta_or_title' ) ){
+			add_filter( 'get_meta_sql', function( $sql ) use ( $title )
+			{
+				global $wpdb;
+
+				// Only run once:
+				static $nr = 0; 
+				if( 0 != $nr++ ) return $sql;
+
+				// Modify WHERE part:
+				$sql['where'] = sprintf(
+					" AND ( %s OR %s ) ",
+					$wpdb->prepare( "{$wpdb->posts}.post_title LIKE '%s'", $title ),
+					mb_substr( $sql['where'], 5, mb_strlen( $sql['where'] ) )
+				);
+				return $sql;
+			});
+		}
+   }
+});

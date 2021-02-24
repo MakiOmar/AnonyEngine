@@ -18,6 +18,17 @@ if ( ! class_exists( 'ANONY_STRING_HELP' ) ) {
 
 			return join(' ', array_slice($words, 0, $len));	
 		}
+		
+		/**
+		 * Uppercase first litter after delimiter
+		 * @param string $delimiter 
+		 * @param string $string 
+		 * @return string
+		 */
+		static  function ucAfter($delimiter, $string){
+
+			return implode($delimiter, array_map('ucfirst', explode($delimiter, $q)));
+		}
 
 	}
 }

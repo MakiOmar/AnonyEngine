@@ -337,3 +337,58 @@ add_action( 'pre_get_posts',  function ($query){
 		}
    }
 });
+
+
+/**
+ * Get related products by meta.
+ * Has the ability to get results from same category or other categories.
+ */ 
+add_action('init', function(){
+	
+	$related_products_by_cat = apply_filters( 'anony_related_products_by_cat', false );
+	
+	if($related_products_by_cat){
+		//Stop loading from same tags
+		add_filter( 'woocommerce_product_related_posts_relate_by_tag', '__return_false' ,100);
+		
+		//Force loading from categories/terms
+		add_filter( 'woocommerce_product_related_posts_relate_by_category', '__return_true', 100 );
+		
+		$related_products_by_meta = apply_filters( 'anony_related_products_by_meta', false );
+		
+		$relation_meta_key = apply_filters( 'anony_relation_meta_key', '' );
+		
+		if($related_products_by_meta){
+			
+			if(empty($relation_meta_key)) die('Meta key name is missing. please check filter {anony_relation_meta_key}');
+			
+			add_filter( 'woocommerce_product_related_posts_query',function ( $query, $product_id ) use($relation_meta_key){
+	
+			    global $wpdb;
+				$relation_meta_value = get_post_meta($product_id, $relation_meta_key, true);
+			    $query['join']  .= " INNER JOIN {$wpdb->postmeta} as pm ON p.ID = pm.post_id ";
+			    $query['where'] .= " AND pm.meta_key = '$relation_meta_key' AND meta_value LIKE '$relation_meta_value' ";
+			    return $query;
+			} , 100, 2 );
+			
+			
+			$related_products_by_meta_outsider = apply_filters( 'anony_related_products_by_meta_outsider', false );
+			
+			if ($related_products_by_meta_outsider) {
+				//Load related from any category
+				add_filter( 'woocommerce_get_related_product_cat_terms', function($ids, $product_id){
+				    $terms = get_terms( array(
+						'taxonomy' => 'product_cat',
+						'hide_empty' => false,
+						'fields' => 'ids'
+					) );
+				    
+				    return $terms;
+				    
+				}, 11, 2 );
+			}
+			
+		}
+		
+	}
+});

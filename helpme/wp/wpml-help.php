@@ -149,6 +149,8 @@ if ( ! class_exists( 'ANONY_WPML_HELP' ) ) {
 				if($lang == self::gatActiveLang()){
 					return 'active-lang';
 				}
+				
+				return '';
 			}
 		}
 

@@ -40,6 +40,24 @@ $anoucsections['general-options']= array(
 							'validate'=> 'no_html',
 							'desc'    => esc_html('If checked, it will publish contents to a none visible/not indexed post type (diwan_test)', ANOE_TEXTDOM),
 							
+						),
+						array(
+							'id'      => 'date_format',
+							'title'   => esc_html__('Date format', ANOE_TEXTDOM),
+							'type'    => 'radio',
+							'options' => array(
+												'Y-m-d'	=> array(
+													'title' => esc_html__('2021-01-31', ANOE_TEXTDOM),
+													'class' => 'slider'
+												),
+		
+												'F Y'	=> array(
+													'title' => esc_html__('March 2021', ANOE_TEXTDOM),
+													'class' => 'slider'
+												),
+											),
+							'desc'    => esc_html('Change date format for all keywords\' posts', ANOE_TEXTDOM),
+							
 						),						
 					)
 );

@@ -4,6 +4,81 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit; // Exit if accessed directly
 }
 
+//Update words alternatives
+add_action('wp_ajax_update_keywords_list', function(){
+    
+    if(empty($_POST) ) return;
+    
+    extract($_POST);
+    
+    if(!isset($post_id) || $post_id === '') return;
+    
+    $k_data = [
+    
+        'title' => $title,
+        'categories' => explode(',', $categories),
+        'tags' => explode(',', $tags),
+        'slug' => $slug,
+        'interval' => $interval,
+        'date_format' => $date_format,
+    
+    ];
+    
+    $keywords_list = get_post_meta( intval($post_id), 'diwan_keywords_list', true );
+    
+    $keywords_list[$index] = $k_data;
+    
+    
+    $updated = update_post_meta( intval($post_id), 'diwan_keywords_list', $keywords_list );
+    
+    
+    $msg = ($updated) ? 'success' : 'failed';
+    
+    
+    wp_send_json(
+            [
+                'result'  => $msg,
+            ]
+        );
+    
+    die();
+    
+    
+});
+
+//Update words alternatives
+add_action('wp_ajax_delete_keyword_in_list', function(){
+    
+    if(empty($_POST) ) return;
+    
+    extract($_POST);
+    
+    if(!isset($post_id) || $post_id === '') return;
+    
+    
+    
+    $keywords_list = get_post_meta( intval($post_id), 'diwan_keywords_list', true );
+    
+    unset($keywords_list[$index]);
+    
+    
+    $updated = update_post_meta( intval($post_id), 'diwan_keywords_list', array_values($keywords_list) );
+    
+    
+    $res = ($updated) ? 'success' : 'failed';
+    
+    
+    wp_send_json(
+            [
+                'result'  => $res,
+            ]
+        );
+    
+    die();
+    
+    
+});
+
 function diwan_ajax_word_alts($meta_key){
     if(empty($_POST) ) return;
     

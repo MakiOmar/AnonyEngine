@@ -213,6 +213,26 @@ add_action( 'admin_menu',  function () {
 			'path'  => '#'
 		],
 		
+		//Test
+		[
+			'title' => esc_html__('Test', ANOE_TEXTDOM),
+			'path'  => 'edit.php?post_type=diwan_test'
+		],
+		
+		[
+			'title' => esc_html__('Add new Test', ANOE_TEXTDOM),
+			'path'  => 'post-new.php?post_type=diwan_test'
+		],
+		
+		[
+			'title' => esc_html__('Test categories', ANOE_TEXTDOM),
+			'path'  => 'edit-tags.php?taxonomy=category&post_type=diwan_test'
+		],
+		[
+			'title' => '----------',
+			'path'  => '#'
+		],
+		
 		//Options
 		[
 			'title' => esc_html__('Diwan Options', ANOE_TEXTDOM),

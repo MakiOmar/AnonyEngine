@@ -36,6 +36,13 @@ function diwan_merged_keywords_groups($content){
     return $temp;
 }
 
+/**
+ * Replaces alternatives within a given conten
+ * @param object $template Post template
+ * @param string $content WP__Query parameter (e.g post_title or post_content)
+ * @param string $meta_key Meta key name which holds altenatives
+ * @return string
+ */
 function diwan_replace_alts($template, $content, $meta_key){
 	//Get template contents
 	$content = $template->$content;
@@ -134,6 +141,23 @@ function diwan_post_thumb($post){
 	return $thumb_id;
 }
 
+function diwan_date_format($flag = 'D'){
+	
+	switch ($flag) {
+		case 'M':
+			return 'F Y';
+			break;
+		case 'N':
+			return false;
+			break;
+		
+		default:
+			return 'Y-m-d';
+			break;
+	}
+	
+}
+
 /**
  * Array of data required to insert a post
  * @param object $post 
@@ -142,7 +166,7 @@ function diwan_post_thumb($post){
  */
 function diwan_post_data($post, $word){
 	$thumb_id = diwan_post_thumb($post);
-				
+	
 	$data = diwan_template_content($post->ID);
 	
 	if(empty($data)) return false;
@@ -152,15 +176,10 @@ function diwan_post_data($post, $word){
 	if(!isset($content) || empty($content)) return false;
 	if(!isset($title)   || empty($title)) return false;
 	
-	$date_format = 'Y-m-d';
-	
-	$opts = get_option('Diwan_Options');
-	
-	if(isset($opts['date_format']) && !empty($opts['date_format'])) $date_format = $opts['date_format'];
 	
 	$content = preg_replace('/\(#.*#\)/i', $word , $content);
 	
-	$title = preg_replace('/\(#.*#\)/i', $word , $title) . ' ' . date_i18n( $date_format );
+	$title = preg_replace('/\(#.*#\)/i', $word , $title) ;
 	
 	return ['content' => $content, 'title' => $title, 'thumb_id' => $thumb_id ];
 }
@@ -196,6 +215,7 @@ function diwan_set_post_terms($post_id, $terms, $taxonomy){
 	wp_set_post_terms($post_id, $term_ids, $taxonomy);
 	
 }
+
 /**
  * Auto poster
  */
@@ -204,6 +224,7 @@ function diwan_auto_poster(){
 	global $diwanOptions;
 	
 	if (!isset($diwanOptions->activate_publish) || $diwanOptions->activate_publish == '' || $diwanOptions->activate_publish == '0' )  return;
+	
 	
 	$post_type = 'post';
 	
@@ -217,7 +238,6 @@ function diwan_auto_poster(){
 	foreach ($keywords_post as $keyword_post) {
 		//Get keywords list
 		$keywords_list = get_post_meta( $keyword_post->ID , 'diwan_keywords_list', true );
-		
 		
 		$current_date = current_time('Y-m-d H:i:s');
 
@@ -246,24 +266,42 @@ function diwan_auto_poster(){
 			
 			
 			if($date_diff < $interval) continue;
+			
 						 
 			$i++;
 			
 			$data = diwan_post_data($keyword_post, $title);
-			
+						
 			if(!$data) continue;
 			
 			extract($data);
-			if($i <= 1 ){
-				$insert = wp_insert_post( 
-							[
+			
+			$dateFormat = 'Y-m-d';
+	
+			$opts = get_option('Diwan_Options');
+			
+			if(isset($opts['date_format']) && !empty($opts['date_format'])) $dateFormat = $opts['date_format'];
+			
+			if(isset($date_format) && !empty($date_format)){
+				$dateFormat = diwan_date_format($date_format);
+			}
+			
+			
+			$title = $date_format == 'N' ? $title : $title . ' ' . date_i18n( $dateFormat );
+						
+			$args = [
 								'post_type'    => $post_type,
 								'post_title'   => wp_strip_all_tags( $title ),
 								'post_content' => wp_kses_post( $content ),
 								'post_status'  => 'publish',
+								'post_name'  => sanitize_title( $slug ),
 								'post_author'  => 1,
-							] 
-						);
+							] ;
+							
+		
+			
+			if($i >= 1 ){
+				$insert = wp_insert_post( $args );
 				
 				if ($insert && !is_wp_error( $insert )) {
 					
@@ -291,6 +329,7 @@ function diwan_auto_poster(){
 	
 }
 
+//return;
 add_action('wp_footer', function(){
 	//diwan_auto_poster();
 });

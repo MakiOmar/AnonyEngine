@@ -104,4 +104,108 @@ jQuery(document).ready(function($){
 	    
 	});
 	
+	$('#keywords-editor tr').on('click','.edit-keyword', function(e){
+		
+		e.preventDefault();
+		
+		
+		var clickedIndex = $(this).data('id');
+		
+		var title = $('#title-' + clickedIndex).text();
+		var categories = $('#categories-' + clickedIndex).text();
+		var tags = $('#tags-' + clickedIndex).text();
+		var slug = $('#slug-' + clickedIndex).text();
+		var dateFormat = $('#date-format-' + clickedIndex).text();
+		var interval = $('#interval-' + clickedIndex).text();
+		
+		
+		var row = "<tr id='keyword-edit" + clickedIndex + "'><td><input type='text' id='title-edit-" + clickedIndex + "' value='"+title+"'/></td><td><input type='text' id='categories-edit-" + clickedIndex + "' value='"+categories+"'/></td><td><input type='text' id='tags-edit-" + clickedIndex + "' value='"+tags+"'/></td><td><input type='text' id='interval-edit-" + clickedIndex + "' value='"+interval+"'/></td><td><input type='text' id='slug-edit-" + clickedIndex + "' value='"+slug+"'/></td><td><input type='text' id='date-format-edit-" + clickedIndex + "' value='"+dateFormat+"'/></td><td><a href='#' class='save-keyword' data-id='" + clickedIndex + "'>save</a></td></tr>";
+		
+		$(row).insertAfter($('#keyword-' + clickedIndex));
+		
+		
+	});
+	
+	$('#keywords-editor tr').on('click','.delete-keyword', function(e){
+		
+		e.preventDefault();
+		
+		
+		var clickedIndex = $(this).data('id');
+		
+		
+		var postId   = $('#post_ID').val();
+		
+		var dataString = 'action=delete_keyword_in_list' +
+		'&post_id='+postId+
+		'&index=' + clickedIndex;
+		
+		$.ajax({
+			type:'POST',
+			data:dataString,
+			url : ajaxUrl,
+			success:function(response) {
+				
+								
+				if (response.result === 'success') {
+					location.reload();
+				}
+				
+				if (response.result === 'failed') {
+					alert('Records is not deleted');
+				}
+			}
+    	});
+		
+		
+	});
+	
+	
+	$('body').on('click','.save-keyword', function(e){
+		
+		e.preventDefault();
+		
+		
+		var clickedIndex = $(this).data('id');
+		
+		var title = $('#title-edit-' + clickedIndex).val();
+		var categories = $('#categories-edit-' + clickedIndex).val();
+		var tags = $('#tags-edit-' + clickedIndex).val();
+		var slug = $('#slug-edit-' + clickedIndex).val();
+		var dateFormat = $('#date-format-edit-' + clickedIndex).val();
+		var interval = $('#interval-edit-' + clickedIndex).val();
+		
+		var action = 'update_keywords_list';
+		
+		var postId   = $('#post_ID').val();		
+	
+		var dataString = 'action=update_keywords_list' +
+		'&post_id='+postId+
+		'&index=' + clickedIndex +
+		'&title=' + title +
+		'&categories=' + categories +
+		'&tags=' + tags +
+		'&slug=' + slug +
+		'&date_format=' + dateFormat +
+		'&interval=' + interval ;
+		$.ajax({
+			type:'POST',
+			data:dataString,
+			url : ajaxUrl,
+			success:function(response) {
+				
+								
+				if (response.result === 'success') {
+					location.reload();
+				}
+				
+				if (response.result === 'failed') {
+					alert('Records is not updated');
+				}
+			}
+    	});
+		
+	});
+	
+	
 });

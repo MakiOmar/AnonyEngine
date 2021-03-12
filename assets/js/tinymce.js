@@ -3,7 +3,7 @@ function replaceAllText(editor, before, after){
 	//Matches all Characters in all languages
 	//[\p{L}-]+
 	//var test = selected_text.replace( new RegExp(/(\w+)(?!([^<]+)?>) /,"gm"),before + "\$1" + after);
-	var test = selected_text.replace( new RegExp(/([\p{L}-]+)(?!([^<]+)?>)/,"ugm"),before + "\$1" + after + ' ');
+	var test = selected_text.replace( new RegExp(/([\p{L}-]+)(?!([^<]+)?>)/,"ugm"),before + "\$1" + after );
 	
 	editor.setContent(test);
 	

@@ -64,6 +64,10 @@ function read_excel_data($input_name){
 			$temp_2['tags'] = diwan_tax_terms($trow);
 		}
 		
+		if(!empty($trow)) $temp_2['slug'] = array_shift($trow);
+		
+		if(!empty($trow)) $temp_2['date_format'] = array_shift($trow);
+		
 		$rows[] = $temp_2;
 		
 		$temp_2 = [];

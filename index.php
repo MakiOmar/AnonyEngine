@@ -280,5 +280,44 @@ function diwan_register_buttons( $buttons ) {
 
 add_action('wp_footer', function(){
 	if(!current_user_can('administrator')) return;
-	nvd(get_option('diwan_alts_main_store'));
+	//nvd(get_option('diwan_alts_main_store'));
 });
+
+add_action('admin_head', function(){?>
+	<style>
+		#keywords-editor {
+  font-family: Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#keywords-editor td, #keywords-editor th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+#keywords-editor td{
+	max-width: 120px;
+}
+
+#keywords-editor td input{
+	max-width: 100%;
+}
+
+#keywords-editor tr:nth-child(even){background-color: #f2f2f2;}
+
+#keywords-editor tr:hover {background-color: #ddd;}
+
+#keywords-editor th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: center;
+  background-color: #4CAF50;
+  color: white;
+}
+.delete-keyword{
+	color: red
+}
+	</style>
+}
+<?php });

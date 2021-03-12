@@ -42,7 +42,9 @@ add_action("admin_enqueue_scripts", function (){
 add_action('add_meta_boxes', function () {
     add_meta_box('diwn_keywords_excel', esc_html__('Add your keywords Excel sheet',ANOE_TEXTDOM), 'diwn_read_keywords_excel', 'keyword', 'normal', 'high');
     
-    add_meta_box('diwn_keywords_template_alts', esc_html__('Template words alternatives',ANOE_TEXTDOM), 'diwn_words_alts', 'keyword_template', 'normal', 'high');  
+    add_meta_box('diwn_keywords_template_alts', esc_html__('Template words alternatives',ANOE_TEXTDOM), 'diwn_words_alts', 'keyword_template', 'normal', 'high');
+    
+    add_meta_box('diwn_keywords_editor', esc_html__('Keywords editor',ANOE_TEXTDOM), 'diwn_keywords_edit', 'keyword', 'normal', 'high');  
 }); 
 
 function diwan_content_words_alts($post, $meta_key){
@@ -119,6 +121,7 @@ function diwn_words_alts($post){
  
 }
 
+
 /**
  * Upload file
  * @param object $post 
@@ -160,7 +163,7 @@ function diwn_read_keywords_excel($post) {
   
  $file_label      = esc_html__('Keywords excel sheet',ANOE_TEXTDOM);
  
- $keywords_label  = esc_html__('Keywords list',ANOE_TEXTDOM);
+ /*$keywords_label  = esc_html__('Keywords list',ANOE_TEXTDOM);
  
  $keywords_list = get_post_meta( $post->ID, 'diwan_keywords_list', true );
  
@@ -168,9 +171,45 @@ function diwn_read_keywords_excel($post) {
   $keywords_list = esc_textarea(serialize($keywords_list));
  else
   $keywords_list = esc_textarea($keywords_list);
- 
+ */
  include ANOE_DIR .'templates/file-read.php';
 }
+
+function diwn_keywords_edit($post){
+  $metabox_id = 'diwn_keywords_editor';
+  
+  $keywords_list = get_post_meta( $post->ID, 'diwan_keywords_list', true );
+  if(empty($keywords_list) || !$keywords_list){
+    esc_html_e('Please upload your keywords in xlsx format',ANOE_TEXTDOM);
+    return ;
+  } 
+  ?>
+  
+  <table id="keywords-editor" style="width:100%;background-color: #fff;">
+    <tr>
+      <th><?= esc_html__('Title',ANOE_TEXTDOM) ?></th>
+      <th><?= esc_html__('category',ANOE_TEXTDOM) ?></th>
+      <th><?= esc_html__('Tags',ANOE_TEXTDOM) ?></th>
+      <th><?= esc_html__('Interval',ANOE_TEXTDOM) ?></th>
+      <th><?= esc_html__('Slug',ANOE_TEXTDOM) ?></th>
+      <th><?= esc_html__('Date format',ANOE_TEXTDOM) ?></th>
+      <th><?= esc_html__('',ANOE_TEXTDOM) ?></th>
+    </tr>
+  <?php 
+  foreach ($keywords_list as $inedx => $keyword) { extract($keyword); ?>
+    <tr id='keyword-<?= $inedx ?>'>
+      <td><?= $inedx.'-<span id="title-'.$inedx .'">'.$title ?></span></td>
+      <td id="categories-<?= $inedx ?>"><?= join(',', $categories) ?></td>
+      <td id="tags-<?= $inedx ?>"><?= join(',', $tags) ?></td>
+      <td id="interval-<?= $inedx ?>"><?= $interval ?></td>
+      <td id="slug-<?= $inedx ?>"><?= $slug ?></td>
+      <td id="date-format-<?= $inedx ?>"><?= $date_format ?></td>
+      <td><a href="#" class="edit-keyword" data-id="<?= $inedx ?>"><?= esc_html__('Edit',ANOE_TEXTDOM) ?></a>&nbsp;|&nbsp;<a href="#" class="delete-keyword" data-id="<?= $inedx ?>"><?= esc_html__('delete',ANOE_TEXTDOM) ?></a></td>
+    </tr>
+  <?php } ?>
+  
+  </table> 
+<?php }
 
 function diwan_compare_lists($new_word_list, $old_word_list){
   

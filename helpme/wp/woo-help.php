@@ -136,5 +136,56 @@ if ( ! class_exists( 'ANONY_WOO_HELP' ) ) {
 			    </script>
 		    <?php endif;
 		}
+		
+		/**
+		 * Show lowest variation price
+		 */
+		static function showOnlyLowestVariationPrice(){
+			add_filter( 'woocommerce_variable_sale_price_html', [self, 'lowestVariationPriceFormat'], 10, 2 );
+			add_filter( 'woocommerce_variable_price_html', [self, 'lowestVariationPriceFormat'], 10, 2 );
+		}
+	
+		static function lowestVariationPriceFormat(){
+			// Main Price
+			$prices = array( $product->get_variation_price( 'min', true ), $product->get_variation_price( 'max', true ) );
+			$price = $prices[0] !== $prices[1] ? sprintf( __( '%1$s', 'woocommerce' ), wc_price( $prices[0] ) ) : wc_price( $prices[0] );
+			 
+			// Sale Price
+			$prices = array( $product->get_variation_regular_price( 'min', true ), $product->get_variation_regular_price( 'max', true ) );
+			sort( $prices );
+			$saleprice = $prices[0] !== $prices[1] ? sprintf( __( '%1$s', 'woocommerce' ), wc_price( $prices[0] ) ) : wc_price( $prices[0] );
+			 
+			if ( $price !== $saleprice ) {
+			$price = '<del>' . $saleprice . $product->get_price_suffix() . '</del> <ins>' . $price . $product->get_price_suffix() . '</ins>';
+			}
+			return $price;
+		}
+
+		
+		/**
+		 * Show highest variation price
+		 */
+		static function showOnlyHighestVariationPrice(){
+			add_filter( 'woocommerce_variable_sale_price_html', [self, 'highesttVariationPriceFormat'], 10, 2 );
+			add_filter( 'woocommerce_variable_price_html', [self, 'highesttVariationPriceFormat'], 10, 2 );
+		}
+			
+		static function highesttVariationPriceFormat(){
+			
+			// Main Price
+			$prices = array( $product->get_variation_price( 'max', true ), $product->get_variation_price( 'min', true ) );
+			$price = $prices[0] !== $prices[1] ? sprintf( __( 'Up To: %1$s', 'woocommerce' ), wc_price( $prices[0] ) ) : wc_price( $prices[0] );
+			 
+			// Sale Price
+			$prices = array( $product->get_variation_regular_price( 'max', true ), $product->get_variation_regular_price( 'min', true ) );
+			sort( $prices );
+			$saleprice = $prices[0] !== $prices[1] ? sprintf( __( 'Up To: %1$s', 'woocommerce' ), wc_price( $prices[0] ) ) : wc_price( $prices[0] );
+			 
+			if ( $price !== $saleprice ) {
+			$price = '<del>' . $saleprice . $product->get_price_suffix() . '</del> <ins>' . $price . $product->get_price_suffix() . '</ins>';
+			}
+			return $price;
+		}
 	}
 }
+

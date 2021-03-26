@@ -170,25 +170,6 @@ add_action( 'wp_print_footer_scripts', function(){
 <?php });
 
 /**
- * Multilingual options
- */
-add_action( 'after_setup_theme', function(){
-		
-	if (!ANONY_WPML_HELP::isActive()) return;
-	
-	$options = apply_filters( 'anony_wpml_multilingual_options', [] );
-		
-	if (is_array($options) && $options != [] ){
-		
-		foreach ($options as $option) {
-			do_action('wpml_multilingual_options', $option);
-		}
-	}
-		
-	
-}, 1);
-
-/**
  * Display only children terms
  * 
  * @return array

@@ -9,30 +9,21 @@
 
 if ( ! class_exists( 'ANONY_WPDATE_HELP' ) ) {
 	class ANONY_WPDATE_HELP extends ANONY_HELP{
+		
 		/**
-		 * Check if valid date
-		 * @param string $date 
-		 * @return boolean true on success otherwise false
+		 * Check if a date has passed
+		 * @param string $datetime Date time string
+		 * @return bool
 		 */
-		static function isDate($date){
-			// date example mm-dd-year -> 09-25-2012
-			$datechunks = explode("-",$date);
-			if(sizeof($datechunks)==3){
-				if(is_numeric($datechunks[0]) && is_numeric($datechunks[1]) && is_numeric($datechunks[2]))
-				{
-					// now check if its a valid date
-					if(checkdate($datechunks[0], $datechunks[1], $datechunks[2])){
-					return true;
-					}else{
-					return false;
-					}
+		static function isPastDate($datetime){
+    
+		    $date = new DateTime( $datetime );
+		    
+		    $current = new DateTime(current_time('mysql')); // current date
 
-				}else{
-				return false;
-				}
-			}
-			
-			return false;
+		    if($date > $current) return false; //Course hasn't been started
+		    
+		    return true; //Course has been started
 		}
 
 		

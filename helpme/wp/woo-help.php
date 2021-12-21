@@ -358,4 +358,5 @@ if ( ! class_exists( 'ANONY_WOO_HELP' ) ) {
 			return $product_name;
 		}
 }
+}
 

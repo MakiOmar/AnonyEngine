@@ -45,21 +45,12 @@ require_once (wp_normalize_path( ANOE_FUNC_DIR . 'phpoffice.php' ));
  */
 function anonyCommonScripts(){
 
-	//Enqueue styles
-	$styles = ['anonyengine'];
-	foreach($styles as $style){
-		wp_enqueue_style( $style , ANOE_URI .'assets/css/'.$style.'.css' , false, filemtime(wp_normalize_path(ANOE_DIR .'assets/css/'.$style.'.css')) );
-	}
-
+	
 
 	$scripts = ['jquery.helpme'];
 	foreach($scripts as $script){
 		wp_enqueue_script( $script , ANOE_URI . 'assets/js/'.$script.'.js' ,array('jquery'),filemtime(wp_normalize_path( ANOE_DIR .'/assets/js/'.$script.'.js')),true);
 	}
-
-	/**
-	 * Register styles/Scripts
-	 */ 
 
 	//Register styles
 	$styles = ['jquery.ui.slider-rtl'];
@@ -70,7 +61,7 @@ function anonyCommonScripts(){
 	//equeue scripts
 	$scripts = ['jquery.ui.slider-rtl.min'];
 	foreach($scripts as $script){
-		wp_enqueue_script( $script , ANOE_URI . 'assets/js/'.$script.'.js' ,array('jquery', 'jquery-ui-slider'),filemtime(wp_normalize_path( ANOE_DIR .'/assets/js/'.$script.'.js')),true);
+		wp_register_style( $script , ANOE_URI . 'assets/js/'.$script.'.js' ,array('jquery', 'jquery-ui-slider'),filemtime(wp_normalize_path( ANOE_DIR .'/assets/js/'.$script.'.js')),true);
 	}
 }
 
@@ -79,6 +70,14 @@ function anonyCommonScripts(){
  */
 add_action('wp_enqueue_scripts','anonyCommonScripts');
 add_action('admin_enqueue_scripts','anonyCommonScripts');
+add_action('admin_enqueue_scripts',function(){
+	//Enqueue styles
+	$styles = ['anonyengine'];
+	foreach($styles as $style){
+		wp_enqueue_style( $style , ANOE_URI .'assets/css/'.$style.'.css' , false, filemtime(wp_normalize_path(ANOE_DIR .'assets/css/'.$style.'.css')) );
+	}
+
+});
 
 
 add_action( 'activated_plugin', function(){

@@ -1,14 +1,19 @@
 <?php
 
+$share_by_email = false;
+
+if (!$share_by_email) return;
+
 require_once 'ajax.php';
 
 add_action( 'wp_enqueue_scripts', function(){
     $path = ANOE_UTLS_DIR . 'share-by-email/';
     $uri  = ANOE_UTLS_URI . 'share-by-email/';
+        
 
     wp_enqueue_style( 'anony-sharebyemail' , $uri . 'share-form-style.css',false, filemtime($path . 'share-form-style.css') );
 
-    wp_enqueue_script( 'anony-sharebyemail-script' , $uri . 'share-script.js',['jquery'], filemtime($path . 'share-script.js') );
+    wp_register_script( 'anony-sharebyemail' , $uri . 'share-script.js',['jquery'], filemtime($path . 'share-script.js') );
 });
 
 add_action( 'anony_after_page_footer' , function(){

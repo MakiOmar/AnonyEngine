@@ -38,6 +38,7 @@ class ANONY_Textarea{
 		$cols  = isset( $this->parent->field['columns'] ) ? $this->parent->field['columns'] : 24;
 		
 		$rows  = isset( $this->parent->field['rows'] ) ? $this->parent->field['rows'] : 5;		
+		$text_align  = isset( $this->parent->field['text-align'] ) ? $this->parent->field['text-align'] : 'initial';
 		
 		if ($this->parent->as_template) {
 			$html	= sprintf( 
@@ -45,7 +46,8 @@ class ANONY_Textarea{
 						$this->parent->field['id']
 					);
 			$html  .= sprintf( 
-						'<textarea class="%1$s anony-row" rows="'.$rows.'" cols="'.$cols.'" name="%2$s" %3$s %4$s %5$s></textarea>', 
+						'<textarea style="text-align:%1$s" class="%2$s anony-row" rows="'.$rows.'" cols="'.$cols.'" name="%3$s" %4$s %5$s %5$s></textarea>', 
+						$text_align,
 						$class,
 						$this->parent->input_name, 
 						$readonly,
@@ -69,7 +71,8 @@ class ANONY_Textarea{
 		}
 
 		$html  .= sprintf( 
-						'<textarea class="%1$s" rows="'.$rows.'" cols="'.$cols.'" id="%2$s" name="%2$s" %3$s %4$s %5$s>%6$s</textarea>', 
+						'<textarea style="text-align:%1$s" class="%2$s" rows="'.$rows.'" cols="'.$cols.'" id="%3$s" name="%3$s" %4$s %5$s %6$s>%7$s</textarea>',
+						$text_align,
 						$class,
 						$this->parent->input_name, 
 						$readonly,

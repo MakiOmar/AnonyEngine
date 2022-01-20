@@ -30,5 +30,16 @@ if ( ! class_exists( 'ANONY_STRING_HELP' ) ) {
 			return implode($delimiter, array_map('ucfirst', explode($delimiter, $q)));
 		}
 
+		/**
+		 * Read textarea content line by line
+		 * @param string content
+		 * @return array
+		 */
+		static function lineByLineTextArea($content){
+
+			return explode("\r\n", trim($content));
+
+		}
+
 	}
 }

@@ -7,14 +7,14 @@ define('ANONY_GOOGLE_MAP_API','AIzaSyB6ieIzFEqkoEHM9mP1Iq5bt9HR__F-04E');
 
 
 /**
- * Holds a URI to metaboxes folder
+ * Holds a path to metaboxes folder
  * @const
  */
 define('ANONY_MB_PATH', wp_normalize_path(ANOE_DIR . 'metaboxes/')); 
 
 
 /**
- * Holds a path plugin's folder
+ * Holds a URI plugin's folder
  * @const
  */
 define('ANONY_MB_URI', ANOE_URI . 'metaboxes/');
@@ -25,11 +25,6 @@ define('ANONY_MB_URI', ANOE_URI . 'metaboxes/');
  */
 define('ANONY_MB_CLASSES', ANONY_MB_PATH .'classes/' );
 
-/**
- * Holds a URI to Custom fields classes folder
- * @const
- */
-define( 'ANONY_MB_FIELDS', ANONY_MB_PATH . 'fields/');
 
 /**
  * Holds a serialized array of all pathes to classes folders

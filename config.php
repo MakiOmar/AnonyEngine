@@ -19,9 +19,16 @@ define('ANOE_TEXTDOM', 'anonyengine');
  */
 define('ANOE_URI', plugin_dir_url( __FILE__ ));
 
+/**
+ * Holds common classes path
+ * @const
+ */
+define('ANOE_COMMON_CLASSES', wp_normalize_path(ANOE_DIR . 'common-classes/'));
+
 /*----------------------required sub-configs----------------*/
 
 require_once( wp_normalize_path( ANOE_FUNC_DIR . 'post.php' ) );
+require_once( wp_normalize_path( ANOE_DIR . 'forms/forms.php' ) );
 require_once( wp_normalize_path( ANOE_DIR . 'metaboxes/metaboxes.php' ) );
 require_once( wp_normalize_path( ANOE_DIR . 'helpme/helpme.php') );
 require_once( wp_normalize_path( ANOE_DIR . 'input-fields/index.php') );
@@ -33,8 +40,11 @@ require_once( wp_normalize_path( ANOE_DIR . 'options/options.php') );
 /*----------------------Autoloading -------------------------*/
 
 define('ANOE_AUTOLOADS' ,serialize(array(
+	/*----Common Classes-----------*/
+
+	ANOE_COMMON_CLASSES,
+
 	/*----Metaboxes-----------*/
-	ANONY_MB_FIELDS,
 	ANONY_MB_CLASSES,
 	/*----Helpers-----------*/
 	ANONY_HLP_PHP,

@@ -3,7 +3,7 @@ if ( !defined('ABSPATH') ) exit();
 /**
  * Plugin Name: AnonyEngine
  * Plugin URI: https://makiomar.com
- * Description: With AnonyEngine you can add any kind of metaboxes and options pages easily and supper fast
+ * Description: With AnonyEngine you can add any kind of metaboxes and options pages and forms easily and supper fast
  * Version: 1.0.0
  * Author: Mohammad Omar
  * Author URI: https://makiomar.com

@@ -51,11 +51,19 @@ function anonyCommonScripts(){
 	foreach($scripts as $script){
 		wp_enqueue_script( $script , ANOE_URI . 'assets/js/'.$script.'.js' ,array('jquery'),filemtime(wp_normalize_path( ANOE_DIR .'/assets/js/'.$script.'.js')),true);
 	}
-
+	
 	//Register styles
-	$styles = ['jquery.ui.slider-rtl'];
+	$styles_libs = ['jquery.ui.slider-rtl'];
+	
+	$styles = [ 'responsive', 'anonyengine'];
+	
+	$styles = array_merge($styles, $styles_libs);
+	
 	foreach($styles as $style){
-		wp_register_style( $style , ANOE_URI .'assets/css/'.$style.'.css' , false, filemtime(wp_normalize_path(ANOE_DIR .'assets/css/'.$style.'.css')) );
+		
+		$handle = in_array($style, $styles_libs) ? $style : 'anony-' . $style;
+		
+		wp_enqueue_style( $handle , ANOE_URI .'assets/css/'.$style.'.css' , false, filemtime(wp_normalize_path(ANOE_DIR .'assets/css/'.$style.'.css')) );
 	}
 
 	//equeue scripts
@@ -70,14 +78,6 @@ function anonyCommonScripts(){
  */
 add_action('wp_enqueue_scripts','anonyCommonScripts');
 add_action('admin_enqueue_scripts','anonyCommonScripts');
-add_action('admin_enqueue_scripts',function(){
-	//Enqueue styles
-	$styles = ['anonyengine'];
-	foreach($styles as $style){
-		wp_enqueue_style( $style , ANOE_URI .'assets/css/'.$style.'.css' , false, filemtime(wp_normalize_path(ANOE_DIR .'assets/css/'.$style.'.css')) );
-	}
-
-});
 
 
 add_action( 'activated_plugin', function(){

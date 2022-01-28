@@ -70,11 +70,16 @@ if( ! class_exists( 'ANONY_Input_Field' )){
 		 * @var int index of multi value fields in multi value array 
 		 */
 		public $index;
+		
+		/**
+		 * @var string field width . Default is 12 columns
+		 */
+		public $width = ' anony-grid-col-12';
 
 		/**
 		 * Inpud field constructor That decides field context
 		 * @param array    $field    An array of field's data
-		 * @param string   $context  The context of where the field is used
+		 * @param string   $context  The context of where the field is used (option | meta | form)
 		 * @param int|null $object_id  Should be an integer if the context is meta box
 		 */
 		function __construct($field, $metabox_id = null, $context = 'option', $object_id = null, $as_template = false, $field_value = null, $index = null)
@@ -95,10 +100,12 @@ if( ! class_exists( 'ANONY_Input_Field' )){
 			$this->object_id     = $object_id;
 
 			$this->context     = $context;
-
+			
 			$this->default     = isset($this->field['default']) ? $this->field['default'] : '';
 
 			$this->class_attr  = ( isset($this->field['class']) ) ? $this->field['class'] : 'anony-input-field';
+			
+			$this->width  = ( isset($this->field['width']) ) ? ' anony-grid-col-'.$this->field['width'] : $this->width;
 
 			$this->set_field_data();
 
@@ -121,6 +128,10 @@ if( ! class_exists( 'ANONY_Input_Field' )){
 				case 'term':
 						$this->meta_field_data();
 					break;
+					
+				case 'form':
+						$this->form_field_data();
+					break;
 				
 				default:
 					$this->input_name = $this->field['id'];
@@ -140,6 +151,13 @@ if( ! class_exists( 'ANONY_Input_Field' )){
 			
 			$this->value = (isset($this->options->$fieldID) && !empty($this->options->$fieldID)) ? $this->options->$fieldID : $this->default;
 			
+		}
+		
+		public function form_field_data(){
+			$this->input_name = isset($this->field['name']) ? $this->field['name'] : $this->field['id'];
+			$this->value = $this->default;
+			
+			$this->value = apply_filters('anony_form_value', $this->value, $this->field['id'], $this->metabox_id);
 		}
 
 		/**
@@ -193,7 +211,7 @@ if( ! class_exists( 'ANONY_Input_Field' )){
 					$this->field_class = 'ANONY_Mixed';
 				}else
 				{
-					$this->field_class = 'ANONY_'.ucfirst($this->field['type']);
+					$this->field_class = str_replace('-','_', 'ANONY_'.ucfirst($this->field['type']));
 
 				}
 				
@@ -205,11 +223,11 @@ if( ! class_exists( 'ANONY_Input_Field' )){
 		 * Initialize options field
 		 */
 		function field_init(){
+			
 			if(!is_null($this->field_class) && class_exists($this->field_class))
 			{
 				
 				$field_class = $this->field_class;
-				
 							
 				$field = new $field_class($this);
 
@@ -243,6 +261,7 @@ if( ! class_exists( 'ANONY_Input_Field' )){
 
 					if(method_exists($field, 'renderDisplay')) return $field->renderDisplay();
 				}else{
+				
 					return $field->render();
 				}
 

@@ -288,7 +288,7 @@ if(!class_exists('ANONY_Validate_Inputs')){
 			$temp['count'] = $count;
 			foreach ($this->value as $name => $v) {
 				foreach ($v as $key => $value) {
-					$value = wp_strip_all_tags( $value );
+					$value = strip_tags( $value );
 
 					$temp[$name][$key] = $value;
 				
@@ -322,23 +322,20 @@ if(!class_exists('ANONY_Validate_Inputs')){
 		 * Remove html within input
 		 */
 		public function valid_no_html(){
-
-			$sanitization = $this->sanitization;
+			
 			
 			if(is_array($this->value)){
 
 				foreach ($this->value as $value) {
 					
-					if($sanitization($value) != $value){
+					if(strip_tags($value) != $value){
 						$this->valid = false;
 
 						return $this->set_error_code('remove-html');
 					}
 				}
-				die();
 			}else{
-
-				if($sanitization($this->value) != $this->value){
+				if(strip_tags($this->value) != $this->value){
 
 					$this->valid = false;
 
@@ -376,7 +373,7 @@ if(!class_exists('ANONY_Validate_Inputs')){
 			
 			if($this->value == '#' || empty($this->value)) return;
 			
-			if (esc_url($this->value) != $this->value ) {
+			if (filter_var($this->value, FILTER_VALIDATE_URL) !== FALSE ) {
 				
 				$this->valid = false;
 

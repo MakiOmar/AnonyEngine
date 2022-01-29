@@ -189,5 +189,24 @@ if ( ! class_exists( 'ANONY_ARRAY_HELP' ) ) {
 			
 			return $resutl;
 		}
+		
+		/**
+		 * Compairs two associative arrays and replace default values of first array with new value in second array
+		 * @param  array $defaults 
+		 * @param  array $atts
+		 * @return array
+		 */
+		static function defaultsMapping( array $defaults, array $atts) {
+			$out  = [];
+			foreach ( $defaults as $name => $default ) {
+				
+				if ( array_key_exists( $name, $atts ) ) {
+					$out[ $name ] = $atts[ $name ];
+				} else {
+					$out[ $name ] = $default;
+				}
+			}
+			return $out;
+		}
 	}
 }

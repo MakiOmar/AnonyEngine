@@ -41,9 +41,7 @@ require_once( wp_normalize_path( ANOE_DIR . 'options/options.php') );
 
 define('ANOE_AUTOLOADS' ,serialize(array(
 	/*----Common Classes-----------*/
-
 	ANOE_COMMON_CLASSES,
-
 	/*----Metaboxes-----------*/
 	ANONY_MB_CLASSES,
 	/*----Helpers-----------*/
@@ -57,7 +55,10 @@ define('ANOE_AUTOLOADS' ,serialize(array(
 	ANONY_OPTIONS_DIR , 
 	ANONY_OPTIONS_FIELDS, 
 	ANONY_OPTIONS_WIDGETS,
-	ANONY_INPUT_FIELDS
+	ANONY_INPUT_FIELDS,
+	/*-----Forms-----*/
+	ANONY_FORMS_CLASSES,
+	
 )));
 
 

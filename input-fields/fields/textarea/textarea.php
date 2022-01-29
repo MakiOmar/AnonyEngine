@@ -42,8 +42,9 @@ class ANONY_Textarea{
 		
 		if ($this->parent->as_template) {
 			$html	= sprintf( 
-						'<fieldset class="anony-row">', 
-						$this->parent->field['id']
+						'<fieldset class="anony-row%2$s" id="fieldset_%1$s">', 
+						$this->parent->field['id'],
+						$this->parent->width
 					);
 			$html  .= sprintf( 
 						'<textarea style="text-align:%1$s" class="%2$s anony-row" rows="'.$rows.'" cols="'.$cols.'" name="%3$s" %4$s %5$s %5$s></textarea>', 
@@ -59,10 +60,11 @@ class ANONY_Textarea{
 		}
 		
 		$html	= sprintf( 
-						'<fieldset class="anony-row" id="fieldset_%1$s">', 
-						$this->parent->field['id']
+						'<fieldset class="anony-row%2$s" id="fieldset_%1$s">', 
+						$this->parent->field['id'],
+						$this->parent->width
 					);
-		if($this->parent->context == 'meta' && isset($this->parent->field['title'])){
+		if(in_array($this->parent->context, ['meta', 'form']) && isset($this->parent->field['title'])){
 			$html	.= sprintf( 
 							'<label class="anony-label" for="anony_%1$s">%2$s</label>', 
 							$this->parent->field['id'], 

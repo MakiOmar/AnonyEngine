@@ -48,7 +48,7 @@ class ANONY_Select{
 			echo '<p class=anony-warning>'.$this->parent->field['note'].'<p>';
 		}
 		
-		if($this->parent->context == 'meta' && isset($this->parent->field['title'])){
+		if(in_array($this->parent->context, ['meta', 'form']) && isset($this->parent->field['title'])){
 			$html .= sprintf( 
 						'<label class="anony-label" for="%1$s">%2$s</label>', 
 						$this->parent->field['id'], 

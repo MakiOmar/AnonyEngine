@@ -62,9 +62,10 @@ class ANONY_Mixed{
 
 		if ($this->parent->as_template) {
 			$html = sprintf( 
-					'<fieldset class="anony-row anony-row-inline"%2$s>', 
+					'<fieldset class="anony-row anony-row-inline"%2$s%3$s>', 
 					$this->parent->field['id'],
-					$this->parent->field['type'] == 'hidden' ? ' style="display:none"' : ''
+					$this->parent->field['type'] == 'hidden' ? ' style="display:none"' : '',
+				    $this->parent->width
 				);
 			$html .= sprintf(
 					'<input  type="%1$s" name="%2$s" class="%3$s anony-row" %4$s %5$s %6$s/>', 
@@ -81,16 +82,17 @@ class ANONY_Mixed{
 		}
 		
 		$html = sprintf( 
-					'<fieldset class="anony-row anony-row-inline" id="fieldset_%1$s"%2$s>', 
+					'<fieldset class="anony-row anony-row-inline%3$s" id="fieldset_%1$s"%2$s>', 
 					$this->parent->field['id'],
-					$this->parent->field['type'] == 'hidden' ? ' style="display:none"' : ''
+					$this->parent->field['type'] == 'hidden' ? ' style="display:none"' : '',
+					$this->parent->width
 				);
 
 		if(isset($this->parent->field['note'])){
 			echo '<p class=anony-warning>'.$this->parent->field['note'].'<p>';
 		}
 
-		if($this->parent->context == 'meta' && isset($this->parent->field['title'])){
+		if(in_array($this->parent->context, ['meta', 'form'])  && isset($this->parent->field['title'])){
 			$html .= sprintf( 
 						'<label class="anony-label" for="%1$s">%2$s</label>', 
 						$this->parent->field['id'], 

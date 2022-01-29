@@ -69,7 +69,7 @@ class ANONY_Radio_img{
 							);
 				
 						$html .= sprintf(
-									'<input type="radio" id="%1$s_%2$s" name="%3$s" %4$s value="%5$s" %6$s/>', 
+									'<input type="radio" id="%1$s_%2$s" name="%3$s" class="%4$s" value="%5$s" %6$s/>', 
 									$this->parent->field['id'], 
 									$search, 
 									$this->parent->input_name, 

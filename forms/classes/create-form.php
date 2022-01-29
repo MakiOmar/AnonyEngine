@@ -131,6 +131,7 @@ if( ! class_exists( 'ANONY_Create_Form' )){
 			
 			if($_SERVER['REQUEST_METHOD'] !== 'POST') return;
 			foreach($fields as $field):
+				if(!isset($_POST[$field['id']])) continue;
 				$this->validate($field);
 			endforeach;
 			

@@ -23,7 +23,7 @@
 	outline: 0;
 	transition: 50ms border-color ease-in-out;
 	border-radius: 10px;
-	padding: 5px;
+	padding: 5px 10px;
     min-height: 35px;
     min-width: 200px;
 }
@@ -33,9 +33,18 @@
     min-width: auto;
 }
 
-.anony-input-field{
-	min-width: 120px;
-    text-align: center;
+input[type="search"], input[type="tel"], input[type="text"], input[type="email"], input[type="password"], input[type="url"],select, textarea {
+	outline: none;
+	padding: 10px;
+	margin: 5px;
+	border: none;
+	color: #222222;
+	border-radius: 6px;
+	border: 1px solid #d7d7d7;
+}
+select{
+	background-color: #fff;
+	min-width: 250px
 }
 
 /* -------------- .multi-text -------------- */
@@ -62,6 +71,10 @@
     border-radius: 10px;
 }
 
+fieldset{
+	border:none
+}
+
 /* -------------- jQuery UI -------------- */
 
 /* .ui-slider */
@@ -83,7 +96,23 @@
     display: block!important;
     font-weight: bold;
 }
+.anony-form-group-heading{
+	background-color: #c4c4c4;
+	color: #333;
+	padding: 8px;
+	font-size: 25px;
+	position:relative
+}
 
+.anony-form-group-heading > i{
+	position: absolute;
+	left: 30px;
+	top: 35%;
+	cursor: pointer
+}
+.anony-form-group-container.collapsible{
+	display:none
+}
 .anony-btn-close, .anony-remove-tab{
     font-weight: bold;
     padding: 5px;
@@ -106,6 +135,9 @@
 }
 [id*='fieldset_anony']  .form-table input.small-text{
     min-width: 150px;
+}
+fieldset .anony-form-heading{
+	color:#000
 }
 .anony-label{
    font-weight: bold;

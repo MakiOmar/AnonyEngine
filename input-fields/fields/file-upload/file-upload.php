@@ -50,7 +50,7 @@ class ANONY_File_upload{
 		$value  = $this->parent->value;
 		$file_url = false;
 		if($value !== ''){
-			$file_url = wp_get_attachment_url( intval($value) ) ?  esc_url( wp_get_attachment_url( intval($value) ) )  : flase;
+			$file_url = wp_get_attachment_url( intval($value) ) ?  esc_url( wp_get_attachment_url( intval($value) ) )  : false;
 			$basename = basename($file_url);
 		}
 		

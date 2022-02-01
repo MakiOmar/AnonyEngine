@@ -250,18 +250,104 @@ if ( ! class_exists( 'ANONY_WPML_HELP' ) ) {
 
 		    if (!$post_translated_id || is_wp_error($post_translated_id)) return $post_translated_id;
 
-		    $trid = wpml_get_content_trid( 'post_' . $post_type, $post_id );
-
-		    // Get default language
-		    $default_lang = wpml_get_default_language();
-
-		    // Associate original post and translated post
-		    global $wpdb;
-		    $wpdb->update( $wpdb->prefix.'icl_translations', array( 'trid' => $trid, 'element_type' => 'post_post', 'language_code' => $lang, 'source_language_code' => $default_lang ), array( 'element_id' => $post_translated_id ) );
+		    self::connectPostTranslation( $post_id ,$post_translated_id, $post_type, $lang );
 
 		    // Return translated post ID
 		    return $post_translated_id;
 
+		}
+
+		/**
+		 * Add post translation
+		 * @param  int    $post_id ID of original post
+		 * @param  int    $post_translated_id ID of translated post 
+		 * @param  string $post_type
+		 * @param  string $lang Language of translation
+		 * @return void 
+		 */
+		static function connectPostTranslation( $post_id ,$post_translated_id, $post_type, $lang ){
+
+			global $sitepress;
+
+			$trid = wpml_get_content_trid( 'post_' . $post_type, $post_id );
+
+			$sitepress->set_element_language_details($post_translated_id , 'post_' . $post_type, $trid, $lang);
+
+		}
+
+		/**
+		 * Add term translation
+		 * @param  int    $post_id ID of original post
+		 * @param  int    $post_translated_id ID of translated post 
+		 * @param  string $post_type
+		 * @param  string $lang Language of translation
+		 * @return void 
+		 */
+		static function connectTermTranslation( $translated_term_taxonomy_id, $term_taxonomy_id , $taxonomy, $lang ){
+
+			global $sitepress;
+
+			$trid = $sitepress->get_element_trid($term_taxonomy_id, 'tax_' . $taxonomy);
+
+			$sitepress->set_element_language_details($translated_term_taxonomy_id , 'tax_' . $taxonomy, $trid, $lang, $sitepress->get_default_language());
+
+		}
+
+		/**
+		 * Add product translation
+		 * @param  int    $product_id ID of product to be translated 
+		 * @param  string $lang Language of translation
+		 * @return Mixed  Translated post id on success or null/wp_error on failure
+		 */
+		static function translateProduct( $product_id , $lang ){
+			if(!class_exists('woocommerce')) return;
+
+			//Check if translation already exists;
+			$is_translated = apply_filters( 'wpml_element_has_translations', NULL , $product_id , 'product' );
+
+			if($is_translated) return;
+
+			$duplicated_product = ANONY_WOO_HELP::duplicateProduct($product_id);
+
+			if(!$duplicated_product) return;
+
+			$duplicated_id = $duplicated_product->get_id();
+
+
+			self::connectPostTranslation( $product_id ,$duplicated_id, 'product', $lang );
+		}
+
+		/**
+		 * Add product translation
+		 * @param  int    $product_id ID of product to be translated 
+		 * @param  string $lang Language of translation
+		 * @return Mixed  Translated post id on success or null/wp_error on failure
+		 */
+		static function translateTerm( $term_id , $lang, $taxonomy ){
+			
+			global $sitepress;
+
+			//Check if translation already exists;
+			$is_translated = apply_filters( 'wpml_element_has_translations', NULL , $term_id , $taxonomy );
+			
+			if($is_translated) return;
+
+			$term = get_term_by('id', $term_id, $taxonomy);
+
+			if(!$term) return;
+
+			$args = [
+				'description'=> $term->description , 
+				'slug' => $term->slug.'-'. $lang, 
+			];
+
+			$inserted_term_id = wp_insert_term( $term->name.'-'. $lang, $taxonomy, $args );
+
+			if(is_wp_error($inserted_term_id)) return;
+
+
+			self::connectTermTranslation( $inserted_term_id['term_taxonomy_id'] ,$term->term_taxonomy_id, $taxonomy, $lang );
+			
 		}
 	}
 }

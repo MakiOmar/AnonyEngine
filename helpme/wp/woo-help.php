@@ -60,7 +60,7 @@ if ( ! class_exists( 'ANONY_WOO_HELP' ) ) {
 		    delete_transient('wc_attribute_taxonomies');
 		}
 		
-		public static function addProductReview($comment_data){
+		public static function addProductReview($comment_data , $rating = 3){
 			global $post, $product;
 			
 			if($post->post_type !== "product") return;
@@ -70,7 +70,7 @@ if ( ! class_exists( 'ANONY_WOO_HELP' ) ) {
 				$comment_id = wp_insert_comment($comment_data);
 
 				// HERE inserting the rating (an integer from 1 to 5)
-				update_comment_meta( $comment_id, 'rating', 3 );
+				update_comment_meta( $comment_id, 'rating', $rating );
 			}
 			
 			
@@ -357,6 +357,6 @@ if ( ! class_exists( 'ANONY_WOO_HELP' ) ) {
 
 			return $product_name;
 		}
-}
+	}
 }
 

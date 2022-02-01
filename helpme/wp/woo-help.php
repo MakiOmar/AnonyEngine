@@ -357,6 +357,17 @@ if ( ! class_exists( 'ANONY_WOO_HELP' ) ) {
 
 			return $product_name;
 		}
+
+		/**
+		 * Add product duplicate
+		 * @param  int    $product_id ID of product to be duplicate 
+		 * @return WC_Product The duplicate.
+		 */
+		static function duplicateProduct($product_id){
+
+			$wc_adp = new WC_Admin_Duplicate_Product;
+			return $wc_adp->product_duplicate( wc_get_product( $product_id ) );
+		}
 	}
 }
 

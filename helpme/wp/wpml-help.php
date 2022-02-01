@@ -217,5 +217,51 @@ if ( ! class_exists( 'ANONY_WPML_HELP' ) ) {
 		    return $translated_term_object;	
 		    
 		}
+		/**
+		 * Add post translation
+		 * @param  int    $post_id ID of post to be translated 
+		 * @param  string $post_type
+		 * @param  string $lang Language of translation
+		 * @return Mixed  Translated post id on success or null/wp_error on failure
+		 */
+		static function apiWpmlTranslatePost( $post_id, $post_type, $lang ){
+
+			if ( !self::isActive()) return $post_id;
+
+		    // Include WPML API
+		    include_once( WP_PLUGIN_DIR . '/sitepress-multilingual-cms/inc/wpml-api.php' );
+
+		    // Define title of translated post
+		    $post_translated_title = get_post( $post_id )->post_title . ' (' . $lang . ')';
+
+		    //Define content of translated post
+		    $post_translated_title = get_post( $post_id )->post_content;
+
+		    //Define excerpt of translated post
+		    $post_translated_title = get_post( $post_id )->post_excerpt;
+
+		    // Insert translated post
+		    $post_translated_id = wp_insert_post( [ 
+		    	'post_title'   => $post_translated_title, 
+		    	'post_type'    => $post_type,
+		    	'post_content' => $post_content,
+		    	'post_excerpt' => $post_excerpt,
+		    ] );
+
+		    if (!$post_translated_id || is_wp_error($post_translated_id)) return $post_translated_id;
+
+		    $trid = wpml_get_content_trid( 'post_' . $post_type, $post_id );
+
+		    // Get default language
+		    $default_lang = wpml_get_default_language();
+
+		    // Associate original post and translated post
+		    global $wpdb;
+		    $wpdb->update( $wpdb->prefix.'icl_translations', array( 'trid' => $trid, 'element_type' => 'post_post', 'language_code' => $lang, 'source_language_code' => $default_lang ), array( 'element_id' => $post_translated_id ) );
+
+		    // Return translated post ID
+		    return $post_translated_id;
+
+		}
 	}
 }

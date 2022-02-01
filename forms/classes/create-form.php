@@ -6,48 +6,48 @@ if( ! class_exists( 'ANONY_Create_Form' )){
 		/**
 		 * @var string form's ID. should be unique foreach form
 		 */
-		protected $id = null;
+		public $id = null;
 		
 		/**
 		 * @var string form's method
 		 */
-		protected $method = 'post';
+		public $method = 'post';
 		
 		/**
 		 * @var string form's action
 		 */
-		protected $action = '';
+		public $action = '';
 		
 		/**
 		 * @var string form's attributes
 		 */
-		protected $form_attributes = '';
+		public $form_attributes = '';
 		
 		/**
 		 * @var array form errors
 		 */
-		protected $errors = [];
+		public $errors = [];
 		
 		/**
 		 * @var array form settings
 		 */
-		protected $settings = [];
+		public $settings = [];
 		
 		/**
 		 * @var array Form mandatory fields
 		 */
-		protected $form_init = ['id', 'fields'];
+		public $form_init = ['id', 'fields'];
 		
 		/**
 		 * @var array fields that can't be validated
 		 */
-		protected $no_validation = ['heading', 'group-start', 'group-close'];
+		public $no_validation = ['heading', 'group-start', 'group-close'];
 		
 		
 		/**
 		 * @var array Form fields
 		 */
-		protected $fields;
+		public $fields;
 		
 		
 		/**
@@ -73,6 +73,7 @@ if( ! class_exists( 'ANONY_Create_Form' )){
 				$this->errors['missing-for-id'] = esc_html__('Form id is missing');
 			}
 			
+			
 			extract ($form);
 			
 			//Set form Settings
@@ -81,20 +82,28 @@ if( ! class_exists( 'ANONY_Create_Form' )){
 			$this->id =  $id;
 			$this->fields =  $fields;
 			
+			add_shortcode($this->id, [$this, 'createShortcode']);
+			
 			//Submitted form
-			$this->formSubmitted();
+			add_action('init', [$this, 'formSubmitted']);
 						
-			$this->create($this->fields);
+			
 		}
 		
-		protected function formSettings(array $form_settings){
+		function createShortcode(){
+			ob_start();
+			$this->create($this->fields);
+			return ob_get_clean();
+		}
+		
+		public function formSettings(array $form_settings){
 			$this->settings['inline_lable'] = true;
 			
 			$this->settings = ANONY_ARRAY_HELP::defaultsMapping($this->settings, $form_settings);
 
 		}
 		
-		protected function create(array $fields){
+		public function create(array $fields){
 			extract ($this->settings);
 			if(false !== $this->error_msgs = get_transient('anony_form_errors_'.$this->id) ){
 				echo '<ul>';
@@ -127,7 +136,7 @@ if( ! class_exists( 'ANONY_Create_Form' )){
 		
 		}
 		
-		protected function validateFormFields($fields){
+		public function validateFormFields($fields){
 			
 			if($_SERVER['REQUEST_METHOD'] !== 'POST') return;
 			foreach($fields as $field):
@@ -136,7 +145,7 @@ if( ! class_exists( 'ANONY_Create_Form' )){
 			endforeach;
 			
 		}
-		protected function validate($field){
+		public function validate($field){
 			
 			$notValidated = $_POST;
 			//Types that can't be validated
@@ -177,7 +186,7 @@ if( ! class_exists( 'ANONY_Create_Form' )){
 			}
 		}
 		
-		protected function formSubmitted(){
+		public function formSubmitted(){
 			
 			if($_SERVER['REQUEST_METHOD'] !== 'POST' && !isset($_POST['submit-'. $this->id ])) return;
 			

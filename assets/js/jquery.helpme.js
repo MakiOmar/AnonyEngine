@@ -23,7 +23,7 @@ jQuery(document).ready(function($){
     }
     $.fn.AnonyEraseCookie = function(name) {
 	    createCookie(name,"",-1);
-	}​
+	}
 	//Apply mutation observer on a querySelector and apply a callback function
 	$.fn.AnonyObserve = function(querySelector, callback){
 

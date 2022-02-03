@@ -252,6 +252,71 @@ if ( ! class_exists( 'ANONY_POST_HELP' ) ) {
 
 			return array_values($metaValues);	
 		}
+		
+		/**
+		* Duplicates a post & its meta and it returns the new duplicated Post ID
+		* @param  [int] $post_id The Post you want to clone
+		* @param  [array] args New post args
+		* @return [int] The duplicated Post ID
+		*/
+		static function duplicate($post_id, $args = []) {
+			//delete_transient('duplicated_posts'); return;
+			if( ! current_user_can( 'edit_posts' ) )  return;
+			$duplicated = [];
+			
+			
+			if(get_transient('duplicated_posts')){
+				$duplicated = get_transient('duplicated_posts');
+			}else{
+				set_transient('duplicated_posts', []);
+			} 
+			
+			if(in_array($post_id, $duplicated)) return;
+			
+			$oldpost = get_post($post_id, ARRAY_A);
+			
+			if(!$oldpost || is_null($oldpost)) return;
+
+			unset($oldpost['ID'], $oldpost['guid']);
+
+			ANONY_WPARRAY_HELP::wpParseArgs( $oldpost, $args );
+
+			$new_post_id = wp_insert_post($oldpost);
+
+			if(!$new_post_id || is_wp_error($new_post_id)) return $new_post_id;
+
+			// Copy post metadata
+			$data = get_post_custom($post_id);
+			foreach ( $data as $key => $values) {
+
+				if( '_wp_old_slug' == $key ) { // do nothing for this meta key
+					continue;
+				}
+
+			  foreach ($values as $value) {
+				add_post_meta( $new_post_id, $key, maybe_unserialize( $value ) );// it is important to unserialize data to avoid conflicts.
+			  }
+			}
+			
+			if(!ANONY_WPML_HELP::isActive()){
+				/*
+				 * get all current post terms ad set them to the new post draft
+				 */
+				$taxonomies = get_object_taxonomies( $oldpost['post_type'] ); // returns array of taxonomy names for post type, ex array("category", "post_tag");
+				if( $taxonomies ) {
+					foreach ( $taxonomies as $taxonomy ) {
+						$post_terms = wp_get_object_terms( $post_id, $taxonomy, array( 'fields' => 'slugs' ) );
+						wp_set_object_terms( $new_post_id, $post_terms, $taxonomy, false );
+					}
+				}
+			}
+			
+			
+			$duplicated[] = $post_id;
+			
+			set_transient('duplicated_posts', $duplicated);
+			return $new_post_id;
+		}
 
 	}
 }

@@ -9,6 +9,8 @@
 
 if ( ! class_exists( 'ANONY_WPML_HELP' ) ) {
 	class ANONY_WPML_HELP extends ANONY_HELP{
+		
+
 		/**
 		 * Add WPML languages menu items
 		 * @param  string $item menu items
@@ -127,6 +129,7 @@ if ( ! class_exists( 'ANONY_WPML_HELP' ) ) {
 		 * @return string
 		 */
 		static function gatActiveLang(){
+			if(!self::isActive()) return false;
 			if(defined('ICL_LANGUAGE_CODE')) return ICL_LANGUAGE_CODE;
 			
 			return apply_filters('wpml_current_language',NULL);
@@ -180,7 +183,7 @@ if ( ! class_exists( 'ANONY_WPML_HELP' ) ) {
 		 * @return array Returns an array of post posts IDs and titles. empty array if no results
 		 */
 		static function queryPostTypeSimple($post_type = 'post'){
-			
+			if(!self::isActive()) return;
 			$results = ANONY_WPML_HELP::queryPostType($post_type);
 			
 			$postIDs = [];
@@ -201,7 +204,7 @@ if ( ! class_exists( 'ANONY_WPML_HELP' ) ) {
 		 * @return Mixed  Term object on success or null on failure
 		 */
 		static function getTranslatedTerm($term_id, $taxonomy) {
-
+			if(!self::isActive()) return;
 			global $sitepress;
 	 
 		    $translated_term_id = icl_object_id(intval($term_id), $taxonomy, false, self::gatActiveLang());
@@ -218,35 +221,61 @@ if ( ! class_exists( 'ANONY_WPML_HELP' ) ) {
 		    
 		}
 		/**
+		 * Duplicates a post
+		 * @param  int    $post_id ID of post to be duplicated 
+		 * @return Mixed  Translated post id on success or null/wp_error on failure
+		 */
+		static function duplicate( $post_id  ){
+			if(!self::isActive()) return $post_id;
+			// Insert translated post
+		    $post_duplicated_id = ANONY_POST_HELP::duplicate($post_id);
+			
+			if($post_duplicated_id){
+				$wpml_element_type = apply_filters( 'wpml_element_type', 'post' );
+				// get the language info of the original post
+				// https://wpml.org/wpml-hook/wpml_element_language_details/
+				$get_language_args = array(
+					'element_id' => $post_id, 
+					'element_type' => 'post' 
+				);
+				
+				$original_post_language_info = apply_filters( 'wpml_element_language_details', null, $get_language_args );
+				
+				
+				$set_language_args = array(
+					'element_id'    => $post_duplicated_id,
+					'element_type'  => $wpml_element_type,
+					'trid'   => NULL,
+					'language_code'   => $original_post_language_info->language_code,
+					'source_language_code' => $original_post_language_info->language_code
+				);
+
+				do_action( 'wpml_set_element_language_details', $set_language_args );
+			}
+		}
+		/**
 		 * Add post translation
 		 * @param  int    $post_id ID of post to be translated 
 		 * @param  string $post_type
 		 * @param  string $lang Language of translation
 		 * @return Mixed  Translated post id on success or null/wp_error on failure
 		 */
-		static function apiWpmlTranslatePost( $post_id, $post_type, $lang ){
+		static function translatePost( $post_id, $post_type, $lang ){
 
 			if ( !self::isActive()) return $post_id;
 
 		    // Include WPML API
 		    include_once( WP_PLUGIN_DIR . '/sitepress-multilingual-cms/inc/wpml-api.php' );
-
-		    // Define title of translated post
-		    $post_translated_title = get_post( $post_id )->post_title . ' (' . $lang . ')';
-
-		    //Define content of translated post
-		    $post_translated_title = get_post( $post_id )->post_content;
-
-		    //Define excerpt of translated post
-		    $post_translated_title = get_post( $post_id )->post_excerpt;
+			
+			$source_post = get_post( $post_id );
+			
+			// Define title of translated post
+		    $post_translated_title = $source_post->post_title . ' (' . $lang . ')';
 
 		    // Insert translated post
-		    $post_translated_id = wp_insert_post( [ 
-		    	'post_title'   => $post_translated_title, 
-		    	'post_type'    => $post_type,
-		    	'post_content' => $post_content,
-		    	'post_excerpt' => $post_excerpt,
-		    ] );
+		    $post_translated_id = ANONY_POST_HELP::duplicate($post_id, [
+				'post_title'   => $post_translated_title
+			]);
 
 		    if (!$post_translated_id || is_wp_error($post_translated_id)) return $post_translated_id;
 
@@ -266,7 +295,7 @@ if ( ! class_exists( 'ANONY_WPML_HELP' ) ) {
 		 * @return void 
 		 */
 		static function connectPostTranslation( $post_id ,$post_translated_id, $post_type, $lang ){
-
+			if(!self::isActive()) return;
 			global $sitepress;
 
 			$trid = wpml_get_content_trid( 'post_' . $post_type, $post_id );
@@ -284,7 +313,7 @@ if ( ! class_exists( 'ANONY_WPML_HELP' ) ) {
 		 * @return void 
 		 */
 		static function connectTermTranslation( $translated_term_taxonomy_id, $term_taxonomy_id , $taxonomy, $lang ){
-
+			if(!self::isActive()) return;
 			global $sitepress;
 
 			$trid = $sitepress->get_element_trid($term_taxonomy_id, 'tax_' . $taxonomy);
@@ -300,6 +329,7 @@ if ( ! class_exists( 'ANONY_WPML_HELP' ) ) {
 		 * @return Mixed  Translated post id on success or null/wp_error on failure
 		 */
 		static function translateProduct( $product_id , $lang ){
+			if(!self::isActive()) return;
 			if(!class_exists('woocommerce')) return;
 
 			//Check if translation already exists;
@@ -324,7 +354,7 @@ if ( ! class_exists( 'ANONY_WPML_HELP' ) ) {
 		 * @return Mixed  Translated post id on success or null/wp_error on failure
 		 */
 		static function translateTerm( $term_id , $lang, $taxonomy ){
-			
+			if(!self::isActive()) return $term_id;
 			global $sitepress;
 
 			//Check if translation already exists;

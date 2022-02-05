@@ -197,17 +197,62 @@ if ( ! class_exists( 'ANONY_WPML_HELP' ) ) {
 			return $postIDs;
 		}
 		
+		static function translatePostTerms($source_post, $lang){
+		    $translated_terms = [];
+		    /*
+			 * get all current post terms ad set them to the new post draft
+			 */
+			$taxonomies = get_object_taxonomies( $source_post->post_type ); // returns array of taxonomy names for post type, ex array("category", "post_tag");
+			
+		    if( $taxonomies ) {
+			   
+				foreach ( $taxonomies as $taxonomy ) {
+				    
+					$post_terms = wp_get_object_terms( $source_post->ID, $taxonomy, array( 'fields' => 'slugs' ) );
+					
+					if(is_wp_error($post_terms)) continue;
+					
+					foreach($post_terms as $slug){
+					    $post_term = get_term_by('slug', $slug, $taxonomy);
+					    
+					    if(!$post_term) continue 2;
+					    
+						$translated_term = self::getTranslatedTerm($post_term->term_id, $taxonomy, $lang);
+
+						if(is_null($translated_term)){
+							
+							$translated_term = self::translateTerm( $post_term->term_id , $lang, $taxonomy );
+						}
+						
+						$translated_terms [$taxonomy][] = (int) $translated_term->term_id;
+					}
+					
+				
+				}
+			}
+			
+			return $translated_terms;
+		}
+		static function setTranslatedPostTerms($translated_post_terms,$new_post_id, $lang){
+			
+			if(empty($translated_post_terms)) return;
+			
+			foreach($translated_post_terms as $taxonomy  => $terms){
+			    
+			   $set =  wp_set_object_terms( $new_post_id, $terms, $taxonomy, false );
+			}
+		}
 		/**
 		 * Get translated term object
 		 * @param  int    $term_id 
 		 * @param  string $taxonomy 
 		 * @return Mixed  Term object on success or null on failure
 		 */
-		static function getTranslatedTerm($term_id, $taxonomy) {
+		static function getTranslatedTerm($term_id, $taxonomy, $lang) {
 			if(!self::isActive()) return;
 			global $sitepress;
 	 
-		    $translated_term_id = icl_object_id(intval($term_id), $taxonomy, false, self::gatActiveLang());
+		    $translated_term_id = icl_object_id(intval($term_id), $taxonomy, false, $lang);
 		    
 		    if (is_null($translated_term_id)) return $translated_term_id;
 		    
@@ -263,6 +308,8 @@ if ( ! class_exists( 'ANONY_WPML_HELP' ) ) {
 		static function translatePost( $post_id, $post_type, $lang ){
 
 			if ( !self::isActive()) return $post_id;
+			
+			if( ! current_user_can( 'edit_posts' ) || is_admin() || !isset($_GET['duplicate']) )  return;
 
 		    // Include WPML API
 		    include_once( WP_PLUGIN_DIR . '/sitepress-multilingual-cms/inc/wpml-api.php' );
@@ -271,16 +318,20 @@ if ( ! class_exists( 'ANONY_WPML_HELP' ) ) {
 			
 			// Define title of translated post
 		    $post_translated_title = $source_post->post_title . ' (' . $lang . ')';
-
+            
 		    // Insert translated post
 		    $post_translated_id = ANONY_POST_HELP::duplicate($post_id, [
 				'post_title'   => $post_translated_title
 			]);
 
 		    if (!$post_translated_id || is_wp_error($post_translated_id)) return $post_translated_id;
-
+            
 		    self::connectPostTranslation( $post_id ,$post_translated_id, $post_type, $lang );
-
+		    
+			$translated_terms = self::translatePostTerms($source_post, $lang);
+			
+			self::setTranslatedPostTerms($translated_terms,$post_translated_id, $lang);
+			
 		    // Return translated post ID
 		    return $post_translated_id;
 
@@ -355,6 +406,11 @@ if ( ! class_exists( 'ANONY_WPML_HELP' ) ) {
 		 */
 		static function translateTerm( $term_id , $lang, $taxonomy ){
 			if(!self::isActive()) return $term_id;
+			
+			$translated_term = self::getTranslatedTerm($term_id, $taxonomy, $lang);
+				
+			if(!is_null($translated_term)) return $translated_term;
+			
 			global $sitepress;
 
 			//Check if translation already exists;
@@ -377,6 +433,8 @@ if ( ! class_exists( 'ANONY_WPML_HELP' ) ) {
 
 
 			self::connectTermTranslation( $inserted_term_id['term_taxonomy_id'] ,$term->term_taxonomy_id, $taxonomy, $lang );
+			
+			return get_term_by('id',$inserted_term_id['term_id'],  $taxonomy);
 			
 		}
 	}

@@ -197,6 +197,12 @@ if ( ! class_exists( 'ANONY_WPML_HELP' ) ) {
 			return $postIDs;
 		}
 		
+		/**
+		 * Translates post's terms
+		 * @param object $source_post The post object of which terms will be translated 
+		 * @param string $lang Translation language code
+		 * @return array Returns an array of taxonomies as its keys and terms' IDs as values. empty array if no results
+		 */
 		static function translatePostTerms($source_post, $lang){
 		    $translated_terms = [];
 		    /*
@@ -233,7 +239,14 @@ if ( ! class_exists( 'ANONY_WPML_HELP' ) ) {
 			
 			return $translated_terms;
 		}
-		static function setTranslatedPostTerms($translated_post_terms,$new_post_id, $lang){
+		
+		/**
+		 * Assign a post to its corresponding terms
+		 * @param array $translated_post_terms An array of taxonomies as its keys and terms' IDs as values
+		 * @param string $new_post_id The ID of the post
+		 * @param string $lang Translation language code
+		 */
+		static function setTranslatedPostTerms(array $translated_post_terms, int $new_post_id, string $lang){
 			
 			if(empty($translated_post_terms)) return;
 			
@@ -265,6 +278,7 @@ if ( ! class_exists( 'ANONY_WPML_HELP' ) ) {
 		    return $translated_term_object;	
 		    
 		}
+		
 		/**
 		 * Duplicates a post
 		 * @param  int    $post_id ID of post to be duplicated 

@@ -244,9 +244,8 @@ if ( ! class_exists( 'ANONY_WPML_HELP' ) ) {
 		 * Assign a post to its corresponding terms
 		 * @param array $translated_post_terms An array of taxonomies as its keys and terms' IDs as values
 		 * @param string $new_post_id The ID of the post
-		 * @param string $lang Translation language code
 		 */
-		static function setTranslatedPostTerms(array $translated_post_terms, int $new_post_id, string $lang){
+		static function setTranslatedPostTerms(array $translated_post_terms, int $new_post_id){
 			
 			ANONY_POST_HELP::setPostTerms( $translated_post_terms,  $new_post_id);
 		}
@@ -339,7 +338,7 @@ if ( ! class_exists( 'ANONY_WPML_HELP' ) ) {
 		    
 			$translated_terms = self::translatePostTerms($source_post, $lang);
 			
-			self::setTranslatedPostTerms($translated_terms,$post_translated_id, $lang);
+			self::setTranslatedPostTerms($translated_terms,$post_translated_id);
 			
 		    // Return translated post ID
 		    return $post_translated_id;

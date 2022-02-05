@@ -254,6 +254,22 @@ if ( ! class_exists( 'ANONY_POST_HELP' ) ) {
 		}
 		
 		/**
+		 * Assign a post to its corresponding terms
+		 * @param array $post_terms An array of taxonomies as its keys and terms' IDs as values
+		 * @param string $post_id The ID of the post
+		 */
+		static function setPostTerms(array $post_terms, int $post_id, string $lang){
+			
+			if(empty($post_terms)) return;
+			
+			foreach($post_terms as $taxonomy  => $terms){
+			    
+			   $set =  wp_set_object_terms( $post_id, $terms, $taxonomy, false );
+			}
+
+		}
+		
+		/**
 		* Duplicates a post & its meta and it returns the new duplicated Post ID
 		* @param  [int] $post_id The Post you want to clone
 		* @param  [array] args New post args

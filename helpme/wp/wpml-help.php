@@ -248,12 +248,7 @@ if ( ! class_exists( 'ANONY_WPML_HELP' ) ) {
 		 */
 		static function setTranslatedPostTerms(array $translated_post_terms, int $new_post_id, string $lang){
 			
-			if(empty($translated_post_terms)) return;
-			
-			foreach($translated_post_terms as $taxonomy  => $terms){
-			    
-			   $set =  wp_set_object_terms( $new_post_id, $terms, $taxonomy, false );
-			}
+			ANONY_POST_HELP::setPostTerms( $translated_post_terms,  $new_post_id);
 		}
 		/**
 		 * Get translated term object

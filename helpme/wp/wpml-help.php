@@ -306,23 +306,24 @@ if ( ! class_exists( 'ANONY_WPML_HELP' ) ) {
 				do_action( 'wpml_set_element_language_details', $set_language_args );
 			}
 		}
+		
 		/**
-		 * Add post translation
+		 * Add post translation without translating its terms
 		 * @param  int    $post_id ID of post to be translated 
 		 * @param  string $post_type
 		 * @param  string $lang Language of translation
 		 * @return Mixed  Translated post id on success or null/wp_error on failure
 		 */
-		static function translatePost( $post_id, $post_type, $lang ){
-
-			if ( !self::isActive()) return $post_id;
+		static function translatePostType( $source_post , $post_type, $lang ){
+			if ( !self::isActive()) return $source_post->ID;
 			
 			if( ! current_user_can( 'edit_posts' ) || is_admin() || !isset($_GET['duplicate']) )  return;
 
 		    // Include WPML API
 		    include_once( WP_PLUGIN_DIR . '/sitepress-multilingual-cms/inc/wpml-api.php' );
 			
-			$source_post = get_post( $post_id );
+			$post_id = $source_post->ID;
+			
 			
 			// Define title of translated post
 		    $post_translated_title = $source_post->post_title . ' (' . $lang . ')';
@@ -335,18 +336,61 @@ if ( ! class_exists( 'ANONY_WPML_HELP' ) ) {
 		    if (!$post_translated_id || is_wp_error($post_translated_id)) return $post_translated_id;
             
 		    self::connectPostTranslation( $post_id ,$post_translated_id, $post_type, $lang );
+		   
+		    // Return translated post ID
+		    return $post_translated_id;
+		}
+		/**
+		 * Add post translation
+		 * @param  int    $post_id ID of post to be translated 
+		 * @param  string $lang Language of translation
+		 * @return Mixed  Translated post id on success or null/wp_error on failure
+		 */
+		static function translatePost( $post_id, $post_type = 'post', $lang ){
+			
+			if($post_type == 'page') return $post_id;
+			
+			$source_post = get_post( $post_id );
+			
+		    // Insert translated post
+		    $post_translated_id = self::translatePostType( $source_post, $post_type, $lang );
+
+		    if (!$post_translated_id || is_wp_error($post_translated_id)) return $post_translated_id;
+            
+		    self::connectPostTranslation( $post_id ,$post_translated_id, $post_type, $lang );
 		    
 			$translated_terms = self::translatePostTerms($source_post, $lang);
 			
 			self::setTranslatedPostTerms($translated_terms,$post_translated_id);
 			
-		    // Return translated post ID
-		    return $post_translated_id;
+			return $post_translated_id;
+
 
 		}
-
+		
 		/**
-		 * Add post translation
+		 * Add page translation
+		 * @param  int    $post_id ID of post to be translated 
+		 * @param  string $lang Language of translation
+		 * @return Mixed  Translated post id on success or null/wp_error on failure
+		 */
+		static function translatePage( $post_id, $lang ){
+			
+			$source_post = get_post( $post_id );
+			
+		    // Insert translated post
+		    $post_translated_id = self::translatePostType( $source_post, 'page', $lang );
+
+		    if (!$post_translated_id || is_wp_error($post_translated_id)) return $post_translated_id;
+            
+		    self::connectPostTranslation( $post_id ,$post_translated_id, 'post', $lang );
+
+			return $post_translated_id;
+
+		}
+		
+		/**
+		 * Connects post translation
 		 * @param  int    $post_id ID of original post
 		 * @param  int    $post_translated_id ID of translated post 
 		 * @param  string $post_type

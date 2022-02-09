@@ -1,5 +1,16 @@
 jQuery(document).ready(function($){
 	'use strict';
+	//Please make sure to add body{-webkit-print-color-adjust:exact;color-adjust:exact}
+	// Page should have this: <iframe src="about:blank" name="print_frame" width="0" height="0" frameborder="0"></iframe>
+	$fn.printDiv = function (divId, css) {
+        var printDivCSS = "<style>@media print{body{-webkit-print-color-adjust:exact;color-adjust:exact}"+css+"}</style>";
+        
+        window.frames["print_frame"].document.body.innerHTML =
+        printDivCSS + document.getElementById(divId).innerHTML;
+        window.frames["print_frame"].window.focus();
+        window.frames["print_frame"].window.print();
+    }
+
 	$.fn.AnonyCreateCookie = function(name,value,minutes) {
         if (minutes) {
             var date = new Date();
@@ -23,7 +34,7 @@ jQuery(document).ready(function($){
     }
     $.fn.AnonyEraseCookie = function(name) {
 	    createCookie(name,"",-1);
-	}
+	}​
 	//Apply mutation observer on a querySelector and apply a callback function
 	$.fn.AnonyObserve = function(querySelector, callback){
 

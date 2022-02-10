@@ -83,3 +83,13 @@ add_action('admin_enqueue_scripts','anonyCommonScripts');
 add_action( 'activated_plugin', function(){
 	flush_rewrite_rules();
 } );
+
+
+add_filter( "plugin_action_links_".plugin_basename( __FILE__ ) ,  function ( $links )
+{
+    $links[] = sprintf(
+			    	'<a href="admin.php?page=anony-settings">%s</a>', 
+			    	esc_html__('Settings', ANOE_TEXTDOM)
+			    );
+    return $links;
+});

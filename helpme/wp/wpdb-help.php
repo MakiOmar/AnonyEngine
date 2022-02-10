@@ -17,13 +17,14 @@ if ( ! class_exists( 'ANONY_WPDB_HELP' ) ) {
 		public static function DirectSelect($clause){
 
 			global $wpdb;
+			
 
 			extract( $clause);
 			
 			$data = [];
 
-			$query = $wpdb->prepare("SELECT $select FROM {$wpdb->$from} WHERE $where $operator '%d'", $value);
-
+			$query = $wpdb->prepare("SELECT $select FROM {$wpdb->prefix}$from WHERE $where $operator '%d'", $value);
+ 
 			$results = $wpdb->get_results($query);
 			
 			if(!empty($results) && !is_null($results)){

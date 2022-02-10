@@ -280,25 +280,16 @@ if ( ! class_exists( 'ANONY_POST_HELP' ) ) {
 			if( ! current_user_can( 'edit_posts' ) )  return;
 			$duplicated = [];
 			
-			
-			if(get_transient('duplicated_posts')){
-				$duplicated = get_transient('duplicated_posts');
-			}else{
-				set_transient('duplicated_posts', []);
-			} 
-			
-			if(in_array($post_id, $duplicated)) return;
-			
 			$oldpost = get_post($post_id, ARRAY_A);
 			
 			if(!$oldpost || is_null($oldpost)) return;
 
 			unset($oldpost['ID'], $oldpost['guid']);
-
-			ANONY_WPARRAY_HELP::wpParseArgs( $oldpost, $args );
-
+            
+			$oldpost = ANONY_WPARRAY_HELP::wpParseArgs( $oldpost, $args );
+            
 			$new_post_id = wp_insert_post($oldpost);
-
+           
 			if(!$new_post_id || is_wp_error($new_post_id)) return $new_post_id;
 
 			// Copy post metadata
@@ -327,10 +318,6 @@ if ( ! class_exists( 'ANONY_POST_HELP' ) ) {
 				}
 			}
 			
-			
-			$duplicated[] = $post_id;
-			
-			set_transient('duplicated_posts', $duplicated);
 			return $new_post_id;
 		}
 

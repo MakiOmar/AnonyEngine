@@ -11,6 +11,49 @@ jQuery(document).ready(function($){
         window.frames["print_frame"].window.print();
     }
 
+    /**
+     * PHP json encoded sample:
+     * $_json_ = json_encode([
+				    
+				        'customer_name' => $customer_name,
+				        'visit_type' => $service,
+				        'appointment_date' => $date,
+				        'appointment_time' => $time,
+				        'join_url' => $join_url,
+				        'join_pass' => $join_pass,
+				        'is_mobile' => wp_is_mobile(),
+				    
+				    ]);
+	*/
+
+	/**
+	 * @var string jsonString JSON string
+	 * @return string
+	 */
+    $.fn.WhatsapShareLink = function (jsonString ) {
+
+        var _json_ = JSON.parse(jsonString);
+
+        var sub_domain = 'api';
+                
+        if(_json_.is_mobile === false){
+            
+            sub_domain = 'web';
+        }
+
+        var whatsAppText =    'Zoom URL : ' + _json_.join_url  + "\r\n\r\n" 
+                + 'Zoom password : ' + _json_.join_pass + "\r\n\r\n" 
+                + 'Customer name : ' + _json_.customer_name + "\r\n\r\n" 
+                + 'Visit type : ' + _json_.visit_type + "\r\n\r\n" 
+                + 'Date : ' + _json_.appointment_date + "\r\n\r\n" 
+                + 'Time : ' + _json_.appointment_time;
+
+        var _text_ = window.encodeURIComponent(whatsAppText);
+
+        return 'https://'+sub_domain+'.whatsapp.com/send?text=' + _text_;
+
+    }
+
 	$.fn.AnonyCreateCookie = function(name,value,minutes) {
         if (minutes) {
             var date = new Date();

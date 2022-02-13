@@ -2,7 +2,7 @@ jQuery(document).ready(function($){
 	'use strict';
 	//Please make sure to add body{-webkit-print-color-adjust:exact;color-adjust:exact}
 	// Page should have this: <iframe src="about:blank" name="print_frame" width="0" height="0" frameborder="0"></iframe>
-	$fn.printDiv = function (divId, css) {
+	$.fn.printDiv = function (divId, css) {
         var printDivCSS = "<style>@media print{body{-webkit-print-color-adjust:exact;color-adjust:exact}"+css.replace(/\s/g, "")+"}</style>";
         
         window.frames["print_frame"].document.body.innerHTML =

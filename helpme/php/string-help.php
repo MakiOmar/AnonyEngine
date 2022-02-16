@@ -32,13 +32,37 @@ if ( ! class_exists( 'ANONY_STRING_HELP' ) ) {
 
 		/**
 		 * Read textarea content line by line
-		 * @param string content
+		 * @param string $content
 		 * @return array
 		 */
 		static function lineByLineTextArea($content){
 
 			return explode("\r\n", trim($content));
 
+		}
+		
+		/**
+		 * Add images missing dimensions
+		 * @param string $content
+		 * @return string
+		 */
+		static function addImagesMissingDimensions($content){
+			$pattern = '/<img [^>]*?src="(\w+?:\/\/[^"]+?)"[^>]*?>/iu';
+			preg_match_all($pattern, $content, $imgs);
+			foreach ( $imgs[0] as $i => $img ) {
+
+				if ( false !== strpos( $img, 'width=' ) && false !== strpos( $img, 'height=' ) ) continue;
+
+				$img_url = $imgs[1][$i];
+				$img_size = @getimagesize( $img_url );
+
+				if ( false === $img_size ) continue;
+
+				$replaced_img = str_replace( '<img ', '<img ' . $img_size[3] . ' ', $imgs[0][$i] );
+				$content = str_replace( $img, $replaced_img, $content );
+			}
+			
+			return $content;
 		}
 
 	}

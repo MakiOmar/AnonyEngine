@@ -3,7 +3,7 @@
  * Multi-input types render class. 
  *
  * Handles rendring these type ['text','number','email', 'password','url', 'hidden'].
- * @package Anonymous theme
+ * @package Anonymous plugin
  * @author Makiomar
  * @link http://makiomar.com
  */
@@ -100,10 +100,11 @@ class ANONY_Mixed{
 					);
 		}
 		
-		
-
+		$min = isset($this->parent->field['min']) ? ' min="'.$this->parent->field['min'].'"' : '';
+		$max = isset($this->parent->field['max']) ? ' max="'.$this->parent->field['max'].'"' : '';
+ 
 		$html  .= sprintf(
-					'<input id="%1$s" type="%2$s" name="%3$s" value="%4$s" class="%5$s" %6$s %7$s %8$s/>', 
+					'<input id="%1$s" type="%2$s" name="%3$s" value="%4$s" class="%5$s" %6$s %7$s %8$s%9$s%10$s/>', 
 					$this->parent->field['id'],
 					$this->parent->field['type'],
 					$this->parent->input_name, 
@@ -111,7 +112,9 @@ class ANONY_Mixed{
 					$this->parent->class_attr,
 					isset($step) ? ' '.$step : '',
 					isset($lang) ? ' '.$lang : '',
-					$placeholder
+					$placeholder,
+					$min,
+					$max
 				 );
 		
 		$html .= (isset($this->parent->field['desc']) && !empty($this->parent->field['desc']))?' <div class="description '.$this->parent->class_attr.'">'.$this->parent->field['desc'].'</div>':'';

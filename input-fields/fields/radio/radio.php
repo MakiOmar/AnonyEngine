@@ -44,9 +44,13 @@ class ANONY_Radio{
 				);
 		
 		if(in_array($this->parent->context, ['meta', 'form']) && isset($this->parent->field['title'])){
+			
+			$label_prefix = isset($this->parent->field['label_prefix']) ? $this->parent->field['label_prefix'] : '';
+			
 			$html	.= sprintf( 
-							'<label class="anony-label" for="anony_%1$s">%2$s</label>', 
-							$this->parent->field['id'], 
+							'<label class="anony-label" for="anony_%1$s">%2$s%3$s</label>', 
+							$this->parent->field['id'],
+							$label_prefix, 
 							$this->parent->field['title']
 						);
 		}

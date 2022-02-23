@@ -31,7 +31,7 @@ class ANONY_Multi_text{
 	 */
 	function render(){
 
-		$buttonText  = (isset($this->parent->field['button-text'])) ? ' placeholder="'.$this->parent->field['button-text'].'"' : esc_html__( 'Add', ANOE_TEXTDOM  );
+		$buttonText  = (isset($this->parent->field['button-text'])) ? ' placeholder="'.$this->parent->field['button-text'].'"' : esc_html__( 'Add', 'anonyengine'  );
 
 		$placeholder = (isset($this->parent->field['placeholder'])) ? 'placeholder="'.$this->parent->field['placeholder'].'"' : '';
 

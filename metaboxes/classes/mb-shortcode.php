@@ -143,7 +143,7 @@
 
 
 			if(!empty($post_id)) {
-				//esc_html_e( 'Sorry! but you already have posted the same data before', ANOE_TEXTDOM  );
+				//esc_html_e( 'Sorry! but you already have posted the same data before', 'anonyengine'  );
 				$this->parent->startUpdate($_POST, intval($post_id[0]));
 
 				$url = add_query_arg('post', $post_id[0], get_the_permalink($post_id[0]));

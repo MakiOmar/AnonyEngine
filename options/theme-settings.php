@@ -124,9 +124,9 @@ if (!class_exists('ANONY_Theme_Settings')) {
 
 			$defaults['parent_slug'] = '';
 
-			$defaults['page_title'] = esc_html__('Anonymous Theme Options', ANOE_TEXTDOM );
+			$defaults['page_title'] = esc_html__('Anonymous Theme Options', 'anonyengine' );
 			
-			$defaults['menu_title'] = esc_html__('Anonymous Theme Options', ANOE_TEXTDOM );
+			$defaults['menu_title'] = esc_html__('Anonymous Theme Options', 'anonyengine' );
 
 			$defaults['page_cap'] = 'manage_options';
 			
@@ -434,7 +434,7 @@ if (!class_exists('ANONY_Theme_Settings')) {
 					add_settings_error( 
 						$this->args['opt_name'], 
 						esc_attr( $this->args['opt_name'] ), 
-						esc_html__('Options are saved except those with the following errors', ANOE_TEXTDOM ), 
+						esc_html__('Options are saved except those with the following errors', 'anonyengine' ), 
 						'error' 
 					);
 
@@ -454,7 +454,7 @@ if (!class_exists('ANONY_Theme_Settings')) {
 					add_settings_error( 
 						$this->args['opt_name'], 
 						esc_attr( $this->args['opt_name'].'_updated' ), 
-						esc_html__('Options saved', ANOE_TEXTDOM ), 
+						esc_html__('Options saved', 'anonyengine' ), 
 						'updated' 
 					);
 				}

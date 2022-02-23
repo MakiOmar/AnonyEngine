@@ -31,7 +31,7 @@ class ANONY_Multi_input{
 	 */
 	function render(){
 
-		$buttonText  = (isset($this->parent->field['button-text'])) ? ' '.$this->parent->field['button-text'] : esc_html__( 'Add', ANOE_TEXTDOM  );
+		$buttonText  = (isset($this->parent->field['button-text'])) ? ' '.$this->parent->field['button-text'] : esc_html__( 'Add', 'anonyengine'  );
 
 		$html = sprintf( 
 					'<fieldset class="anony-row anony-row-inline anony-multi-value-wrapper" id="fieldset_%1$s">', 

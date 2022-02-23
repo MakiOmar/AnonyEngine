@@ -66,7 +66,7 @@ class ANONY_Select{
 				);
 
 			if( is_array( $this->parent->field['options'] ) && !empty($this->parent->field['options']) ){
-				$html .= sprintf('<option value="">%1$s</option>', esc_html__( 'Select', ANOE_TEXTDOM  ));
+				$html .= sprintf('<option value="">%1$s</option>', esc_html__( 'Select', 'anonyengine'  ));
 				
 				if( empty($multiple) ) :
 
@@ -123,7 +123,7 @@ class ANONY_Select{
 			}else{
 				$html .= sprintf(
 								'<option value="">%1$s</option>', 
-								esc_html__( 'No options', ANOE_TEXTDOM  )
+								esc_html__( 'No options', 'anonyengine'  )
 							);
 			}
 

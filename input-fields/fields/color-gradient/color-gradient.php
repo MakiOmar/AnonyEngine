@@ -48,7 +48,7 @@ class ANONY_Color_gradient{
 			$html	.= sprintf( 
 						'<label class="anony-label-col" for="%1$s-from">%2$s</label>', 
 						$this->parent->field['id'], 
-						esc_html__( 'From', ANOE_TEXTDOM  )
+						esc_html__( 'From', 'anonyengine'  )
 						);
 
 	        $html  .= sprintf( 
@@ -63,7 +63,7 @@ class ANONY_Color_gradient{
 			$html	.= sprintf( 
 						'<label class="anony-label-col" for="%1$s-to">%2$s</label>', 
 						$this->parent->field['id'], 
-						esc_html__( 'To', ANOE_TEXTDOM  )
+						esc_html__( 'To', 'anonyengine'  )
 						);
 
 	        $html  .= sprintf( 

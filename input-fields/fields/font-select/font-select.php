@@ -32,10 +32,10 @@ class ANONY_Font_select{
 
 		$opts_groups = 
 		[
-			'default' => esc_html__('Default Webfont',ANOE_TEXTDOM ),
-			'system'  => esc_html__('System',ANOE_TEXTDOM ),
-			'popular' => esc_html__('Popular Google Fonts',ANOE_TEXTDOM ),
-			'all'     => esc_html__('Google Fonts',ANOE_TEXTDOM ),
+			'default' => esc_html__('Default Webfont','anonyengine' ),
+			'system'  => esc_html__('System','anonyengine' ),
+			'popular' => esc_html__('Popular Google Fonts','anonyengine' ),
+			'all'     => esc_html__('Google Fonts','anonyengine' ),
 		];
 
 		$html = sprintf( 

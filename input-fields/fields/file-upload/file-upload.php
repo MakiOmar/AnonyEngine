@@ -34,10 +34,10 @@ class ANONY_File_upload{
 	 */
 	function render( $meta = false ){
 		
-		$select_text   = esc_html__('Select your file',ANOE_TEXTDOM);
-		$no_file_text  = esc_html__('No selected file',ANOE_TEXTDOM);
-		$current_text  = esc_html__('Current file:',ANOE_TEXTDOM);
-		$download_text = esc_html__('Download',ANOE_TEXTDOM);
+		$select_text   = esc_html__('Select your file','anonyengine');
+		$no_file_text  = esc_html__('No selected file','anonyengine');
+		$current_text  = esc_html__('Current file:','anonyengine');
+		$download_text = esc_html__('Download','anonyengine');
 		
 		
 		$note = isset($this->parent->field['note']) ? $this->parent->field['note'] : '';

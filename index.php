@@ -89,7 +89,7 @@ add_filter( "plugin_action_links_".plugin_basename( __FILE__ ) ,  function ( $li
 {
     $links[] = sprintf(
 			    	'<a href="admin.php?page=anony-settings">%s</a>', 
-			    	esc_html__('Settings', ANOE_TEXTDOM)
+			    	esc_html__('Settings', 'anonyengine')
 			    );
     return $links;
 });

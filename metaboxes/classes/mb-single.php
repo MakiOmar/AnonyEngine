@@ -42,7 +42,7 @@
 		public function showOnFront($content){
 
 			if (!is_user_logged_in() && !is_admin() && is_singular() && isset($_GET['action'])) {
-				return esc_html__( 'Sorry, you have to login first', ANOE_TEXTDOM  );
+				return esc_html__( 'Sorry, you have to login first', 'anonyengine'  );
 			}
 
 			global $post;

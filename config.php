@@ -7,13 +7,6 @@
 define('ANOENGINE', '');
 
 /**
- * Holds plugin text domain
- * @const
- */
-define('ANOE_TEXTDOM', 'anonyengine');
-
-
-/**
  * Holds plugin uri
  * @const
  */

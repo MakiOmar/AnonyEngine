@@ -60,9 +60,9 @@ class ANONY_Tabs{
 
 		// default tab to clone
 				$html .= '<li class="tabs-default">';
-					$html .= '<div class="anony-tab-item"><label class="anony-label">'. esc_html__('Title',ANOE_TEXTDOM ) .'</label>';
+					$html .= '<div class="anony-tab-item"><label class="anony-label">'. esc_html__('Title','anonyengine' ) .'</label>';
 					$html .= '<input type="text" name="'. $this->parent->input_name .'[data-'.($count).'][title]" value="" /></div>';
-					$html .= '<div class="anony-tab-item"><label class="anony-label">'. esc_html__('Content',ANOE_TEXTDOM ) .'</label>';
+					$html .= '<div class="anony-tab-item"><label class="anony-label">'. esc_html__('Content','anonyengine' ) .'</label>';
 					$html .= '<textarea name="'. $this->parent->input_name .'[data-'.($count).'][content]" value=""></textarea></div>';
 					$html .= '<br style="clear:both;" />';
 					$html .= '<a href="" class="anony-btn-close anony-remove-tab"><em>delete</em></a>';
@@ -78,9 +78,9 @@ class ANONY_Tabs{
 					if ( $i <= $count) {
 
 						$html .= '<li>';
-						$html .= '<div class="anony-tab-item"><label class="anony-label">'. esc_html__('Title',ANOE_TEXTDOM ) .'</label>';
+						$html .= '<div class="anony-tab-item"><label class="anony-label">'. esc_html__('Title','anonyengine' ) .'</label>';
 						$html .= '<input type="text" name="'. $this->parent->input_name .'[data-'.$i.'][title]" value="'. esc_attr($value['title']) .'" /></div>';
-						$html .= '<div class="anony-tab-item"><label class="anony-label">'. esc_html__('Content',ANOE_TEXTDOM ) .'</label>';
+						$html .= '<div class="anony-tab-item"><label class="anony-label">'. esc_html__('Content','anonyengine' ) .'</label>';
 						$html .= '<textarea name="'. $this->parent->input_name .'[data-'.$i.'][content]" value="" >'. esc_textarea( $value['content'] ) .'</textarea></div>';
 						$html .= '<a href="" class="anony-btn-close anony-remove-tab"><em>delete</em></a>';
 						$html .= '</li>';

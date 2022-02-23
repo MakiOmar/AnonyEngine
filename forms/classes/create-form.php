@@ -126,7 +126,7 @@ if( ! class_exists( 'ANONY_Create_Form' )){
 					do_action('anony_form_fields', $fields);
 				?>
 				<p>
-					<input type="submit" id="submit-<?= $this->id ?>" name="submit-<?= $this->id ?>" value="<?= esc_html__('submit', ANOE_TEXTDOM) ?>"/>
+					<input type="submit" id="submit-<?= $this->id ?>" name="submit-<?= $this->id ?>" value="<?= esc_html__('submit', 'anonyengine') ?>"/>
 				</p>
 				
 			</form>

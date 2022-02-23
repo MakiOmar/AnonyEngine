@@ -75,12 +75,12 @@ class ANONY_Gallery{
 		
 		$html .= sprintf(
 					'<a href="javascript:void(0);" data-choose="Choose a File" data-update="Select File" class="anony-opts-gallery button button-primary button-large"><span></span>%1$s</a>', 
-					esc_html__('Browse', ANOE_TEXTDOM )
+					esc_html__('Browse', 'anonyengine' )
 				);
 
 		$html .= sprintf(
 					' <a href="javascript:void(0);" class="anony-opts-clear-gallery button button-primary button-large" style="'.$style.'"><span></span>%1$s</a>', 
-					esc_html__('Remove all', ANOE_TEXTDOM )
+					esc_html__('Remove all', 'anonyengine' )
 				);
 		$html .= '</div>';
 

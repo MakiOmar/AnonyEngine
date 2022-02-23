@@ -72,7 +72,7 @@ class ANONY_Color_gradient_farbtastic{
 		$html .= sprintf(
 					'<label for="%1$s-from" class="anony-input-lable">%2$s</label>',
 					$this->parent->field['id'], 
-					esc_html__( 'From', ANOE_TEXTDOM  )
+					esc_html__( 'From', 'anonyengine'  )
 				);
 
 		$html .= sprintf(
@@ -99,7 +99,7 @@ class ANONY_Color_gradient_farbtastic{
 		$html .= sprintf(
 					'<label for="%1$s-to" class="anony-input-lable">%2$s</label>',
 					$this->parent->field['id'], 
-					esc_html__( 'To', ANOE_TEXTDOM  )
+					esc_html__( 'To', 'anonyengine'  )
 				);
 
 		$html .= sprintf(

@@ -96,7 +96,7 @@ if( ! class_exists( 'ANONY_Term_Metabox' )){
   public function metaFieldsCallback($object_id = null){
 
    if(!class_exists('ANONY_Input_Field')){
-      esc_html_e( 'Input fields plugin is required', ANOE_TEXTDOM );
+      esc_html_e( 'Input fields plugin is required', 'anonyengine' );
       return;
    }
 

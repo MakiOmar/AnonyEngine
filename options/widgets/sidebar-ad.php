@@ -16,8 +16,8 @@ class ANONY_Sidebar_Ad extends WP_Widget{
 	
 	public function __construct(){
 		$parms = array(
-			'description' => esc_html__('Displays the sidebar AD from theme options',ANOE_TEXTDOM ),
-			'name' => esc_html__('Sidebar ADs',ANOE_TEXTDOM )
+			'description' => esc_html__('Displays the sidebar AD from theme options','anonyengine' ),
+			'name' => esc_html__('Sidebar ADs','anonyengine' )
 		);
 		parent::__construct('Options__Widgets__Sidebar__Ad','',$parms);
 	}
@@ -29,14 +29,14 @@ class ANONY_Sidebar_Ad extends WP_Widget{
 		extract($instance);?>
 
 		<p>
-			<label for="<?php echo $this->get_field_id('title') ?>"><?php esc_html_e('Title:', ANOE_TEXTDOM ) ?></label>
+			<label for="<?php echo $this->get_field_id('title') ?>"><?php esc_html_e('Title:', 'anonyengine' ) ?></label>
 
-			<input type="text" class="widefat" id="<?php echo $this->get_field_id('title') ?>" name="<?php echo $this->get_field_name('title') ?>"  value="<?php echo (isset($title) && !empty($title))? esc_attr($title) : esc_attr__('ADs', ANOE_TEXTDOM );?>">
+			<input type="text" class="widefat" id="<?php echo $this->get_field_id('title') ?>" name="<?php echo $this->get_field_name('title') ?>"  value="<?php echo (isset($title) && !empty($title))? esc_attr($title) : esc_attr__('ADs', 'anonyengine' );?>">
 
 		</p>
 		
 		<p>
-			<label for="<?php echo $this->get_field_id('anony_ad') ?>"><?php esc_html_e('AD:', ANOE_TEXTDOM ) ?></label><br/>
+			<label for="<?php echo $this->get_field_id('anony_ad') ?>"><?php esc_html_e('AD:', 'anonyengine' ) ?></label><br/>
 			
 			<textarea rows="10" class="widefat" id="<?php echo $this->get_field_id('anony_ad') ?>" name="<?php echo $this->get_field_name('anony_ad') ?>"><?php echo (isset($anony_ad) && !empty($anony_ad))? ANONY_HELP::removeTagsDom($anony_ad, 'script',true) : ''?></textarea>
 
@@ -54,7 +54,7 @@ class ANONY_Sidebar_Ad extends WP_Widget{
 
 		extract($instance);
 
-		$title = empty($title) ?  esc_html__('ADs', ANOE_TEXTDOM ) : $title;
+		$title = empty($title) ?  esc_html__('ADs', 'anonyengine' ) : $title;
 
 		echo $before_widget;
 

@@ -18,9 +18,9 @@ add_action( 'wp_enqueue_scripts', function(){
 
 add_action( 'anony_after_page_footer' , function(){
 
-    $titel = esc_html__('Share by email', ANOE_TEXTDOM);
-    $subtitle = esc_html__('Please write down client\'s email address', ANOE_TEXTDOM);
-    $submit_txt = esc_html__('Share', ANOE_TEXTDOM);
+    $titel = esc_html__('Share by email', 'anonyengine');
+    $subtitle = esc_html__('Please write down client\'s email address', 'anonyengine');
+    $submit_txt = esc_html__('Share', 'anonyengine');
     
     $page_title  =  '';
     $description =  '' ;

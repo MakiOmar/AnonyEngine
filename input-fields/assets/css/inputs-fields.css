@@ -536,3 +536,8 @@ fieldset .anony-form-heading{
     max-width: 100px;
     text-align: center;
 }
+.uploads-wrapper{
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}

@@ -45,11 +45,11 @@ class ANONY_Uploader{
 						'<fieldset class="anony-row anony-row-inline" id="fieldset_%1$s">', 
 						$this->parent->field['id'] 
 					);
-		if($this->parent->context == 'meta' && isset($this->parent->field['title'])){
+		if(($this->parent->context === 'meta' || $this->parent->context === 'form') && isset($this->parent->field['title'])){
 			$html   .= sprintf(
 							'<label class="anony-label" for="%1$s">%2$s</label>', 
-							$this->parent->field['id'],
-							$this->parent->field['title']
+							esc_attr($this->parent->field['id']),
+							esc_html($this->parent->field['title'])
 						  ) ;
 		}
 		
@@ -59,9 +59,23 @@ class ANONY_Uploader{
 				$this->parent->value, 
 				$this->parent->class_attr
 			);
-
-		$html .= '<img class="anony-opts-screenshot" style="max-width:180px;" src="'.$this->parent->value.'" />';
-
+		$html .= '<div class="uploads-wrapper">';
+		$image_exts   = array( 'jpg', 'jpeg', 'jpe', 'gif', 'png', 'svg' );
+		$img_ext_preg = '!\.(' . join( '|', $image_exts ) . ')$!i';
+		
+		if(!empty($this->parent->value) && wp_http_validate_url($this->parent->value)){
+			if ( preg_match( $img_ext_preg, $this->parent->value ) ) {
+				$html .= '<img class="anony-opts-screenshot" style="max-width:80px;" src="'.$this->parent->value.'" />';
+			} else {
+				$file_basename = wp_basename($this->parent->value);
+				$html .= '<a href="'.$this->parent->value.'">';
+				$html .= '<img class="anony-opts-screenshot" style="max-width:80px;" src="'. ANOE_URI . 'assets/images/placeholders/file.png'.'" /><br>';
+				$html .= '<span>'.$file_basename.'</span>';
+				$html .= '</a>';
+			}
+		}
+		
+		
 		if($this->parent->value == ''){
 			$remove = ' style="display:none;"';
 			$upload = '';
@@ -77,11 +91,11 @@ class ANONY_Uploader{
 				);
 
 		$html .= sprintf(
-					' <a href="javascript:void(0);" class="anony-opts-upload-remove"%1$s>%2$s</a>', 
+					'<br><a href="javascript:void(0);" class="anony-opts-upload-remove"%1$s>%2$s</a>', 
 					$remove, 
 					esc_html__('Remove Upload', ANOE_TEXTDOM )
 				);
-		
+		$html .= '<div>';
 		$html .= (isset($this->parent->field['desc']) && !empty($this->parent->field['desc']))?'<div class="description">'.$this->parent->field['desc'].'</div>':'';
 		$html .= '</fieldset>';
 

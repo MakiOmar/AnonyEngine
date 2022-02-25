@@ -1,58 +1,63 @@
-function AnonyUpload(){
-	(function($) {
+;(function($) {
+	"use strict";
+	$( "img[src='']" ).attr( "src", anony_upload.url );
 
-		jQuery( "img[src='']" ).attr( "src", anony_upload.url );
+	$( ".anony-opts-upload" ).click( function( event ) {   
+		event.preventDefault();
 
-		jQuery( ".anony-opts-upload" ).click( function( event ) {   
-        	event.preventDefault();
-        	
-        	var activeFileUploadContext = jQuery(this).parent();
-        	custom_file_frame = null;
-        	
-        	item_clicked = jQuery(this);
+		var activeFileUploadContext = $(this).parent();
+		var custom_file_frame = null;
+		var clicked = $(this).data('id');
+		// Create the media frame.
+		custom_file_frame = wp.media.frames.customHeader = wp.media({
+			title: $(this).data( "choose" ),
+			library: {
+				type: 'image'
+			},
+			button: {
+				text: $(this).data( "update" )
+			}
+		});
 
-            // Create the media frame.
-            custom_file_frame = wp.media.frames.customHeader = wp.media({
-            	title: jQuery(this).data( "choose" ),
-            	library: {
-            		type: 'image'
-            	},
-                button: {
-                    text: jQuery(this).data( "update" )
-                }
-            });
+		custom_file_frame.on( "select", function() {
+			var attachment = custom_file_frame.state().get( "selection" ).first();
+			
+			var imageExtensions   = [ 'jpg', 'jpeg', 'jpe', 'gif', 'png', 'svg' ];
+			
+			if(imageExtensions.includes(attachment.attributes.subtype)){
+				// Update value of the targetfield input with the attachment url.
+				$( '.anony-opts-screenshot', activeFileUploadContext ).attr( 'src', attachment.attributes.url );
+			}else{
+				$( '.anony-opts-screenshot', activeFileUploadContext ).attr( 'src', anony_upload.url );
+				$('.uploaded-file-name', activeFileUploadContext).text(attachment.attributes.filename);
+				$( '.uploaded-file-name', activeFileUploadContext ).show();
+			}
+						
+			$( '#' + clicked )
+				.val( attachment.attributes.url ).trigger( 'change' );
+			console.log($( '#' + clicked));
+			$( '.anony-opts-upload', activeFileUploadContext ).hide();
+			$( '.anony-opts-screenshot', activeFileUploadContext ).show();
+			$( '.anony-opts-upload-remove', activeFileUploadContext ).show();
+		});
 
-            custom_file_frame.on( "select", function() {
-            	var attachment = custom_file_frame.state().get( "selection" ).first();
+		custom_file_frame.open();
+	});
 
-                // Update value of the targetfield input with the attachment url.
-                jQuery( '.anony-opts-screenshot', activeFileUploadContext ).attr( 'src', attachment.attributes.url );
-                jQuery( 'input', activeFileUploadContext )
-            		.val( attachment.attributes.url )
-            		.trigger( 'change' );
+	$( ".anony-opts-upload-remove" ).click( function( event ) {
+		event.preventDefault();
 
-                jQuery( '.anony-opts-upload', activeFileUploadContext ).hide();
-                jQuery( '.anony-opts-screenshot', activeFileUploadContext ).show();
-                jQuery( '.anony-opts-upload-remove', activeFileUploadContext ).show();
-            });
+		var activeFileUploadContext = $( this ).parent();
+		
+		var clicked = $(this).data('id');
+		
+		$( '#' + clicked ).val('').trigger('change');
+		$(this).prev().fadeIn('slow');
+		$( '.anony-opts-screenshot', activeFileUploadContext ).fadeOut( 'slow' );
+		$( '.uploaded-file-name', activeFileUploadContext ).fadeOut( 'slow' );
+		$(this).fadeOut( 'slow' );
+		$( '.anony-opts-upload', activeFileUploadContext ).show();
+	});
 
-            custom_file_frame.open();
-        });
+})(jQuery);
 
-	    jQuery( ".anony-opts-upload-remove" ).click( function( event ) {
-	    	event.preventDefault();
-	    	
-	        var activeFileUploadContext = jQuery( this ).parent();
-	
-	        jQuery( 'input', activeFileUploadContext ).val('');
-	        jQuery(this).prev().fadeIn('slow');
-	        jQuery( '.anony-opts-screenshot', activeFileUploadContext ).fadeOut( 'slow' );
-	        jQuery(this).fadeOut( 'slow' );
-	    });
-
-	})(jQuery);
-}
-	
-jQuery(document).ready(function($){
-	var anony_upload = new AnonyUpload();
-});

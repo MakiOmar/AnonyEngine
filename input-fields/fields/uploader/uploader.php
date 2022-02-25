@@ -69,10 +69,11 @@ class ANONY_Uploader {
 		}
 
 		$html        .= sprintf(
-			'<input type="hidden" name="%1$s" value="%2$s" class="%3$s" />',
+			'<input id="%4$s" type="hidden" name="%1$s" value="%2$s" class="%3$s" />',
 			$this->parent->input_name,
 			$this->parent->value,
-			$this->parent->class_attr
+			$this->parent->class_attr,
+			esc_attr( $this->parent->field['id'] )
 		);
 		$html        .= '<div class="uploads-wrapper">';
 		$image_exts   = array( 'jpg', 'jpeg', 'jpe', 'gif', 'png', 'svg' );
@@ -84,10 +85,13 @@ class ANONY_Uploader {
 			} else {
 				$file_basename = wp_basename( $this->parent->value );
 				$html         .= '<a href="' . $this->parent->value . '">';
-				$html         .= '<img class="anony-opts-screenshot" style="max-width:80px;" src="' . ANOE_URI . 'assets/images/placeholders/file.png/><br>';
-				$html         .= '<span>' . $file_basename . '</span>';
+				$html         .= '<img class="anony-opts-screenshot" style="max-width:80px;" src="' . ANOE_URI . 'assets/images/placeholders/file.png"/><br>';
+				$html         .= '<span class="uploaded-file-name">' . $file_basename . '</span>';
 				$html         .= '</a>';
 			}
+		}else{
+			$html .= '<img class="anony-opts-screenshot" style="max-width:80px;" src="'.ANOE_URI . 'assets/images/placeholders/browse.png"/>';
+			$html .= '<span class="uploaded-file-name"></span>';
 		}
 
 		if ( '' === $this->parent->value ) {
@@ -99,15 +103,17 @@ class ANONY_Uploader {
 		}
 
 		$html .= sprintf(
-			' <a href="javascript:void(0);" data-choose="Choose a File" data-update="Select File" class="anony-opts-upload"%1$s><span></span>%2$s</a>',
+			' <a href="javascript:void(0);" data-id="%3$s" data-choose="Choose a File" data-update="Select File" class="anony-opts-upload"%1$s><span></span>%2$s</a>',
 			$upload,
-			esc_html__( 'Browse', 'anonyengine' )
+			esc_html__( 'Browse', 'anonyengine' ),
+			esc_attr($this->parent->field['id'])
 		);
 
 		$html .= sprintf(
-			'<br><a href="javascript:void(0);" class="anony-opts-upload-remove"%1$s>%2$s</a>',
+			'<br><a href="javascript:void(0);" data-id="%3$s" class="anony-opts-upload-remove"%1$s>%2$s</a>',
 			$remove,
-			esc_html__( 'Remove Upload', 'anonyengine' )
+			esc_html__( 'Remove Upload', 'anonyengine' ),
+			esc_attr($this->parent->field['id'])
 		);
 		$html .= '<div>';
 		$html .= ( isset( $this->parent->field['desc'] ) && ! empty( $this->parent->field['desc'] ) ) ? '<div class="description">' . $this->parent->field['desc'] . '</div>' : '';
@@ -144,6 +150,6 @@ class ANONY_Uploader {
 			);
 			wp_enqueue_media();
 		}
-		wp_localize_script( 'anony-opts-field-upload-js', 'anony_upload', array( 'url' => ANONY_FIELDS_URI . 'uploader/blank.png' ) );
+		wp_localize_script( 'anony-opts-field-upload-js', 'anony_upload', array( 'url' => ANOE_URI . 'assets/images/placeholders/file.png' ) );
 	}
 }

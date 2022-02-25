@@ -373,8 +373,7 @@ if(!class_exists('ANONY_Validate_Inputs')){
 			
 			if($this->value == '#' || empty($this->value)) return;
 			
-			if (filter_var($this->value, FILTER_VALIDATE_URL) !== FALSE ) {
-				
+			if (!filter_var(($this->value), FILTER_VALIDATE_URL) ) {
 				$this->valid = false;
 
 				return $this->set_error_code('not-url');

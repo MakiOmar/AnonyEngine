@@ -8,6 +8,11 @@
 		var activeFileUploadContext = $(this).parent();
 		var custom_file_frame = null;
 		var clicked = $(this).data('id');
+
+		if(custom_file_frame){
+			custom_file_frame.open();
+			return;
+		}
 		// Create the media frame.
 		custom_file_frame = wp.media.frames.customHeader = wp.media({
 			title: $(this).data( "choose" ),

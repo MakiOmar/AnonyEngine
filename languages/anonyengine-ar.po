@@ -1,0 +1,531 @@
+msgid ""
+msgstr ""
+"Plural-Forms: nplurals=6; plural=(n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
+"&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5);\n"
+"Project-Id-Version: AnonyEngine\n"
+"POT-Creation-Date: 2022-02-27 10:12+0200\n"
+"PO-Revision-Date: 2022-02-27 10:14+0200\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.0.6\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-Flags-xgettext: --add-comments=translators:\n"
+"X-Poedit-WPHeader: index.php\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
+"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;"
+"_n_noop:1,2;_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
+"Last-Translator: \n"
+"Language: ar\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPathExcluded-0: *.js\n"
+
+#: common-classes/validate-inputs.php:516
+#, php-format
+msgid ""
+"<a href=\"#%1$s\" rel-id=\"%1$s\" class=\"meta-error\"><strong>%2$s:</"
+"strong></a> Sorry!! Please select another file, the selected file type is "
+"not supported. <a>"
+msgstr ""
+
+#: common-classes/validate-inputs.php:521
+#: common-classes/validate-inputs.php:535
+#: common-classes/validate-inputs.php:549
+#: common-classes/validate-inputs.php:563
+#: common-classes/validate-inputs.php:577
+#: common-classes/validate-inputs.php:591
+#: common-classes/validate-inputs.php:605
+#: common-classes/validate-inputs.php:619
+#: common-classes/validate-inputs.php:633
+#: common-classes/validate-inputs.php:647
+msgid "Here"
+msgstr ""
+
+#: common-classes/validate-inputs.php:530
+#, php-format
+msgid ""
+"<a href=\"#%1$s\" rel-id=\"%1$s\" class=\"meta-error\"><strong>%2$s:</"
+"strong></a> Sorry!! The entered date is not valid"
+msgstr ""
+
+#: common-classes/validate-inputs.php:544
+#, php-format
+msgid ""
+"<a href=\"#%1$s\" rel-id=\"%1$s\" class=\"meta-error\"><strong>%2$s:</"
+"strong></a> Sorry!! Date format is not supported"
+msgstr ""
+
+#: common-classes/validate-inputs.php:558
+#, php-format
+msgid ""
+"<a href=\"#%1$s\" rel-id=\"%1$s\" class=\"meta-error\"><strong>%2$s:</"
+"strong></a> Please enter a valid number (e.g. 1,2,-5)"
+msgstr ""
+
+#: common-classes/validate-inputs.php:572
+#, php-format
+msgid ""
+"<a href=\"#%1$s\" rel-id=\"%1$s\" class=\"meta-error\"><strong>%2$s:</"
+"strong></a> You must provide a valid URL"
+msgstr ""
+
+#: common-classes/validate-inputs.php:586
+#, php-format
+msgid ""
+"<a href=\"#%1$s\" rel-id=\"%1$s\" class=\"meta-error\"><strong>%2$s:</"
+"strong></a> You must enter a valid email address."
+msgstr ""
+
+#: common-classes/validate-inputs.php:600
+#, php-format
+msgid ""
+"<a href=\"#%1$s\" rel-id=\"%1$s\" class=\"meta-error\"><strong>%2$s:</"
+"strong></a> HTML is not allowed"
+msgstr ""
+
+#: common-classes/validate-inputs.php:614
+#, php-format
+msgid ""
+"<a href=\"#%1$s\" rel-id=\"%1$s\" class=\"meta-error\"><strong>%2$s:</"
+"strong></a> You must enter an absolute integer"
+msgstr ""
+
+#: common-classes/validate-inputs.php:628
+#, php-format
+msgid ""
+"<a href=\"#%1$s\" rel-id=\"%1$s\" class=\"meta-error\"><strong>%2$s:</"
+"strong></a> You must enter a valid hex color"
+msgstr ""
+
+#: common-classes/validate-inputs.php:642
+#, php-format
+msgid ""
+"<a href=\"#%1$s\" rel-id=\"%1$s\" class=\"meta-error\"><strong>%2$s:</"
+"strong></a> Unvalid option/s"
+msgstr ""
+
+#: common-classes/validate-inputs.php:654
+msgid ""
+"<strong>Sorry!! Something wrong:</strong> Please make sure all your inputs "
+"are correct"
+msgstr ""
+
+#: forms/classes/create-form.php:73
+msgid "Form id is missing"
+msgstr ""
+
+#: forms/classes/create-form.php:129
+msgid "submit"
+msgstr ""
+
+#: functions/post.php:61
+#, php-format
+msgctxt "General Name"
+msgid "%s"
+msgstr ""
+
+#: functions/post.php:62
+#, php-format
+msgctxt "Singular Name"
+msgid "%s"
+msgstr ""
+
+#: functions/post.php:63 functions/post.php:64 functions/post.php:92
+#, php-format
+msgid "%s"
+msgstr ""
+
+#: functions/post.php:65
+#, php-format
+msgid "%s Archives"
+msgstr ""
+
+#: functions/post.php:66
+#, php-format
+msgid "%s Attributes"
+msgstr ""
+
+#: functions/post.php:67 functions/post.php:155
+#, php-format
+msgid "Parent %s:"
+msgstr ""
+
+#: functions/post.php:68 functions/post.php:148
+#, php-format
+msgid "All %s"
+msgstr ""
+
+#: functions/post.php:69
+#, php-format
+msgid "Add New %s"
+msgstr ""
+
+#: functions/post.php:70
+msgid "Add New"
+msgstr ""
+
+#: functions/post.php:71
+#, php-format
+msgid "New %s"
+msgstr ""
+
+#: functions/post.php:72 functions/post.php:149
+#, php-format
+msgid "Edit %s"
+msgstr ""
+
+#: functions/post.php:73
+#, php-format
+msgid "Update %s"
+msgstr ""
+
+#: functions/post.php:74 functions/post.php:75 functions/post.php:150
+#, php-format
+msgid "View %s"
+msgstr ""
+
+#: functions/post.php:76
+#, php-format
+msgid "Search %s"
+msgstr ""
+
+#: functions/post.php:77
+msgid "Not found"
+msgstr ""
+
+#: functions/post.php:78
+msgid "Not found in Trash"
+msgstr ""
+
+#: functions/post.php:79
+msgid "Featured Image"
+msgstr ""
+
+#: functions/post.php:80
+msgid "Set featured image"
+msgstr ""
+
+#: functions/post.php:81
+msgid "Remove featured image"
+msgstr ""
+
+#: functions/post.php:82
+msgid "Use as featured image"
+msgstr ""
+
+#: functions/post.php:83
+#, php-format
+msgid "Insert into %s"
+msgstr ""
+
+#: functions/post.php:84
+#, php-format
+msgid "Uploaded to this %s"
+msgstr ""
+
+#: functions/post.php:85
+#, php-format
+msgid "%s list"
+msgstr ""
+
+#: functions/post.php:86
+#, php-format
+msgid "%s list navigation"
+msgstr ""
+
+#: functions/post.php:87
+#, php-format
+msgid "Filter %s list"
+msgstr ""
+
+#: functions/post.php:93
+#, php-format
+msgid "Here you can add your %s"
+msgstr ""
+
+#: functions/post.php:151
+#, php-format
+msgid "update %s"
+msgstr ""
+
+#: functions/post.php:152
+#, php-format
+msgid "Add new %s"
+msgstr ""
+
+#: functions/post.php:153
+#, php-format
+msgid "new %s"
+msgstr ""
+
+#: functions/post.php:154
+#, php-format
+msgid "Parent %s"
+msgstr ""
+
+#: functions/post.php:156
+#, php-format
+msgid "search %s"
+msgstr ""
+
+#: functions/post.php:157
+#, php-format
+msgid "No %s found"
+msgstr ""
+
+#: helpme/wp/woo-help.php:24
+#, php-format
+msgid "Name \"%s\" is too long (28 characters max). Shorten it, please."
+msgstr ""
+
+#: helpme/wp/woo-help.php:27
+#, php-format
+msgid ""
+"Name \"%s\" is not allowed because it is a reserved term. Change it, please."
+msgstr ""
+
+#: helpme/wp/woo-help.php:30 helpme/wp/woo-help.php:35
+#, php-format
+msgid "Name \"%s\" is already in use. Change it, please."
+msgstr ""
+
+#: helpme/wp/woo-help.php:101
+msgid "إذا كان لديك رمز قسيمة ، فيرجى تطبيقه أدناه."
+msgstr ""
+
+#: helpme/wp/woo-help.php:103
+msgid "كود القسيمة"
+msgstr ""
+
+#: helpme/wp/woo-help.php:106
+msgid "Apply coupon"
+msgstr ""
+
+#: helpme/wp/woo-help.php:106
+msgid "تطبيق الكود"
+msgstr ""
+
+#: helpme/wp/woo-help.php:151 helpme/wp/woo-help.php:156
+#, php-format
+msgid "%1$s"
+msgstr ""
+
+#: helpme/wp/woo-help.php:177 helpme/wp/woo-help.php:182
+#, php-format
+msgid "Up To: %1$s"
+msgstr ""
+
+#: helpme/wp/woo-help.php:350
+msgid "Remove this item"
+msgstr ""
+
+#: helpme/wp/wpcomment-help.php:28
+msgid "Pingback:"
+msgstr ""
+
+#: helpme/wp/wpcomment-help.php:28
+msgid "(Edit)"
+msgstr ""
+
+#: helpme/wp/wpcomment-help.php:43
+msgid "Post author"
+msgstr ""
+
+#. translators: 1: date, 2: time
+#: helpme/wp/wpcomment-help.php:49
+#, php-format
+msgid "%1$s at %2$s"
+msgstr ""
+
+#: helpme/wp/wpcomment-help.php:55
+msgid "Your comment is awaiting moderation."
+msgstr ""
+
+#: helpme/wp/wpcomment-help.php:60 metaboxes/classes/mb-single.php:98
+msgid "Edit"
+msgstr ""
+
+#: helpme/wp/wpcomment-help.php:64
+msgid "Reply"
+msgstr ""
+
+#: index.php:92
+msgid "Settings"
+msgstr ""
+
+#: input-fields/fields/color-gradient-farbtastic/color-gradient-farbtastic.php:75
+#: input-fields/fields/color-gradient/color-gradient.php:51
+msgid "From"
+msgstr ""
+
+#: input-fields/fields/color-gradient-farbtastic/color-gradient-farbtastic.php:102
+#: input-fields/fields/color-gradient/color-gradient.php:66
+msgid "To"
+msgstr ""
+
+#: input-fields/fields/file-upload/file-upload.php:37
+msgid "Select your file"
+msgstr ""
+
+#: input-fields/fields/file-upload/file-upload.php:38
+msgid "No selected file"
+msgstr ""
+
+#: input-fields/fields/file-upload/file-upload.php:39
+msgid "Current file:"
+msgstr ""
+
+#: input-fields/fields/file-upload/file-upload.php:40
+msgid "Download"
+msgstr ""
+
+#: input-fields/fields/font-select/font-select.php:35
+msgid "Default Webfont"
+msgstr ""
+
+#: input-fields/fields/font-select/font-select.php:36
+msgid "System"
+msgstr ""
+
+#: input-fields/fields/font-select/font-select.php:37
+msgid "Popular Google Fonts"
+msgstr ""
+
+#: input-fields/fields/font-select/font-select.php:38
+msgid "Google Fonts"
+msgstr ""
+
+#: input-fields/fields/gallery/gallery.php:78
+#: input-fields/fields/uploader/uploader.php:108
+msgid "Browse"
+msgstr "تصفح"
+
+#: input-fields/fields/gallery/gallery.php:83
+msgid "Remove all"
+msgstr ""
+
+#: input-fields/fields/multi-input/multi-input.php:34
+#: input-fields/fields/multi-text/multi-text.php:34
+#: input-fields/fields/multi-value/multi-value.php:34
+msgid "Add"
+msgstr ""
+
+#: input-fields/fields/select/select.php:69
+#: input-fields/fields/select2/select2.php:71
+msgid "Select"
+msgstr "حدد خياراً"
+
+#: input-fields/fields/select/select.php:126
+#: input-fields/fields/select2/select2.php:128
+msgid "No options"
+msgstr ""
+
+#: input-fields/fields/tabs/tabs.php:63 input-fields/fields/tabs/tabs.php:81
+msgid "Title"
+msgstr ""
+
+#: input-fields/fields/tabs/tabs.php:65 input-fields/fields/tabs/tabs.php:83
+msgid "Content"
+msgstr ""
+
+#: input-fields/fields/uploader/uploader.php:115
+msgid "Remove Upload"
+msgstr ""
+
+#: input-fields/input-field.php:271
+#, php-format
+msgid "%s class doesn't exist"
+msgstr ""
+
+#: metaboxes/classes/mb-shortcode.php:94 metaboxes/classes/mb-single.php:124
+msgid "Save changes"
+msgstr ""
+
+#: metaboxes/classes/mb-single.php:45
+msgid "Sorry, you have to login first"
+msgstr ""
+
+#: metaboxes/classes/meta-box.php:135 metaboxes/classes/term-metabox.php:99
+msgid "Input fields plugin is required"
+msgstr ""
+
+#: options/theme-settings.php:127 options/theme-settings.php:129
+msgid "Anonymous Theme Options"
+msgstr ""
+
+#: options/theme-settings.php:437
+msgid "Options are saved except those with the following errors"
+msgstr ""
+
+#: options/theme-settings.php:457
+msgid "Options saved"
+msgstr ""
+
+#: options/widgets/sidebar-ad.php:19
+msgid "Displays the sidebar AD from theme options"
+msgstr ""
+
+#: options/widgets/sidebar-ad.php:20
+msgid "Sidebar ADs"
+msgstr ""
+
+#: options/widgets/sidebar-ad.php:32
+msgid "Title:"
+msgstr "العنوان:"
+
+#: options/widgets/sidebar-ad.php:34 options/widgets/sidebar-ad.php:57
+msgid "ADs"
+msgstr ""
+
+#: options/widgets/sidebar-ad.php:39
+msgid "AD:"
+msgstr ""
+
+#: utilities/share-by-email/ajax.php:18
+msgid "Please make sure you have entered a valid email address"
+msgstr ""
+
+#: utilities/share-by-email/ajax.php:37
+msgid "anony Real Estate"
+msgstr ""
+
+#: utilities/share-by-email/ajax.php:49
+msgid "Email can't be sent"
+msgstr ""
+
+#: utilities/share-by-email/ajax.php:57
+msgid "Email has been be sent successfully"
+msgstr ""
+
+#: utilities/share-by-email/share-data.php:21
+msgid "Share by email"
+msgstr ""
+
+#: utilities/share-by-email/share-data.php:22
+msgid "Please write down client's email address"
+msgstr ""
+
+#: utilities/share-by-email/share-data.php:23
+msgid "Share"
+msgstr "مشاركة"
+
+#. Plugin Name of the plugin/theme
+msgid "AnonyEngine"
+msgstr ""
+
+#. Plugin URI of the plugin/theme
+#. Author URI of the plugin/theme
+msgid "https://makiomar.com"
+msgstr ""
+
+#. Description of the plugin/theme
+msgid ""
+"With AnonyEngine you can add any kind of metaboxes and options pages and "
+"forms easily and supper fast"
+msgstr ""
+
+#. Author of the plugin/theme
+msgid "Mohammad Omar"
+msgstr ""

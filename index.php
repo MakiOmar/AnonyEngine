@@ -93,3 +93,13 @@ add_filter( "plugin_action_links_".plugin_basename( __FILE__ ) ,  function ( $li
 			    );
     return $links;
 });
+
+
+/**
+ * Load user control plugin textdomain.
+ *
+ * @since 1.0.0
+ */
+add_action( 'plugins_loaded', function() {
+  load_plugin_textdomain( 'anonyengine', false, basename( dirname( __FILE__ ) ) . '/languages' ); 
+} );

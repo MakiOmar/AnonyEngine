@@ -278,5 +278,37 @@ if ( ! class_exists( 'ANONY_TERM_HELP' ) ) {
 			return $grouped;
 		}
 
+		/**
+		 * Render top level terms as parent/children groups.
+		 *
+		 * @param  array $args       Arguments required for get_terms.
+		 * @param  array $attributes Select input attributes.
+		 * @return void
+		 */
+		static function top_level_terms_option_groups( $args, $attributes ) {
+
+			$groups = self::top_level_terms_children( $args );
+
+			$name = trim($attributes['name']);
+			$class = trim( 'terms-options-group '. $attributes['class'] );
+
+			$select = "<select name='{$name}' class='{$class}'>";
+
+		    $select.= "<option value='-1'>".esc_html__('Select category', ABBL_DOMAIN)."</option>";
+		    if(!empty($grouped)){
+		        foreach($grouped as $parent => $children){
+		            $select .= '<optgroup label="'. get_term($parent)->name .'">';
+		            
+		            foreach ($children as $child_id) {
+		                $select.= "<option value='".get_term($child_id)->term_id."'".selected(intval($requested_cat), get_term($child_id)->term_id, false).">".get_term($child_id)->name."</option>";
+		            }
+		            
+		            
+		            $select .= '</optgroup>';
+		        }
+		    }
+
+		}
+
 	}
 }

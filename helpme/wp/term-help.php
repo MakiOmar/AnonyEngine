@@ -205,6 +205,38 @@ if ( ! class_exists( 'ANONY_TERM_HELP' ) ) {
 				$pagination .= '</ul>';
 			endif;
 		}
+
+		static function group_terms_by_parent ($args) {
+
+			$categories = get_terms($args);
+            
+            // Get all parents values. (May have duplicates).
+		    $duplicate_parents = array_column($categories,'parent');
+		    
+		    // Remove duplicates.
+		    $unique_parents    = array_unique($duplicate_parents);
+		    
+		    $grouped           = array();
+		    
+		    foreach($unique_parents as $parent){
+
+		        foreach($categories as $category){
+		        
+		            if ($category->parent === $parent) {
+		                
+		                if ( !isset($grouped[$parent]) ) {
+		                    $grouped[$parent]=array();
+		                }
+		                
+		                $grouped[$parent][] = $category;
+		            }
+		            
+		        }
+		        
+		    }
+
+		    return $grouped;
+		}
 		
 	}
 }

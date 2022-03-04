@@ -32,7 +32,8 @@ require_once( wp_normalize_path( ANOE_DIR . 'options/options.php') );
 
 /*----------------------Autoloading -------------------------*/
 
-define('ANOE_AUTOLOADS' ,serialize(array(
+// Holds autoload classes' paths.
+$auto_load = apply_filters( 'anoe_auto_load', array(
 	/*----Common Classes-----------*/
 	ANOE_COMMON_CLASSES,
 	/*----Metaboxes-----------*/
@@ -52,7 +53,13 @@ define('ANOE_AUTOLOADS' ,serialize(array(
 	/*-----Forms-----*/
 	ANONY_FORMS_CLASSES,
 	
-)));
+));
+
+/**
+ * Holds serialized autoload paths
+ * @const
+ */
+define('ANOE_AUTOLOADS' , serialize($auto_load));
 
 
 /*

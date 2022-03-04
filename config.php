@@ -59,7 +59,7 @@ $auto_load = apply_filters( 'anoe_auto_load', array(
  * Holds serialized autoload paths
  * @const
  */
-define('ANOE_AUTOLOADS' , serialize($auto_load));
+define('ANOE_AUTOLOADS' , wp_json_encode($auto_load));
 
 
 /*
@@ -79,7 +79,7 @@ spl_autoload_register( function ( $class_name ) {
 
 			require_once($class_file);
 		}else{
-			foreach(unserialize( ANOE_AUTOLOADS ) as $path){
+			foreach(json_decode( ANOE_AUTOLOADS ) as $path){
 
 				$class_file = wp_normalize_path($path) .$class_name . '.php';
 

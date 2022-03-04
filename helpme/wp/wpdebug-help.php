@@ -60,11 +60,10 @@ if ( ! class_exists( 'ANONY_WPDEBUG_HELP' ) ) {
 		 */
 		public static function error_log( $data ) {
 			if ( defined( 'WP_DEBUG' ) && true === WP_DEBUG ) {
-				echo '<pre styel="direction:ltr;text-align:left">';
-					// phpcs:disable WordPress.PHP.DevelopmentFunctions
-					error_log( print_r( $data, true ) );
-					// phpcs:enable
-				echo '</pre>';
+
+				// phpcs:disable WordPress.PHP.DevelopmentFunctions
+				error_log( print_r( $data, true ) );
+				// phpcs:enable
 			}
 		}
 

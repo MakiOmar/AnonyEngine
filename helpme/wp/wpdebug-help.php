@@ -21,16 +21,16 @@ if ( ! class_exists( 'ANONY_WPDEBUG_HELP' ) ) {
 	 * @license    https://makiomar.com AnonyEngine Licence
 	 * @link       https://makiomar.com
 	 */
-	class ANONY_WPDEBUG_HELP extends ANONY_HELP{
+	class ANONY_WPDEBUG_HELP extends ANONY_HELP {
 		/**
 		 * Debug query result.
-		 * 
-		 * @param mixed $results Query result
+		 *
+		 * @param mixed $results Query result.
 		 * @return void
 		 */
-		static function printDbErrors($results){
-			global $wpdb; 
-			if(is_null($results) && WP_DEBUG == true){
+		public static function printDbErrors( $results ) {
+			global $wpdb;
+			if ( is_null( $results ) && defined( 'WP_DEBUG' ) && true === WP_DEBUG ) {
 				$wpdb->show_errors();
 				$wpdb->print_error();
 			}
@@ -38,31 +38,35 @@ if ( ! class_exists( 'ANONY_WPDEBUG_HELP' ) ) {
 
 		/**
 		 * For debugging. used when page direction is rtl.
-		 * 
-		 * @param mixed $data Debug data
+		 *
+		 * @param mixed $data Debug data.
 		 * @return void
 		 */
-		static function neat_var_dump($data){
-			if ( defined( 'WP_DEBUG' ) && WP_DEBUG === true ) {
+		public static function neat_var_dump( $data ) {
+			if ( defined( 'WP_DEBUG' ) && true === WP_DEBUG ) {
 				echo '<pre styel="direction:ltr;text-align:left">';
-					var_dump($data);
+					// phpcs:disable WordPress.PHP.DevelopmentFunctions
+					var_dump( $data );
+					// phpcs:enable
 				echo '</pre>';
 			}
 		}
 
 		/**
 		 * Write to error_log.
-		 * 
-		 * @param array $data Debug data
+		 *
+		 * @param array $data Debug data.
 		 * @return void
 		 */
-		static function error_log($data){
-			if ( defined( 'WP_DEBUG' ) && WP_DEBUG === true ) {
+		public static function error_log( $data ) {
+			if ( defined( 'WP_DEBUG' ) && true === WP_DEBUG ) {
 				echo '<pre styel="direction:ltr;text-align:left">';
-					error_log(print_r($data, true));
+					// phpcs:disable WordPress.PHP.DevelopmentFunctions
+					error_log( print_r( $data, true ) );
+					// phpcs:enable
 				echo '</pre>';
 			}
 		}
-		
+
 	}
 }

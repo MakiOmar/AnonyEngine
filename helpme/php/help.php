@@ -115,12 +115,13 @@ if ( ! class_exists( 'ANONY_HELP' ) ) {
 		    return false;
 		}
 
-		//For testing
+		// For debugging. used when page direction is rtl.
 		static function neatVarDump($r){
-
-				echo '<pre dir="ltr">';
-					var_dump($r);
-				echo '</pre>';
+			echo '<pre styel="direction:ltr;text-align:left">';
+				// phpcs:disable WordPress.PHP.DevelopmentFunctions
+				var_dump($r);
+				// phpcs:enable
+			echo '</pre>';
 		}
 
 	}

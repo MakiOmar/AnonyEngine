@@ -64,7 +64,6 @@ url('../fonts/raleway-thin-webfont.svg#ralewaythin') format('svg');
 .anony-label{
     font-weight: bold;
     margin: 15px;
-    min-width: 150px;
     display: inline-block;
 }
 .anony-middle{

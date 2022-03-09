@@ -1,17 +1,18 @@
 <?php
-if ( ! defined( 'ABSPATH' ) ) {
-	exit();
-}
 /**
  * Plugin Name: AnonyEngine
  * Plugin URI: https://makiomar.com
  * Description: With AnonyEngine you can add any kind of metaboxes and options pages and forms easily and supper fast
  * Version: 1.0.0
+ *
+ * @package  AnonyEngine
  * Author: Mohammad Omar
  * Author URI: https://makiomar.com
  * Text Domain: anonyengine
  * License: GPL2
-*/
+ */
+
+defined( 'ABSPATH' ) || die(); // Exit if accessed direct.
 
 /**
  * Holds plugin PATH
@@ -48,14 +49,14 @@ require_once wp_normalize_path( ANOE_FUNC_DIR . 'phpoffice.php' );
  *
  * Looping through custom arrays of styles/scripts, and consider using filemtime
  */
-function anonyCommonScripts() {
+function anony_common_scripts() {
 
 	$scripts = array( 'jquery.helpme' );
 	foreach ( $scripts as $script ) {
 		wp_enqueue_script( $script, ANOE_URI . 'assets/js/' . $script . '.js', array( 'jquery' ), filemtime( wp_normalize_path( ANOE_DIR . '/assets/js/' . $script . '.js' ) ), true );
 	}
 
-	// Register styles
+	// Register styles.
 	$styles_libs = array( 'jquery.ui.slider-rtl' );
 
 	$styles = array( 'responsive', 'anonyengine' );
@@ -64,12 +65,12 @@ function anonyCommonScripts() {
 
 	foreach ( $styles as $style ) {
 
-		$handle = in_array( $style, $styles_libs ) ? $style : 'anony-' . $style;
+		$handle = in_array( $style, $styles_libs, true ) ? $style : 'anony-' . $style;
 
 		wp_enqueue_style( $handle, ANOE_URI . 'assets/css/' . $style . '.css', false, filemtime( wp_normalize_path( ANOE_DIR . 'assets/css/' . $style . '.css' ) ) );
 	}
 
-	// equeue scripts
+	// equeue scripts.
 	$scripts = array( 'jquery.ui.slider-rtl.min' );
 	foreach ( $scripts as $script ) {
 		wp_register_style( $script, ANOE_URI . 'assets/js/' . $script . '.js', array( 'jquery', 'jquery-ui-slider' ), filemtime( wp_normalize_path( ANOE_DIR . '/assets/js/' . $script . '.js' ) ), true );
@@ -77,10 +78,10 @@ function anonyCommonScripts() {
 }
 
 /**
- * AnonyEngine common scripts
+ * AnonyEngine common scripts.
  */
-add_action( 'wp_enqueue_scripts', 'anonyCommonScripts' );
-add_action( 'admin_enqueue_scripts', 'anonyCommonScripts' );
+add_action( 'wp_enqueue_scripts', 'anony_common_scripts' );
+add_action( 'admin_enqueue_scripts', 'anony_common_scripts' );
 
 
 add_action(

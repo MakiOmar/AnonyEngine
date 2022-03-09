@@ -19,9 +19,6 @@ class ANONY_Mixed{
 
 		$this->parent = $parent;
 
-		
-		$this->parent->value = esc_attr($this->parent->value );
-
 		switch ($this->parent->field['type']) {
 			case 'url':
 				$this->parent->value  = esc_url($this->parent->value);
@@ -89,7 +86,7 @@ class ANONY_Mixed{
 				);
 
 		if(isset($this->parent->field['note'])){
-			echo '<p class=anony-warning>'.$this->parent->field['note'].'<p>';
+			$html .= '<p class=anony-warning>'.$this->parent->field['note'].'<p>';
 		}
 
 		if(in_array($this->parent->context, ['meta', 'form'])  && isset($this->parent->field['title'])){
@@ -165,4 +162,3 @@ class ANONY_Mixed{
 	}
 	
 }
-?>

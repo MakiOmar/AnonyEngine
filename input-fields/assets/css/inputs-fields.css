@@ -72,9 +72,24 @@ select{
 }
 
 fieldset{
-	border:none
+	border:none;
+    position:relative;
 }
 
+fieldset .iti {
+    width: 100%;
+    color: #222;
+    direction: ltr;
+    padding: 0;
+}
+fieldset .iti div.iti__arrow{
+    padding: 0;
+}
+
+.iti__country{
+    display: flex;
+    align-items: center;
+}
 /* -------------- jQuery UI -------------- */
 
 /* .ui-slider */
@@ -182,6 +197,10 @@ fieldset .anony-form-heading{
 [id*='fieldset_anony']  > h1{
 	text-align: center;
 	font-family: "EXO";
+}
+input[type=tel]{
+    direction: ltr;
+    text-indent: 10px;
 }
 #options-wrap{
 	display: flex;

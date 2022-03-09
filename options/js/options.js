@@ -2,115 +2,121 @@
  * check cookie and get value
  */
 function anonyGetCookie( name ) {
-    var dc,
-        prefix,
-        begin,
-        end;
+	var dc,
+		prefix,
+		begin,
+		end;
 
-    dc = document.cookie;
-    prefix = name + "=";
-    begin = dc.indexOf("; " + prefix);
-    end = dc.length; // default to end of the string
+	dc     = document.cookie;
+	prefix = name + "=";
+	begin  = dc.indexOf( "; " + prefix );
+	end    = dc.length; // default to end of the string
 
-    // found, and not in first position
-    if (begin !== -1) {
-        // exclude the "; "
-        begin += 2;
-    } else {
-        //see if cookie is in first position
-        begin = dc.indexOf(prefix);
-        // not found at all or found as a portion of another cookie name
-        if (begin === -1 || begin !== 0 ) return null;
-    } 
+	// found, and not in first position
+	if (begin !== -1) {
+		// exclude the "; "
+		begin += 2;
+	} else {
+		// see if cookie is in first position
+		begin = dc.indexOf( prefix );
+		// not found at all or found as a portion of another cookie name
+		if (begin === -1 || begin !== 0 ) {
+			return null;
+		}
+	}
 
-    // if we find a ";" somewhere after the prefix position then "end" is that position,
-    // otherwise it defaults to the end of the string
-    if (dc.indexOf(";", begin) !== -1) {
-        end = dc.indexOf(";", begin);
-    }
+	// if we find a ";" somewhere after the prefix position then "end" is that position,
+	// otherwise it defaults to the end of the string
+	if (dc.indexOf( ";", begin ) !== -1) {
+		end = dc.indexOf( ";", begin );
+	}
 
-    return decodeURI(dc.substring(begin + prefix.length, end) ).replace(/\"/g, ''); 
+	return decodeURI( dc.substring( begin + prefix.length, end ) ).replace( /\"/g, '' );
 }
 
 
-jQuery(document).ready(function($){
-	var SettingsView = Backbone.View.extend({
-		el: "#options-wrap",
-		initialize: function(){
-			this.showFirstSection();
-		},
-		events: {
-			'click .nav-toggle': function(e){
-				"use strict";
-					e.preventDefault();
+jQuery( document ).ready(
+	function($){
+		var SettingsView = Backbone.View.extend(
+			{
+				el: "#options-wrap",
+				initialize: function(){
+					this.showFirstSection();
+				},
+				events: {
+					'click .nav-toggle': function(e){
+						"use strict";
+						e.preventDefault();
 
-					var targetID = $(e.currentTarget).attr("role");
+						var targetID = $( e.currentTarget ).attr( "role" );
 
-					$('.anony-dropdown').hide();
-					if($('#' + targetID + '-dropdown')){
-						$('#' + targetID + '-dropdown').toggle();
+						$( '.anony-dropdown' ).hide();
+						if ($( '#' + targetID + '-dropdown' )) {
+							$( '#' + targetID + '-dropdown' ).toggle();
+						}
+
+					},
+
+					'click #submit': function(e){
+						var currentFragment = Backbone.history.getFragment();
+						if (currentFragment !== "undefined" || currentFragment !== '') {
+							document.cookie = "currentFragment=" + currentFragment;
+						}
+					},
+
+					'change input[type="checkbox"]': function(e){
+						$( '.' + e.target.id + '_' ).toggle();
+					},
+
+					'change input[type="radio"]': function(e){
+						$( '.' + e.target.className + '_' ).hide();
+						$( '.' + e.target.value ).toggle();
 					}
+				},
 
-
-			},
-
-			'click #submit': function(e){
-				var currentFragment = Backbone.history.getFragment();
-				if(currentFragment !== "undefined" || currentFragment !== ''){
-					document.cookie = "currentFragment=" + currentFragment;
-				}
-			},
-
-			'change input[type="checkbox"]': function(e){
-				$('.' + e.target.id + '_').toggle();
-			},
-
-			'change input[type="radio"]': function(e){
-				$('.'+ e.target.className +'_').hide();
-				$('.' + e.target.value ).toggle();
+				showFirstSection: function(){
+					if ($( '.anony-show-section' ).length == 0) {
+						$( '.anony-section-group:first' ).addClass( 'anony-show-section' );
+						$( '.anony-nav-link:first' ).closest( '.anony-dropdown' ).show();
+						$( '.anony-nav-link:first' ).parent().addClass( 'active' );
+					}
+				},
 			}
-		},
+		);
 
-		showFirstSection: function(){
-			if($('.anony-show-section').length == 0){
-				$('.anony-section-group:first').addClass('anony-show-section');
-				$('.anony-nav-link:first').closest('.anony-dropdown').show();
-				$('.anony-nav-link:first').parent().addClass('active');
+		var settingsView = new SettingsView();
+
+		var SettingsRouter = Backbone.Router.extend(
+			{
+				routes: {
+					'anony-section/:section': function(section){
+						"use strict";
+						var target = $( 'a[href="#anony-section/' + section + '"]' ),
+						content    = $( '#anony_' + section + '_section' );
+						$( '.anony-nav-link' ).parent().removeClass( 'active' );
+						$( '.anony-section-group' ).removeClass( 'anony-show-section' );
+						target.parent().addClass( 'active' );
+						content.addClass( 'anony-show-section' );
+					}
+				},
+
 			}
-		},
-	});
+		);
 
-	var settingsView = new SettingsView();
+		var settingsRouter = new SettingsRouter();
 
-	var SettingsRouter = Backbone.Router.extend({
-			routes: {
-				'anony-section/:section': function(section){
-					"use strict";
-					var target = $('a[href="#anony-section/' + section + '"]'),
-						content = $('#anony_' + section + '_section');
-					$('.anony-nav-link').parent().removeClass('active');
-					$('.anony-section-group').removeClass('anony-show-section');
-					target.parent().addClass('active');
-					content.addClass('anony-show-section');
-				}
-			},
+		Backbone.history.start();
 
-		});
+		/*--------activate last tab was before form submit------------*/
 
-	var settingsRouter = new SettingsRouter();
+		var lastActiveTab = anonyGetCookie( 'currentFragment' );
 
-	Backbone.history.start();
+		if (lastActiveTab !== null) {
+			var targetID = lastActiveTab.split( '/' )[1];
+			$( '#' + targetID ).closest( '.anony-dropdown' ).show();
+			settingsRouter.navigate( lastActiveTab, {trigger: true} );
+			document.cookie = 'currentFragment=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+		}
 
-	
-	/*--------activate last tab was before form submit------------*/
-
-	var lastActiveTab  = anonyGetCookie('currentFragment');
-
-	if(lastActiveTab !== null){
-		var targetID = lastActiveTab.split('/')[1];
-		$('#' + targetID).closest('.anony-dropdown').show();
-		settingsRouter.navigate(lastActiveTab, {trigger: true});
-		document.cookie =  'currentFragment=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
 	}
-	
-});
+);

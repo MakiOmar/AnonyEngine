@@ -8,8 +8,8 @@
  */
 
 if ( ! class_exists( 'ANONY_OPTS_HELP' ) ) {
-	class ANONY_OPTS_HELP extends ANONY_HELP{
-		
+	class ANONY_OPTS_HELP extends ANONY_HELP {
+
 		/**
 		 * Print out the settings fields for a particular settings section.
 		 *
@@ -50,7 +50,7 @@ if ( ! class_exists( 'ANONY_OPTS_HELP' ) ) {
 				call_user_func( $field['callback'], $field['args'] );
 				echo '</td>';
 				echo '</tr>';
-				echo "</table>";
+				echo '</table>';
 
 			}
 		}
@@ -82,20 +82,21 @@ if ( ! class_exists( 'ANONY_OPTS_HELP' ) ) {
 				}
 				?>
 
-				<div id="<?php echo $section['id'];?>" class="anony-section-group">
-					<?php 
+				<div id="<?php echo $section['id']; ?>" class="anony-section-group">
+					<?php
 
-						if ( $section['title'] ) {
-							echo "<h2>{$section['title']}</h2>\n";
-						}
+					if ( $section['title'] ) {
+						echo "<h2>{$section['title']}</h2>\n";
+					}
 
-						if ( $section['callback'] ) {
-							call_user_func( $section['callback'], $section );
-						}
-						ANONY_OPTS_HELP::DoSettingsFields( $page, $section['id'] );
+					if ( $section['callback'] ) {
+						call_user_func( $section['callback'], $section );
+					}
+						self::DoSettingsFields( $page, $section['id'] );
 					?>
 				</div>
-			<?php }
+				<?php
+			}
 		}
 
 	}

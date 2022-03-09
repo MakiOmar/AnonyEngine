@@ -6,40 +6,44 @@
  * @author Makiomar
  * @link http://makiomar.com
  */
-extract($this->data);
+extract( $this->data );
 
-if($note):?>
+if ( $note ) :?>
 
-<p class=anony-warning><?= $note ?><p>
+<p class=anony-warning><?php echo $note; ?><p>
 
 <?php endif ?>
 
-<fieldset class="anony-row anony-row-inline" id="fieldset_<?= $id?>">
+<fieldset class="anony-row anony-row-inline" id="fieldset_<?php echo $id; ?>">
 				 
-	<?php if($context == 'meta' && $title ) :?>
+	<?php if ( $context == 'meta' && $title ) : ?>
 
-		<label class="anony-label" for="<?= $id ?>"><?= $title ?></label>
+		<label class="anony-label" for="<?php echo $id; ?>"><?php echo $title; ?></label>
 
-	<?php endif;
+		<?php
+	endif;
 
 	// fix for WordPress 3.6 meta options
-	if(strpos( $id ,'[]') === false) :?>
+	if ( strpos( $id, '[]' ) === false ) :
+		?>
 
-		<input type="hidden" name="<?= $name?>" value="0"/>
+		<input type="hidden" name="<?php echo $name; ?>" value="0"/>
 
-	<?php endif?> 
+	<?php endif ?> 
 					
 	<div class="anony-metabox-col">
 
-	<?php if($options && is_array($options)):
+	<?php
+	if ( $options && is_array( $options ) ) :
 
-		foreach($options as $opt => $title):
+		foreach ( $options as $opt => $title ) :
 
-			$checked = (is_array($value) && in_array($opt, $value)) ? ' checked="checked"' : '';?>
+			$checked = ( is_array( $value ) && in_array( $opt, $value ) ) ? ' checked="checked"' : '';
+			?>
 
-			<label class="anony-inputs-row"> <?= $title ?> 
+			<label class="anony-inputs-row"> <?php echo $title; ?> 
 						
-				<input type="checkbox" class="checkbox <?= $class ?>" id="<?= $id ?>[<?= $opt ?>]" name="<?= $name ?>[]" value="<?= $opt ?>"<?= $checked ?><?= $disabled ?>/>
+				<input type="checkbox" class="checkbox <?php echo $class; ?>" id="<?php echo $id; ?>[<?php echo $opt; ?>]" name="<?php echo $name; ?>[]" value="<?php echo $opt; ?>"<?php echo $checked; ?><?php echo $disabled; ?>/>
 
 			</label>
 
@@ -47,15 +51,20 @@ if($note):?>
 
 	</div>
 
-	<?php else: $checked = checked($value, 1, false);?>
+		<?php
+	else :
+		$checked = checked( $value, 1, false );
+		?>
 
-		<input type="checkbox" id="<?= $id ?>" name="<?= $name ?>" class="checkbox <?= $class ?>" value="1"<?= $checked.$disabled ?>/>
+		<input type="checkbox" id="<?php echo $id; ?>" name="<?php echo $name; ?>" class="checkbox <?php echo $class; ?>" value="1"<?php echo $checked . $disabled; ?>/>
 
-	<?php endif;
+		<?php
+	endif;
 
-	if($desc && !empty($desc)):?>
+	if ( $desc && ! empty( $desc ) ) :
+		?>
 
-		<div class="description btn-desc"><?= $desc?></div>
+		<div class="description btn-desc"><?php echo $desc; ?></div>
 
 	<?php endif ?>
 

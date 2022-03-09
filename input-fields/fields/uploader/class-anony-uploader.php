@@ -89,8 +89,8 @@ class ANONY_Uploader {
 				$html         .= '<span class="uploaded-file-name">' . $file_basename . '</span>';
 				$html         .= '</a>';
 			}
-		}else{
-			$html .= '<img class="anony-opts-screenshot" style="max-width:80px;" src="'.ANOE_URI . 'assets/images/placeholders/browse.png"/>';
+		} else {
+			$html .= '<img class="anony-opts-screenshot" style="max-width:80px;" src="' . ANOE_URI . 'assets/images/placeholders/browse.png"/>';
 			$html .= '<span class="uploaded-file-name"></span>';
 		}
 
@@ -106,14 +106,14 @@ class ANONY_Uploader {
 			' <a href="javascript:void(0);" data-id="%3$s" data-choose="Choose a File" data-update="Select File" class="anony-opts-upload"%1$s><span></span>%2$s</a>',
 			$upload,
 			esc_html__( 'Browse', 'anonyengine' ),
-			esc_attr($this->parent->field['id'])
+			esc_attr( $this->parent->field['id'] )
 		);
 
 		$html .= sprintf(
 			'<br><a href="javascript:void(0);" data-id="%3$s" class="anony-opts-upload-remove"%1$s>%2$s</a>',
 			$remove,
 			esc_html__( 'Remove Upload', 'anonyengine' ),
-			esc_attr($this->parent->field['id'])
+			esc_attr( $this->parent->field['id'] )
 		);
 		$html .= '<div>';
 		$html .= ( isset( $this->parent->field['desc'] ) && ! empty( $this->parent->field['desc'] ) ) ? '<div class="description">' . $this->parent->field['desc'] . '</div>' : '';

@@ -7,4 +7,4 @@
  * @link http://makiomar.com
  */
 
-require_once('opts.php');
+require_once 'opts.php';

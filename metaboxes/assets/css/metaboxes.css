@@ -1,20 +1,20 @@
-[id*='anony-meta-'] input[type="checkbox"], 
-[id*='anony-meta-'] input[type="color"], 
-[id*='anony-meta-'] input[type="date"], 
-[id*='anony-meta-'] input[type="datetime-local"], 
-[id*='anony-meta-'] input[type="datetime"], 
-[id*='anony-meta-'] input[type="email"], 
-[id*='anony-meta-'] input[type="month"], 
-[id*='anony-meta-'] input[type="number"], 
-[id*='anony-meta-'] input[type="password"], 
-[id*='anony-meta-'] input[type="radio"], 
-[id*='anony-meta-'] input[type="search"], 
-[id*='anony-meta-'] input[type="tel"], 
-[id*='anony-meta-'] input[type="text"], 
-[id*='anony-meta-'] input[type="time"], 
-[id*='anony-meta-'] input[type="url"], 
-[id*='anony-meta-'] input[type="week"], 
-[id*='anony-meta-'] select, 
+[id*='anony-meta-'] input[type="checkbox"],
+[id*='anony-meta-'] input[type="color"],
+[id*='anony-meta-'] input[type="date"],
+[id*='anony-meta-'] input[type="datetime-local"],
+[id*='anony-meta-'] input[type="datetime"],
+[id*='anony-meta-'] input[type="email"],
+[id*='anony-meta-'] input[type="month"],
+[id*='anony-meta-'] input[type="number"],
+[id*='anony-meta-'] input[type="password"],
+[id*='anony-meta-'] input[type="radio"],
+[id*='anony-meta-'] input[type="search"],
+[id*='anony-meta-'] input[type="tel"],
+[id*='anony-meta-'] input[type="text"],
+[id*='anony-meta-'] input[type="time"],
+[id*='anony-meta-'] input[type="url"],
+[id*='anony-meta-'] input[type="week"],
+[id*='anony-meta-'] select,
 [id*='anony-meta-'] textarea{
 	border: navajowhite;
 	box-shadow: inset 0 1px 5px rgba(0,0,0,.2);
@@ -180,14 +180,14 @@ fieldset div{
 }
 .anony-options{
 	display: flex;
-	flex-direction: column;	
+	flex-direction: column;
 }
 .anony-hidden-input{
-    display:none;
+	display:none;
 }
 #anony_map{
-    height:350px;
-    width: 100%;
+	height:350px;
+	width: 100%;
 }
 @media screen and (max-width:760px){
 
@@ -203,7 +203,7 @@ fieldset div{
 	fieldset div a,fieldset span,fieldset p,button{
 		font-size: 14px!important;
 	}
-}	
+}
 @media screen and (min-width:850px){
 	#anony-upload-wrapper,#anony-download-file{
 		flex-direction: column;

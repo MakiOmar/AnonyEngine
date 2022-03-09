@@ -6,66 +6,66 @@
 	font-style: normal;
 }
 @font-face {
-    font-family: 'Raleway';
-    src: url('../fonts/raleway-bold-webfont.eot');
-    src: url('../fonts/raleway-bold-webfont.eot?#iefix') format('embedded-opentype'),
+	font-family: 'Raleway';
+	src: url('../fonts/raleway-bold-webfont.eot');
+	src: url('../fonts/raleway-bold-webfont.eot?#iefix') format('embedded-opentype'),
 url('../fonts/raleway-bold-webfont.woff') format('woff'),
 url('../fonts/raleway-bold-webfont.ttf') format('truetype'),
 url('../fonts/raleway-bold-webfont.svg#ralewaybold') format('svg');
-    font-weight: bold;
-    font-style: normal;
+	font-weight: bold;
+	font-style: normal;
 }
 
 @font-face {
-    font-family: 'Raleway';
-    src: url('../fonts/raleway-light-webfont.eot');
-    src: url('../fonts/raleway-light-webfont.eot?#iefix') format('embedded-opentype'),
+	font-family: 'Raleway';
+	src: url('../fonts/raleway-light-webfont.eot');
+	src: url('../fonts/raleway-light-webfont.eot?#iefix') format('embedded-opentype'),
 url('../fonts/raleway-light-webfont.woff') format('woff'),
 url('../fonts/raleway-light-webfont.ttf') format('truetype'),
 url('../fonts/raleway-light-webfont.svg#ralewaylight') format('svg');
-    font-weight: 300;
-    font-style: normal;
+	font-weight: 300;
+	font-style: normal;
 }
 
 @font-face {
-    font-family: 'Raleway';
-    src: url('../fonts/raleway-regular-webfont.eot');
-    src: url('../fonts/raleway-regular-webfont.eot?#iefix') format('embedded-opentype'),
+	font-family: 'Raleway';
+	src: url('../fonts/raleway-regular-webfont.eot');
+	src: url('../fonts/raleway-regular-webfont.eot?#iefix') format('embedded-opentype'),
 url('../fonts/raleway-regular-webfont.woff') format('woff'),
 url('../fonts/raleway-regular-webfont.ttf') format('truetype'),
 url('../fonts/raleway-regular-webfont.svg#ralewayregular') format('svg');
-    font-weight: normal;
-    font-style: normal;
+	font-weight: normal;
+	font-style: normal;
 }
 
 @font-face {
-    font-family: 'Raleway';
-    src: url('../fonts/raleway-thin-webfont.eot');
-    src: url('../fonts/raleway-thin-webfont.eot?#iefix') format('embedded-opentype'),
+	font-family: 'Raleway';
+	src: url('../fonts/raleway-thin-webfont.eot');
+	src: url('../fonts/raleway-thin-webfont.eot?#iefix') format('embedded-opentype'),
 url('../fonts/raleway-thin-webfont.woff') format('woff'),
 url('../fonts/raleway-thin-webfont.ttf') format('truetype'),
 url('../fonts/raleway-thin-webfont.svg#ralewaythin') format('svg');
-    font-weight: 100;
-    font-style: normal;
+	font-weight: 100;
+	font-style: normal;
 }
 
 .file-upload-override-button{
-    display: inline-block;
-    margin: 10px;
+	display: inline-block;
+	margin: 10px;
 }
 .anony-form{
 	background: #fff;
 	padding:10px
 }
 #download-file{
-    padding: 10px;
+	padding: 10px;
 }
 
 .anony-label{
-    font-weight: bold;
-    margin: 15px;
-    display: inline-block;
+	font-weight: bold;
+	margin: 15px;
+	display: inline-block;
 }
 .anony-middle{
-    vertical-align: middle!important;
+	vertical-align: middle!important;
 }

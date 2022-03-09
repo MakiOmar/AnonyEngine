@@ -32,7 +32,7 @@ input, button {
   font-size: 100%;
   color: inherit; }
   input[disabled], button[disabled] {
-    background-color: #eee; }
+	background-color: #eee; }
 
 input, select {
   border: 1px solid #CCC;
@@ -54,9 +54,9 @@ button {
   background-color: #428BCA;
   border: 1px solid #357EBD; }
   button:hover {
-    background-color: #3276B1;
-    border-color: #285E8E;
-    cursor: pointer; }
+	background-color: #3276B1;
+	border-color: #285E8E;
+	cursor: pointer; }
 
 #result {
   margin-bottom: 100px; }

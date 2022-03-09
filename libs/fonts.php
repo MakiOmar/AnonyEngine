@@ -1,15 +1,15 @@
 <?php
 /**
-* Theme fonts array.
-*
-* @package Anonymous
-* @author Makiomar
-* @link http://makiomar.com
-*/
+ * Theme fonts array.
+ *
+ * @package Anonymous
+ * @author Makiomar
+ * @link http://makiomar.com
+ */
 
 $fonts = array();
 
-// system fonts won`t be downloaded from Google Fonts 
+// system fonts won`t be downloaded from Google Fonts
 $fonts['system'] = array(
 	'Arial',
 	'Georgia',
@@ -772,4 +772,4 @@ $fonts['all'] = array(
 	'Zeyada',
 );
 
-define('ANOE_FONTS', serialize($fonts));
+define( 'ANOE_FONTS', serialize( $fonts ) );

@@ -8,7 +8,7 @@
 }
 
 .has-switch > div.switch-on {
-    left: auto;
+	left: auto;
 	right: -63%;
 }
 
@@ -18,10 +18,10 @@
 	border-bottom-right-radius: 0;
 }
 #options-nav {
-    box-shadow: -10px 5px 6px #dbd1d1;
+	box-shadow: -10px 5px 6px #dbd1d1;
 }
 #anony-options-wrapper > h1{
-	
+
 }
 
 #anony-options-wrapper .anony-section-group .multi-text-ul li a.multi-text-remove{

@@ -8,61 +8,71 @@
  */
 
 if ( ! class_exists( 'ANONY_ARRAY_HELP' ) ) {
-	class ANONY_ARRAY_HELP extends ANONY_HELP{
- 		
- 		/**
- 		 * Checks if an array is sequentially indexed
- 		 * @param  array $arr 
- 		 * @return bool
- 		 */
-		static function isSequentiallyIndexed (array $arr){
+	class ANONY_ARRAY_HELP extends ANONY_HELP {
 
-		    if (array() === $arr) return false;
+		/**
+		 * Checks if an array is sequentially indexed
+		 *
+		 * @param  array $arr
+		 * @return bool
+		 */
+		static function isSequentiallyIndexed( array $arr ) {
 
+			if ( array() === $arr ) {
+				return false;
+			}
 
-		    return array_keys($arr) === range(0, count($arr) - 1);
+			return array_keys( $arr ) === range( 0, count( $arr ) - 1 );
 		}
 
 		/**
 		 * Checks if an array is indexed
- 		 * @param  array $arr 
- 		 * @return bool
+		 *
+		 * @param  array $arr
+		 * @return bool
 		 */
-		static function isIndexed($array){
-			if( empty(array_filter(array_keys($array) ,'is_string' ) ) ) return true;
+		static function isIndexed( $array ) {
+			if ( empty( array_filter( array_keys( $array ), 'is_string' ) ) ) {
+				return true;
+			}
 			return false;
 		}
 
 		/**
 		 * Checks if an array is associative
- 		 * @param  array $arr 
- 		 * @return bool
+		 *
+		 * @param  array $arr
+		 * @return bool
 		 */
-		static function isAssoc($array){
-			if (!self::isIndexed($array)) return true;
-			if (!self::isSequentiallyIndexed($array)) return true;
+		static function isAssoc( $array ) {
+			if ( ! self::isIndexed( $array ) ) {
+				return true;
+			}
+			if ( ! self::isSequentiallyIndexed( $array ) ) {
+				return true;
+			}
 			return false;
 		}
 		/**
 		 * Gets an associative array as key/value pairs from any object properties.
-		 * 
-	 	 * Useful where a select input field has dynamic options.
+		 *
+		 * Useful where a select input field has dynamic options.
+		 *
 		 * @param object $objects_array The array of objects to loop through
 		 * @param string $key           The property that should be used as a key
 		 * @param string $value         The property that should be used as a value
-		 * @return array                An array of properties as key/value pairs    
+		 * @return array                An array of properties as key/value pairs
 		 */
-		static function ObjToAssoc($objects_array, $key, $value, $assoc = true){
+		static function ObjToAssoc( $objects_array, $key, $value, $assoc = true ) {
 
-			$arr = [];
+			$arr = array();
 
-			foreach ($objects_array as $object) {
-				if($assoc && !empty($key)){
-					$arr[$object->$key] = $object->$value;
-				}else{
+			foreach ( $objects_array as $object ) {
+				if ( $assoc && ! empty( $key ) ) {
+					$arr[ $object->$key ] = $object->$value;
+				} else {
 					$arr[] = $object->$value;
 				}
-				
 			}
 
 			return $arr;
@@ -70,136 +80,145 @@ if ( ! class_exists( 'ANONY_ARRAY_HELP' ) ) {
 
 		/**
 		 * Same as print_r but usefull for rtl pages
-		 * @param type $array 
+		 *
+		 * @param type $array
 		 * @return type
 		 */
-		static function neatPrintR($array){
+		static function neatPrintR( $array ) {
 			echo '<pre dir="ltr">';
-				print_r($array);
+				print_r( $array );
 			echo '</pre>';
 		}
 
 		/**
 		 * Insert a key/value before another in an associative array
-		 * @param array $originalArray 
-		 * @param strin $originalKey 
-		 * @param array $insertKey 
-		 * @param string $insertValue 
+		 *
+		 * @param array  $originalArray
+		 * @param strin  $originalKey
+		 * @param array  $insertKey
+		 * @param string $insertValue
 		 * @return array
 		 */
 		static function insertBeforeKey( $originalArray, $originalKey, $insertKey, $insertValue ) {
 
-		    $newArray = array();
-		    $inserted = false;
+			$newArray = array();
+			$inserted = false;
 
-		    foreach( $originalArray as $key => $value ) {
+			foreach ( $originalArray as $key => $value ) {
 
-		        if( !$inserted && $key === $originalKey ) {
-		            $newArray[ $insertKey ] = $insertValue;
-		            $inserted = true;
-		        }
+				if ( ! $inserted && $key === $originalKey ) {
+					$newArray[ $insertKey ] = $insertValue;
+					$inserted               = true;
+				}
 
-		        $newArray[ $key ] = $value;
+				$newArray[ $key ] = $value;
 
-		    }
+			}
 
-		    return $newArray;
+			return $newArray;
 
 		}
 
 		/**
 		 *  Check if an array is a multidimensional array.
 		 *
-		 *  @param   array   $arr  The array to check
+		 *  @param   array $arr  The array to check
 		 *  @return  boolean       Whether the the array is a multidimensional array or not
 		 */
 		static function isMultiDimensional( $x ) {
-			if( count( array_filter( $x,'is_array' ) ) > 0 ) return true;
+			if ( count( array_filter( $x, 'is_array' ) ) > 0 ) {
+				return true;
+			}
 			return false;
 		}
 
 		/**
 		 *  Convert an object to an array.
 		 *
-		 *  @param   array   $object  The object to convert
+		 *  @param   array $object  The object to convert
 		 *  @return  array            The converted array
 		 */
 		static function ToArray( $object ) {
-			if( !is_object( $object ) || !is_array( $object ) ) return $object;
+			if ( ! is_object( $object ) || ! is_array( $object ) ) {
+				return $object;
+			}
 			return array_map( 'object_to_array', (array) $object );
 		}
 
 		/**
 		 *  Check if a value exists in the array/object.
 		 *
-		 *  @param   mixed    $needle    The value that you are searching for
-		 *  @param   mixed    $haystack  The array/object to search
-		 *  @param   boolean  $strict    Whether to use strict search or not
+		 *  @param   mixed   $needle    The value that you are searching for
+		 *  @param   mixed   $haystack  The array/object to search
+		 *  @param   boolean $strict    Whether to use strict search or not
 		 *  @return  boolean             Whether the value was found or not
 		 */
-		static function searchHaystack( $needle, $haystack, $strict=true ) {
+		static function searchHaystack( $needle, $haystack, $strict = true ) {
 			$haystack = self::ToArray( $haystack );
 
-			if( is_array( $haystack ) ) {
-				if( self::isMultiDimensional( $haystack ) ) {   // Multidimensional array
-					foreach( $haystack as $subhaystack ) {
-						if( self::searchHaystack( $needle, $subhaystack, $strict ) ) {
+			if ( is_array( $haystack ) ) {
+				if ( self::isMultiDimensional( $haystack ) ) {   // Multidimensional array
+					foreach ( $haystack as $subhaystack ) {
+						if ( self::searchHaystack( $needle, $subhaystack, $strict ) ) {
 							return true;
 						}
 					}
-				} elseif( array_keys( $haystack ) !== range( 0, count( $haystack ) - 1 ) ) {    // Associative array
-					foreach( $haystack as $key => $val ) {
-						if( $needle == $val && !$strict ) {
+				} elseif ( array_keys( $haystack ) !== range( 0, count( $haystack ) - 1 ) ) {    // Associative array
+					foreach ( $haystack as $key => $val ) {
+						if ( $needle == $val && ! $strict ) {
 							return true;
-						} elseif( $needle === $val && $strict ) {
+						} elseif ( $needle === $val && $strict ) {
 							return true;
 						}
 					}
 
 					return false;
-				} else {    
+				} else {
 					// Normal array
-					if(!$strict){
+					if ( ! $strict ) {
 						return $needle == $haystack;
-					}else
-					
-					return $needle === $haystack;
+					} else {
+
+						return $needle === $haystack;
+					}
 				}
 			}
 
 			return false;
 		}
-		
+
 		/**
 		 * Insertes new key/value pairs after a specific key
-		 * @param  string $key 
-		 * @param  array $insert_array 
-		 * @param  array $original_array 
+		 *
+		 * @param  string $key
+		 * @param  array  $insert_array
+		 * @param  array  $original_array
 		 * @return array
 		 */
-		static function insertAfterAssocKey($key, $insert_array, $original_array){
-			
-			$offset = array_search($key, array_keys($original_array));
+		static function insertAfterAssocKey( $key, $insert_array, $original_array ) {
+
+			$offset = array_search( $key, array_keys( $original_array ) );
 
 			$result = array_merge(
-			            array_slice($original_array, 0, $offset),
-			            $insert_array,
-			            array_slice($original_array, $offset, null)
-			        );
-			
+				array_slice( $original_array, 0, $offset ),
+				$insert_array,
+				array_slice( $original_array, $offset, null )
+			);
+
 			return $resutl;
 		}
-		
+
 		/**
 		 * Compairs two associative arrays and replace default values of first array with new value in second array
-		 * @param  array $defaults 
+		 *
+		 * @param  array $defaults
 		 * @param  array $atts
 		 * @return array
 		 */
-		static function defaultsMapping( array $defaults, array $atts) {
-			$out  = [];
+		static function defaultsMapping( array $defaults, array $atts ) {
+			$out = array();
 			foreach ( $defaults as $name => $default ) {
-				
+
 				if ( array_key_exists( $name, $atts ) ) {
 					$out[ $name ] = $atts[ $name ];
 				} else {

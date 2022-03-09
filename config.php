@@ -119,6 +119,19 @@ function anoe_autoloader( $class_name ) {
 				}
 			}
 		}
+
+		$class_name = 'class-'. strtolower( str_replace( '_', '-', $class_name ) );
+
+		foreach ( json_decode( ANOEL_AUTOLOADS ) as $path ) {
+
+			$class_file = wp_normalize_path( $path ) . '/' . $class_name . '.php';
+
+			if ( file_exists( $class_file ) ) {
+
+				require_once $class_file;
+			}
+		}
+
 	}
 }
 

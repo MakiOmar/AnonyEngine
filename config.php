@@ -83,48 +83,40 @@ define( 'ANOE_AUTOLOADS', wp_json_encode( $auto_load ) );
 
 
 /**
- * Classes Auto loader.
+ * Initialize WordPress autoloader.
  *
  * @param string $class_name Class name.
  */
-function anoe_autoloader( $class_name ) {
+spl_autoload_register( function( $class_name ) {
 
-	if ( false !== strpos( $class_name, 'ANONY_' ) ) {
+	if ( false === strpos( $class_name, 'ANONY_' ) ) return;
 
-		$class_name = preg_replace( '/ANONY_/', '', $class_name );
+	$wp_class_name = 'class-' . strtolower( str_replace( '_', '-', $class_name ) );
 
-		$class_name = strtolower( str_replace( '_', '-', $class_name ) );
+	foreach ( json_decode( ANOE_AUTOLOADS ) as $path ) {
 
-		$class_file = $class_name . '.php';
+		$class_file = wp_normalize_path( $path ) . '/' . $wp_class_name . '.php';
 
 		if ( file_exists( $class_file ) ) {
 
 			require_once $class_file;
-		} else {
-			foreach ( json_decode( ANOE_AUTOLOADS ) as $path ) {
+		}else{
 
-				$class_file = wp_normalize_path( $path ) . $class_name . '.php';
+			$folder_name = strtolower( 
+				str_replace( 
+					'_', 
+					'-', 
+					preg_replace( 
+						'/ANONY_/', 
+						'', 
+						$class_name 
+					) 
+				) 
+			);
 
-				if ( file_exists( $class_file ) ) {
+			$class_file = wp_normalize_path( $path ) . $folder_name . '/' . $wp_class_name . '.php';
 
-					require_once $class_file;
-				} else {
-
-					$class_file = wp_normalize_path( $path ) . $class_name . '/' . $class_name . '.php';
-
-					if ( file_exists( $class_file ) ) {
-
-						require_once $class_file;
-					}
-				}
-			}
-		}
-
-		$class_name = 'class-' . strtolower( str_replace( '_', '-', $class_name ) );
-
-		foreach ( json_decode( ANOEL_AUTOLOADS ) as $path ) {
-
-			$class_file = wp_normalize_path( $path ) . '/' . $class_name . '.php';
+			
 
 			if ( file_exists( $class_file ) ) {
 
@@ -132,9 +124,8 @@ function anoe_autoloader( $class_name ) {
 			}
 		}
 	}
-}
 
-// Initialize autoloader.
-spl_autoload_register( 'anoe_autoloader' );
+} );
+
 
 

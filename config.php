@@ -120,7 +120,7 @@ function anoe_autoloader( $class_name ) {
 			}
 		}
 
-		$class_name = 'class-'. strtolower( str_replace( '_', '-', $class_name ) );
+		$class_name = 'class-' . strtolower( str_replace( '_', '-', $class_name ) );
 
 		foreach ( json_decode( ANOEL_AUTOLOADS ) as $path ) {
 
@@ -131,7 +131,6 @@ function anoe_autoloader( $class_name ) {
 				require_once $class_file;
 			}
 		}
-
 	}
 }
 

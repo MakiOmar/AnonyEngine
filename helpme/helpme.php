@@ -19,14 +19,20 @@ define( 'ANONY_HLP_URI', ANOE_URI . 'helpme/' );
  *
  * @const
  */
-define( 'ANONY_HLP_PHP', ANONY_HLP_PATH . 'php/' );
+define( 'ANONY_HLP_PHP', wp_normalize_path( ANONY_HLP_PATH . 'php/' ) );
 
 /**
  * Holds a URI to Custom fields classes folder
  *
  * @const
  */
-define( 'ANONY_HLP_WP', ANONY_HLP_PATH . 'wp/' );
+define( 'ANONY_HLP_WP', wp_normalize_path( ANONY_HLP_PATH . 'wp/' ) );
 
+/**
+ * Holds helper classes path
+ *
+ * @const
+ */
+define( 'ANOE_HELPER_CLASSES', wp_normalize_path( ANONY_HLP_PATH . 'helper-classes/' ) );
 
 require_once 'wp-hooks.php';

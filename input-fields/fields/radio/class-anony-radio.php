@@ -33,6 +33,16 @@ class ANONY_Radio {
 		}
 
 		$this->parent = $parent;
+
+		$this->show_only_labels = 'no';
+
+		if ( isset( $this->parent->field['only-labels'] ) ) {
+			$this->show_only_labels = $this->parent->field['only-labels'];
+		}
+
+		if ( 'yes' === $this->show_only_labels ) {
+			$this->parent->class_attr .= ' anony-hidden-radio';
+		}
 		$this->enqueue();
 	}
 
@@ -79,6 +89,7 @@ class ANONY_Radio {
 				),
 			),
 		*/
+		$html .= '<div class="anony-radio-items">';
 		foreach ( $this->parent->field['options'] as $k => $v ) {
 
 			$radioClass = isset( $v['class'] ) ? 'class="' . $v['class'] . ' ' . $this->parent->class_attr . '"' : '';
@@ -92,7 +103,7 @@ class ANONY_Radio {
 					array_keys( $this->parent->field['options'] )
 				);
 
-				$selected = ( $checked != '' ) ? ' anony-radio-img-selected' : '';
+				$selected = ( $checked != '' ) ? ' anony-radio-selected' : '';
 
 				$html .= sprintf(
 					'<label class="anony-radio%1$s anony-radio-%2$s" for="%2$s_%3$s">',
@@ -102,7 +113,7 @@ class ANONY_Radio {
 				);
 
 					$html .= sprintf(
-						'<input %1$s type="radio" id="%2$s_%3$s" name="%4$s" value="%6$s" %7$s />',
+						'<input %1$s type="radio" id="%2$s_%3$s" name="%4$s" class="%5$s anony-radio-input" value="%6$s" %7$s />',
 						$radioClass,
 						$this->parent->field['id'],
 						$search,
@@ -114,12 +125,19 @@ class ANONY_Radio {
 
 				$html .= '</label>';
 
-				$html .= '<span class="description">' . $v['title'] . '</span>';
+				if ( 'yes' === $this->show_only_labels ) {
+					$html .= sprintf('<span class="radio-title anony-for-hidden-radio" data-id="%1$s_%3$s">%2$s</span>', $this->parent->field['id'], $v['title'], $search);
+				}else{
+					$html .= '<span class="radio-title">' . $v['title'] . '</span>';
+				}
+
+				
 
 			$html .= '</div>';
 		}
+		$html .= '</div>';
 
-			$html .= ( isset( $this->parent->field['desc'] ) && ! empty( $this->parent->field['desc'] ) ) ? '<br style="clear:both;"/><div class="description">' . $this->parent->field['desc'] . '</div>' : '';
+		$html .= ( isset( $this->parent->field['desc'] ) && ! empty( $this->parent->field['desc'] ) ) ? '<br style="clear:both;"/><div class="description">' . $this->parent->field['desc'] . '</div>' : '';
 
 		$html .= '</fieldset>';
 
@@ -131,7 +149,7 @@ class ANONY_Radio {
 	 * Enqueue scripts.
 	 */
 	public function enqueue() {
-		// wp_enqueue_script('anony-opts-field-radio-js', ANONY_FIELDS_URI.'radio/field_radio.js', array('jquery'),time(),true);
+		wp_enqueue_script('anony-field-radio-js', ANONY_FIELDS_URI.'radio/field_radio.js', array('jquery'),time(),true);
 	}
 
 }

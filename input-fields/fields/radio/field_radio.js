@@ -1,12 +1,16 @@
-/*
- *
- * anony_radio_select function
- * Changes the radio select option, and changes class on label
- *
- */
+jQuery(document).ready(function(e){
 
-function anony_radio_select(relid, labelclass){
-	jQuery( this ).prev( 'input[type="radio"]' ).prop( 'checked' );
-	jQuery( '.anony-radio-' + labelclass ).removeClass( 'anony-radio-img-selected' );
-	jQuery( 'label[for="' + relid + '"]' ).addClass( 'anony-radio-img-selected' );
-}// JavaScript Document
+    e('.anony-radio-selected').next('.anony-for-hidden-radio').addClass('anony-hidden-radio-selected');
+    e(".anony-for-hidden-radio").click( function(){
+        var radioId = e(this).data('id');
+
+        e( '#' + radioId ).prop( 'checked', true );       
+
+        e('input[name="customer_gender"]').trigger('change');
+    
+
+        e(".anony-for-hidden-radio").removeClass('anony-hidden-radio-selected');
+
+        e(this).addClass('anony-hidden-radio-selected');
+    });
+});

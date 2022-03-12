@@ -76,6 +76,10 @@ fieldset{
 	position:relative;
 }
 
+fieldset input[type=tel]{
+	width: 100%;
+}
+
 fieldset .iti {
 	width: 100%;
 	color: #222;
@@ -261,6 +265,23 @@ input[type=tel]{
 }
 #options-sections{
 	width: 70%;
+}
+.anony-hidden-radio{
+	display: none;
+}
+
+.anony-for-hidden-radio{
+	cursor: pointer;
+	padding: 10px;
+	border: 1px solid #cac4c4;
+	border-radius: 8px;
+}
+
+.anony-hidden-radio-selected, .anony-for-hidden-radio:hover{
+	border: 1px solid rgba(47,191,12,0.75);
+	box-shadow: 0px 0px 5px 1px rgba(47,191,12,0.75);
+	-webkit-box-shadow: 0px 0px 5px 1px rgba(47,191,12,0.75);
+	-moz-box-shadow: 0px 0px 5px 1px rgba(47,191,12,0.75);
 }
 .anony-radio-img input[type="radio"]{display: none}
 .anony-radio-img{padding: 5px;border:1px solid #d8d9d8;;}

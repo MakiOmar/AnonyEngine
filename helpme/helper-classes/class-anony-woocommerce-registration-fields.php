@@ -33,6 +33,12 @@ if ( ! class_exists( 'ANONY_Woocommerce_Registration_Fields' ) ) {
 		public $registration_fields;
 
 		/**
+		 * Woocommerce default fields.
+		 *
+		 * @var array
+		 */
+		public $woocommerce_default_fields = array( 'billing_first_name', 'billing_last_name', 'billing_company', 'billing_address_1', 'billing_address_2', 'billing_city', 'billing_postcode', 'billing_country', 'billing_email', 'billing_phone' );
+		/**
 		 * Field position.
 		 *
 		 * Use 'end' for woocommerce_register_form and 'start' for woocommerce_register_form_start . Default is 'end'.
@@ -50,6 +56,7 @@ if ( ! class_exists( 'ANONY_Woocommerce_Registration_Fields' ) ) {
 
 			$this->registration_fields = $this->registration_fields( $fields );
 
+			// Registration page.
 			$this->init();
 			add_action( 'woocommerce_register_form', array( $this, 'nonce_field' ) );
 
@@ -57,8 +64,37 @@ if ( ! class_exists( 'ANONY_Woocommerce_Registration_Fields' ) ) {
 
 			add_action( 'woocommerce_created_customer', array( $this, 'update_user_meta' ) );
 
+			// My account page.
+			add_action( 'woocommerce_edit_account_form', array( $this, 'render_edit_my_account_fields' ) );
+			add_action( 'woocommerce_save_account_details', array( $this, 'update_my_account_user_meta' ), 12, 1 );
+
 		}
 
+		public function render_edit_my_account_fields() {
+
+			if ( array() === $this->registration_fields ) {
+				return;
+			}
+
+			foreach ( $this->registration_fields as $field_name => $field_data ) {
+
+				if ( in_array( $field_name, $this->woocommerce_default_fields, true) ) {
+					continue;
+				}
+				$this->fields_names[] = $field_name;
+
+				$field_data['default'] = get_user_meta( get_current_user_id(), $field_name, true );
+
+				$render_field = new ANONY_Input_Field( $field_data, null, 'form' );
+
+				// phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
+				echo $render_field->field_init();
+				// phpcs:enable
+
+			}
+
+			wp_nonce_field( 'anony_woocommerce_edit_my_account_action', 'anony_woocommerce_edit_my_account_nonce' );
+		}
 		/**
 		 * Insert new user registration meta keys/values.
 		 *
@@ -77,6 +113,30 @@ if ( ! class_exists( 'ANONY_Woocommerce_Registration_Fields' ) ) {
 					update_user_meta( $customer_id, $meta_key, $meta_value );
 				}
 			}
+		}
+
+		/**
+		 * Update user meta keys/values within my account page.
+		 *
+		 * @param int $customer_id Customer ID.
+		 * @return void
+		 */
+		public function update_my_account_user_meta( $customer_id ) {
+
+			if ( isset( $_SERVER['REQUEST_METHOD'] ) && 'POST' !== $_SERVER['REQUEST_METHOD'] ) {
+				return;
+			}
+
+			$this->submitted_data = wp_unslash( $_POST );
+
+			foreach ( $this->registration_fields as $field_name => $field_data ) {
+				if ( isset( $this->submitted_data[ $field_name ] ) ) {
+					
+					update_user_meta( $customer_id, $field_name, $this->submitted_data[ $field_name ] );
+				}
+				
+			}
+			
 		}
 		/**
 		 * Filter registration fields.

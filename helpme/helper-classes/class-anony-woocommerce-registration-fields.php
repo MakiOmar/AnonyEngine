@@ -67,6 +67,10 @@ if ( ! class_exists( 'ANONY_Woocommerce_Registration_Fields' ) ) {
 		 */
 		public function update_user_meta( $customer_id ) {
 
+			if ( isset( $_SERVER['REQUEST_METHOD'] ) && 'POST' !== $_SERVER['REQUEST_METHOD'] ) {
+				return;
+			}
+
 			if ( isset( $this->submitted_data ) && ! empty( $this->submitted_data ) ) {
 
 				foreach ( $this->submitted_data as $meta_key => $meta_value ) {
@@ -171,6 +175,10 @@ if ( ! class_exists( 'ANONY_Woocommerce_Registration_Fields' ) ) {
 		 * @return \WP_Error          Validation object.
 		 */
 		public function validate( $username, $email, $validation_errors ) {
+
+			if ( isset( $_SERVER['REQUEST_METHOD'] ) && 'POST' !== $_SERVER['REQUEST_METHOD'] ) {
+				return;
+			}
 
 			$submitted_data = wp_unslash( $_POST );
 

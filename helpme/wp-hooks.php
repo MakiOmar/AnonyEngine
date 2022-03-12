@@ -24,7 +24,7 @@ add_action(
 		//  get the current post type
 		$post_type = get_post_type($post->ID);
 
-		//  if post type is not 'post', return
+		//  if post type is not 'keyword', return
 		if('keyword' != $post_type)
 		return;
 

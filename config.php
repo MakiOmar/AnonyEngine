@@ -59,6 +59,7 @@ $auto_load = apply_filters(
 		/*----Helpers-----------*/
 		ANONY_HLP_PHP,
 		ANONY_HLP_WP,
+		ANOE_HELPER_CLASSES,
 		/*----Inputs-----------*/
 		ANONY_INPUT_FIELDS,
 		ANONY_FIELDS_DIR,
@@ -109,8 +110,8 @@ spl_autoload_register(
 					str_replace(
 						'_',
 						'-',
-						preg_replace(
-							'/ANONY_/',
+						str_replace(
+							'ANONY_',
 							'',
 							$class_name
 						)

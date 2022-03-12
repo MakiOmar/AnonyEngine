@@ -11,7 +11,17 @@ class ANONY_Radio {
 	/**
 	 * Field Constructor.
 	 *
-	 * Required - must call the parent constructor, then assign field and value to vars, and obviously call the render field function
+	 * Required - must call the parent constructor, then assign field and value to vars, and obviously call the render field function. Example <code>'options'  => array(
+						'input-value1'  => array(
+							'title' => esc_html__( 'input value1 title', 'textdomain' ),
+							'class' => 'slider',
+						),
+
+						'input-value1' => array(
+							'title' => esc_html__( 'input value1 title', 'textdomain' ),
+							'class' => 'slider',
+						),
+					)</code>
 	 *
 	 * @param array  $this->parent->field Array of field's data
 	 * @param object $parent Field parent object

@@ -55,6 +55,10 @@ if ( ! class_exists( 'ANONY_Tel' ) ) {
 				$this->dial_init();
 			}
 
+			if ( isset( $this->parent->field['pattern'] ) ) {
+				$this->pattern = $this->parent->field['pattern'];
+			}
+
 			$this->enqueue();
 		}
 
@@ -90,13 +94,14 @@ if ( ! class_exists( 'ANONY_Tel' ) ) {
 			}
 
 			$html .= sprintf(
-				'<input id="%1$s" type="%2$s" name="%3$s" value="%4$s" class="%5$s"%6$s/>',
+				'<input id="%1$s" type="%2$s" name="%3$s" value="%4$s" class="%5$s"%6$s%7$s/>',
 				$this->parent->field['id'],
 				$this->parent->field['type'],
 				$this->parent->input_name,
 				$this->parent->value,
 				$this->parent->class_attr,
 				$this->parent->placeholder,
+				isset( $this->pattern ) ? 'pattern ="'. $this->pattern .'"' : ''
 			);
 
 			if ( isset( $this->parent->description ) ) {

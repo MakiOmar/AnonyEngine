@@ -66,20 +66,32 @@ if ( ! class_exists( 'ANONY_Woocommerce_Registration_Fields' ) ) {
 
 			// My account page.
 			add_action( 'woocommerce_edit_account_form', array( $this, 'render_edit_my_account_fields' ) );
-			add_action( 'woocommerce_save_account_details', array( $this, 'update_my_account_user_meta' ));
-			add_action( 'woocommerce_save_account_details_errors', array( $this, 'validate_my_account_user_meta' ),  10,2 );
+			add_action( 'woocommerce_save_account_details', array( $this, 'update_my_account_user_meta' ) );
+			add_action( 'woocommerce_save_account_details_errors', array( $this, 'validate_my_account_user_meta' ), 10, 2 );
 
 		}
 
-		public function validate_my_account_user_meta( $args, $user){
+		/**
+		 * Validate my account's user meta (Those fields added to registration).
+		 *
+		 * @param array  $args An array of Woocommerce validaion errors/notices/success.
+		 * @param object $user An std user object.
+		 */
+		public function validate_my_account_user_meta( $args, $user ) {
 
 			$submitted_data = wp_unslash( $_POST );
 
+			if ( ! wp_verify_nonce( $submitted_data['anony_woocommerce_edit_my_account_nonce'], 'anony_woocommerce_edit_my_account_action' ) ) {
+
+				wc_add_notice( '<strong>' . esc_html__( 'Error' ) . '</strong> ' . esc_html__( 'Maybe cheater!!!', 'anonyengine' ), 'error' );
+				return;
+			}
+
 			foreach ( $this->registration_fields as $field_name => $field ) {
 
-				// Skip default woocommerce default meta keys. 
+				// Skip default woocommerce default meta keys.
 				// Sometimes we may use one of these fields during registration, so we have to skip it here.
-				if ( in_array( $field_name, $this->woocommerce_default_fields, true) ) {
+				if ( in_array( $field_name, $this->woocommerce_default_fields, true ) ) {
 					continue;
 				}
 
@@ -87,14 +99,13 @@ if ( ! class_exists( 'ANONY_Woocommerce_Registration_Fields' ) ) {
 					if ( isset( $submitted_data[ $field_name ] ) ) {
 						$this->submitted_data[ $field_name ] = $submitted_data[ $field_name ];
 						continue;
-					}else{
+					} else {
 						continue;
 					}
-					
 				}
 
 				$value = $submitted_data[ $field_name ];
-				
+
 				$validated = $this->validate_field( $field, $value );
 
 				if ( ! empty( $validated->errors ) ) {
@@ -103,15 +114,19 @@ if ( ! class_exists( 'ANONY_Woocommerce_Registration_Fields' ) ) {
 
 						foreach ( $codes as $code ) {
 
-							wc_add_notice( '<strong>' . esc_html__( 'Error' ) . '</strong> ' . $validated->get_error_msg( $code, $id ) , 'error' );
+							wc_add_notice( '<strong>' . esc_html__( 'Error' ) . '</strong> ' . $validated->get_error_msg( $code, $id ), 'error' );
 						}
 					}
 				} else {
 					$this->submitted_data[ $field_name ] = $validated->value;
 				}
 			}
-			 
+
 		}
+
+		/**
+		 * Render edit my account fields.
+		 */
 		public function render_edit_my_account_fields() {
 
 			if ( array() === $this->registration_fields ) {
@@ -120,7 +135,7 @@ if ( ! class_exists( 'ANONY_Woocommerce_Registration_Fields' ) ) {
 
 			foreach ( $this->registration_fields as $field_name => $field_data ) {
 
-				if ( in_array( $field_name, $this->woocommerce_default_fields, true) ) {
+				if ( in_array( $field_name, $this->woocommerce_default_fields, true ) ) {
 					continue;
 				}
 				$this->fields_names[] = $field_name;
@@ -171,14 +186,19 @@ if ( ! class_exists( 'ANONY_Woocommerce_Registration_Fields' ) ) {
 
 			$this->submitted_data = wp_unslash( $_POST );
 
+			if ( ! wp_verify_nonce( $submitted_data['anony_woocommerce_edit_my_account_nonce'], 'anony_woocommerce_edit_my_account_action' ) ) {
+
+				wc_add_notice( '<strong>' . esc_html__( 'Error' ) . '</strong> ' . esc_html__( 'Maybe cheater!!!', 'anonyengine' ), 'error' );
+				return;
+			}
+
 			foreach ( $this->registration_fields as $field_name => $field_data ) {
 				if ( isset( $this->submitted_data[ $field_name ] ) ) {
-					
+
 					update_user_meta( $customer_id, $field_name, $this->submitted_data[ $field_name ] );
 				}
-				
 			}
-			
+
 		}
 		/**
 		 * Filter registration fields.

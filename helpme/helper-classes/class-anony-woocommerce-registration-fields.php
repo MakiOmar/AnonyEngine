@@ -66,10 +66,52 @@ if ( ! class_exists( 'ANONY_Woocommerce_Registration_Fields' ) ) {
 
 			// My account page.
 			add_action( 'woocommerce_edit_account_form', array( $this, 'render_edit_my_account_fields' ) );
-			add_action( 'woocommerce_save_account_details', array( $this, 'update_my_account_user_meta' ), 12, 1 );
+			add_action( 'woocommerce_save_account_details', array( $this, 'update_my_account_user_meta' ));
+			add_action( 'woocommerce_save_account_details_errors', array( $this, 'validate_my_account_user_meta' ),  10,2 );
 
 		}
 
+		public function validate_my_account_user_meta( $args, $user){
+
+			$submitted_data = wp_unslash( $_POST );
+
+			foreach ( $this->registration_fields as $field_name => $field ) {
+
+				// Skip default woocommerce default meta keys. 
+				// Sometimes we may use one of these fields during registration, so we have to skip it here.
+				if ( in_array( $field_name, $this->woocommerce_default_fields, true) ) {
+					continue;
+				}
+
+				if ( ! isset( $field['validate'] ) ) {
+					if ( isset( $submitted_data[ $field_name ] ) ) {
+						$this->submitted_data[ $field_name ] = $submitted_data[ $field_name ];
+						continue;
+					}else{
+						continue;
+					}
+					
+				}
+
+				$value = $submitted_data[ $field_name ];
+				
+				$validated = $this->validate_field( $field, $value );
+
+				if ( ! empty( $validated->errors ) ) {
+
+					foreach ( $validated->errors as $id => $codes ) {
+
+						foreach ( $codes as $code ) {
+
+							wc_add_notice( '<strong>' . esc_html__( 'Error' ) . '</strong> ' . $validated->get_error_msg( $code, $id ) , 'error' );
+						}
+					}
+				} else {
+					$this->submitted_data[ $field_name ] = $validated->value;
+				}
+			}
+			 
+		}
 		public function render_edit_my_account_fields() {
 
 			if ( array() === $this->registration_fields ) {

@@ -17,6 +17,43 @@ if ( ! class_exists( 'ANONY_Woocommerce_Registration_Fields' ) ) {
 	/**
 	 * Woocommerce custom registration fields.
 	 *
+	 * **Note** Example : <code>new ANONY_Woocommerce_Registration_Fields(array(
+
+			'billing_phone' =>
+				array(
+					'id'          => 'billing_phone',
+					'type'        => 'tel',
+					'class'       => 'username',
+					'with-dial-codes' => 'yes',
+					'validate' => 'no_html|required',
+					'placeholder' => esc_html__( 'Phone number', 'user-control' ),
+				),
+
+			'customer_gender' =>
+				array(
+					'id'          => 'customer_gender',
+					'title'       => esc_html__( 'Gender', 'user-control' ),
+					'type'        => 'radio',
+					'validate'    => 'no_html|required',
+					'only-labels' => 'yes',
+					'options' => array(
+						'<p>male</p>'  => array(
+									'title' =>  esc_html__( 'Male', 'user-control' ),
+								),
+
+						'female'  => array(
+									'title' =>  esc_html__( 'Female', 'user-control' ),
+								),
+
+						'not-set'  => array(
+									'title' =>  esc_html__( 'Later', 'user-control' ),
+								)
+					),
+					'default' => 'not-set'
+				)
+
+		));</code>
+	 *
 	 * @package    AnonyEngine Woocommerce
 	 * @author     Makiomar <info@makior.com>
 	 * @license    https:// makiomar.com AnonyEngine Licence.

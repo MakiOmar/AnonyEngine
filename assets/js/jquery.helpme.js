@@ -194,4 +194,20 @@ jQuery(document).ready(function($){
 		
 		return stringToJsonObject;
 	};
+
+	/**
+	 * Get Query variable value from a URL by it's name.
+	 *
+	 * @param string name query variable name.
+	 * @param string url Queried URL.
+	 * @return string
+	 */
+	$.fn.getParameterByName = function(name, url = window.location.href) {
+			name = name.replace(/[\[\]]/g, '\\$&');
+			var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+				results = regex.exec(url);
+			if (!results) return null;
+			if (!results[2]) return '';
+			return decodeURIComponent(results[2].replace(/\+/g, ' '));
+		}
 });

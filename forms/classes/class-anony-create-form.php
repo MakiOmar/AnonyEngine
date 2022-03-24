@@ -73,15 +73,14 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 				$this->errors['missing-for-id'] = esc_html__( 'Form id is missing' );
 			}
 
-			extract( $form );
-
 			// Set form Settings
 			if ( isset( $settings ) && is_array( $settings ) ) {
 				$this->formSettings( $settings );
 			}
 
-			$this->id     = $id;
-			$this->fields = $fields;
+			$this->id     = $form[ 'id' ];
+			$this->fields = $form[ 'fields' ];
+			$this->submit_label = isset( $form[ 'submit_label' ] ) && !empty( $form[ 'submit_label' ] ) ? $form[ 'submit_label' ] : esc_attr(__( 'Submit', 'anonyengine' ));
 
 			add_shortcode( $this->id, array( $this, 'createShortcode' ) );
 
@@ -126,7 +125,7 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 					do_action( 'anony_form_fields', $fields );
 				?>
 				<p>
-					<input type="submit" id="submit-<?php echo $this->id; ?>" name="submit-<?php echo $this->id; ?>" value="<?php echo esc_html__( 'submit', 'anonyengine' ); ?>"/>
+					<button type="submit" id="submit-<?php echo $this->id; ?>" name="submit-<?php echo $this->id; ?>" value="submit-<?php echo $this->id; ?>"><?php echo $this->submit_label ?></button>
 				</p>
 				
 			</form>

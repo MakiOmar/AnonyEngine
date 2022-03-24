@@ -20,6 +20,8 @@ class ANONY_Select {
 		}
 
 		$this->parent = $parent;
+
+		$this->numbered = isset( $this->parent->field['numbered'] )  && 'yes' === $this->parent->field['numbered'] ? true : false;
 	}
 
 	/**
@@ -68,13 +70,20 @@ class ANONY_Select {
 		);
 
 		if ( is_array( $this->parent->field['options'] ) && ! empty( $this->parent->field['options'] ) ) {
+
 			$html .= sprintf( '<option value="">%1$s</option>', esc_html__( 'Select', 'anonyengine' ) );
+
+			$option_number = 1;
 
 			if ( empty( $multiple ) ) :
 
 				if ( ANONY_ARRAY_HELP::isAssoc( $this->parent->field['options'] ) ) {
 
 					foreach ( $this->parent->field['options'] as $key => $label ) {
+
+						$label = $this->numbered ? $option_number . '- ' . $label : $label;
+
+						$option_number++;
 
 						$html .= sprintf(
 							'<option value="%1$s"%2$s>%3$s</option>',
@@ -97,6 +106,9 @@ class ANONY_Select {
 				else :
 					if ( ANONY_ARRAY_HELP::isAssoc( $this->parent->field['options'] ) ) {
 						foreach ( $this->parent->field['options'] as $key => $label ) {
+
+							$label = $this->numbered ? $option_number . '- ' . $label : $label;
+							$option_number++;
 
 							$selected = is_array( $this->parent->value ) && in_array( $key, $this->parent->value ) && $key != '' ? ' selected' : '';
 
@@ -138,4 +150,3 @@ class ANONY_Select {
 	}
 
 }
-

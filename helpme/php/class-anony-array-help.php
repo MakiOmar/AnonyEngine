@@ -227,5 +227,23 @@ if ( ! class_exists( 'ANONY_ARRAY_HELP' ) ) {
 			}
 			return $out;
 		}
+
+		/**
+		 * Sorts multi-dimensional array by a given key value.
+		 *
+		 * @param  string $key Sorting key.
+		 * @param  array $array Array to be sorted.
+		 * @param  string $flag Sorting flag ( Refere to: https://www.php.net/manual/en/function.array-multisort.php ).
+		 * @return array Sorted array.
+		 */
+		static function array_multisort_by_key( $key, $array, $flag = SORT_DESC ){
+
+			$sort_country = array_column($array, $key);
+	
+			array_multisort($sort_country, $flag, $array);
+
+			return $array;
+
+		}
 	}
 }

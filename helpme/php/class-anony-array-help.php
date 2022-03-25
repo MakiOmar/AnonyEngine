@@ -1,6 +1,6 @@
 <?php
 /**
- * PHP helpers class
+ * PHP Array helpers
  *
  * @package Anonymous theme
  * @author Makiomar
@@ -8,15 +8,23 @@
  */
 
 if ( ! class_exists( 'ANONY_ARRAY_HELP' ) ) {
+	/**
+	 * PHP Array helpers class
+	 *
+	 * @package    AnonyEngine
+	 * @author     Makiomar <info@makior.com>
+	 * @license    https://makiomar.com AnonyEngine Licence
+	 * @link       https://makiomar.com
+	 */
 	class ANONY_ARRAY_HELP extends ANONY_HELP {
 
 		/**
 		 * Checks if an array is sequentially indexed
 		 *
-		 * @param  array $arr
+		 * @param  array $array To be checked array.
 		 * @return bool
 		 */
-		static function isSequentiallyIndexed( array $arr ) {
+		public static function is_sequentially_indexed( array $array ) {
 
 			if ( array() === $arr ) {
 				return false;
@@ -28,10 +36,10 @@ if ( ! class_exists( 'ANONY_ARRAY_HELP' ) ) {
 		/**
 		 * Checks if an array is indexed
 		 *
-		 * @param  array $arr
+		 * @param  array $array To be checked array.
 		 * @return bool
 		 */
-		static function isIndexed( $array ) {
+		public static function is_indexed( $array ) {
 			if ( empty( array_filter( array_keys( $array ), 'is_string' ) ) ) {
 				return true;
 			}
@@ -41,34 +49,36 @@ if ( ! class_exists( 'ANONY_ARRAY_HELP' ) ) {
 		/**
 		 * Checks if an array is associative
 		 *
-		 * @param  array $arr
+		 * @param  array $array To be checked array.
 		 * @return bool
 		 */
-		static function isAssoc( $array ) {
-			if ( ! self::isIndexed( $array ) ) {
+		public static function is_assoc( $array ) {
+			if ( ! self::is_indexed( $array ) ) {
 				return true;
 			}
-			if ( ! self::isSequentiallyIndexed( $array ) ) {
+			if ( ! self::is_sequentially_indexed( $array ) ) {
 				return true;
 			}
 			return false;
 		}
+
 		/**
 		 * Gets an associative array as key/value pairs from any object properties.
 		 *
 		 * Useful where a select input field has dynamic options.
 		 *
-		 * @param object $objects_array The array of objects to loop through
-		 * @param string $key           The property that should be used as a key
-		 * @param string $value         The property that should be used as a value
-		 * @return array                An array of properties as key/value pairs
+		 * @param object $objects_array The array of objects to loop through.
+		 * @param string $key           The property that should be used as a key.
+		 * @param string $value         The property that should be used as a value.
+		 * @param bool   $is_associative  Weather the to convert to associative array or indexed one. Default 'yes'.
+		 * @return array                An array of properties as key/value pairs.
 		 */
-		static function ObjToAssoc( $objects_array, $key, $value, $assoc = true ) {
+		public static function object_to_associative_array( $objects_array, $key, $value, $is_associative = 'yes' ) {
 
 			$arr = array();
 
 			foreach ( $objects_array as $object ) {
-				if ( $assoc && ! empty( $key ) ) {
+				if ( 'yes' === $is_associative && ! empty( $key ) ) {
 					$arr[ $object->$key ] = $object->$value;
 				} else {
 					$arr[] = $object->$value;
@@ -79,54 +89,59 @@ if ( ! class_exists( 'ANONY_ARRAY_HELP' ) ) {
 		}
 
 		/**
-		 * Same as print_r but usefull for rtl pages
+		 * Same as print_r but usefull for rtl pages.
 		 *
-		 * @param type $array
-		 * @return type
+		 * @param array $array To be printed array.
+		 * @return void
 		 */
-		static function neatPrintR( $array ) {
-			echo '<pre dir="ltr">';
-				print_r( $array );
-			echo '</pre>';
+		public static function neat_print_r( $array ) {
+			if ( defined( 'WP_BEBUG' ) && true === WP_BEBUG ) {
+				echo '<pre dir="ltr" style="diretction:ltr;text-align:center">';
+					// phpcs:disable WordPress.PHP.DevelopmentFunctions
+					print_r( $array );
+					// phpcs: enable.
+				echo '</pre>';
+			}
+
 		}
 
 		/**
-		 * Insert a key/value before another in an associative array
+		 * Insert a key/value before another in an associative array.
 		 *
-		 * @param array  $originalArray
-		 * @param strin  $originalKey
-		 * @param array  $insertKey
-		 * @param string $insertValue
+		 * @param array  $original_array The Array.
+		 * @param strin  $original_key   The key to be iserted before.
+		 * @param array  $insert_key     To be inserted key.
+		 * @param string $insert_value   To be inserted value.
 		 * @return array
 		 */
-		static function insertBeforeKey( $originalArray, $originalKey, $insertKey, $insertValue ) {
+		public static function insert_before_key( $original_array, $original_key, $insert_key, $insert_value ) {
 
-			$newArray = array();
-			$inserted = false;
+			$new_array = array();
+			$inserted  = false;
 
-			foreach ( $originalArray as $key => $value ) {
+			foreach ( $original_array as $key => $value ) {
 
-				if ( ! $inserted && $key === $originalKey ) {
-					$newArray[ $insertKey ] = $insertValue;
-					$inserted               = true;
+				if ( ! $inserted && $key === $original_key ) {
+					$new_array[ $insert_key ] = $insert_value;
+					$inserted                 = true;
 				}
 
-				$newArray[ $key ] = $value;
+				$new_array[ $key ] = $value;
 
 			}
 
-			return $newArray;
+			return $new_array;
 
 		}
 
 		/**
 		 *  Check if an array is a multidimensional array.
 		 *
-		 *  @param   array $arr  The array to check
-		 *  @return  boolean       Whether the the array is a multidimensional array or not
+		 *  @param   array $array  The array to check.
+		 *  @return  boolean     Whether the the array is a multidimensional array or not.
 		 */
-		static function isMultiDimensional( $x ) {
-			if ( count( array_filter( $x, 'is_array' ) ) > 0 ) {
+		public static function is_multi_dimensional( $array ) {
+			if ( count( array_filter( $array, 'is_array' ) ) > 0 ) {
 				return true;
 			}
 			return false;
@@ -135,37 +150,37 @@ if ( ! class_exists( 'ANONY_ARRAY_HELP' ) ) {
 		/**
 		 *  Convert an object to an array.
 		 *
-		 *  @param   array $object  The object to convert
-		 *  @return  array            The converted array
+		 *  @param   array $object  The object to convert.
+		 *  @return  array          The converted array.
 		 */
-		static function ToArray( $object ) {
+		public static function to_array( $object ) {
 			if ( ! is_object( $object ) || ! is_array( $object ) ) {
 				return $object;
 			}
-			return array_map( 'object_to_array', (array) $object );
+			return array_map( array( self, 'object_to_array' ), (array) $object );
 		}
 
 		/**
 		 *  Check if a value exists in the array/object.
 		 *
-		 *  @param   mixed   $needle    The value that you are searching for
-		 *  @param   mixed   $haystack  The array/object to search
-		 *  @param   boolean $strict    Whether to use strict search or not
-		 *  @return  boolean             Whether the value was found or not
+		 *  @param   mixed   $needle    The value that you are searching for.
+		 *  @param   mixed   $haystack  The array/object to search.
+		 *  @param   boolean $strict    Whether to use strict search or not.
+		 *  @return  boolean            Whether the value was found or not.
 		 */
-		static function searchHaystack( $needle, $haystack, $strict = true ) {
-			$haystack = self::ToArray( $haystack );
+		public static function search_haystack( $needle, $haystack, $strict = true ) {
+			$haystack = self::to_array( $haystack );
 
 			if ( is_array( $haystack ) ) {
-				if ( self::isMultiDimensional( $haystack ) ) {   // Multidimensional array
+				if ( self::is_multi_dimensional( $haystack ) ) {   // Multidimensional array.
 					foreach ( $haystack as $subhaystack ) {
-						if ( self::searchHaystack( $needle, $subhaystack, $strict ) ) {
+						if ( self::search_haystack( $needle, $subhaystack, $strict ) ) {
 							return true;
 						}
 					}
-				} elseif ( array_keys( $haystack ) !== range( 0, count( $haystack ) - 1 ) ) {    // Associative array
+				} elseif ( array_keys( $haystack ) !== range( 0, count( $haystack ) - 1 ) ) {    // Associative array.
 					foreach ( $haystack as $key => $val ) {
-						if ( $needle == $val && ! $strict ) {
+						if ( $needle === $val && ! $strict ) {
 							return true;
 						} elseif ( $needle === $val && $strict ) {
 							return true;
@@ -174,9 +189,9 @@ if ( ! class_exists( 'ANONY_ARRAY_HELP' ) ) {
 
 					return false;
 				} else {
-					// Normal array
+					// Normal array.
 					if ( ! $strict ) {
-						return $needle == $haystack;
+						return $needle === $haystack;
 					} else {
 
 						return $needle === $haystack;
@@ -188,16 +203,16 @@ if ( ! class_exists( 'ANONY_ARRAY_HELP' ) ) {
 		}
 
 		/**
-		 * Insertes new key/value pairs after a specific key
+		 * Insertes new key/value pairs after a specific key.
 		 *
-		 * @param  string $key
-		 * @param  array  $insert_array
-		 * @param  array  $original_array
-		 * @return array
+		 * @param  string $key Insert after this key.
+		 * @param  array  $insert_array To be inserted array.
+		 * @param  array  $original_array Original array.
+		 * @return array  Array after insertion.
 		 */
-		static function insertAfterAssocKey( $key, $insert_array, $original_array ) {
+		public static function insert_after_assoc_key( $key, $insert_array, $original_array ) {
 
-			$offset = array_search( $key, array_keys( $original_array ) );
+			$offset = array_search( $key, array_keys( $original_array ), true );
 
 			$result = array_merge(
 				array_slice( $original_array, 0, $offset ),
@@ -209,13 +224,13 @@ if ( ! class_exists( 'ANONY_ARRAY_HELP' ) ) {
 		}
 
 		/**
-		 * Compairs two associative arrays and replace default values of first array with new value in second array
+		 * Compairs two associative arrays and replace default values of first array with new value in second array.
 		 *
-		 * @param  array $defaults
-		 * @param  array $atts
+		 * @param  array $defaults Defaults array.
+		 * @param  array $atts     New Array.
 		 * @return array
 		 */
-		static function defaultsMapping( array $defaults, array $atts ) {
+		public static function defaults_mapping( array $defaults, array $atts ) {
 			$out = array();
 			foreach ( $defaults as $name => $default ) {
 
@@ -232,15 +247,15 @@ if ( ! class_exists( 'ANONY_ARRAY_HELP' ) ) {
 		 * Sorts multi-dimensional array by a given key value.
 		 *
 		 * @param  string $key Sorting key.
-		 * @param  array $array Array to be sorted.
+		 * @param  array  $array Array to be sorted.
 		 * @param  string $flag Sorting flag ( Refere to: https://www.php.net/manual/en/function.array-multisort.php ).
 		 * @return array Sorted array.
 		 */
-		static function array_multisort_by_key( $key, $array, $flag = SORT_DESC ){
+		public static function array_multisort_by_key( $key, $array, $flag = SORT_DESC ) {
 
-			$sort_country = array_column($array, $key);
-	
-			array_multisort($sort_country, $flag, $array);
+			$sort_country = array_column( $array, $key );
+
+			array_multisort( $sort_country, $flag, $array );
 
 			return $array;
 

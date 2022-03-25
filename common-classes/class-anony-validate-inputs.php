@@ -79,7 +79,7 @@ if ( ! class_exists( 'ANONY_Validate_Inputs' ) ) {
 		/**
 		 * Constructor.
 		 *
-		 * @param string|array array of field's date required for validation.<br/>**Note: **Empty $args so the class can be instantiated without $args if needed.
+		 * @param string|array $args An array of field's date required for validation.<br/>**Note: **Empty $args so the class can be instantiated without $args if needed.
 		 */
 		public function __construct( $args = '' ) {
 
@@ -181,14 +181,17 @@ if ( ! class_exists( 'ANONY_Validate_Inputs' ) ) {
 				$this->limits = $vald[1];
 
 				// Validation method name.
-				return $method = 'valid_' . $vald[0];
+				$method = 'valid_' . $vald[0];
 
 			} else {
 
 				// Validation method name.
-				return $method = 'valid_' . $value;
+				$method = 'valid_' . $value;
 
 			}// if level 1.
+
+			return $method;
+
 		}//end select_method()
 
 		/**
@@ -211,7 +214,7 @@ if ( ! class_exists( 'ANONY_Validate_Inputs' ) ) {
 		/**
 		 * Call validation method if the validation is multiple. e.g. url|file_type: pdf,docx.
 		 *
-		 * @param string $validation Validation string..
+		 * @param string $validations Validation string.
 		 * @return void
 		 */
 		public function multiple_validation( $validations = '' ) {
@@ -242,12 +245,13 @@ if ( ! class_exists( 'ANONY_Validate_Inputs' ) ) {
 
 					$temp_value[ $key ] = $sanitization( $value );
 				}
+				$this->value = $temp_value;
 
-				return $this->value = $temp_value;
-
+			} else {
+				$this->value = $sanitization( $this->value );
 			}
 
-			return $this->value = $sanitization( $this->value );
+			return $this->value;
 		}
 
 		/**
@@ -267,7 +271,7 @@ if ( ! class_exists( 'ANONY_Validate_Inputs' ) ) {
 					$this->valid = false;
 				}
 
-			// If checked/selected one option e.g. radio.
+				// If checked/selected one option e.g. radio.
 			} else {
 
 				if ( ! in_array( $this->value, $options_keys, true ) ) {
@@ -440,7 +444,7 @@ if ( ! class_exists( 'ANONY_Validate_Inputs' ) ) {
 				$this->valid = false;
 
 				$this->set_error_code( 'not-abs' );
-			}else{
+			} else {
 
 				$this->sanitize();
 
@@ -450,22 +454,17 @@ if ( ! class_exists( 'ANONY_Validate_Inputs' ) ) {
 
 		/**
 		 * Check againest required.
-		 *
-		 * @param string $string String to be check.
-		 * @return bool  Returns true field has a value.
 		 */
 		public function valid_required() {
 
-			if (  '' === $this->value || is_null( $this->value ) ) {
+			if ( '' === $this->value || is_null( $this->value ) ) {
 				$this->valid = false;
 
 				$this->set_error_code( 'required' );
-			}else{
+			} else {
 				$this->sanitize();
 			}
 
-
-			
 		}
 
 		/**
@@ -542,9 +541,9 @@ if ( ! class_exists( 'ANONY_Validate_Inputs' ) ) {
 		}//end is_hex_color()
 
 		/**
-		 * Set error message code
+		 * Set error message code.
 		 *
-		 * @param string $code.
+		 * @param string $code Error message's code.
 		 * @return void
 		 */
 		public function set_error_code( $code ) {
@@ -572,8 +571,8 @@ if ( ! class_exists( 'ANONY_Validate_Inputs' ) ) {
 			$accepted_tags = array(
 				'strong' => array(),
 				'a'      => array(
-					'href'   => array(),
-					'class'  => array(),
+					'href'    => array(),
+					'class'   => array(),
 					'data-id' => array(),
 				),
 			);
@@ -678,7 +677,6 @@ if ( ! class_exists( 'ANONY_Validate_Inputs' ) ) {
 						esc_html__( 'Here', 'anonyengine' )
 					);
 
-
 				case 'strange-options':
 					return sprintf(
 						wp_kses(
@@ -703,7 +701,6 @@ if ( ! class_exists( 'ANONY_Validate_Inputs' ) ) {
 
 				case 'invalid-nonce':
 					return esc_html__( 'Maybe cheater!!!', 'anonyengine' );
-
 
 				default:
 					return wp_kses(

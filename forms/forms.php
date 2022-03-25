@@ -1,6 +1,6 @@
 <?php
 /**
- * AnonyEngine configuration file.
+ * AnonyEngine forms' configuration file.
  *
  * PHP version 7.3 Or Later.
  *

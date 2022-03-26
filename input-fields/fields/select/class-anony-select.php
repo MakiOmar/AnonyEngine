@@ -77,7 +77,7 @@ class ANONY_Select {
 
 			if ( empty( $multiple ) ) :
 
-				if ( ANONY_ARRAY_HELP::isAssoc( $this->parent->field['options'] ) ) {
+				if ( ANONY_ARRAY_HELP::is_assoc( $this->parent->field['options'] ) ) {
 
 					foreach ( $this->parent->field['options'] as $key => $label ) {
 
@@ -104,7 +104,7 @@ class ANONY_Select {
 				}
 
 				else :
-					if ( ANONY_ARRAY_HELP::isAssoc( $this->parent->field['options'] ) ) {
+					if ( ANONY_ARRAY_HELP::is_assoc( $this->parent->field['options'] ) ) {
 						foreach ( $this->parent->field['options'] as $key => $label ) {
 
 							$label = $this->numbered ? $option_number . '- ' . $label : $label;

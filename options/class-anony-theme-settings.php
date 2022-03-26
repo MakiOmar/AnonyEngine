@@ -229,7 +229,7 @@ if ( ! class_exists( 'ANONY_Theme_Settings' ) ) {
 
 			$args = $this->args;
 
-			$args = ANONY_ARRAY_HELP::insertBeforeKey( $args, 'icon_url', 'function', array( &$this, 'options_page_html' ) );
+			$args = ANONY_ARRAY_HELP::insert_before_key( $args, 'icon_url', 'function', array( &$this, 'options_page_html' ) );
 
 			if ( isset( $this->args['page_type'] ) ) {
 

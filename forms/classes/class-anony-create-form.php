@@ -50,7 +50,7 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 		 *
 		 * @var array
 		 */
-		public $to_do_list = [];
+		public $to_do_list = array();
 
 		/**
 		 * Form's attributes.
@@ -224,12 +224,14 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 				return;
 			}
 
+			$not_validated = wp_unslash( $_POST );
+
 			// Verify nonce.
-			if ( ! isset( $_POST[ 'anony_form_submit_nonce_' . $this->id ] ) || ! wp_verify_nonce( $_POST[ 'anony_form_submit_nonce_' . $this->id ], 'anony_form_submit_' . $this->id ) ) {
+			if ( ! isset( $not_validated[ 'anony_form_submit_nonce_' . $this->id ] ) || ! wp_verify_nonce( $not_validated[ 'anony_form_submit_nonce_' . $this->id ], 'anony_form_submit_' . $this->id ) ) {
 				return;
 			}
 			foreach ( $fields as $field ) :
-				if ( ! isset( $_POST[ $field['id'] ] ) ) {
+				if ( ! isset( $not_validated[ $field['id'] ] ) ) {
 					continue;
 				}
 				$this->validate( $field );
@@ -245,7 +247,7 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 		public function validate( $field ) {
 
 			//phpcs:disable WordPress.Security.NonceVerification.Missing
-			$not_validated = $_POST;
+			$not_validated = wp_unslash( $_POST );
 			//phpcs:enable.
 
 			// Types that can't be validated.
@@ -290,12 +292,14 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 		 */
 		public function form_submitted() {
 
-			if ( isset( $_SERVER['REQUEST_METHOD'] ) !== 'POST' && ! isset( $_POST[ 'submit-' . $this->id ] ) ) {
+			$not_validated = wp_unslash( $_POST );
+
+			if ( isset( $_SERVER['REQUEST_METHOD'] ) !== 'POST' && ! isset( $not_validated[ 'submit-' . $this->id ] ) ) {
 				return;
 			}
 
 			// Verify nonce.
-			if ( ! isset( $_POST[ 'anony_form_submit_nonce_' . $this->id ] ) || ! wp_verify_nonce( $_POST[ 'anony_form_submit_nonce_' . $this->id ], 'anony_form_submit_' . $this->id ) ) {
+			if ( ! isset( $not_validated[ 'anony_form_submit_nonce_' . $this->id ] ) || ! wp_verify_nonce( $not_validated[ 'anony_form_submit_nonce_' . $this->id ], 'anony_form_submit_' . $this->id ) ) {
 				return;
 			}
 
@@ -313,8 +317,9 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 				foreach ( $this->to_do_list as $to_do => $to_do_data ) {
 					$class_name = "ANONY_{$to_do}";
 					if ( class_exists( $class_name ) ) :
-						
+
 						new $class_name( $this->validated, $to_do_data );
+
 					endif;
 				}
 			}

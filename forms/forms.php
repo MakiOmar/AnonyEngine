@@ -34,3 +34,10 @@ define( 'ANONY_FORMS_URI', ANOE_URI . 'forms/' );
  * @const
  */
 define( 'ANONY_FORMS_CLASSES', ANONY_FORMS_PATH . 'classes/' );
+
+/**
+ * Holds a URI to actions classes folder
+ *
+ * @const
+ */
+define( 'ANONY_FORMS_ACTIONS', ANONY_FORMS_CLASSES . 'actions/' );

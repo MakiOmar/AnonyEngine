@@ -71,6 +71,7 @@ $auto_load = apply_filters(
 		ANONY_INPUT_FIELDS,
 		/*-----Forms-----*/
 		ANONY_FORMS_CLASSES,
+		ANONY_FORMS_ACTIONS
 
 	)
 );

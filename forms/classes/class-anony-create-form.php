@@ -46,6 +46,13 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 		public $action = '';
 
 		/**
+		 * A list of actions the form should perfom.
+		 *
+		 * @var array
+		 */
+		public $to_do_list = [];
+
+		/**
 		 * Form's attributes.
 		 *
 		 * @var string
@@ -120,6 +127,10 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 			// Set form Settings.
 			if ( isset( $settings ) && is_array( $settings ) ) {
 				$this->form_settings( $settings );
+			}
+
+			if ( isset( $form['to_do_list'] ) && is_array( $form['to_do_list'] ) ) {
+				$this->to_do_list = $form['to_do_list'];
 			}
 
 			$this->id           = $form['id'];
@@ -214,7 +225,7 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 			}
 
 			// Verify nonce.
-			if ( ! isset( $_POST[ 'anony_form_submit_nonce_' . $this->id ] ) || ! wp_verify_nonce( 'anony_form_submit_nonce_' . $this->id, 'anony_form_submit_' . $this->id ) ) {
+			if ( ! isset( $_POST[ 'anony_form_submit_nonce_' . $this->id ] ) || ! wp_verify_nonce( $_POST[ 'anony_form_submit_nonce_' . $this->id ], 'anony_form_submit_' . $this->id ) ) {
 				return;
 			}
 			foreach ( $fields as $field ) :
@@ -284,7 +295,7 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 			}
 
 			// Verify nonce.
-			if ( ! isset( $_POST[ 'anony_form_submit_nonce_' . $this->id ] ) || ! wp_verify_nonce( 'anony_form_submit_nonce_' . $this->id, 'anony_form_submit_' . $this->id ) ) {
+			if ( ! isset( $_POST[ 'anony_form_submit_nonce_' . $this->id ] ) || ! wp_verify_nonce( $_POST[ 'anony_form_submit_nonce_' . $this->id ], 'anony_form_submit_' . $this->id ) ) {
 				return;
 			}
 
@@ -295,6 +306,17 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 				set_transient( 'anony_form_errors_' . $this->id, $this->error_msgs );
 
 				return;
+			}
+
+			if ( ! empty( $this->to_do_list ) ) {
+
+				foreach ( $this->to_do_list as $to_do => $to_do_data ) {
+					$class_name = "ANONY_{$to_do}";
+					if ( class_exists( $class_name ) ) :
+						
+						new $class_name( $this->validated, $to_do_data );
+					endif;
+				}
 			}
 
 			do_action( 'anony_form_submitted', $this->validated, $this->id );

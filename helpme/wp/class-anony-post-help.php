@@ -33,7 +33,7 @@ if ( ! class_exists( 'ANONY_POST_HELP' ) ) {
 		 * @param  obj $post
 		 * @return bool True if shortcode exist, otherwise false
 		 */
-		static function isPageHasShortcode( $post, $shortcode_tag ) {
+		public static function isPageHasShortcode( $post, $shortcode_tag ) {
 			if ( $post instanceof WP_Post ) {
 				setup_postdata( $post );
 				$content = get_the_content();
@@ -50,7 +50,7 @@ if ( ! class_exists( 'ANONY_POST_HELP' ) ) {
 		 * @param string $post_type
 		 * @return array Returns an array of published post posts IDs and titles. empty array if no results
 		 */
-		static function queryPostTypeSimple( $post_type = 'post' ) {
+		public static function queryPostTypeSimple( $post_type = 'post' ) {
 			$wpml_plugin = 'sitepress-multilingual-cms/sitepress.php';
 
 			if ( ANONY_WPPLUGIN_HELP::isActive( $wpml_plugin ) && function_exists( 'icl_get_languages' ) ) {
@@ -84,7 +84,7 @@ if ( ! class_exists( 'ANONY_POST_HELP' ) ) {
 		 * @param string $title Post's title
 		 * @return int Post's id
 		 */
-		static function queryIdByTitle( $title ) {
+		public static function queryIdByTitle( $title ) {
 			global $wpdb;
 			$post_id = $wpdb->get_col( "select ID from $wpdb->posts where post_title LIKE '" . $title . "%' " );
 			return $post_id;
@@ -95,7 +95,7 @@ if ( ! class_exists( 'ANONY_POST_HELP' ) ) {
 		 *
 		 * @return array Return an associative array of pages IDs and titles. key (id) equal value (title)
 		 */
-		static function getPagesIdsTitles() {
+		public static function getPagesIdsTitles() {
 			$pages_data = array();
 
 			$pages = get_pages( 'sort_column=post_title&hierarchical=0' );
@@ -112,7 +112,7 @@ if ( ! class_exists( 'ANONY_POST_HELP' ) ) {
 		 *
 		 * @return array Return an associative array of posts IDs and titles. key (id) equal value (title)
 		 */
-		static function getPostsIdsTitles( $args ) {
+		public static function getPostsIdsTitles( $args ) {
 			$posts_data = array();
 
 			$posts = get_posts( $args );
@@ -131,7 +131,7 @@ if ( ! class_exists( 'ANONY_POST_HELP' ) ) {
 		 * @param  string|null $selected   The selected option stored in DB
 		 * @return string      $html       Rendered ooptions
 		 */
-		static function renderHtmlOptions( $options, $selected = null ) {
+		public static function renderHtmlOptions( $options, $selected = null ) {
 
 			$html = '';
 
@@ -159,7 +159,7 @@ if ( ! class_exists( 'ANONY_POST_HELP' ) ) {
 		 * @param  string $selected     Value to check selected option against
 		 * @return string $html         HTML of options groups
 		 */
-		static function renderHtmlOptsGroups( $options, $opts_groups, $selected ) {
+		public static function renderHtmlOptsGroups( $options, $opts_groups, $selected ) {
 
 			$html = '';
 
@@ -188,7 +188,7 @@ if ( ! class_exists( 'ANONY_POST_HELP' ) ) {
 		 * @param int $words_count number of words
 		 * @return void
 		 */
-		static function crossLangExcerpt( $id, $words_count = 25 ) {
+		public static function crossLangExcerpt( $id, $words_count = 25 ) {
 
 			if ( ! defined( 'ORIGINAL_LANG' ) ) {
 				return '<p>' . get_the_excerpt( $id ) . '</p>';
@@ -215,7 +215,7 @@ if ( ! class_exists( 'ANONY_POST_HELP' ) ) {
 		 * @param  string $value  The meta value you want to query with
 		 * @return array          An array of posts IDs
 		 */
-		static function queryIdsByMeta( $key, $value ) {
+		public static function queryIdsByMeta( $key, $value ) {
 			global $wpdb;
 
 			$postIDs = array();
@@ -244,7 +244,7 @@ if ( ! class_exists( 'ANONY_POST_HELP' ) ) {
 		 * @return array Returns an array of meta values
 		 */
 
-		static function queryMetaValuesByKey( $key ) {
+		public static function queryMetaValuesByKey( $key ) {
 			global $wpdb;
 
 			$metaValues = array();
@@ -272,7 +272,7 @@ if ( ! class_exists( 'ANONY_POST_HELP' ) ) {
 		 * @param array  $post_terms An array of taxonomies as its keys and terms' IDs as values
 		 * @param string $post_id The ID of the post
 		 */
-		static function setPostTerms( array $post_terms, int $post_id ) {
+		public static function setPostTerms( array $post_terms, int $post_id ) {
 
 			if ( empty( $post_terms ) ) {
 				return;
@@ -292,7 +292,7 @@ if ( ! class_exists( 'ANONY_POST_HELP' ) ) {
 		 * @param  [array] args New post args
 		 * @return [int] The duplicated Post ID
 		 */
-		static function duplicate( $post_id, $args = array() ) {
+		public static function duplicate( $post_id, $args = array() ) {
 			// delete_transient('duplicated_posts'); return;
 			if ( ! current_user_can( 'edit_posts' ) ) {
 				return;
@@ -349,13 +349,13 @@ if ( ! class_exists( 'ANONY_POST_HELP' ) ) {
 		 *
 		 * @return [array] An array of post types as ( 'post_type_name' => post_type_lable )
 		 */
-		static function get_post_types_list(){
+		public static function get_post_types_list() {
 			$args       = array(
-			    'public' => true,
+				'public' => true,
 			);
 			$post_types = get_post_types( $args, 'objects' );
 
-			foreach ( $post_types as $post_type_obj ):
+			foreach ( $post_types as $post_type_obj ) :
 
 				$labels = get_post_type_labels( $post_type_obj );
 

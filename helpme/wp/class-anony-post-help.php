@@ -344,5 +344,28 @@ if ( ! class_exists( 'ANONY_POST_HELP' ) ) {
 			return $new_post_id;
 		}
 
+		/**
+		 * Get a list of public post types.
+		 *
+		 * @return [array] An array of post types as ( 'post_type_name' => post_type_lable )
+		 */
+		static function get_post_types_list(){
+			$args       = array(
+			    'public' => true,
+			);
+			$post_types = get_post_types( $args, 'objects' );
+
+			foreach ( $post_types as $post_type_obj ):
+
+				$labels = get_post_type_labels( $post_type_obj );
+
+				$list[ $post_type_obj->name ] = $labels->name;
+
+			endforeach;
+
+			return $list;
+
+		}
+
 	}
 }

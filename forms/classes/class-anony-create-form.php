@@ -109,7 +109,6 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 		 * @param array $form A multi-dimensional array of form's fields.
 		 */
 		public function __construct( array $form ) {
-
 			if (
 				count( array_intersect( $this->form_init, array_keys( $form ) ) ) !== count( $this->form_init )
 				||
@@ -143,19 +142,6 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 			ob_start();
 			$this->create( $this->fields );
 			return ob_get_clean();
-		}
-
-		/**
-		 * Form render shortcode callback.
-		 *
-		 * @param array $form_settings Form's settings.
-		 * @return void
-		 */
-		public function form_settings( array $form_settings ) {
-			$this->settings['inline_lable'] = true;
-
-			$this->settings = ANONY_ARRAY_HELP::defaults_mapping( $this->settings, $form_settings );
-
 		}
 
 		/**
@@ -199,6 +185,19 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 			<?php
 
 			do_action( 'anony_form_after', $fields );
+
+		}
+
+		/**
+		 * Form settings.
+		 *
+		 * @param array $form_settings Form's settings.
+		 * @return void
+		 */
+		public function form_settings( array $form_settings ) {
+			$this->settings['inline_lable'] = true;
+
+			$this->settings = ANONY_ARRAY_HELP::defaults_mapping( $this->settings, $form_settings );
 
 		}
 
@@ -294,6 +293,8 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 
 			if ( isset( $this->error_msgs ) ) {
 				set_transient( 'anony_form_errors_' . $this->id, $this->error_msgs );
+
+				return;
 			}
 
 			do_action( 'anony_form_submitted', $this->validated, $this->id );

@@ -123,5 +123,21 @@ if ( ! class_exists( 'ANONY_HELP' ) ) {
 			echo '</pre>';
 		}
 
+		/**
+		 * Check is a variable is set and not empty.
+		 * 
+		 * @param mixed $variable To be checked variable.
+		 * @return bool True if a variable is set and not empty, otherwise false.
+		 */ 
+		static function isset_not_empty( $variable ){
+
+			if ( isset( $variable ) && !empty( $variable ) ) {
+				return true;
+			}
+
+			return false;
+
+		}
+
 	}
 }

@@ -1,21 +1,34 @@
 <?php
 /**
- * PHP Main helpers class
+ * AnonyEngine PHP Main helpers.
  *
- * @package Anonymous theme
- * @author Makiomar
- * @link http://makiomar.com
+ * PHP version 7.3 Or Later.
+ *
+ * @package  AnonyEngine
+ * @author   Makiomar <info@makior.com>
+ * @license  https://makiomar.com AnonyEngine Licence
+ * @link     https://makiomar.com/anonyengine_elements
  */
+
+defined( 'ABSPATH' ) || die(); // Exit if accessed directly.
+
 if ( ! class_exists( 'ANONY_HELP' ) ) {
+	/**
+	 * PHP Main helpers class
+	 *
+	 * @package AnonyEngine
+	 * @author Makiomar
+	 * @link http://makiomar.com
+	 */
 	class ANONY_HELP {
 
 		/**
-		 * Output buffer included file
+		 * Buffer output of included file.
 		 *
-		 * @param  string $file_path
+		 * @param  string $file_path File to be buffered.
 		 * @return string
 		 */
-		static function obInclude( $file_path ) {
+		public static function ob_include( $file_path ) {
 			ob_start();
 
 			include $file_path;
@@ -24,27 +37,26 @@ if ( ! class_exists( 'ANONY_HELP' ) ) {
 		}
 
 		/**
-		 * Output buffer function
+		 * Buffer output of a function.
 		 *
-		 * @param string $function
-		 * @param array  $args
+		 * @param string $function Function name.
+		 * @param array  $args Function arguments.
 		 * @return string
 		 */
-		static function obGet( $function, $args = array() ) {
+		public static function ob_get( $function, $args = array() ) {
 			ob_start();
 			call_user_func_array( $function, $args );
 			return ob_get_clean();
 		}
 
 		/**
-		 * trims a string to a custom number of words
+		 * Trims a string to a custom number of words.
 		 *
-		 * @param string $text
-		 * @param int    $length
+		 * @param string $text Text to be trimmed.
+		 * @param int    $length Trim length.
 		 * @return string
 		 */
-
-		static function sliceText( $text, $length ) {
+		public static function slice_text( $text, $length ) {
 
 			$words = str_word_count( $text, 1 );
 
@@ -56,10 +68,10 @@ if ( ! class_exists( 'ANONY_HELP' ) ) {
 		/**
 		 * Remove script tags with REGEX.
 		 *
-		 * @param string $string String to be cleaned
-		 * @return string Cleaned string
+		 * @param string $string String to be cleaned.
+		 * @return string Cleaned string.
 		 */
-		static function removeScriptTagRegx( $string ) {
+		public static function remove_script_tag_regx( $string ) {
 			return preg_replace( '#<script(.*?)>(.*?)</script>#mis', '', $string );
 		}
 		/**
@@ -67,25 +79,25 @@ if ( ! class_exists( 'ANONY_HELP' ) ) {
 		 *
 		 * **Description: ** Will remove all supplied tags and automatically remove DOCTYPE, body and html.
 		 *
-		 * @param string                                                                    $html String to be cleaned
-		 * @param array|string                                                              $remove Tag or array of tags to be removed
-		 * @param boolean If <code>true</code> removes DOCTYPE, body and html automatically. default <code>true</code>
-		 * @return string Cleaned string
+		 * @param string       $html String to be cleaned.
+		 * @param array|string $remove Tag or array of tags to be removed.
+		 * @param boolean      $cleanest If <code>true</code> removes DOCTYPE, body and html automatically. default <code>true</code>.
+		 * @return string Cleaned string.
 		 */
-		static function removeTagsDom( $html, $remove, $cleanest = true ) {
+		public static function remove_tags_dom( $html, $remove, $cleanest = true ) {
 			$dom = new DOMDocument();
 			$dom->loadHTML( $html, LIBXML_HTML_NODEFDTD | LIBXML_HTML_NOIMPLIED );
 			if ( is_array( $remove ) ) {
 				foreach ( $remove as $tag ) {
 					$element = $dom->getElementsByTagName( $tag );
 					foreach ( $element  as $item ) {
-						$item->parentNode->removeChild( $item );
+						$item->parent_node->removeChild( $item );
 					}
 				}
 			} else {
 				$element = $dom->getElementsByTagName( $remove );
 				foreach ( $element  as $item ) {
-						$item->parentNode->removeChild( $item );
+						$item->parent_node->removeChild( $item );
 				}
 			}
 
@@ -93,20 +105,26 @@ if ( ! class_exists( 'ANONY_HELP' ) ) {
 				$html = preg_replace( '/^<!DOCTYPE.+?>/', '', str_replace( array( '<html>', '</html>', '<body>', '</body>' ), array( '', '', '', '' ), $dom->saveHTML() ) );
 			}
 
-			if ( ( is_array( $remove ) && in_array( 'script', $remove ) ) || $remove == 'script' ) {
-				$html = self::removeScriptTagRegx( $html );
+			if ( ( is_array( $remove ) && in_array( 'script', $remove, true ) ) || 'script' === $remove ) {
+				$html = self::remove_script_tag_regx( $html );
 			}
 
 			return $html;
 		}
 
 		/**
-		 * Check if checkbox is checked in a form
+		 * Check if checkbox is checked in a form.
+		 *
+		 * @param array  $sent_data Data sent.
+		 * @param string $chkname Checkbox's input name.
+		 * @param string $value Checkbox's value.
+		 *
+		 * @return bool True if checked, otherwise false.
 		 */
-		static function isChecked( $chkname, $value ) {
-			if ( isset( $_POST[ $chkname ] ) && ! empty( $_POST[ $chkname ] ) ) {
-				foreach ( $_POST[ $chkname ] as $chkval ) {
-					if ( $chkval == $value ) {
+		public static function is_checked( $sent_data, $chkname, $value ) {
+			if ( self::isset_not_empty( $sent_data[ $chkname ] ) ) {
+				foreach ( $sent_data[ $chkname ] as $chkval ) {
+					if ( $chkval === $value ) {
 						return true;
 					}
 				}
@@ -114,24 +132,28 @@ if ( ! class_exists( 'ANONY_HELP' ) ) {
 			return false;
 		}
 
-		// For debugging. used when page direction is rtl.
-		static function neatVarDump( $r ) {
+		/**
+		 * For debugging. used when page direction is rtl.
+		 *
+		 * @param mixed $data To be dumpped variable.
+		 */
+		public static function neat_var_dump( $data ) {
 			echo '<pre styel="direction:ltr;text-align:left">';
 				// phpcs:disable WordPress.PHP.DevelopmentFunctions
-				var_dump( $r );
+				var_dump( $data );
 				// phpcs:enable
 			echo '</pre>';
 		}
 
 		/**
 		 * Check is a variable is set and not empty.
-		 * 
+		 *
 		 * @param mixed $variable To be checked variable.
 		 * @return bool True if a variable is set and not empty, otherwise false.
-		 */ 
-		static function isset_not_empty( $variable ){
+		 */
+		public static function isset_not_empty( $variable ) {
 
-			if ( isset( $variable ) && !empty( $variable ) ) {
+			if ( isset( $variable ) && ! empty( $variable ) ) {
 				return true;
 			}
 

@@ -94,6 +94,8 @@ if ( ! class_exists( 'ANONY_Validate_Inputs' ) ) {
 
 				$this->field = $args['field'];
 
+				$this->field_title = ANONY_HELP::isset_not_empty( $this->field[ 'title' ] ) ? $this->field[ 'title' ] : sprintf( __( 'Field with id %s', 'anonyengine' ), $this->field['id'] );
+
 				if ( isset( $this->field['validate'] ) ) {
 
 					$this->select_sanitization();
@@ -264,22 +266,17 @@ if ( ! class_exists( 'ANONY_Validate_Inputs' ) ) {
 			// If checked/selected multiple options.
 			if ( is_array( $this->value ) ) {
 
-				// Get intersection between values array and the pre-set options array keys.
-				$intersection = array_intersect( $this->value, $options_keys );
-
-				if ( count( $intersection ) !== count( $this->value ) ) {
-					$this->valid = false;
+				foreach ( $this->value as $value ) {
+					$this->value = $value;
+					$this->valid_no_html();
 				}
 
 				// If checked/selected one option e.g. radio.
 			} else {
 
-				if ( ! in_array( $this->value, $options_keys, true ) ) {
-					$this->valid = false;
-				}
+				$this->valid_no_html();
 			}// if level 1.
 
-			$this->set_error_code( 'strange-options' );
 		}//end valid_multiple_options()
 
 		/**
@@ -550,7 +547,8 @@ if ( ! class_exists( 'ANONY_Validate_Inputs' ) ) {
 			if ( ! $this->valid ) {
 
 				$this->errors[ $this->field['id'] ] = array(
-					'code' => $code,
+					'code'  => $code,
+					'title' => $this->field_title
 				);
 			}// if level 1.
 		}//end set_error_code()
@@ -562,7 +560,7 @@ if ( ! class_exists( 'ANONY_Validate_Inputs' ) ) {
 		 * @param string $field_id Field id to be shown with message.
 		 * @return string The error message
 		 */
-		public static function get_error_msg( $code, $field_id = '' ) {
+		public static function get_error_msg( $code, $field_id = '', $field_title = '' ) {
 
 			if ( empty( $code ) ) {
 				return;
@@ -582,121 +580,121 @@ if ( ! class_exists( 'ANONY_Validate_Inputs' ) ) {
 					return sprintf(
 						wp_kses(
 							// translators: %1$s Field ID, %2$s Here text.
-							__( '<a href="#fieldset_%1$s" data-id="fieldset_%1$s" class="meta-error"><strong>%2$s:</strong></a> Sorry!! Please select another file, the selected file type is not supported. <a>', 'anonyengine' ),
+							__( '<a href="#fieldset_%1$s" data-id="fieldset_%1$s" class="anony-validation-error"><strong>%2$s:</strong></a> Sorry!! Please select another file, the selected file type is not supported. <a>', 'anonyengine' ),
 							$accepted_tags
 						),
 						$field_id,
-						esc_html__( 'Here', 'anonyengine' )
+						!empty( $field_title ) ? $field_title : esc_html__( 'Here', 'anonyengine' )
 					);
 
 				case 'not-date':
 					return sprintf(
 						wp_kses(
 							// translators: %1$s Field ID, %2$s Here text.
-							__( '<a href="#fieldset_%1$s" data-id="fieldset_%1$s" class="meta-error"><strong>%2$s:</strong></a> Sorry!! The entered date is not valid', 'anonyengine' ),
+							__( '<a href="#fieldset_%1$s" data-id="fieldset_%1$s" class="anony-validation-error"><strong>%2$s:</strong></a> Sorry!! The entered date is not valid', 'anonyengine' ),
 							$accepted_tags
 						),
 						$field_id,
-						esc_html__( 'Here', 'anonyengine' )
+						!empty( $field_title ) ? $field_title : esc_html__( 'Here', 'anonyengine' )
 					);
 
 				case 'incorrect-date-format':
 					return sprintf(
 						wp_kses(
 							// translators: %1$s Field ID, %2$s Here text.
-							__( '<a href="#fieldset_%1$s" data-id="fieldset_%1$s" class="meta-error"><strong>%2$s:</strong></a> Sorry!! Date format is not supported', 'anonyengine' ),
+							__( '<a href="#fieldset_%1$s" data-id="fieldset_%1$s" class="anony-validation-error"><strong>%2$s:</strong></a> Sorry!! Date format is not supported', 'anonyengine' ),
 							$accepted_tags
 						),
 						$field_id,
-						esc_html__( 'Here', 'anonyengine' )
+						!empty( $field_title ) ? $field_title : esc_html__( 'Here', 'anonyengine' )
 					);
 
 				case 'not-number':
 					return sprintf(
 						wp_kses(
 							// translators: %1$s Field ID, %2$s Here text.
-							__( '<a href="#fieldset_%1$s" data-id="fieldset_%1$s" class="meta-error"><strong>%2$s:</strong></a> Please enter a valid number (e.g. 1,2,-5)', 'anonyengine' ),
+							__( '<a href="#fieldset_%1$s" data-id="fieldset_%1$s" class="anony-validation-error"><strong>%2$s:</strong></a> Please enter a valid number (e.g. 1,2,-5)', 'anonyengine' ),
 							$accepted_tags
 						),
 						$field_id,
-						esc_html__( 'Here', 'anonyengine' )
+						!empty( $field_title ) ? $field_title : esc_html__( 'Here', 'anonyengine' )
 					);
 
 				case 'not-url':
 					return sprintf(
 						wp_kses(
 							// translators: %1$s Field ID, %2$s Here text.
-							__( '<a href="#fieldset_%1$s" data-id="fieldset_%1$s" class="meta-error"><strong>%2$s:</strong></a> You must provide a valid URL', 'anonyengine' ),
+							__( '<a href="#fieldset_%1$s" data-id="fieldset_%1$s" class="anony-validation-error"><strong>%2$s:</strong></a> You must provide a valid URL', 'anonyengine' ),
 							$accepted_tags
 						),
 						$field_id,
-						esc_html__( 'Here', 'anonyengine' )
+						!empty( $field_title ) ? $field_title : esc_html__( 'Here', 'anonyengine' )
 					);
 
 				case 'not-email':
 					return sprintf(
 						wp_kses(
 							// translators: %1$s Field ID, %2$s Here text.
-							__( '<a href="#fieldset_%1$s" data-id="fieldset_%1$s" class="meta-error"><strong>%2$s:</strong></a> You must enter a valid email address.', 'anonyengine' ),
+							__( '<a href="#fieldset_%1$s" data-id="fieldset_%1$s" class="anony-validation-error"><strong>%2$s:</strong></a> You must enter a valid email address.', 'anonyengine' ),
 							$accepted_tags
 						),
 						$field_id,
-						esc_html__( 'Here', 'anonyengine' )
+						!empty( $field_title ) ? $field_title : esc_html__( 'Here', 'anonyengine' )
 					);
 
 				case 'remove-html':
 					return sprintf(
 						wp_kses(
 							// translators: %1$s Field ID, %2$s Here text.
-							__( '<a href="#fieldset_%1$s" data-id="fieldset_%1$s" class="meta-error"><strong>%2$s:</strong></a> HTML is not allowed', 'anonyengine' ),
+							__( '<a href="#fieldset_%1$s" data-id="fieldset_%1$s" class="anony-validation-error"><strong>%2$s:</strong></a> HTML is not allowed', 'anonyengine' ),
 							$accepted_tags
 						),
 						$field_id,
-						esc_html__( 'Here', 'anonyengine' )
+						!empty( $field_title ) ? $field_title : esc_html__( 'Here', 'anonyengine' )
 					);
 
 				case 'not-abs':
 					return sprintf(
 						wp_kses(
 							// translators: %1$s Field ID, %2$s Here text.
-							__( '<a href="#fieldset_%1$s" data-id="fieldset_%1$s" class="meta-error"><strong>%2$s:</strong></a> You must enter an absolute integer', 'anonyengine' ),
+							__( '<a href="#fieldset_%1$s" data-id="fieldset_%1$s" class="anony-validation-error"><strong>%2$s:</strong></a> You must enter an absolute integer', 'anonyengine' ),
 							$accepted_tags
 						),
 						$field_id,
-						esc_html__( 'Here', 'anonyengine' )
+						!empty( $field_title ) ? $field_title : esc_html__( 'Here', 'anonyengine' )
 					);
 
 				case 'not-hex':
 					return sprintf(
 						wp_kses(
 							// translators: %1$s Field ID, %2$s Here text.
-							__( '<a href="#fieldset_%1$s" data-id="fieldset_%1$s" class="meta-error"><strong>%2$s:</strong></a> You must enter a valid hex color', 'anonyengine' ),
+							__( '<a href="#fieldset_%1$s" data-id="fieldset_%1$s" class="anony-validation-error"><strong>%2$s:</strong></a> You must enter a valid hex color', 'anonyengine' ),
 							$accepted_tags
 						),
 						$field_id,
-						esc_html__( 'Here', 'anonyengine' )
+						!empty( $field_title ) ? $field_title : esc_html__( 'Here', 'anonyengine' )
 					);
 
 				case 'strange-options':
 					return sprintf(
 						wp_kses(
 							// translators: %1$s Field ID, %2$s Here text.
-							__( '<a href="#fieldset_%1$s" data-id="fieldset_%1$s" class="meta-error"><strong>%2$s:</strong></a> Unvalid option/s', 'anonyengine' ),
+							__( '<a href="#fieldset_%1$s" data-id="fieldset_%1$s" class="anony-validation-error"><strong>%2$s:</strong></a> Unvalid option/s', 'anonyengine' ),
 							$accepted_tags
 						),
 						$field_id,
-						esc_html__( 'Here', 'anonyengine' )
+						!empty( $field_title ) ? $field_title : esc_html__( 'Here', 'anonyengine' )
 					);
 
 				case 'required':
 					return sprintf(
 						wp_kses(
 							// translators: %1$s Field ID, %2$s Here text.
-							__( '<a href="#fieldset_%1$s" data-id="fieldset_%1$s" class="meta-error"><strong>%2$s:</strong></a> This is a required field', 'anonyengine' ),
+							__( '<a href="#fieldset_%1$s" data-id="fieldset_%1$s" class="anony-validation-error"><strong>%2$s:</strong></a> This is a required field', 'anonyengine' ),
 							$accepted_tags
 						),
 						$field_id,
-						esc_html__( 'Here', 'anonyengine' )
+						!empty( $field_title ) ? $field_title : esc_html__( 'Here', 'anonyengine' )
 					);
 
 				case 'invalid-nonce':

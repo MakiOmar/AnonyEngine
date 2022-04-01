@@ -94,7 +94,8 @@ if ( ! class_exists( 'ANONY_Validate_Inputs' ) ) {
 
 				$this->field = $args['field'];
 
-				$this->field_title = ANONY_HELP::isset_not_empty( $this->field[ 'title' ] ) ? $this->field[ 'title' ] : sprintf( __( 'Field with id %s', 'anonyengine' ), $this->field['id'] );
+				// translators: %s is for field's id.
+				$this->field_title = ANONY_HELP::isset_not_empty( $this->field['title'] ) ? $this->field['title'] : sprintf( __( 'Field with id %s', 'anonyengine' ), $this->field['id'] );
 
 				if ( isset( $this->field['validate'] ) ) {
 
@@ -548,7 +549,7 @@ if ( ! class_exists( 'ANONY_Validate_Inputs' ) ) {
 
 				$this->errors[ $this->field['id'] ] = array(
 					'code'  => $code,
-					'title' => $this->field_title
+					'title' => $this->field_title,
 				);
 			}// if level 1.
 		}//end set_error_code()
@@ -558,6 +559,7 @@ if ( ! class_exists( 'ANONY_Validate_Inputs' ) ) {
 		 *
 		 * @param string $code Message code.
 		 * @param string $field_id Field id to be shown with message.
+		 * @param string $field_title Field title.
 		 * @return string The error message
 		 */
 		public static function get_error_msg( $code, $field_id = '', $field_title = '' ) {
@@ -584,7 +586,7 @@ if ( ! class_exists( 'ANONY_Validate_Inputs' ) ) {
 							$accepted_tags
 						),
 						$field_id,
-						!empty( $field_title ) ? $field_title : esc_html__( 'Here', 'anonyengine' )
+						! empty( $field_title ) ? $field_title : esc_html__( 'Here', 'anonyengine' )
 					);
 
 				case 'not-date':
@@ -595,7 +597,7 @@ if ( ! class_exists( 'ANONY_Validate_Inputs' ) ) {
 							$accepted_tags
 						),
 						$field_id,
-						!empty( $field_title ) ? $field_title : esc_html__( 'Here', 'anonyengine' )
+						! empty( $field_title ) ? $field_title : esc_html__( 'Here', 'anonyengine' )
 					);
 
 				case 'incorrect-date-format':
@@ -606,7 +608,7 @@ if ( ! class_exists( 'ANONY_Validate_Inputs' ) ) {
 							$accepted_tags
 						),
 						$field_id,
-						!empty( $field_title ) ? $field_title : esc_html__( 'Here', 'anonyengine' )
+						! empty( $field_title ) ? $field_title : esc_html__( 'Here', 'anonyengine' )
 					);
 
 				case 'not-number':
@@ -617,7 +619,7 @@ if ( ! class_exists( 'ANONY_Validate_Inputs' ) ) {
 							$accepted_tags
 						),
 						$field_id,
-						!empty( $field_title ) ? $field_title : esc_html__( 'Here', 'anonyengine' )
+						! empty( $field_title ) ? $field_title : esc_html__( 'Here', 'anonyengine' )
 					);
 
 				case 'not-url':
@@ -628,7 +630,7 @@ if ( ! class_exists( 'ANONY_Validate_Inputs' ) ) {
 							$accepted_tags
 						),
 						$field_id,
-						!empty( $field_title ) ? $field_title : esc_html__( 'Here', 'anonyengine' )
+						! empty( $field_title ) ? $field_title : esc_html__( 'Here', 'anonyengine' )
 					);
 
 				case 'not-email':
@@ -639,7 +641,7 @@ if ( ! class_exists( 'ANONY_Validate_Inputs' ) ) {
 							$accepted_tags
 						),
 						$field_id,
-						!empty( $field_title ) ? $field_title : esc_html__( 'Here', 'anonyengine' )
+						! empty( $field_title ) ? $field_title : esc_html__( 'Here', 'anonyengine' )
 					);
 
 				case 'remove-html':
@@ -650,7 +652,7 @@ if ( ! class_exists( 'ANONY_Validate_Inputs' ) ) {
 							$accepted_tags
 						),
 						$field_id,
-						!empty( $field_title ) ? $field_title : esc_html__( 'Here', 'anonyengine' )
+						! empty( $field_title ) ? $field_title : esc_html__( 'Here', 'anonyengine' )
 					);
 
 				case 'not-abs':
@@ -661,7 +663,7 @@ if ( ! class_exists( 'ANONY_Validate_Inputs' ) ) {
 							$accepted_tags
 						),
 						$field_id,
-						!empty( $field_title ) ? $field_title : esc_html__( 'Here', 'anonyengine' )
+						! empty( $field_title ) ? $field_title : esc_html__( 'Here', 'anonyengine' )
 					);
 
 				case 'not-hex':
@@ -672,7 +674,7 @@ if ( ! class_exists( 'ANONY_Validate_Inputs' ) ) {
 							$accepted_tags
 						),
 						$field_id,
-						!empty( $field_title ) ? $field_title : esc_html__( 'Here', 'anonyengine' )
+						! empty( $field_title ) ? $field_title : esc_html__( 'Here', 'anonyengine' )
 					);
 
 				case 'strange-options':
@@ -683,7 +685,7 @@ if ( ! class_exists( 'ANONY_Validate_Inputs' ) ) {
 							$accepted_tags
 						),
 						$field_id,
-						!empty( $field_title ) ? $field_title : esc_html__( 'Here', 'anonyengine' )
+						! empty( $field_title ) ? $field_title : esc_html__( 'Here', 'anonyengine' )
 					);
 
 				case 'required':
@@ -694,7 +696,7 @@ if ( ! class_exists( 'ANONY_Validate_Inputs' ) ) {
 							$accepted_tags
 						),
 						$field_id,
-						!empty( $field_title ) ? $field_title : esc_html__( 'Here', 'anonyengine' )
+						! empty( $field_title ) ? $field_title : esc_html__( 'Here', 'anonyengine' )
 					);
 
 				case 'invalid-nonce':

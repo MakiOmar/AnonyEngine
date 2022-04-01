@@ -42,8 +42,22 @@ jQuery( document ).ready(
 				el: "#options-wrap",
 				initialize: function(){
 					this.showFirstSection();
+					this.highlightErrors();
 				},
 				events: {
+					'click .nav-toggle': function(e){
+						"use strict";
+						e.preventDefault();
+
+						var targetID = $( e.currentTarget ).attr( "role" );
+
+						$( '.anony-dropdown' ).hide();
+						if ($( '#' + targetID + '-dropdown' )) {
+							$( '#' + targetID + '-dropdown' ).toggle();
+						}
+
+					},
+
 					'click .nav-toggle': function(e){
 						"use strict";
 						e.preventDefault();
@@ -81,6 +95,14 @@ jQuery( document ).ready(
 						$( '.anony-nav-link:first' ).parent().addClass( 'active' );
 					}
 				},
+
+				highlightErrors: function() {
+					$('.anony-validation-error').each( function(){
+
+						var targetId = $(this).data('id');
+						$("#" + targetId).css('border', '1px solid red');
+					} );
+				}
 			}
 		);
 

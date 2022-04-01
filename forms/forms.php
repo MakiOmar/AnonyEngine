@@ -14,7 +14,7 @@ defined( 'ABSPATH' ) || die(); // Exit if accessed directly.
 
 
 /**
- * Holds a path to forms folder
+ * Holds a path to forms folder.
  *
  * @const
  */
@@ -22,21 +22,21 @@ define( 'ANONY_FORMS_PATH', wp_normalize_path( ANOE_DIR . 'forms/' ) );
 
 
 /**
- * Holds forms' URI
+ * Holds forms' URI.
  *
  * @const
  */
 define( 'ANONY_FORMS_URI', ANOE_URI . 'forms/' );
 
 /**
- * Holds a URI to main classes folder
+ * Holds a URI to main classes folder.
  *
  * @const
  */
 define( 'ANONY_FORMS_CLASSES', ANONY_FORMS_PATH . 'classes/' );
 
 /**
- * Holds a URI to actions classes folder
+ * Holds a URI to actions classes folder.
  *
  * @const
  */

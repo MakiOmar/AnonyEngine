@@ -526,7 +526,7 @@ if ( ! class_exists( 'ANONY_Theme_Settings' ) ) {
 				if ( has_custom_logo() ) {
 					$option_logo = get_custom_logo();
 				} else {
-					$option_logo = '<img src="' . ANONY_OPTIONS_URI . '/imgs/logo-orange.png"/>';
+					$option_logo = '<img src="' . ANONY_OPTIONS_URI . 'imgs/logo-orange.png"/>';
 				}
 
 				// phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped

@@ -1,11 +1,16 @@
 <?php
 /**
- * PHP Array helpers
+ * Array helpers.
  *
- * @package Anonymous theme
- * @author Makiomar
- * @link http://makiomar.com
+ * PHP version 7.3 Or Later.
+ *
+ * @package  AnonyEngine
+ * @author   Makiomar <info@makior.com>
+ * @license  https:// makiomar.com AnonyEngine Licence.
+ * @link     https:// makiomar.com/anonyengine_elements.
  */
+
+defined( 'ABSPATH' ) || die();
 
 if ( ! class_exists( 'ANONY_ARRAY_HELP' ) ) {
 	/**

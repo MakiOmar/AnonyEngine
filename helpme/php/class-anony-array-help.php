@@ -26,11 +26,11 @@ if ( ! class_exists( 'ANONY_ARRAY_HELP' ) ) {
 		 */
 		public static function is_sequentially_indexed( array $array ) {
 
-			if ( array() === $arr ) {
+			if ( array() === $array ) {
 				return false;
 			}
 
-			return array_keys( $arr ) === range( 0, count( $arr ) - 1 );
+			return array_keys( $array ) === range( 0, count( $array ) - 1 );
 		}
 
 		/**

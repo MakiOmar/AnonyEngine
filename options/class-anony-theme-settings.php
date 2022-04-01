@@ -433,7 +433,7 @@ if ( ! class_exists( 'ANONY_Theme_Settings' ) ) {
 						add_settings_error(
 							$this->args['opt_name'],
 							esc_attr( $field_id ),
-							$this->validate->get_error_msg( $data['code'], $data['title'] ),
+							$this->validate->get_error_msg( $data['code'], $field_id, $data[ 'title' ] ),
 							'error'
 						);
 

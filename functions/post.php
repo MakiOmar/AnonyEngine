@@ -1,4 +1,15 @@
 <?php
+/**
+ * AnonyEngine posts registration.
+ *
+ * PHP version 7.3 Or Later.
+ *
+ * @package  AnonyEngine
+ * @author   Makiomar <info@makior.com>
+ * @license  https://makiomar.com AnonyEngine Licence
+ * @link     https://makiomar.com/anonyengine_elements
+ */
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }

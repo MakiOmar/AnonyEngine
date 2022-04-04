@@ -265,5 +265,25 @@ if ( ! class_exists( 'ANONY_ARRAY_HELP' ) ) {
 			return $array;
 
 		}
+
+		/**
+		 * Function that groups an array of associative arrays by some key.
+		 * 
+		 * @param string $key Property to sort by.
+		 * @param array $data Array that stores multiple associative arrays.
+		 */
+		public static function group_by($key, $data) {
+		    $result = array();
+
+		    foreach($data as $val) {
+		        if(array_key_exists($key, $val)){
+		            $result[$val[$key]][] = $val;
+		        }else{
+		            $result[""][] = $val;
+		        }
+		    }
+
+		    return $result;
+		}
 	}
 }

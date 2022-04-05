@@ -1,22 +1,39 @@
 <?php
 /**
- * PHP Time helpers class
+ * PHP Time helpers.
  *
- * @package Anonymous theme
- * @author Makiomar
- * @link http://makiomar.com
+ * PHP version 7.3 Or Later.
+ *
+ * @package  AnonyEngine
+ * @author   Makiomar <info@makior.com>
+ * @license  https:// makiomar.com AnonyEngine Licence.
+ * @link     https:// makiomar.com/anonyengine
  */
+
+defined( 'ABSPATH' ) || die();
+
 if ( ! class_exists( 'ANONY_TIME_HELP' ) ) {
+
+	/**
+	 * PHP Time helpers class.
+	 *
+	 * PHP version 7.3 Or Later.
+	 *
+	 * @package  AnonyEngine
+	 * @author   Makiomar <info@makior.com>
+	 * @license  https:// makiomar.com AnonyEngine Licence.
+	 * @link     https:// makiomar.com/anonyengine
+	 */
 	class ANONY_TIME_HELP extends ANONY_HELP {
 		/**
 		 * Calculate period of time
 		 *
 		 * @param  int    $time        the time you want to calculate.
 		 * @param  string $time_type   the time type you want to calculate.
-		 * @var    int      $period      the calculated time.
+		 * @var    int    $period      the calculated time.
 		 * @return int
 		 */
-		static function timeInSeconds( $time, $time_type = null ) {
+		public static function time_in_seconds( $time, $time_type = null ) {
 			$second = 1;
 			$minute = $second * 60;
 			$hour   = $minute * 60;

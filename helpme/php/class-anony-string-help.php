@@ -33,7 +33,7 @@ if ( ! class_exists( 'ANONY_STRING_HELP' ) ) {
 		 * @param string $length Slice length.
 		 * @return string
 		 */
-		public static function sliceText( $text, $length ) {
+		public static function slice_text( $text, $length ) {
 
 			$words = str_word_count( $text, 1 );
 

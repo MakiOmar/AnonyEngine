@@ -1,13 +1,29 @@
 <?php
 /**
- * WP Options//settings helpers class
+ * WP Options/settings helpers.
  *
- * @package Anonymous theme
- * @author Makiomar
- * @link http://makiomar.com
+ * PHP version 7.3 Or Later.
+ *
+ * @package  AnonyEngine
+ * @author   Makiomar <info@makior.com>
+ * @license  https:// makiomar.com AnonyEngine Licence.
+ * @link     https:// makiomar.com/anonyengine
  */
 
+defined( 'ABSPATH' ) || die();
+
 if ( ! class_exists( 'ANONY_OPTS_HELP' ) ) {
+
+	/**
+	 * WP Options/settings helpers class.
+	 *
+	 * PHP version 7.3 Or Later.
+	 *
+	 * @package  AnonyEngine
+	 * @author   Makiomar <info@makior.com>
+	 * @license  https:// makiomar.com AnonyEngine Licence.
+	 * @link     https:// makiomar.com/anonyengine
+	 */
 	class ANONY_OPTS_HELP extends ANONY_HELP {
 
 		/**
@@ -24,7 +40,7 @@ if ( ! class_exists( 'ANONY_OPTS_HELP' ) ) {
 		 * @param string $page Slug title of the admin page whose settings fields you want to show.
 		 * @param string $section Slug title of the settings section whose fields you want to show.
 		 */
-		static function DoSettingsFields( $page, $section ) {
+		public static function do_settings_fields( $page, $section ) {
 			global $wp_settings_fields;
 
 			if ( ! isset( $wp_settings_fields[ $page ][ $section ] ) ) {
@@ -38,12 +54,12 @@ if ( ! class_exists( 'ANONY_OPTS_HELP' ) ) {
 					$class = ' class="' . esc_attr( $field['args']['class'] ) . '"';
 				}
 				echo '<table class="form-table" role="presentation">';
-				echo "<tr{$class}>";
+				echo '<tr' . esc_attr( $class ) . '>';
 
 				if ( ! empty( $field['args']['label_for'] ) ) {
-					echo '<th scope="row"><label for="' . esc_attr( $field['args']['label_for'] ) . '">' . $field['title'] . '</label></th>';
+					echo '<th scope="row"><label for="' . esc_attr( $field['args']['label_for'] ) . '">' . esc_html( $field['title'] ) . '</label></th>';
 				} else {
-					echo '<th scope="row">' . $field['title'] . '</th>';
+					echo '<th scope="row">' . esc_html( $field['title'] ) . '</th>';
 				}
 
 				echo '<td>';
@@ -68,7 +84,7 @@ if ( ! class_exists( 'ANONY_OPTS_HELP' ) ) {
 		 *
 		 * @param string $page The slug name of the page whose settings sections you want to output.
 		 */
-		static function DoSettingsSections( $page ) {
+		public static function do_settings_sections( $page ) {
 			global $wp_settings_sections, $wp_settings_fields;
 
 			if ( ! isset( $wp_settings_sections[ $page ] ) ) {
@@ -82,17 +98,17 @@ if ( ! class_exists( 'ANONY_OPTS_HELP' ) ) {
 				}
 				?>
 
-				<div id="<?php echo $section['id']; ?>" class="anony-section-group">
+				<div id="<?php echo esc_attr( $section['id'] ); ?>" class="anony-section-group">
 					<?php
 
 					if ( $section['title'] ) {
-						echo "<h2>{$section['title']}</h2>\n";
+						echo '<h2>' . esc_html( $section['title'] ) . "</h2>\n";
 					}
 
 					if ( $section['callback'] ) {
 						call_user_func( $section['callback'], $section );
 					}
-						self::DoSettingsFields( $page, $section['id'] );
+						self::do_settings_fields( $page, $section['id'] );
 					?>
 				</div>
 				<?php

@@ -42,7 +42,6 @@ require ANOE_DIR . 'vendor/autoload.php';
 require_once ANOE_LIBS_URI . 'fonts.php';
 
 require_once wp_normalize_path( ANOE_DIR . 'config.php' );
-require_once wp_normalize_path( ANOE_FUNC_DIR . 'phpoffice.php' );
 
 /**
  * Enqueue admin/frontend common scripts.

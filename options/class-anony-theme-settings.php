@@ -554,7 +554,7 @@ if ( ! class_exists( 'ANONY_Theme_Settings' ) ) {
 					/**
 					 * Output setting sections and their fields.
 					 */
-					ANONY_OPTS_HELP::DoSettingsSections( $this->args['menu_slug'] );
+					ANONY_OPTS_HELP::do_settings_sections( $this->args['menu_slug'] );
 
 					submit_button( 'Save Settings', 'primary', 'submit', true, array( 'role' => 'anony-options' ) );
 

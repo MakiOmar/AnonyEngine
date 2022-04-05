@@ -18,7 +18,7 @@ use PhpOffice\PhpSpreadsheet\IOFactory;
 
 if ( ! class_exists( 'ANONY_PHPOFFICE_HELP' ) ) {
 	/**
-	 * PHPOFFICE helpers class
+	 * PHPOFFICE helpers class.
 	 *
 	 * @package    AnonyEngine helpers
 	 * @author     Makiomar <info@makior.com>

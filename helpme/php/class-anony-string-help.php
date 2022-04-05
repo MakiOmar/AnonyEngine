@@ -1,16 +1,39 @@
 <?php
 /**
- * PHP String helpers class
+ * PHP String helpers.
  *
- * @package Anonymous theme
- * @author Makiomar
- * @link http://makiomar.com
+ * PHP version 7.3 Or Later.
+ *
+ * @package  AnonyEngine
+ * @author   Makiomar <info@makior.com>
+ * @license  https:// makiomar.com AnonyEngine Licence.
+ * @link     https:// makiomar.com/anonyengine
  */
 
+defined( 'ABSPATH' ) || die();
+
 if ( ! class_exists( 'ANONY_STRING_HELP' ) ) {
+
+	/**
+	 * PHP String helpers class.
+	 *
+	 * PHP version 7.3 Or Later.
+	 *
+	 * @package  AnonyEngine
+	 * @author   Makiomar <info@makior.com>
+	 * @license  https:// makiomar.com AnonyEngine Licence.
+	 * @link     https:// makiomar.com/anonyengine
+	 */
 	class ANONY_STRING_HELP extends ANONY_HELP {
 
-		static function sliceText( $text, $length ) {
+		/**
+		 * Slice text to a specific length.
+		 *
+		 * @param string $text Text to be sliced.
+		 * @param string $length Slice length.
+		 * @return string
+		 */
+		public static function sliceText( $text, $length ) {
 
 			$words = str_word_count( $text, 1 );
 
@@ -22,54 +45,25 @@ if ( ! class_exists( 'ANONY_STRING_HELP' ) ) {
 		/**
 		 * Uppercase first litter after delimiter
 		 *
-		 * @param string $delimiter
-		 * @param string $string
+		 * @param string $delimiter The delimiter.
+		 * @param string $string    The String.
 		 * @return string
 		 */
-		static function ucAfter( $delimiter, $string ) {
+		public static function upper_case_after_delimiter( $delimiter, $string ) {
 
 			return implode( $delimiter, array_map( 'ucfirst', explode( $delimiter, $q ) ) );
 		}
 
 		/**
-		 * Read textarea content line by line
+		 * Read textarea content line by line.
 		 *
-		 * @param string $content
-		 * @return array
+		 * @param string $content To be read multi-line text.
+		 * @return array An array of text's lines.
 		 */
-		static function lineByLineTextArea( $content ) {
+		public static function line_by_line_textarea( $content ) {
 
 			return explode( "\r\n", trim( $content ) );
 
-		}
-
-		/**
-		 * Add images missing dimensions
-		 *
-		 * @param string $content
-		 * @return string
-		 */
-		static function addImagesMissingDimensions( $content ) {
-			$pattern = '/<img [^>]*?src="(\w+?:\/\/[^"]+?)"[^>]*?>/iu';
-			preg_match_all( $pattern, $content, $imgs );
-			foreach ( $imgs[0] as $i => $img ) {
-
-				if ( false !== strpos( $img, 'width=' ) && false !== strpos( $img, 'height=' ) ) {
-					continue;
-				}
-
-				$img_url  = $imgs[1][ $i ];
-				$img_size = @getimagesize( $img_url );
-
-				if ( false === $img_size ) {
-					continue;
-				}
-
-				$replaced_img = str_replace( '<img ', '<img ' . $img_size[3] . ' ', $imgs[0][ $i ] );
-				$content      = str_replace( $img, $replaced_img, $content );
-			}
-
-			return $content;
 		}
 
 	}

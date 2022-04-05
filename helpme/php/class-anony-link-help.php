@@ -1,20 +1,40 @@
 <?php
 /**
- * PHP Link helpers class
+ * PHP Link helpers.
  *
- * @package Anonymous theme
- * @author Makiomar
- * @link http://makiomar.com
+ * PHP version 7.3 Or Later.
+ *
+ * @package  AnonyEngine
+ * @author   Makiomar <info@makior.com>
+ * @license  https:// makiomar.com AnonyEngine Licence.
+ * @link     https:// makiomar.com/anonyengine
  */
+
+defined( 'ABSPATH' ) || die();
+
 if ( ! class_exists( 'ANONY_LINK_HELP' ) ) {
+
+	/**
+	 * PHP Link helpers class.
+	 *
+	 * PHP version 7.3 Or Later.
+	 *
+	 * @package  AnonyEngine
+	 * @author   Makiomar <info@makior.com>
+	 * @license  https:// makiomar.com AnonyEngine Licence.
+	 * @link     https:// makiomar.com/anonyengine
+	 */
 	class ANONY_LINK_HELP extends ANONY_HELP {
 
 		/**
-		 * Check if link exists
+		 * Check if link exists.
+		 *
+		 * @param string $url To be checked link.
+		 * @return bool True if is a link otherwise false.
 		 */
-		static function linkExists( $url ) {
-			$file_headers = @get_headers( $url );
-			if ( ! $file_headers || $file_headers[0] == 'HTTP/1.1 404 Not Found' ) {
+		public static function linkExists( $url ) {
+			$file_headers = get_headers( $url );
+			if ( 'HTTP/1.1 404 Not Found' === ! $file_headers || $file_headers[0] ) {
 				return false;
 			}
 
@@ -22,9 +42,13 @@ if ( ! class_exists( 'ANONY_LINK_HELP' ) ) {
 		}
 
 		/**
-		 * Checks if a url exists
+		 * Checks if a url exists.
+		 *
+		 * @param string $url To be checked URL.
+		 * @return bool True if is a URL exists otherwise false.
 		 */
-		static function curlUrlExists( $url ) {
+		public static function curlUrlExists( $url ) {
+			//phpcs:disable WordPress.WP.AlternativeFunctions
 			$ch = curl_init( $url );
 
 			curl_setopt( $ch, CURLOPT_NOBODY, true );
@@ -33,20 +57,20 @@ if ( ! class_exists( 'ANONY_LINK_HELP' ) ) {
 
 			$code = curl_getinfo( $ch, CURLINFO_HTTP_CODE );
 
-			$status = ( $code == 200 ) ? true : false;
+			$status = ( 200 === $code ) ? true : false;
 
 			curl_close( $ch );
-
+			// phpcs:enable.
 			return $status;
 		}
 
 		/**
-		 * Generate Path
+		 * Generate Path.
 		 *
-		 * @param  array   An array of folders tree
-		 * @return string  Requied path
+		 * @param  array $dir_tree  An array of folders tree.
+		 * @return string  Requied path.
 		 */
-		static function generatePath( $dir_tree ) {
+		public static function generatePath( $dir_tree ) {
 			$path = '';
 
 			if ( ! is_array( $dir_tree ) ) {

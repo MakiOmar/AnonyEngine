@@ -31,10 +31,10 @@ if ( ! class_exists( 'ANONY_TERM_HELP' ) ) {
 		 * @param  string $taxonomy Taxonomy to get terms from.
 		 * @return array             An indexed array of terms slugs.
 		 */
-		public static function queryTermsinAdmin( $taxonomy ) {
+		public static function query_terms_in_admin( $taxonomy ) {
 
 			$terms = ANONY_ARRAY_HELP::ObjToAssoc(
-				self::queryTermsByTaxonomy( $taxonomy ),
+				self::query_terms_by_taxonomy( $taxonomy ),
 				'',
 				'slug'
 			);
@@ -47,7 +47,7 @@ if ( ! class_exists( 'ANONY_TERM_HELP' ) ) {
 		 * @param  string $taxonomy taxonomy to get terms from.
 		 * @return array             An array of terms objects contains only slug name.
 		 */
-		public static function queryTermsSlugsByTaxonomy( $taxonomy ) {
+		public static function query_terms_slugs_by_taxonomy( $taxonomy ) {
 			global $wpdb;
 
 			$cache_key = 'anony_terms_slug_by_taxonomy_' . $taxonomy;
@@ -86,7 +86,7 @@ if ( ! class_exists( 'ANONY_TERM_HELP' ) ) {
 		 * @param  string $operator Query operator.
 		 * @return array            An array of terms objects.
 		 */
-		public static function queryTermsByTaxonomy( $taxonomy, $operator = '=' ) {
+		public static function query_terms_by_taxonomy( $taxonomy, $operator = '=' ) {
 			global $wpdb;
 
 			$cache_key = 'anony_terms_by_taxonomy_' . $taxonomy;
@@ -129,7 +129,7 @@ if ( ! class_exists( 'ANONY_TERM_HELP' ) ) {
 		 * @param  string $fields Fields to fetch.
 		 * @return array          An array of terms (id, name, slug).
 		 */
-		public static function wpTermQuery( $tax, $fields ) {
+		public static function wp_term_query( $tax, $fields ) {
 			/**
 			 * 'fields' to return Accepts:
 			 * 'all' (returns an array of complete term objects),
@@ -163,7 +163,7 @@ if ( ! class_exists( 'ANONY_TERM_HELP' ) ) {
 		 * @param  type $tax  Term taxonomy.
 		 * @return string     Dash separated terms IDs.
 		 */
-		public static function termParents( $id, $tax ) {
+		public static function term_parents( $id, $tax ) {
 			$terms  = '';
 			$parent = get_term( $id, $tax );
 
@@ -174,7 +174,7 @@ if ( ! class_exists( 'ANONY_TERM_HELP' ) ) {
 
 			if ( $parent->parent && ( $parent->parent !== $parent->term_id ) ) {
 
-				$terms .= '-' . self::termParents( $parent->parent, $tax );
+				$terms .= '-' . self::term_parents( $parent->parent, $tax );
 
 			}
 			return $terms;
@@ -186,7 +186,7 @@ if ( ! class_exists( 'ANONY_TERM_HELP' ) ) {
 		 * @param array $taxonomies Array of taxonomies to delete terms connected to.
 		 * @param bool  $delete_taxonomy    Boolean to decide weather to delete a taxonomy. default yes.
 		 */
-		public static function deleteTerms( $taxonomies, $delete_taxonomy = 'yes' ) {
+		public static function delete_terms( $taxonomies, $delete_taxonomy = 'yes' ) {
 			global $wpdb;
 			foreach ( $taxonomies as $taxonomy ) {
 				// Prepare & excecute SQL, Delete Terms.
@@ -218,7 +218,7 @@ if ( ! class_exists( 'ANONY_TERM_HELP' ) ) {
 		 * @param string $taxonomy Taxonomy slug.
 		 * @return mixed (WP_Term|array|false) WP_Term instance (or array) on success, depending on the $output value. False if $taxonomy does not exist or $term was not found.
 		 */
-		public static function getTermBy( $term_id, $taxonomy ) {
+		public static function get_term_by( $term_id, $taxonomy ) {
 
 			if ( ANONY_WPML_HELP::isActive() ) {
 
@@ -235,7 +235,7 @@ if ( ! class_exists( 'ANONY_TERM_HELP' ) ) {
 		 * @param string $taxonomy Taxonomy slug.
 		 * @param int    $posts_per_page Number of posts per page.
 		 */
-		public static function termsPagination( $taxonomy, $posts_per_page ) {
+		public static function terms_pagination( $taxonomy, $posts_per_page ) {
 			/*
 				You should filter get_term args where the code that gets terms exists
 

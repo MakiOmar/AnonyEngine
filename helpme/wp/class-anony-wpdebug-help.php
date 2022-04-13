@@ -44,7 +44,7 @@ if ( ! class_exists( 'ANONY_WPDEBUG_HELP' ) ) {
 		 */
 		public static function neat_var_dump( $data ) {
 			if ( defined( 'WP_DEBUG' ) && true === WP_DEBUG ) {
-				echo '<pre styel="direction:ltr;text-align:left">';
+				echo '<pre dir="ltr" styel="direction:ltr;text-align:left">';
 					// phpcs:disable WordPress.PHP.DevelopmentFunctions
 					var_dump( $data );
 					// phpcs:enable

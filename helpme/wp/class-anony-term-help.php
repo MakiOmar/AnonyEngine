@@ -55,7 +55,7 @@ if ( ! class_exists( 'ANONY_TERM_HELP' ) ) {
 			$result = wp_cache_get( $cache_key );
 
 			if ( false === $result ) {
-
+				// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery
 				$result = $wpdb->get_results(
 					$wpdb->prepare(
 						"SELECT DISTINCT 
@@ -71,7 +71,7 @@ if ( ! class_exists( 'ANONY_TERM_HELP' ) ) {
 						$taxonomy
 					)
 				);
-
+				// phpcs:enable.
 				wp_cache_set( $cache_key, $result );
 
 				ANONY_WPDEBUG_HELP::printDbErrors( $result );
@@ -94,7 +94,7 @@ if ( ! class_exists( 'ANONY_TERM_HELP' ) ) {
 			$result = wp_cache_get( $cache_key );
 
 			if ( false === $result ) {
-
+				// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery
 				$result = $wpdb->get_results(
 					$wpdb->prepare(
 						"SELECT 
@@ -111,7 +111,7 @@ if ( ! class_exists( 'ANONY_TERM_HELP' ) ) {
 						$taxonomy
 					)
 				);
-
+				// phpcs:enable.
 				wp_cache_set( $cache_key, $result );
 
 				ANONY_WPDEBUG_HELP::printDbErrors( $result );
@@ -195,15 +195,18 @@ if ( ! class_exists( 'ANONY_TERM_HELP' ) ) {
 				$result = wp_cache_get( $cache_key );
 
 				if ( false === $result ) {
-
+					// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery
 					$result = $wpdb->get_results( $wpdb->prepare( "DELETE t.*, tt.* FROM $wpdb->terms AS t INNER JOIN $wpdb->term_taxonomy AS tt ON t.term_id = tt.term_id WHERE tt.taxonomy IN (%s)", $taxonomy ) );
+					// phpcs:enable.
 
 					wp_cache_set( $cache_key, $result );
 				}
 
 				// Delete Taxonomy.
 				if ( 'yes' === $delete_taxonomy ) {
+					// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery
 					$wpdb->delete( $wpdb->term_taxonomy, array( 'taxonomy' => $taxonomy ), array( '%s' ) );
+					// phpcs:enable.
 				}
 			}
 		}

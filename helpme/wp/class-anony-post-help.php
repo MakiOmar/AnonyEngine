@@ -1,20 +1,33 @@
 <?php
 /**
- * WP posts helpers class
+ * WP posts helpers.
  *
- * @package Anonymous theme
- * @author Makiomar
- * @link http://makiomar.com
+ * PHP version 7.3 Or Later.
+ *
+ * @package  AnonyEngine.
+ * @author   Makiomar <info@makior.com>.
+ * @license  https:// makiomar.com AnonyEngine Licence..
+ * @link     https:// makiomar.com/anonyengine.
  */
 
 if ( ! class_exists( 'ANONY_POST_HELP' ) ) {
+	/**
+	 * WP posts helpers class.
+	 *
+	 * PHP version 7.3 Or Later.
+	 *
+	 * @package  AnonyEngine.
+	 * @author   Makiomar <info@makior.com>.
+	 * @license  https:// makiomar.com AnonyEngine Licence..
+	 * @link     https:// makiomar.com/anonyengine.
+	 */
 	class ANONY_POST_HELP extends ANONY_HELP {
 
 		/**
-		 * Get all meta keys for post by id
+		 * Get all meta keys for post by id.
 		 *
-		 * @param int $post_id
-		 * @return array An array of meta keys
+		 * @param int $post_id Post's ID..
+		 * @return array An array of meta keys..
 		 */
 		public static function getPostMetaKeys( $post_id ) {
 			$clause = array(
@@ -27,11 +40,13 @@ if ( ! class_exists( 'ANONY_POST_HELP' ) ) {
 
 			return ANONY_WPDB_HELP::DirectSelect( $clause );
 		}
+
 		/**
 		 * Checks if a shortcode exists in page/post
 		 *
-		 * @param  obj $post
-		 * @return bool True if shortcode exist, otherwise false
+		 * @param  obj    $post Post object.
+		 * @param  string $shortcode_tag Shortcode tag to search for.
+		 * @return bool True if shortcode exist, otherwise false.
 		 */
 		public static function isPageHasShortcode( $post, $shortcode_tag ) {
 			if ( $post instanceof WP_Post ) {
@@ -44,11 +59,12 @@ if ( ! class_exists( 'ANONY_POST_HELP' ) ) {
 
 			return false;
 		}
+
 		/**
-		 * Get posts IDs and titles
+		 * Get posts' IDs and titles
 		 *
-		 * @param string $post_type
-		 * @return array Returns an array of published post posts IDs and titles. empty array if no results
+		 * @param string $post_type Post tyye.
+		 * @return array Returns an array of published post posts IDs and titles. empty array if no results.
 		 */
 		public static function queryPostTypeSimple( $post_type = 'post' ) {
 			$wpml_plugin = 'sitepress-multilingual-cms/sitepress.php';
@@ -60,83 +76,100 @@ if ( ! class_exists( 'ANONY_POST_HELP' ) ) {
 
 			global $wpdb;
 
-			$postIDs = array();
+			$posts_ids = array();
 
-			$query = $wpdb->prepare( "SELECT ID , post_title FROM $wpdb->posts WHERE post_type = '%s' AND post_status = 'publish'", $post_type );
+			$cache_key = 'anony_simple_post_type_query_' . $post_type;
 
-			$results = $wpdb->get_results( $query );
+			$results = wp_cache_get( $cache_key );
+
+			if ( false === $results ) {
+				// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery
+				$results = $wpdb->get_results(
+					$wpdb->prepare(
+						"SELECT ID , post_title 
+						FROM 
+							$wpdb->posts 
+						WHERE 
+							post_type = %s 
+						AND 
+							post_status = 'publish'",
+						$post_type
+					)
+				);
+				// phpcs:enable.
+				wp_cache_set( $cache_key, $results );
+
+				ANONY_WPDEBUG_HELP::printDbErrors( $results );
+			}
 
 			if ( ! empty( $results ) && ! is_null( $results ) ) {
+
 				foreach ( $results as $result ) {
 
-						$postIDs[ $result->ID ] = $result->post_title;
+					$posts_ids[ $result->ID ] = $result->post_title;
+
 				}
 			}
 
-			ANONY_WPDEBUG_HELP::printDbErrors( $results );
-
-			return $postIDs;
+			return $posts_ids;
 
 		}
 		/**
 		 * Gets post id by it;s title
 		 *
-		 * @param string $title Post's title
-		 * @return int Post's id
+		 * @param string $title Post's title.
+		 * @param string $post_type Post's type.
+		 * @return mixed Post's id on success, otherwise false.
 		 */
-		public static function queryIdByTitle( $title ) {
+		public static function queryIdByTitle( $title, $post_type = 'post' ) {
 			global $wpdb;
-			$post_id = $wpdb->get_col( "select ID from $wpdb->posts where post_title LIKE '" . $title . "%' " );
-			return $post_id;
-		}
 
-		/**
-		 * Gets an array of pages IDs and titles
-		 *
-		 * @return array Return an associative array of pages IDs and titles. key (id) equal value (title)
-		 */
-		public static function getPagesIdsTitles() {
-			$pages_data = array();
+			$cache_key = 'query_id_by_title_' . sanitize_title( $title );
 
-			$pages = get_pages( 'sort_column=post_title&hierarchical=0' );
+			$post_id = wp_cache_get( $cache_key );
 
-			foreach ( $pages as $page ) {
-				$pages_data[ $page->ID ] = $page->post_title;
+			if ( false === $post_id ) {
+				// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery
+				$post_id = $wpdb->get_col(
+					$wpdb->prepare(
+						"SELECT ID 
+						FROM 
+							$wpdb->posts 
+						WHERE 
+							post_title = %s
+						AND post_type = %s",
+						$title,
+						$post_type
+					)
+				);
+				// phpcs:enable.
+				wp_cache_set( $cache_key, $post_id );
+
+				ANONY_WPDEBUG_HELP::printDbErrors( $post_id );
+
 			}
 
-			return $pages_data;
-		}
-
-		/**
-		 * Gets an array of posts IDs and titles
-		 *
-		 * @return array Return an associative array of posts IDs and titles. key (id) equal value (title)
-		 */
-		public static function getPostsIdsTitles( $args ) {
-			$posts_data = array();
-
-			$posts = get_posts( $args );
-
-			foreach ( $posts as $post ) {
-				$posts_data[ $post->ID ] = $post->post_title;
+			if ( count( $post_id ) > 0 ) {
+				return intval( $post_id[0] );
+			} else {
+				return false;
 			}
 
-			return $posts_data;
 		}
 
 		/**
 		 * Renders an array of options to html select input
 		 *
-		 * @param  array       $options    Array of options to be rendered
-		 * @param  string|null $selected   The selected option stored in DB
-		 * @return string      $html       Rendered ooptions
+		 * @param  array       $options    Array of options to be rendered.
+		 * @param  string|null $selected   The selected option stored in DB.
+		 * @return string      $html       Rendered ooptions.
 		 */
 		public static function renderHtmlOptions( $options, $selected = null ) {
 
 			$html = '';
 
 			foreach ( $options as $option ) {
-				// Will be used to compare with the sanitized value
+				// Will be used to compare with the sanitized value.
 				$sanitized_opt = sanitize_title( $option );
 
 				$html .= sprintf(
@@ -154,10 +187,10 @@ if ( ! class_exists( 'ANONY_POST_HELP' ) ) {
 		/**
 		 * Render select option groups.
 		 *
-		 * @param  array  $options      Array of all options groups.
-		 * @param  array  $opts_groups  array of option groups names and there option group lable ['system' => 'option group label']
-		 * @param  string $selected     Value to check selected option against
-		 * @return string $html         HTML of options groups
+		 * @param  array  $options      Array of all options groups..
+		 * @param  array  $opts_groups  array of option groups names and there option group lable ['system' => 'option group label'].
+		 * @param  string $selected     Value to check selected option against.
+		 * @return string $html         HTML of options groups.
 		 */
 		public static function renderHtmlOptsGroups( $options, $opts_groups, $selected ) {
 
@@ -182,11 +215,11 @@ if ( ! class_exists( 'ANONY_POST_HELP' ) ) {
 		/**
 		 * Gets post excerpt.
 		 *
-		 * **Dscription: ** Echoes out an excerpt depending on the language
+		 * **Dscription: ** Excerpt length varies from languages to another, so this function helps to get equal length excerpt.
 		 *
-		 * @param int $id The post ID to get excerpt for
-		 * @param int $words_count number of words
-		 * @return void
+		 * @param int $id The post ID to get excerpt for.
+		 * @param int $words_count number of words.
+		 * @return string The excerpt.
 		 */
 		public static function crossLangExcerpt( $id, $words_count = 25 ) {
 
@@ -201,7 +234,7 @@ if ( ! class_exists( 'ANONY_POST_HELP' ) ) {
 			$text = explode( ' ', $text );
 			$text = array_slice( $text, 0, $words_count );
 			$text = '<p>' . implode( ' ', $text ) . '...</p>';
-			if ( get_bloginfo( 'language' ) == ORIGINAL_LANG ) {
+			if ( get_bloginfo( 'language' ) === ORIGINAL_LANG ) {
 				return $text;
 			} else {
 				return '<p>' . get_the_excerpt( $id ) . '</p>';
@@ -211,66 +244,101 @@ if ( ! class_exists( 'ANONY_POST_HELP' ) ) {
 		/**
 		 * Query posts IDs by meta key and meta value
 		 *
-		 * @param  string $key    The meta key you want to query with
-		 * @param  string $value  The meta value you want to query with
-		 * @return array          An array of posts IDs
+		 * @param  string $key    The meta key you want to query with.
+		 * @param  string $value  The meta value you want to query with.
+		 * @return array          An array of posts IDs or empty array if nothing found.
 		 */
 		public static function queryIdsByMeta( $key, $value ) {
 			global $wpdb;
 
-			$postIDs = array();
+			$posts_ids = array();
 
-			$query = "SELECT post_id FROM $wpdb->postmeta WHERE meta_key = 'anony__set_as_featured' AND meta_value = 'on'";
+			$cache_key = "query_id_by_meta_key_{$key}";
 
-			$results = $wpdb->get_results( $query );
+			$results = wp_cache_get( $cache_key );
 
-			if ( ! empty( $results ) && ! is_null( $results ) ) {
-				foreach ( $results as $result ) {
-					foreach ( $result as $id ) {
-						$postIDs[] = $id;
+			if ( false === $results ) {
+				// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery
+				$results = $wpdb->get_results(
+					$wpdb->prepare(
+						"SELECT post_id 
+					FROM 
+						$wpdb->postmeta 
+					WHERE 
+						meta_key = %s 
+					AND 
+						meta_value = %s",
+						$key,
+						$value
+					)
+				);
+				// phpcs:enable.
+				if ( ! empty( $results ) && ! is_null( $results ) ) {
+					foreach ( $results as $result ) {
+						foreach ( $result as $id ) {
+							$posts_ids[] = $id;
+						}
 					}
 				}
+
+				wp_cache_set( $cache_key, $results );
+
+				ANONY_WPDEBUG_HELP::printDbErrors( $results );
+
 			}
 
-			ANONY_WPDEBUG_HELP::printDbErrors( $results );
-
-			return $postIDs;
+			return $posts_ids;
 		}
 
 		/**
 		 * Query meta values by meta key.
 		 *
-		 * @param string $key    the meta key you want to query with
-		 * @return array Returns an array of meta values
+		 * @param string $key    the meta key you want to query with.
+		 * @return array Returns an array of meta values.
 		 */
-
 		public static function queryMetaValuesByKey( $key ) {
 			global $wpdb;
 
-			$metaValues = array();
+			$meta_values = array();
 
-			$query = "SELECT meta_value FROM $wpdb->postmeta WHERE meta_key = '$key'";
+			$cache_key = "query_meta_value_by_{$key}";
 
-			$results = $wpdb->get_results( $query );
+			$results = wp_cache_get( $cache_key );
 
-			if ( ! empty( $results ) && ! is_null( $results ) ) {
-				foreach ( $results as $result ) {
-					foreach ( $result as $value ) {
-						$metaValues[] = $value;
+			if ( false === $results ) {
+				// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery
+				$results = $wpdb->get_results(
+					$wpdb->prepare(
+						"SELECT meta_value 
+					FROM 
+						$wpdb->postmeta 
+					WHERE 
+						meta_key = %s",
+						$key
+					)
+				);
+				// phpcs:enable.
+				if ( ! empty( $results ) && ! is_null( $results ) ) {
+					foreach ( $results as $result ) {
+						foreach ( $result as $value ) {
+							$meta_values[] = $value;
+						}
 					}
 				}
+
+				wp_cache_set( $cache_key, $results );
+
+				ANONY_WPDEBUG_HELP::printDbErrors( $results );
 			}
 
-			ANONY_WPDEBUG_HELP::printDbErrors( $results );
-
-			return array_values( $metaValues );
+			return array_values( $meta_values );
 		}
 
 		/**
 		 * Assign a post to its corresponding terms
 		 *
-		 * @param array  $post_terms An array of taxonomies as its keys and terms' IDs as values
-		 * @param string $post_id The ID of the post
+		 * @param array $post_terms An array of taxonomies as its keys and terms' IDs as values.
+		 * @param int   $post_id The ID of the post.
 		 */
 		public static function setPostTerms( array $post_terms, int $post_id ) {
 
@@ -288,12 +356,12 @@ if ( ! class_exists( 'ANONY_POST_HELP' ) ) {
 		/**
 		 * Duplicates a post & its meta and it returns the new duplicated Post ID
 		 *
-		 * @param  [int]                      $post_id The Post you want to clone
-		 * @param  [array] args New post args
-		 * @return [int] The duplicated Post ID
+		 * @param  [int]   $post_id The Post you want to clone.
+		 * @param  [array] $args New post args.
+		 * @return [int] The duplicated Post ID.
 		 */
 		public static function duplicate( $post_id, $args = array() ) {
-			// delete_transient('duplicated_posts'); return;
+
 			if ( ! current_user_can( 'edit_posts' ) ) {
 				return;
 			}
@@ -315,11 +383,11 @@ if ( ! class_exists( 'ANONY_POST_HELP' ) ) {
 				return $new_post_id;
 			}
 
-			// Copy post metadata
+			// Copy post metadata.
 			$data = get_post_custom( $post_id );
 			foreach ( $data as $key => $values ) {
 
-				if ( '_wp_old_slug' == $key ) { // do nothing for this meta key
+				if ( '_wp_old_slug' === $key ) { // do nothing for this meta key.
 					continue;
 				}
 
@@ -330,9 +398,9 @@ if ( ! class_exists( 'ANONY_POST_HELP' ) ) {
 
 			if ( ! ANONY_WPML_HELP::isActive() ) {
 				/*
-				 * get all current post terms ad set them to the new post draft
+				 * get all current post terms ad set them to the new post draft.
 				 */
-				$taxonomies = get_object_taxonomies( $oldpost['post_type'] ); // returns array of taxonomy names for post type, ex array("category", "post_tag");
+				$taxonomies = get_object_taxonomies( $oldpost['post_type'] ); // returns array of taxonomy names for post type, ex array("category", "post_tag").
 				if ( $taxonomies ) {
 					foreach ( $taxonomies as $taxonomy ) {
 						$post_terms = wp_get_object_terms( $post_id, $taxonomy, array( 'fields' => 'slugs' ) );
@@ -347,7 +415,7 @@ if ( ! class_exists( 'ANONY_POST_HELP' ) ) {
 		/**
 		 * Get a list of public post types.
 		 *
-		 * @return [array] An array of post types as ( 'post_type_name' => post_type_lable )
+		 * @return [array] An array of post types as ( 'post_type_name' => post_type_lable ).
 		 */
 		public static function get_post_types_list() {
 			$args       = array(

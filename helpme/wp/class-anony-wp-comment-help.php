@@ -1,14 +1,29 @@
 <?php
 /**
- * WP comments helpers class
+ * WP comments helpers.
  *
- * @package Anonymous theme
- * @author Makiomar
- * @link http://makiomar.com
+ * PHP version 7.3 Or Later.
+ *
+ * @package  AnonyEngine
+ * @author   Makiomar <info@makior.com>
+ * @license  https://makiomar.com AnonyEngine Licence
+ * @link     https://makiomar.com/anonyengine
  */
 
-if ( ! class_exists( 'ANONY_WPCOMMENT_HELP' ) ) {
-	class ANONY_WPCOMMENT_HELP extends ANONY_HELP {
+defined( 'ABSPATH' ) || die(); // Exit if accessed direct.
+
+if ( ! class_exists( 'ANONY_Wp_Comment_Help' ) ) {
+	/**
+	 * WP comments helpers.
+	 *
+	 * PHP version 7.3 Or Later.
+	 *
+	 * @package  AnonyEngine
+	 * @author   Makiomar <info@makior.com>
+	 * @license  https://makiomar.com AnonyEngine Licence
+	 * @link     https://makiomar.com/anonyengine
+	 */
+	class ANONY_Wp_Comment_Help extends ANONY_HELP {
 		/**
 		 * Comments render
 		 *

@@ -203,11 +203,22 @@ jQuery(document).ready(function($){
 	 * @return string
 	 */
 	$.fn.getParameterByName = function(name, url = window.location.href) {
-			name = name.replace(/[\[\]]/g, '\\$&');
-			var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
-				results = regex.exec(url);
-			if (!results) return null;
-			if (!results[2]) return '';
-			return decodeURIComponent(results[2].replace(/\+/g, ' '));
-		}
+		name = name.replace(/[\[\]]/g, '\\$&');
+		var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+			results = regex.exec(url);
+		if (!results) return null;
+		if (!results[2]) return '';
+		return decodeURIComponent(results[2].replace(/\+/g, ' '));
+	}
+
+	/**
+	 * Matches simple emoji | emoji with modifiers (skin tones) | country flags | region flags | emoji presentation sequences.
+	 * 
+	 * @param string sentence Sentence to be searched.
+	 * @return array
+	 */ 
+	$.fn.matchEmoji = function ( sentence ) {
+		const regexpUnicodeModified = /\p{RI}\p{RI}|\p{Emoji}(\p{EMod}+|\u{FE0F}\u{20E3}?|[\u{E0020}-\u{E007E}]+\u{E007F})?(\u{200D}\p{Emoji}(\p{EMod}+|\u{FE0F}\u{20E3}?|[\u{E0020}-\u{E007E}]+\u{E007F})?)+|\p{EPres}(\p{EMod}+|\u{FE0F}\u{20E3}?|[\u{E0020}-\u{E007E}]+\u{E007F})?|\p{Emoji}(\p{EMod}+|\u{FE0F}\u{20E3}?|[\u{E0020}-\u{E007E}]+\u{E007F})/gu
+		return sentence.match(regexpUnicodeModified);
+	}
 });

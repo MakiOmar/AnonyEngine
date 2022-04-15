@@ -1,18 +1,18 @@
 <?php
 /**
- * AnonyEngine WP DEBUG.
+ * WP DEBUG.
  *
  * PHP version 7.3 Or Later.
  *
  * @package  AnonyEngine
  * @author   Makiomar <info@makior.com>
  * @license  https://makiomar.com AnonyEngine Licence
- * @link     https://makiomar.com/anonyengine_elements
+ * @link     https://makiomar.com/anonyengine
  */
 
 defined( 'ABSPATH' ) || die(); // Exit if accessed direct.
 
-if ( ! class_exists( 'ANONY_WPDEBUG_HELP' ) ) {
+if ( ! class_exists( 'ANONY_Wp_Debug_Help' ) ) {
 	/**
 	 * AnonyEngine wp debug class.
 	 *
@@ -21,7 +21,7 @@ if ( ! class_exists( 'ANONY_WPDEBUG_HELP' ) ) {
 	 * @license    https://makiomar.com AnonyEngine Licence
 	 * @link       https://makiomar.com
 	 */
-	class ANONY_WPDEBUG_HELP extends ANONY_HELP {
+	class ANONY_Wp_Debug_Help extends ANONY_HELP {
 		/**
 		 * Debug query result.
 		 *

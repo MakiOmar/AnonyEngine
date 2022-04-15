@@ -10,7 +10,9 @@
  * @link     https:// makiomar.com/anonyengine.
  */
 
-if ( ! class_exists( 'ANONY_POST_HELP' ) ) {
+defined( 'ABSPATH' ) || die();
+
+if ( ! class_exists( 'ANONY_Post_Help' ) ) {
 	/**
 	 * WP posts helpers class.
 	 *
@@ -21,7 +23,7 @@ if ( ! class_exists( 'ANONY_POST_HELP' ) ) {
 	 * @license  https:// makiomar.com AnonyEngine Licence..
 	 * @link     https:// makiomar.com/anonyengine.
 	 */
-	class ANONY_POST_HELP extends ANONY_HELP {
+	class ANONY_Post_Help extends ANONY_HELP {
 
 		/**
 		 * Get all meta keys for post by id.
@@ -99,7 +101,7 @@ if ( ! class_exists( 'ANONY_POST_HELP' ) ) {
 				// phpcs:enable.
 				wp_cache_set( $cache_key, $results );
 
-				ANONY_WPDEBUG_HELP::printDbErrors( $results );
+				ANONY_Wp_Debug_Help::printDbErrors( $results );
 			}
 
 			if ( ! empty( $results ) && ! is_null( $results ) ) {
@@ -145,7 +147,7 @@ if ( ! class_exists( 'ANONY_POST_HELP' ) ) {
 				// phpcs:enable.
 				wp_cache_set( $cache_key, $post_id );
 
-				ANONY_WPDEBUG_HELP::printDbErrors( $post_id );
+				ANONY_Wp_Debug_Help::printDbErrors( $post_id );
 
 			}
 
@@ -283,7 +285,7 @@ if ( ! class_exists( 'ANONY_POST_HELP' ) ) {
 
 				wp_cache_set( $cache_key, $results );
 
-				ANONY_WPDEBUG_HELP::printDbErrors( $results );
+				ANONY_Wp_Debug_Help::printDbErrors( $results );
 
 			}
 
@@ -328,7 +330,7 @@ if ( ! class_exists( 'ANONY_POST_HELP' ) ) {
 
 				wp_cache_set( $cache_key, $results );
 
-				ANONY_WPDEBUG_HELP::printDbErrors( $results );
+				ANONY_Wp_Debug_Help::printDbErrors( $results );
 			}
 
 			return array_values( $meta_values );

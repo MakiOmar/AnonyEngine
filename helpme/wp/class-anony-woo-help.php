@@ -6,11 +6,13 @@
  *
  * @package  AnonyEngine.
  * @author   Makiomar <info@makior.com>.
- * @license  https:// makiomar.com AnonyEngine Licence..
- * @link     https:// makiomar.com/anonyengine.
+ * @license  https:// makiomar.com AnonyEngine Licence.
+ * @link     https:// makiomar.com/anonyengine
  */
 
-if ( ! class_exists( 'ANONY_WOO_HELP' ) ) {
+defined( 'ABSPATH' ) || die();
+
+if ( ! class_exists( 'ANONY_Woo_Help' ) ) {
 	/**
 	 * Woocommerce helpers class.
 	 *
@@ -21,7 +23,7 @@ if ( ! class_exists( 'ANONY_WOO_HELP' ) ) {
 	 * @license  https:// makiomar.com AnonyEngine Licence...
 	 * @link     https:// makiomar.com/anonyengine.
 	 */
-	class ANONY_WOO_HELP extends ANONY_HELP {
+	class ANONY_Woo_Help extends ANONY_HELP {
 
 		/**
 		 * Create product attribute.

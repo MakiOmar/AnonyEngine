@@ -74,7 +74,7 @@ if ( ! class_exists( 'ANONY_TERM_HELP' ) ) {
 				// phpcs:enable.
 				wp_cache_set( $cache_key, $result );
 
-				ANONY_WPDEBUG_HELP::printDbErrors( $result );
+				ANONY_Wp_Debug_Help::printDbErrors( $result );
 			}
 
 			return $result;
@@ -114,7 +114,7 @@ if ( ! class_exists( 'ANONY_TERM_HELP' ) ) {
 				// phpcs:enable.
 				wp_cache_set( $cache_key, $result );
 
-				ANONY_WPDEBUG_HELP::printDbErrors( $result );
+				ANONY_Wp_Debug_Help::printDbErrors( $result );
 			}
 
 			return $result;

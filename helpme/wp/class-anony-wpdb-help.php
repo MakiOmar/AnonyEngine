@@ -34,7 +34,7 @@ if ( ! class_exists( 'ANONY_WPDB_HELP' ) ) {
 				}
 			}
 
-			ANONY_WPDEBUG_HELP::printDbErrors( $results );
+			ANONY_Wp_Debug_Help::printDbErrors( $results );
 
 			return $data;
 		}

@@ -10,7 +10,9 @@
  * @link     https:// makiomar.com/anonyengine
  */
 
-if ( ! class_exists( 'ANONY_JSON_HELP' ) ) {
+defined( 'ABSPATH' ) || die();
+
+if ( ! class_exists( 'ANONY_Wp_Json_Help' ) ) {
 	/**
 	 * WP JSON helpers class.
 	 *

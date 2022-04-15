@@ -27,13 +27,15 @@ if ( ! class_exists( 'ANONY_Wp_Comment_Help' ) ) {
 		/**
 		 * Comments render
 		 *
-		 * @param  object  $comment
-		 * @param  array   $args
-		 * @param  integer $depth
+		 * @param  object  $comment Comment object.
+		 * @param  array   $args Comment args.
+		 * @param  integer $depth Comments list depth.
 		 * @return void
 		 */
-		static function renderComment( $comment, $args, $depth ) {
+		public static function render_comment( $comment, $args, $depth ) {
+			// phpcs:disable WordPress.WP.GlobalVariablesOverride.Prohibited
 			$GLOBALS['comment'] = $comment;
+			// phpcs:enable.
 
 			switch ( $comment->comment_type ) :
 				case 'pingback':
@@ -62,14 +64,14 @@ if ( ! class_exists( 'ANONY_Wp_Comment_Help' ) ) {
 							printf(
 								'<a href="%1$s"><time datetime="%2$s">%3$s</time></a>',
 								esc_url( get_comment_link( $comment->comment_ID ) ),
-								get_comment_time( 'c' ),
+								esc_attr( get_comment_time( 'c' ) ),
 								/* translators: 1: date, 2: time */
-								sprintf( esc_html__( '%1$s at %2$s', 'anonyengine' ), get_comment_date(), get_comment_time() )
+								sprintf( esc_html__( '%1$s at %2$s', 'anonyengine' ), esc_html( get_comment_date() ), esc_html( get_comment_time() ) )
 							);
 						?>
 					</header><!-- .anony-comment-meta -->
 
-					<?php if ( '0' == $comment->comment_approved ) : ?>
+					<?php if ( '0' === $comment->comment_approved ) : ?>
 						<p class="anony-comment-awaiting-moderation"><?php esc_html_e( 'Your comment is awaiting moderation.', 'anonyengine' ); ?></p>
 					<?php endif; ?>
 
@@ -96,7 +98,7 @@ if ( ! class_exists( 'ANONY_Wp_Comment_Help' ) ) {
 				</article><!-- #anony-comment-## -->
 					<?php
 					break;
-			endswitch; // end comment_type check
+			endswitch; // end comment_type check.
 		}
 
 	}

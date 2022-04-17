@@ -40,7 +40,7 @@ if ( ! class_exists( 'ANONY_Post_Help' ) ) {
 				'value'    => $post_id,
 			);
 
-			return ANONY_WPDB_HELP::DirectSelect( $clause );
+			return ANONY_Wp_Db_Help::direct_select( $clause );
 		}
 
 		/**

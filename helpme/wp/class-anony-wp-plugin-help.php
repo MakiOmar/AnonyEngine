@@ -30,14 +30,13 @@ if ( ! class_exists( 'ANONY_Wp_Plugin_Help' ) ) {
 		 *
 		 * Detect plugin. For use on Front End and Back End.
 		 *
-		 * @var string $path  Path of plugin file
+		 * @param string $path  Path of plugin file.
 		 */
-
-		static function isActive( $path ) {
+		public static function isActive( $path ) {
 
 			$path = wp_normalize_path( $path );
 
-			if ( in_array( $path, apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) ) {
+			if ( in_array( $path, apply_filters( 'active_plugins', get_option( 'active_plugins' ) ), true ) ) {
 				return true;
 			}
 
@@ -45,15 +44,15 @@ if ( ! class_exists( 'ANONY_Wp_Plugin_Help' ) ) {
 		}
 
 		/**
-		 * Activate plugin
+		 * Activate plugin.
 		 *
-		 * @var string $path  Path of plugin file (e.g akismet/akismet.php)
+		 * @param string $plugin  Path of plugin file (e.g akismet/akismet.php).
 		 */
-		static function activatePlugin( $plugin ) {
+		public static function activatePlugin( $plugin ) {
 			$current = get_option( 'active_plugins' );
 			$plugin  = plugin_basename( trim( $plugin ) );
 
-			if ( ! in_array( $plugin, $current ) ) {
+			if ( ! in_array( $plugin, $current, true ) ) {
 				$current[] = $plugin;
 				sort( $current );
 				do_action( 'activate_plugin', trim( $plugin ) );
@@ -61,8 +60,6 @@ if ( ! class_exists( 'ANONY_Wp_Plugin_Help' ) ) {
 				do_action( 'activate_' . trim( $plugin ) );
 				do_action( 'activated_plugin', trim( $plugin ) );
 			}
-
-			return null;
 		}
 
 	}

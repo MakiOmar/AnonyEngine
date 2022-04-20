@@ -71,7 +71,7 @@ if ( ! class_exists( 'ANONY_Post_Help' ) ) {
 		public static function queryPostTypeSimple( $post_type = 'post' ) {
 			$wpml_plugin = 'sitepress-multilingual-cms/sitepress.php';
 
-			if ( ANONY_WPPLUGIN_HELP::isActive( $wpml_plugin ) && function_exists( 'icl_get_languages' ) ) {
+			if ( ANONY_Wp_Plugin_Help::isActive( $wpml_plugin ) && function_exists( 'icl_get_languages' ) ) {
 
 				return ANONY_WPML_HELP::queryPostTypeSimple( $post_type );
 			}

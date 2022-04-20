@@ -21,7 +21,7 @@ if ( ! class_exists( 'ANONY_WPML_HELP' ) ) {
 
 			$wpml_plugin = 'sitepress-multilingual-cms/sitepress.php';
 
-			if ( ANONY_WPPLUGIN_HELP::isActive( $wpml_plugin ) || function_exists( 'icl_get_languages' ) ) {
+			if ( ANONY_Wp_Plugin_Help::isActive( $wpml_plugin ) || function_exists( 'icl_get_languages' ) ) {
 
 				$languages = icl_get_languages( 'skip_missing=0'/*make sure to include all available languages*/ );
 
@@ -62,7 +62,7 @@ if ( ! class_exists( 'ANONY_WPML_HELP' ) ) {
 
 			$wpml_plugin = 'sitepress-multilingual-cms/sitepress.php';
 
-			if ( ANONY_WPPLUGIN_HELP::isActive( $wpml_plugin ) && function_exists( 'icl_get_languages' ) ) {
+			if ( ANONY_Wp_Plugin_Help::isActive( $wpml_plugin ) && function_exists( 'icl_get_languages' ) ) {
 
 				$item = '';
 
@@ -95,7 +95,7 @@ if ( ! class_exists( 'ANONY_WPML_HELP' ) ) {
 
 			$wpml_plugin = 'sitepress-multilingual-cms/sitepress.php';
 
-			if ( ANONY_WPPLUGIN_HELP::isActive( $wpml_plugin ) || function_exists( 'icl_get_languages' ) ) {
+			if ( ANONY_Wp_Plugin_Help::isActive( $wpml_plugin ) || function_exists( 'icl_get_languages' ) ) {
 				return true;
 			}
 

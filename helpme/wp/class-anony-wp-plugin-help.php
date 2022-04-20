@@ -1,14 +1,30 @@
 <?php
 /**
- * WP plugins helpers class
+ * WP plugins helpers.
  *
- * @package Anonymous theme
- * @author Makiomar
- * @link http://makiomar.com
+ * PHP version 7.3 Or Later.
+ *
+ * @package  AnonyEngine.
+ * @author   Makiomar <info@makior.com>.
+ * @license  https:// makiomar.com AnonyEngine Licence.
+ * @link     https:// makiomar.com/anonyengine
  */
 
-if ( ! class_exists( 'ANONY_WPPLUGIN_HELP' ) ) {
-	class ANONY_WPPLUGIN_HELP extends ANONY_HELP {
+defined( 'ABSPATH' ) || die(); // Exit if accessed direct.
+
+if ( ! class_exists( 'ANONY_Wp_Plugin_Help' ) ) {
+
+	/**
+	 * WP plugins helpers class.
+	 *
+	 * PHP version 7.3 Or Later.
+	 *
+	 * @package  AnonyEngine.
+	 * @author   Makiomar <info@makior.com>.
+	 * @license  https:// makiomar.com AnonyEngine Licence.
+	 * @link     https:// makiomar.com/anonyengine
+	 */
+	class ANONY_Wp_Plugin_Help extends ANONY_HELP {
 		/**
 		 * Check if plugin is active.
 		 *

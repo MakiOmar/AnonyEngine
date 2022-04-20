@@ -21,7 +21,7 @@ if ( ! class_exists( 'ANONY_WPML_HELP' ) ) {
 
 			$wpml_plugin = 'sitepress-multilingual-cms/sitepress.php';
 
-			if ( ANONY_Wp_Plugin_Help::isActive( $wpml_plugin ) || function_exists( 'icl_get_languages' ) ) {
+			if ( ANONY_Wp_Plugin_Help::is_active( $wpml_plugin ) || function_exists( 'icl_get_languages' ) ) {
 
 				$languages = icl_get_languages( 'skip_missing=0'/*make sure to include all available languages*/ );
 
@@ -62,7 +62,7 @@ if ( ! class_exists( 'ANONY_WPML_HELP' ) ) {
 
 			$wpml_plugin = 'sitepress-multilingual-cms/sitepress.php';
 
-			if ( ANONY_Wp_Plugin_Help::isActive( $wpml_plugin ) && function_exists( 'icl_get_languages' ) ) {
+			if ( ANONY_Wp_Plugin_Help::is_active( $wpml_plugin ) && function_exists( 'icl_get_languages' ) ) {
 
 				$item = '';
 
@@ -91,11 +91,11 @@ if ( ! class_exists( 'ANONY_WPML_HELP' ) ) {
 		/**
 		 * Checks if plugin WPML is active
 		 */
-		static function isActive() {
+		static function is_active() {
 
 			$wpml_plugin = 'sitepress-multilingual-cms/sitepress.php';
 
-			if ( ANONY_Wp_Plugin_Help::isActive( $wpml_plugin ) || function_exists( 'icl_get_languages' ) ) {
+			if ( ANONY_Wp_Plugin_Help::is_active( $wpml_plugin ) || function_exists( 'icl_get_languages' ) ) {
 				return true;
 			}
 
@@ -111,7 +111,7 @@ if ( ! class_exists( 'ANONY_WPML_HELP' ) ) {
 		static function getAjaxUrl() {
 			$ajax_url = admin_url( 'admin-ajax.php' );
 
-			if ( self::isActive() ) {
+			if ( self::is_active() ) {
 
 				$wpml_active_lang = self::gatActiveLang();
 
@@ -131,7 +131,7 @@ if ( ! class_exists( 'ANONY_WPML_HELP' ) ) {
 		 * @return string
 		 */
 		static function gatActiveLang() {
-			if ( ! self::isActive() ) {
+			if ( ! self::is_active() ) {
 				return false;
 			}
 			if ( defined( 'ICL_LANGUAGE_CODE' ) ) {
@@ -153,7 +153,7 @@ if ( ! class_exists( 'ANONY_WPML_HELP' ) ) {
 		 */
 		static function ActiveLangClass( $lang ) {
 
-			if ( self::isActive() ) {
+			if ( self::is_active() ) {
 				global $sitepress;
 
 				if ( $lang == self::gatActiveLang() ) {
@@ -172,7 +172,7 @@ if ( ! class_exists( 'ANONY_WPML_HELP' ) ) {
 		 */
 		static function queryPostType( $post_type = 'post' ) {
 
-			if ( ! self::isActive() ) {
+			if ( ! self::is_active() ) {
 				return array();
 			}
 
@@ -194,7 +194,7 @@ if ( ! class_exists( 'ANONY_WPML_HELP' ) ) {
 		 * @return array Returns an array of post posts IDs and titles. empty array if no results
 		 */
 		static function queryPostTypeSimple( $post_type = 'post' ) {
-			if ( ! self::isActive() ) {
+			if ( ! self::is_active() ) {
 				return;
 			}
 			$results = self::queryPostType( $post_type );
@@ -274,7 +274,7 @@ if ( ! class_exists( 'ANONY_WPML_HELP' ) ) {
 		 * @return Mixed  Term object on success or null on failure
 		 */
 		static function getTranslatedTerm( $term_id, $taxonomy, $lang ) {
-			if ( ! self::isActive() ) {
+			if ( ! self::is_active() ) {
 				return;
 			}
 			global $sitepress;
@@ -303,7 +303,7 @@ if ( ! class_exists( 'ANONY_WPML_HELP' ) ) {
 		 * @return Mixed  Translated post id on success or null/wp_error on failure
 		 */
 		static function duplicate( $post_id, $post_type = 'post' ) {
-			if ( ! self::isActive() ) {
+			if ( ! self::is_active() ) {
 				return $post_id;
 			}
 			// Insert translated post
@@ -341,7 +341,7 @@ if ( ! class_exists( 'ANONY_WPML_HELP' ) ) {
 		 * @return Mixed  Translated post id on success or null/wp_error on failure
 		 */
 		static function translatePostType( $source_post, $post_type, $lang, $force = false ) {
-			if ( ! self::isActive() ) {
+			if ( ! self::is_active() ) {
 				return $source_post->ID;
 			}
 
@@ -467,7 +467,7 @@ if ( ! class_exists( 'ANONY_WPML_HELP' ) ) {
 		 */
 		static function bulkTranslatePages( $lang, $force = false ) {
 
-			if ( ! self::isActive() || ! current_user_can( 'edit_posts' ) || is_admin() || ! isset( $_GET['duplicate'] ) ) {
+			if ( ! self::is_active() || ! current_user_can( 'edit_posts' ) || is_admin() || ! isset( $_GET['duplicate'] ) ) {
 				return;
 			}
 
@@ -497,7 +497,7 @@ if ( ! class_exists( 'ANONY_WPML_HELP' ) ) {
 		 */
 		static function bulkTranslatePosts( $lang, $post_type = 'post', $force = false ) {
 
-			if ( ! self::isActive() || ! current_user_can( 'edit_posts' ) || is_admin() || ! isset( $_GET['duplicate'] ) ) {
+			if ( ! self::is_active() || ! current_user_can( 'edit_posts' ) || is_admin() || ! isset( $_GET['duplicate'] ) ) {
 				return;
 			}
 
@@ -532,7 +532,7 @@ if ( ! class_exists( 'ANONY_WPML_HELP' ) ) {
 		 * @return void
 		 */
 		static function connectPostTranslation( $post_id, $post_translated_id, $post_type, $lang ) {
-			if ( ! self::isActive() ) {
+			if ( ! self::is_active() ) {
 				return;
 			}
 			global $sitepress;
@@ -553,7 +553,7 @@ if ( ! class_exists( 'ANONY_WPML_HELP' ) ) {
 		 * @return void
 		 */
 		static function connectTermTranslation( $translated_term_taxonomy_id, $term_taxonomy_id, $taxonomy, $lang ) {
-			if ( ! self::isActive() ) {
+			if ( ! self::is_active() ) {
 				return;
 			}
 			global $sitepress;
@@ -572,7 +572,7 @@ if ( ! class_exists( 'ANONY_WPML_HELP' ) ) {
 		 * @return Mixed  Translated post id on success or null/wp_error on failure
 		 */
 		static function translateProduct( $product_id, $lang ) {
-			if ( ! self::isActive() ) {
+			if ( ! self::is_active() ) {
 				return;
 			}
 			if ( ! class_exists( 'woocommerce' ) ) {
@@ -606,7 +606,7 @@ if ( ! class_exists( 'ANONY_WPML_HELP' ) ) {
 		 * @return object  Term object
 		 */
 		static function translateTerm( $term_id, $lang, $taxonomy ) {
-			if ( ! self::isActive() ) {
+			if ( ! self::is_active() ) {
 				return $term_id;
 			}
 
@@ -656,7 +656,7 @@ if ( ! class_exists( 'ANONY_WPML_HELP' ) ) {
 		 * @return object  Term object
 		 */
 		static function translateTaxonomyTerms( $taxonomy, $lang ) {
-			if ( ! self::isActive() ) {
+			if ( ! self::is_active() ) {
 				return $source_post->ID;
 			}
 

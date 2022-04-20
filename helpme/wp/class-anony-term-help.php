@@ -220,7 +220,7 @@ if ( ! class_exists( 'ANONY_TERM_HELP' ) ) {
 		 */
 		public static function get_term_by( $term_id, $taxonomy ) {
 
-			if ( ANONY_WPML_HELP::isActive() ) {
+			if ( ANONY_WPML_HELP::is_active() ) {
 
 				return ANONY_WPML_HELP::getTranslatedTerm( $term_id, $taxonomy );
 			}

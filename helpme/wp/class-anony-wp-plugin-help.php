@@ -32,7 +32,7 @@ if ( ! class_exists( 'ANONY_Wp_Plugin_Help' ) ) {
 		 *
 		 * @param string $path  Path of plugin file.
 		 */
-		public static function isActive( $path ) {
+		public static function is_active( $path ) {
 
 			$path = wp_normalize_path( $path );
 
@@ -48,7 +48,7 @@ if ( ! class_exists( 'ANONY_Wp_Plugin_Help' ) ) {
 		 *
 		 * @param string $plugin  Path of plugin file (e.g akismet/akismet.php).
 		 */
-		public static function activatePlugin( $plugin ) {
+		public static function activate_plugin( $plugin ) {
 			$current = get_option( 'active_plugins' );
 			$plugin  = plugin_basename( trim( $plugin ) );
 

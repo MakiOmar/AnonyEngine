@@ -71,7 +71,7 @@ if ( ! class_exists( 'ANONY_Post_Help' ) ) {
 		public static function queryPostTypeSimple( $post_type = 'post' ) {
 			$wpml_plugin = 'sitepress-multilingual-cms/sitepress.php';
 
-			if ( ANONY_Wp_Plugin_Help::isActive( $wpml_plugin ) && function_exists( 'icl_get_languages' ) ) {
+			if ( ANONY_Wp_Plugin_Help::is_active( $wpml_plugin ) && function_exists( 'icl_get_languages' ) ) {
 
 				return ANONY_WPML_HELP::queryPostTypeSimple( $post_type );
 			}
@@ -398,7 +398,7 @@ if ( ! class_exists( 'ANONY_Post_Help' ) ) {
 				}
 			}
 
-			if ( ! ANONY_WPML_HELP::isActive() ) {
+			if ( ! ANONY_WPML_HELP::is_active() ) {
 				/*
 				 * get all current post terms ad set them to the new post draft.
 				 */

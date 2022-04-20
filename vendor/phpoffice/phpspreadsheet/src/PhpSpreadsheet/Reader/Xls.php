@@ -4392,8 +4392,8 @@ class Xls extends BaseReader
         $this->phpSheet->setRightToLeft((bool) ((0x0040 & $options) >> 6));
 
         // bit: 10; mask: 0x0400; 0 = sheet not active, 1 = sheet active
-        $isActive = (bool) ((0x0400 & $options) >> 10);
-        if ($isActive) {
+        $is_active = (bool) ((0x0400 & $options) >> 10);
+        if ($is_active) {
             $this->spreadsheet->setActiveSheetIndex($this->spreadsheet->getIndex($this->phpSheet));
         }
 

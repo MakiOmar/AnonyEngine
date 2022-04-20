@@ -84,6 +84,36 @@ if ( ! class_exists( 'ANONY_Wp_Db_Help' ) ) {
 		}
 
 		/**
+		 * Retrieves one variable from the database and make sure check cache first.
+		 *
+		 * @param string $prepared_query Mysql query.Must be prepared first.
+		 * @param string $cache_key WP cache key.
+		 * @param string $x Column to return. Indexed from 0.
+		 * @param string $y Row of value to return. Indexed from 0.
+		 * @param string $group Where to group the cache contents. Enables the same key to be used across groups.
+		 * @param int    $expiry When to expire the cache contents, in seconds. Default 0 (no expiration).
+		 * @return array Database query result. Array indexed from 0 by SQL result row number.
+		 */
+		public static function get_var( $prepared_query, $cache_key, $x = 0, $y = 0, $group = '', $expiry = 0 ) {
+
+			global $wpdb;
+
+			$results = wp_cache_get( $cache_key );
+
+			if ( false === $results ) {
+
+				// phpcs:disable
+				$results = $wpdb->get_var( $prepared_query, $x, $y );
+				// phpcs:enable
+
+				wp_cache_set( $cache_key, $results, $group, $expiry );
+
+			}
+
+			return $results;
+		}
+
+		/**
 		 * Query published posts ids.
 		 *
 		 * @param string $post_type Post type slug.

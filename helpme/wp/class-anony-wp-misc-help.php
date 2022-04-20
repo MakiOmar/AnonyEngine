@@ -9,6 +9,9 @@
  * @license  https:// makiomar.com AnonyEngine Licence.
  * @link     https:// makiomar.com/anonyengine
  */
+
+defined( 'ABSPATH' ) || die(); // Exit if accessed direct.
+
 if ( ! class_exists( 'ANONY_Wp_Misc_Help' ) ) {
 
 	/**
@@ -52,7 +55,6 @@ if ( ! class_exists( 'ANONY_Wp_Misc_Help' ) ) {
 		 * @var    array    $transient_timeout      array contains the transient time for expiry.
 		 * @return string                           timestamp of transient expiry.
 		 */
-
 		public static function get_transient_timeout( $transient ) {
 			// If the transient does not exist, does not have a value, or has expired, then get_transient will return false.
 			if ( ! get_transient( $transient ) ) {
@@ -61,7 +63,7 @@ if ( ! class_exists( 'ANONY_Wp_Misc_Help' ) ) {
 
 			global $wpdb;
 
-			$prepared_query = $wpdb->prepare( 
+			$prepared_query = $wpdb->prepare(
 				"
 				SELECT 
 					option_value
@@ -70,7 +72,9 @@ if ( ! class_exists( 'ANONY_Wp_Misc_Help' ) ) {
 			  	WHERE 
 			  		option_name
 			  	LIKE %s
-				", "%_transient_timeout_{$transient}%" );
+				",
+				"%_transient_timeout_{$transient}%"
+			);
 
 			$cache_key = "get_transient_timeout_{$transient}";
 
@@ -80,7 +84,7 @@ if ( ! class_exists( 'ANONY_Wp_Misc_Help' ) ) {
 		}
 
 		/**
-		 * list all functions which are hooked to afilter.
+		 * Lists all functions which are hooked to afilter.
 		 *
 		 * @param string $hook A substring of the hook name.
 		 */
@@ -89,22 +93,15 @@ if ( ! class_exists( 'ANONY_Wp_Misc_Help' ) ) {
 
 			$filters = array();
 
-			$h1  = '<h1>Current Filters</h1>';
-			$out = '';
-			$toc = '<ul>';
-
 			foreach ( $wp_filter as $key => $val ) {
 				if ( false !== strpos( $key, $hook ) ) {
+					// phpcs:disable WordPress.PHP.DevelopmentFunctions.error_log_var_export
 					$filters[ $key ][] = var_export( $val, true );
+					// phpcs:enable.
 				}
 			}
 
-			foreach ( $filters as $name => $arr_vals ) {
-				$out .= "<h2 id=$name>$name</h2><pre>" . implode( "\n\n", $arr_vals ) . '</pre>';
-				$toc .= "<li><a href='#$name'>$name</a></li>";
-			}
-
-			print "$h1$toc</ul>$out";
+			ANONY_Wp_Debug_Help::error_log( $filters );
 		}
 
 		/**

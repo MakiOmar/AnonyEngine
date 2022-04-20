@@ -29,7 +29,6 @@ if ( ! class_exists( 'ANONY_Wp_User_Help' ) ) {
 		 *
 		 * @return string|bool Returns current user role on success or false on failure.
 		 */
-
 		public static function get_current_user_role() {
 
 			if ( is_user_logged_in() ) {
@@ -58,11 +57,29 @@ if ( ! class_exists( 'ANONY_Wp_User_Help' ) ) {
 			if ( empty( $member_number ) ) {
 				global $wpdb;
 
-				// this code generates a string 10 characters long of numbers and letters
+				// this code generates a string 10 characters long of numbers and letters.
 				while ( empty( $member_number ) ) {
-					$scramble      = md5( AUTH_KEY . current_time( 'timestamp' ) . $user_id . SECURE_AUTH_KEY );
+					// phpcs:disable WordPress.DateTime.CurrentTimeTimestamp.Requested
+					$scramble = md5( AUTH_KEY . current_time( 'timestamp' ) . $user_id . SECURE_AUTH_KEY );
+					// phpcs:enable.
+
 					$member_number = substr( $scramble, 0, 10 );
-					$check         = $wpdb->get_var( "SELECT meta_value FROM $wpdb->usermeta WHERE meta_value = '" . esc_sql( $member_number ) . "' LIMIT 1" );
+
+					$check = ANONY_Wp_Db_Help::get_var(
+						$wpbd->prepare(
+							"
+							SELECT 
+								meta_value 
+							FROM 
+								$wpdb->usermeta 
+							WHERE 
+								meta_value = %s 
+							LIMIT 1
+							",
+							esc_sql( $member_number )
+						)
+					);
+
 					if ( $check || is_numeric( $member_number ) ) {
 						$member_number = null;
 					}

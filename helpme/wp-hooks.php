@@ -207,7 +207,8 @@ add_action(
 );
 
 /**
- * Display only children terms
+ * Display only children terms.
+ * **Description** To exclude top level parents, we can now pass <code>'anony_exclude_top' => 1</code> with <code>get_terms</code> array of arguments.
  *
  * @return array
  */

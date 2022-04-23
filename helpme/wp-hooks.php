@@ -82,64 +82,6 @@ add_filter(
 );
 
 /**
- * Define new rewrite tag, permastruct and rewrite rule for cross parent post type.
- */
-add_action(
-	'init',
-	function() {
-		$post_parents = apply_filters( 'anony_cross_parent_rewrite', array() );
-
-		if ( empty( $post_parents ) || ! is_array( $post_parents ) ) {
-			return;
-		}
-
-		foreach ( $post_parents as $post_type => $parent_post_type ) {
-
-			add_rewrite_tag( '%' . $post_type . '%', '([^/]+)', $post_type . '=' );
-
-			add_permastruct( $post_type, '/' . $post_type . '/%' . $parent_post_type . '%/%' . $post_type . '%', false );
-			add_rewrite_rule( '^' . $post_type . '/([^/]+)/([^/]+)/?', 'index.php?' . $parent_post_type . '=$matches[2]', 'top' );
-
-		}
-	}
-);
-
-/**
- * Rewrite the permalink for cross parent post type.
- *
- * @return string Post's permalink
- */
-add_filter(
-	'post_type_link',
-	function ( $permalink, $post, $leavename ) {
-
-		/**
-		 * Should be array of post_type => parent_post_type
-		 */
-		$post_parents = apply_filters( 'anony_cross_parent_permalink', array() );
-
-		if ( empty( $post_parents ) || ! is_array( $post_parents ) ) {
-			return $permalink;
-		}
-
-		if ( ! in_array( $post->post_type, array_keys( $post_parents ) ) || empty( $permalink ) || in_array( $post->post_status, array( 'draft', 'pending', 'auto-draft' ) ) ) {
-			return $permalink;
-		}
-
-		$parent_post_type = $post_parents[ $post->post_type ];
-
-		$parent = $post->post_parent;
-
-		$parent_post = get_post( $parent );
-
-		$permalink = str_replace( '%' . $parent_post_type . '%', $parent_post->post_name, $permalink );
-
-		return $permalink;
-	},
-	10,
-	3
-);
-/**
  * Force https connection.
  *
  * Adds rewrite rules to htaccess to force using https.

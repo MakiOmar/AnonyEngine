@@ -447,7 +447,7 @@ if ( ! class_exists( 'ANONY_Theme_Settings' ) ) {
 								);
 
 								$this->validate = new ANONY_Validate_Inputs( $args );
-								
+
 								// Add to errors if not valid.
 								if ( ! empty( $this->validate->errors ) ) {
 

@@ -318,7 +318,7 @@ if ( ! class_exists( 'ANONY_Theme_Settings' ) ) {
 			register_setting(
 				$this->option_group,
 				$this->args['opt_name'],
-				array( 'sanitize_callback' => array( &$this, 'options_validate' ) )
+				array( 'sanitize_callback' => array( $this, 'options_validate' ) )
 			);
 
 			foreach ( $this->sections as $sec_key => $section ) {
@@ -447,7 +447,7 @@ if ( ! class_exists( 'ANONY_Theme_Settings' ) ) {
 								);
 
 								$this->validate = new ANONY_Validate_Inputs( $args );
-
+								
 								// Add to errors if not valid.
 								if ( ! empty( $this->validate->errors ) ) {
 
@@ -465,6 +465,7 @@ if ( ! class_exists( 'ANONY_Theme_Settings' ) ) {
 						}
 					}
 				}
+
 				if ( ! empty( $this->errors ) ) {
 
 					// add settings saved message with the class of "updated".
@@ -516,7 +517,7 @@ if ( ! class_exists( 'ANONY_Theme_Settings' ) ) {
 			}?>
 
 			<div id="anony-options-wrapper">
-				<h_1><?php echo esc_html( get_admin_page_title() ); ?></h_1>
+				<h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
 
 				<form action="options.php" method="post" enctype="multipart/form-data" autocomplete="off">
 
@@ -577,7 +578,7 @@ if ( ! class_exists( 'ANONY_Theme_Settings' ) ) {
 			}
 			// phpcs:enable.
 
-			wp_enqueue_style( 'select_2', ANONY_FIELDS_URI . 'select_2/css/select_2.min.css', array(), time(), 'all' );
+			wp_enqueue_style( 'select_2', ANONY_FIELDS_URI . 'select2/css/select2.min.css', array(), time(), 'all' );
 
 			wp_register_style( 'anony-options-css', ANONY_OPTIONS_URI . 'css/options.css', array( 'farbtastic' ), time(), 'all' );
 

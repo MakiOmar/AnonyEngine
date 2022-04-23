@@ -262,8 +262,6 @@ if ( ! class_exists( 'ANONY_Validate_Inputs' ) ) {
 		 */
 		public function valid_multiple_options() {
 
-			$options_keys = array_keys( $this->field['options'] );
-
 			// If checked/selected multiple options.
 			if ( is_array( $this->value ) ) {
 
@@ -358,14 +356,15 @@ if ( ! class_exists( 'ANONY_Validate_Inputs' ) ) {
 
 				foreach ( $this->value as $value ) {
 
-					if ( wp_strip_all_tags( $value ) !== $value ) {
+					if ( intval( wp_strip_all_tags( $value ) ) !== intval( $value ) ) {
 						$this->valid = false;
 
 						return $this->set_error_code( 'remove-html' );
 					}
 				}
 			} else {
-				if ( wp_strip_all_tags( $this->value ) !== $this->value ) {
+
+				if ( intval( wp_strip_all_tags( $this->value ) ) !== intval( $this->value ) ) {
 
 					$this->valid = false;
 

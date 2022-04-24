@@ -73,7 +73,7 @@ if ( ! class_exists( 'ANONY_Post_Help' ) ) {
 
 			if ( ANONY_Wp_Plugin_Help::is_active( $wpml_plugin ) && function_exists( 'icl_get_languages' ) ) {
 
-				return ANONY_WPML_HELP::queryPostTypeSimple( $post_type );
+				return ANONY_Wpml_Help::query_post_typeSimple( $post_type );
 			}
 
 			global $wpdb;
@@ -342,7 +342,7 @@ if ( ! class_exists( 'ANONY_Post_Help' ) ) {
 		 * @param array $post_terms An array of taxonomies as its keys and terms' IDs as values.
 		 * @param int   $post_id The ID of the post.
 		 */
-		public static function setPostTerms( array $post_terms, int $post_id ) {
+		public static function set_post_terms( array $post_terms, int $post_id ) {
 
 			if ( empty( $post_terms ) ) {
 				return;
@@ -398,7 +398,7 @@ if ( ! class_exists( 'ANONY_Post_Help' ) ) {
 				}
 			}
 
-			if ( ! ANONY_WPML_HELP::is_active() ) {
+			if ( ! ANONY_Wpml_Help::is_active() ) {
 				/*
 				 * get all current post terms ad set them to the new post draft.
 				 */

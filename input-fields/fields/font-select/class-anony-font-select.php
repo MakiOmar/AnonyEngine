@@ -60,7 +60,7 @@ class ANONY_Font_select {
 
 		$html .= sprintf( '<select name="%1$s" class="%2$s-select %2$s" rows="6" >', $this->parent->input_name, $this->parent->class_attr );
 
-		$html .= ANONY_POST_HELP::renderHtmlOptsGroups( $fonts, $opts_groups, $this->parent->value );
+		$html .= ANONY_Post_Help::renderHtmlOptsGroups( $fonts, $opts_groups, $this->parent->value );
 
 		$html .= '</select>';
 

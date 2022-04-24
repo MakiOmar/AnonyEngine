@@ -24,7 +24,7 @@ if ( ! class_exists( 'ANONY_Wpml_Post_Translate' ) ) {
 	 * @license  https:// makiomar.com AnonyEngine Licence.
 	 * @link     https:// makiomar.com/anonyengine
 	 */
-	class ANONY_Wpml_Post_Translate extends ANONY_WPML_HELP {
+	class ANONY_Wpml_Post_Translate extends ANONY_Wpml_Help {
 
 
 

@@ -69,7 +69,7 @@ if ( ! class_exists( 'ANONY_Meta_Box' ) ) {
 			$anoe_metaboxes[] = $this->metabox;
 
 			$localize_scripts = array(
-				'ajaxURL'   => ANONY_WPML_HELP::getAjaxUrl(),
+				'ajaxURL'   => ANONY_Wpml_Help::get_ajax_url(),
 				'textDir'   => ( is_rtl() ? 'rtl' : 'ltr' ),
 				'themeLang' => get_bloginfo( 'language' ),
 				'MbUri'     => ANONY_MB_URI,

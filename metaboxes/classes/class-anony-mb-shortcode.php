@@ -197,7 +197,7 @@ if ( ! class_exists( 'ANONY_Mb_Shortcode' ) ) {
 		public function enqueueShortcodeScripts() {
 			global $post;
 
-			if ( ANONY_POST_HELP::isPageHasShortcode( $post, $this->parent->id_as_hook ) ) {
+			if ( ANONY_Post_Help::isPageHasShortcode( $post, $this->parent->id_as_hook ) ) {
 				$this->parent->frontScripts();
 			}
 		}
@@ -208,7 +208,7 @@ if ( ! class_exists( 'ANONY_Mb_Shortcode' ) ) {
 		public function shortcodeFooterScripts() {
 			global $post;
 
-			if ( ANONY_POST_HELP::isPageHasShortcode( $post, $this->parent->id_as_hook ) ) {
+			if ( ANONY_Post_Help::isPageHasShortcode( $post, $this->parent->id_as_hook ) ) {
 				$this->parent->footerScripts();
 			}
 

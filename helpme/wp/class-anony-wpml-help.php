@@ -1,15 +1,28 @@
 <?php
 /**
- * WPML helpers class
+ * WPML helpers.
  *
- * @package Anonymous theme
- * @author Makiomar
- * @link http://makiomar.com
+ * PHP version 7.3 Or Later.
+ *
+ * @package  AnonyEngine.
+ * @author   Makiomar <info@makior.com>.
+ * @license  https:// makiomar.com AnonyEngine Licence.
+ * @link     https:// makiomar.com/anonyengine
  */
 
-if ( ! class_exists( 'ANONY_WPML_HELP' ) ) {
-	class ANONY_WPML_HELP extends ANONY_HELP {
+if ( ! class_exists( 'ANONY_Wpml_Help' ) ) {
 
+	/**
+	 * WPML helpers class.
+	 *
+	 * PHP version 7.3 Or Later.
+	 *
+	 * @package  AnonyEngine.
+	 * @author   Makiomar <info@makior.com>.
+	 * @license  https:// makiomar.com AnonyEngine Licence.
+	 * @link     https:// makiomar.com/anonyengine
+	 */
+	class ANONY_Wpml_Help extends ANONY_HELP {
 
 		/**
 		 * Add WPML languages menu items
@@ -17,7 +30,7 @@ if ( ! class_exists( 'ANONY_WPML_HELP' ) ) {
 		 * @param  string $item menu items
 		 * @return string
 		 */
-		static function langMenu( $item = '' ) {
+		public static function lang_menu( $item = '' ) {
 
 			$wpml_plugin = 'sitepress-multilingual-cms/sitepress.php';
 
@@ -58,7 +71,7 @@ if ( ! class_exists( 'ANONY_WPML_HELP' ) ) {
 		 *
 		 * @return string
 		 */
-		static function langMenuFlagged() {
+		public static function lang_menu_flagged() {
 
 			$wpml_plugin = 'sitepress-multilingual-cms/sitepress.php';
 
@@ -91,7 +104,7 @@ if ( ! class_exists( 'ANONY_WPML_HELP' ) ) {
 		/**
 		 * Checks if plugin WPML is active
 		 */
-		static function is_active() {
+		public static function is_active() {
 
 			$wpml_plugin = 'sitepress-multilingual-cms/sitepress.php';
 
@@ -108,12 +121,12 @@ if ( ! class_exists( 'ANONY_WPML_HELP' ) ) {
 		 *
 		 * @return string AJAX URL.
 		 */
-		static function getAjaxUrl() {
+		public static function get_ajax_url() {
 			$ajax_url = admin_url( 'admin-ajax.php' );
 
 			if ( self::is_active() ) {
 
-				$wpml_active_lang = self::gatActiveLang();
+				$wpml_active_lang = self::gat_active_lang();
 
 				if ( $wpml_active_lang ) {
 
@@ -130,7 +143,7 @@ if ( ! class_exists( 'ANONY_WPML_HELP' ) ) {
 		 *
 		 * @return string
 		 */
-		static function gatActiveLang() {
+		public static function gat_active_lang() {
 			if ( ! self::is_active() ) {
 				return false;
 			}
@@ -151,12 +164,12 @@ if ( ! class_exists( 'ANONY_WPML_HELP' ) ) {
 		 * @param  string $lang language code to check for
 		 * @return string 'active-lang' class if $lang is current active language else nothing
 		 */
-		static function ActiveLangClass( $lang ) {
+		public static function active_lang_class( $lang ) {
 
 			if ( self::is_active() ) {
 				global $sitepress;
 
-				if ( $lang == self::gatActiveLang() ) {
+				if ( $lang == self::gat_active_lang() ) {
 					return 'active-lang';
 				}
 
@@ -170,7 +183,7 @@ if ( ! class_exists( 'ANONY_WPML_HELP' ) ) {
 		 * @param  string $post_type    Queried post type
 		 * @return mixed                An array of posts objects
 		 */
-		static function queryPostType( $post_type = 'post' ) {
+		public static function query_post_type( $post_type = 'post' ) {
 
 			if ( ! self::is_active() ) {
 				return array();
@@ -178,7 +191,7 @@ if ( ! class_exists( 'ANONY_WPML_HELP' ) ) {
 
 			global $wpdb;
 
-			$lang = self::gatActiveLang();
+			$lang = self::gat_active_lang();
 
 			$query = "SELECT * FROM {$wpdb->prefix}posts JOIN {$wpdb->prefix}icl_translations t ON {$wpdb->prefix}posts.ID = t.element_id AND t.element_type = CONCAT('post_', {$wpdb->prefix}posts.post_type)  WHERE {$wpdb->prefix}posts.post_type = '$post_type' AND {$wpdb->prefix}posts.post_status = 'publish' AND ( ( t.language_code = '$lang' AND {$wpdb->prefix}posts.post_type = '$post_type' ) )  ORDER BY {$wpdb->prefix}posts.post_date DESC";
 
@@ -193,11 +206,11 @@ if ( ! class_exists( 'ANONY_WPML_HELP' ) ) {
 		 * @param type $post_type
 		 * @return array Returns an array of post posts IDs and titles. empty array if no results
 		 */
-		static function queryPostTypeSimple( $post_type = 'post' ) {
+		public static function query_post_type_simple( $post_type = 'post' ) {
 			if ( ! self::is_active() ) {
 				return;
 			}
-			$results = self::queryPostType( $post_type );
+			$results = self::query_post_type( $post_type );
 
 			$postIDs = array();
 
@@ -217,7 +230,7 @@ if ( ! class_exists( 'ANONY_WPML_HELP' ) ) {
 		 * @param string $lang Translation language code
 		 * @return array Returns an array of taxonomies as its keys and terms' IDs as values. empty array if no results
 		 */
-		static function translatePostTerms( $source_post, $lang ) {
+		public static function translate_post_terms( $source_post, $lang ) {
 			$translated_terms = array();
 			/*
 			 * get all current post terms ad set them to the new post draft
@@ -241,11 +254,11 @@ if ( ! class_exists( 'ANONY_WPML_HELP' ) ) {
 							continue 2;
 						}
 
-						$translated_term = self::getTranslatedTerm( $post_term->term_id, $taxonomy, $lang );
+						$translated_term = self::get_translated_term( $post_term->term_id, $taxonomy, $lang );
 
 						if ( is_null( $translated_term ) ) {
 
-							$translated_term = self::translateTerm( $post_term->term_id, $lang, $taxonomy );
+							$translated_term = self::translate_term( $post_term->term_id, $lang, $taxonomy );
 						}
 
 						$translated_terms [ $taxonomy ][] = (int) $translated_term->term_id;
@@ -262,9 +275,9 @@ if ( ! class_exists( 'ANONY_WPML_HELP' ) ) {
 		 * @param array  $translated_post_terms An array of taxonomies as its keys and terms' IDs as values
 		 * @param string $new_post_id The ID of the post
 		 */
-		static function setTranslatedPostTerms( array $translated_post_terms, int $new_post_id ) {
+		public static function set_translated_post_terms( array $translated_post_terms, int $new_post_id ) {
 
-			ANONY_POST_HELP::setPostTerms( $translated_post_terms, $new_post_id );
+			ANONY_Post_Help::set_post_terms( $translated_post_terms, $new_post_id );
 		}
 		/**
 		 * Get translated term object
@@ -273,7 +286,7 @@ if ( ! class_exists( 'ANONY_WPML_HELP' ) ) {
 		 * @param  string $taxonomy
 		 * @return Mixed  Term object on success or null on failure
 		 */
-		static function getTranslatedTerm( $term_id, $taxonomy, $lang ) {
+		public static function get_translated_term( $term_id, $taxonomy, $lang ) {
 			if ( ! self::is_active() ) {
 				return;
 			}
@@ -302,12 +315,12 @@ if ( ! class_exists( 'ANONY_WPML_HELP' ) ) {
 		 * @param  string $post_type Post type
 		 * @return Mixed  Translated post id on success or null/wp_error on failure
 		 */
-		static function duplicate( $post_id, $post_type = 'post' ) {
+		public static function duplicate( $post_id, $post_type = 'post' ) {
 			if ( ! self::is_active() ) {
 				return $post_id;
 			}
 			// Insert translated post
-			$post_duplicated_id = ANONY_POST_HELP::duplicate( $post_id );
+			$post_duplicated_id = ANONY_Post_Help::duplicate( $post_id );
 
 			if ( $post_duplicated_id ) {
 				$wpml_element_type = apply_filters( 'wpml_element_type', $post_type );
@@ -340,7 +353,7 @@ if ( ! class_exists( 'ANONY_WPML_HELP' ) ) {
 		 * @param  string $lang Language of translation
 		 * @return Mixed  Translated post id on success or null/wp_error on failure
 		 */
-		static function translatePostType( $source_post, $post_type, $lang, $force = false ) {
+		public static function translate_post_type( $source_post, $post_type, $lang, $force = false ) {
 			if ( ! self::is_active() ) {
 				return $source_post->ID;
 			}
@@ -354,8 +367,8 @@ if ( ! class_exists( 'ANONY_WPML_HELP' ) ) {
 
 			$post_id = $source_post->ID;
 
-			if ( $force && self::checkIclTranslation( $post_id, $lang ) ) {
-				self::deleteIclTranslation( $post_id, $lang );
+			if ( $force && self::check_icl_translation( $post_id, $lang ) ) {
+				self::delete_icl_translation( $post_id, $lang );
 			}
 
 			// Check if translation already exists;
@@ -370,13 +383,13 @@ if ( ! class_exists( 'ANONY_WPML_HELP' ) ) {
 			$post_translated_title = $source_post->post_title . ' (' . $lang . ')';
 
 			// Insert translated post
-			$post_translated_id = ANONY_POST_HELP::duplicate( $post_id );
+			$post_translated_id = ANONY_Post_Help::duplicate( $post_id );
 
 			if ( ! $post_translated_id || is_wp_error( $post_translated_id ) ) {
 				return $post_translated_id;
 			}
 
-			self::connectPostTranslation( $post_id, $post_translated_id, $post_type, $lang );
+			self::connect_post_translation( $post_id, $post_translated_id, $post_type, $lang );
 
 			// Return translated post ID
 			return $post_translated_id;
@@ -388,7 +401,7 @@ if ( ! class_exists( 'ANONY_WPML_HELP' ) ) {
 		 * @param  string $lang Language of translation
 		 * @return Mixed  Translated post id on success or null/wp_error on failure
 		 */
-		static function translatePost( $post_id, $post_type = 'post', $lang, $force = false ) {
+		public static function translate_post( $post_id, $post_type = 'post', $lang, $force = false ) {
 
 			if ( $post_type == 'page' ) {
 				return $post_id;
@@ -397,15 +410,15 @@ if ( ! class_exists( 'ANONY_WPML_HELP' ) ) {
 			$source_post = get_post( $post_id );
 
 			// Insert translated post
-			$post_translated_id = self::translatePostType( $source_post, $post_type, $lang, $force );
+			$post_translated_id = self::translate_post_type( $source_post, $post_type, $lang, $force );
 
 			if ( ! $post_translated_id || is_wp_error( $post_translated_id ) ) {
 				return $post_translated_id;
 			}
 
-			$translated_terms = self::translatePostTerms( $source_post, $lang );
+			$translated_terms = self::translate_post_terms( $source_post, $lang );
 
-			self::setTranslatedPostTerms( $translated_terms, $post_translated_id );
+			self::set_translated_post_terms( $translated_terms, $post_translated_id );
 
 			return $post_translated_id;
 
@@ -418,7 +431,7 @@ if ( ! class_exists( 'ANONY_WPML_HELP' ) ) {
 		 * @param  string $lang Language of translation
 		 * @return bool
 		 */
-		static function checkIclTranslation( $post_id, $lang ) {
+		public static function check_icl_translation( $post_id, $lang ) {
 			global $wpdb;
 			$query = $wpdb->prepare( "SELECT COUNT(*) FROM {$wpdb->prefix}icl_translations WHERE trid = %d AND language_code= '%s'", $post_id, $lang );
 
@@ -434,9 +447,9 @@ if ( ! class_exists( 'ANONY_WPML_HELP' ) ) {
 		 * @param  string $lang Language of translation
 		 * @return void
 		 */
-		static function deleteIclTranslation( $post_id, $lang ) {
+		public static function delete_icl_translation( $post_id, $lang ) {
 			global $wpdb;
-			if ( self::checkIclTranslation( $post_id, $lang ) ) {
+			if ( self::check_icl_translation( $post_id, $lang ) ) {
 				$query = $wpdb->prepare( "DELETE FROM {$wpdb->prefix}icl_translations WHERE trid = %d AND language_code= '%s'", $post_id, $lang );
 
 				$wpdb->query( $query );
@@ -449,12 +462,12 @@ if ( ! class_exists( 'ANONY_WPML_HELP' ) ) {
 		 * @param  string $lang Language of translation
 		 * @return Mixed  Translated post id on success or null/wp_error on failure
 		 */
-		static function translatePage( $post_id, $lang, $force = false ) {
+		public static function translate_page( $post_id, $lang, $force = false ) {
 
 			$source_post = get_post( $post_id );
 
 			// Insert translated post
-			$post_translated_id = self::translatePostType( $source_post, 'page', $lang, $force );
+			$post_translated_id = self::translate_post_type( $source_post, 'page', $lang, $force );
 
 			return $post_translated_id;
 
@@ -465,7 +478,7 @@ if ( ! class_exists( 'ANONY_WPML_HELP' ) ) {
 		 *
 		 * @param  string $lang Language of translation
 		 */
-		static function bulkTranslatePages( $lang, $force = false ) {
+		public static function bulk_translate_pages( $lang, $force = false ) {
 
 			if ( ! self::is_active() || ! current_user_can( 'edit_posts' ) || is_admin() || ! isset( $_GET['duplicate'] ) ) {
 				return;
@@ -483,7 +496,7 @@ if ( ! class_exists( 'ANONY_WPML_HELP' ) ) {
 					continue;
 				}
 
-				self::translatePage( $page_id, $lang, $force );
+				self::translate_page( $page_id, $lang, $force );
 			}
 
 		}
@@ -495,7 +508,7 @@ if ( ! class_exists( 'ANONY_WPML_HELP' ) ) {
 		 * @param  string $post_type Post type
 		 * @param  bool   $force This forcely deletes ol connections in icl_translations table
 		 */
-		static function bulkTranslatePosts( $lang, $post_type = 'post', $force = false ) {
+		public static function bulk_translate_posts( $lang, $post_type = 'post', $force = false ) {
 
 			if ( ! self::is_active() || ! current_user_can( 'edit_posts' ) || is_admin() || ! isset( $_GET['duplicate'] ) ) {
 				return;
@@ -518,7 +531,7 @@ if ( ! class_exists( 'ANONY_WPML_HELP' ) ) {
 					continue;
 				}
 
-				self::translatePostType( get_post( $post_id ), $post_type, $lang, $force );
+				self::translate_post_type( get_post( $post_id ), $post_type, $lang, $force );
 			}
 
 		}
@@ -531,7 +544,7 @@ if ( ! class_exists( 'ANONY_WPML_HELP' ) ) {
 		 * @param  string $lang Language of translation
 		 * @return void
 		 */
-		static function connectPostTranslation( $post_id, $post_translated_id, $post_type, $lang ) {
+		public static function connect_post_translation( $post_id, $post_translated_id, $post_type, $lang ) {
 			if ( ! self::is_active() ) {
 				return;
 			}
@@ -552,7 +565,7 @@ if ( ! class_exists( 'ANONY_WPML_HELP' ) ) {
 		 * @param  string $lang Language of translation
 		 * @return void
 		 */
-		static function connectTermTranslation( $translated_term_taxonomy_id, $term_taxonomy_id, $taxonomy, $lang ) {
+		public static function connect_term_translation( $translated_term_taxonomy_id, $term_taxonomy_id, $taxonomy, $lang ) {
 			if ( ! self::is_active() ) {
 				return;
 			}
@@ -571,7 +584,7 @@ if ( ! class_exists( 'ANONY_WPML_HELP' ) ) {
 		 * @param  string $lang Language of translation
 		 * @return Mixed  Translated post id on success or null/wp_error on failure
 		 */
-		static function translateProduct( $product_id, $lang ) {
+		public static function translate_product( $product_id, $lang ) {
 			if ( ! self::is_active() ) {
 				return;
 			}
@@ -594,7 +607,7 @@ if ( ! class_exists( 'ANONY_WPML_HELP' ) ) {
 
 			$duplicated_id = $duplicated_product->get_id();
 
-			self::connectPostTranslation( $product_id, $duplicated_id, 'product', $lang );
+			self::connect_post_translation( $product_id, $duplicated_id, 'product', $lang );
 		}
 
 		/**
@@ -605,12 +618,12 @@ if ( ! class_exists( 'ANONY_WPML_HELP' ) ) {
 		 * @param  string $taxonomy Term's taxonomy
 		 * @return object  Term object
 		 */
-		static function translateTerm( $term_id, $lang, $taxonomy ) {
+		public static function translate_term( $term_id, $lang, $taxonomy ) {
 			if ( ! self::is_active() ) {
 				return $term_id;
 			}
 
-			$translated_term = self::getTranslatedTerm( $term_id, $taxonomy, $lang );
+			$translated_term = self::get_translated_term( $term_id, $taxonomy, $lang );
 
 			if ( ! is_null( $translated_term ) ) {
 				return $translated_term;
@@ -642,7 +655,7 @@ if ( ! class_exists( 'ANONY_WPML_HELP' ) ) {
 				return;
 			}
 
-			self::connectTermTranslation( $inserted_term_id['term_taxonomy_id'], $term->term_taxonomy_id, $taxonomy, $lang );
+			self::connect_term_translation( $inserted_term_id['term_taxonomy_id'], $term->term_taxonomy_id, $taxonomy, $lang );
 
 			return get_term_by( 'id', $inserted_term_id['term_id'], $taxonomy );
 
@@ -655,7 +668,7 @@ if ( ! class_exists( 'ANONY_WPML_HELP' ) ) {
 		 * @param  string $lang Language of translation
 		 * @return object  Term object
 		 */
-		static function translateTaxonomyTerms( $taxonomy, $lang ) {
+		public static function translate_taxonomy_terms( $taxonomy, $lang ) {
 			if ( ! self::is_active() ) {
 				return $source_post->ID;
 			}
@@ -677,7 +690,7 @@ if ( ! class_exists( 'ANONY_WPML_HELP' ) ) {
 
 			if ( is_array( $terms ) ) {
 				foreach ( $terms as $term ) {
-					self::translateTerm( $term->term_id, $lang, $taxonomy );
+					self::translate_term( $term->term_id, $lang, $taxonomy );
 				}
 			}
 		}

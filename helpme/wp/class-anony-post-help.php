@@ -437,5 +437,127 @@ if ( ! class_exists( 'ANONY_Post_Help' ) ) {
 
 		}
 
+		/**
+		 * Get post type taxonomies.
+		 *
+		 * @param string $post_type The post type to get taxonomies for.
+		 * @return array An array of taxonomies names.
+		 */
+		public static function anony_post_taxonomies( $post_type ) {
+
+			$post_taxonomies = apply_filters( 'anony_post_taxonomies', array() );
+
+			if ( ! empty( $post_taxonomies ) && array_key_exists( $post_type, $post_taxonomies ) ) {
+				return $post_taxonomies[ $post_type ];
+			}
+
+			return array();
+		}
+
+		/**
+		 * Register post types
+		 */
+		public static function register_post_types() {
+
+			$custom_posts = apply_filters( 'anony_post_types', array() );
+
+			if ( empty( $custom_posts ) ) {
+				return;
+			}
+
+			foreach ( $custom_posts as $custom_post => $translatable ) {
+
+				$singular_label = $translatable[0];
+				$plural_label   = $translatable[1];
+
+				$labels = array(
+					'name'                  => $plural_label,
+					'singular_name'         => $plural_label,
+					'menu_name'             => $plural_label,
+					'name_admin_bar'        => $plural_label,
+					// Translators: Post type plural label.
+					'archives'              => sprintf( esc_html__( '%s Archives', 'anonyengine' ), $plural_label ),
+					// Translators: Post type plural label.
+					'attributes'            => sprintf( esc_html__( '%s Attributes', 'anonyengine' ), $plural_label ),
+					// Translators: Post type singular label.
+					'parent_item_colon'     => sprintf( esc_html__( 'Parent %s:', 'anonyengine' ), $singular_label ),
+					// Translators: Post type plural label.
+					'all_items'             => sprintf( esc_html__( 'All %s', 'anonyengine' ), $plural_label ),
+					// Translators: Post type singular label.
+					'add_new_item'          => sprintf( esc_html__( 'Add New %s', 'anonyengine' ), $singular_label ),
+					// Translators: Post type singular label.
+					'add_new'               => sprintf( esc_html__( 'Add New', 'anonyengine' ), $singular_label ),
+					// Translators: Post type singular label.
+					'new_item'              => sprintf( esc_html__( 'New %s', 'anonyengine' ), $singular_label ),
+					// Translators: Post type singular label.
+					'edit_item'             => sprintf( esc_html__( 'Edit %s', 'anonyengine' ), $singular_label ),
+					// Translators: Post type singular label.
+					'update_item'           => sprintf( esc_html__( 'Update %s', 'anonyengine' ), $singular_label ),
+					// Translators: Post type singular label.
+					'view_item'             => sprintf( esc_html__( 'View %s', 'anonyengine' ), $singular_label ),
+					// Translators: Post type plural label.
+					'view_items'            => sprintf( esc_html__( 'View %s', 'anonyengine' ), $plural_label ),
+					// Translators: Post type plural label.
+					'search_items'          => sprintf( esc_html__( 'Search %s', 'anonyengine' ), $plural_label ),
+					'not_found'             => esc_html__( 'Not found', 'anonyengine' ),
+					'not_found_in_trash'    => esc_html__( 'Not found in Trash', 'anonyengine' ),
+					'featured_image'        => esc_html__( 'Featured Image', 'anonyengine' ),
+					'set_featured_image'    => esc_html__( 'Set featured image', 'anonyengine' ),
+					'remove_featured_image' => esc_html__( 'Remove featured image', 'anonyengine' ),
+					'use_featured_image'    => esc_html__( 'Use as featured image', 'anonyengine' ),
+					// Translators: Post type singular label.
+					'insert_into_item'      => sprintf( esc_html__( 'Insert into %s', 'anonyengine' ), $singular_label ),
+					// Translators: Post type singular label.
+					'uploaded_to_this_item' => sprintf( esc_html__( 'Uploaded to this %s', 'anonyengine' ), $singular_label ),
+					// Translators: Post type singular label.
+					'items_list'            => sprintf( esc_html__( '%s list', 'anonyengine' ), $plural_label ),
+					// Translators: Post type plural label.
+					'items_list_navigation' => sprintf( esc_html__( '%s list navigation', 'anonyengine' ), $plural_label ),
+					// Translators: Post type plural label.
+					'filter_items_list'     => sprintf( esc_html__( 'Filter %s list', 'anonyengine' ), $plural_label ),
+				);
+
+				$args = array(
+					'label'               => $plural_label,
+					// Translators: Post type plural label.
+					'description'         => sprintf( esc_html__( 'Here you can add your %s', 'anonyengine' ), lcfirst( $plural_label ) ),
+					'labels'              => $labels,
+					'supports'            => apply_filters(
+						"anony_{$custom_post}_supports",
+						array(
+							'title',
+							'editor',
+							'excerpt',
+							'custom-fields',
+							'comments',
+							'revisions',
+							'thumbnail',
+							'author',
+							'post-formats',
+						)
+					),
+					'taxonomies'          => self::anony_post_taxonomies( lcfirst( $custom_post ) ),
+					'public'              => true,
+					'hierarchical'        => apply_filters( "anony_{$custom_post}_hierarchical", false ),
+					'show_ui'             => true,
+					'show_in_menu'        => true,
+					'menu_position'       => 5,
+					'show_in_admin_bar'   => true,
+					'show_in_nav_menus'   => true,
+					'can_export'          => true,
+					'has_archive'         => true,
+					'exclude_from_search' => false,
+					'publicly_queryable'  => true,
+					'capability_type'     => 'post',
+					'rewrite'             => array(
+						'slug'       => lcfirst( $custom_post ),
+						'with_front' => false,
+					),
+				);
+
+				register_post_type( lcfirst( $custom_post ), $args );
+			}
+		}
+
 	}
 }

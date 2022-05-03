@@ -114,3 +114,9 @@ add_action(
 		load_plugin_textdomain( 'anonyengine', false, basename( dirname( __FILE__ ) ) . '/languages' );
 	}
 );
+
+// Register Post Types.
+add_action( 'init', array ( 'ANONY_Post_Help', 'register_post_types') );
+
+// Register Taxonomies.
+add_action( 'init', array ( 'ANONY_Taxonomy_Help', 'register_taxonomies' ));

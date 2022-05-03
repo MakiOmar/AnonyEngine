@@ -161,5 +161,20 @@ if ( ! class_exists( 'ANONY_HELP' ) ) {
 
 		}
 
+		/**
+		 * Check if any of supplied variables is empty.
+		 *
+		 * @param mixed ...$arguments Any number of variables.
+		 * @return bool Returns true on success, otherwise false
+		 */
+		public static function empty( ...$arguments ) {
+			foreach ( $arguments as $argument ) {
+				if ( empty( $argument ) ) {
+					return true;
+				}
+			}
+			return false;
+		}
+
 	}
 }

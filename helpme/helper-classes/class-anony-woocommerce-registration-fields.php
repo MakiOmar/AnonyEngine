@@ -17,18 +17,18 @@ if ( ! class_exists( 'ANONY_Woocommerce_Registration_Fields' ) ) {
 	/**
 	 * Woocommerce custom registration fields.
 	 *
-	 * **Note** Example : 
+	 * **Note** Example :
 	 * <code>new ANONY_Woocommerce_Registration_Fields(array(
-	 * 		'field_name' =>
-	 * 			array(
-	 * 				'id'          => 'field_id',
-	 * 				'type'        => 'tel',
-	 * 				'class'       => 'username',
-	 * 				'with-dial-codes' => 'yes',
-	 * 				'validate' => 'no_html|required',
-	 * 				'placeholder' => esc_html__( 'Phone number', 'text-domain' ),
-	 * 			)
-	 * 	));</code>
+	 *      'field_name' =>
+	 *          array(
+	 *              'id'          => 'field_id',
+	 *              'type'        => 'tel',
+	 *              'class'       => 'username',
+	 *              'with-dial-codes' => 'yes',
+	 *              'validate' => 'no_html|required',
+	 *              'placeholder' => esc_html__( 'Phone number', 'text-domain' ),
+	 *          )
+	 *  ));</code>
 	 *
 	 * @package    AnonyEngine Woocommerce
 	 * @author     Makiomar <info@makior.com>

@@ -147,7 +147,9 @@ if ( ! class_exists( 'ANONY_Wp_Misc_Help' ) ) {
 				);
 				?>
 				<!--API should be always before map script-->
-				<script type='text/javascript' src='<?php echo esc_attr( $script_src ); ?>'></script> 
+				<?php // phpcs:disable  ?>
+				<script type='text/javascript' src='<?php echo esc_attr( $script_src ); ?>'></script>
+				<?php // phpcs:enable.  ?>
 			<?php } ?>
 
 			<script type="text/javascript">
@@ -157,19 +159,11 @@ if ( ! class_exists( 'ANONY_Wp_Misc_Help' ) ) {
 				);
 
 				function initialize(){
-					var mapProp = {
-					  center:Gisborne,
-					  zoom:13,
-					  scrollwheel: false,
-					  mapTypeId:google.maps.MapTypeId.ROADMAP
-					};
+					var mapProp = { center:Gisborne, zoom:13, scrollwheel: false, mapTypeId:google.maps.MapTypeId.ROADMAP };
 					   
 					var map = new google.maps.Map(document.getElementById("<?php echo esc_html( $args['target_id'] ); ?>"),mapProp);
-					
-					var marker=new google.maps.Marker({
-							  position:Gisborne,
-							  icon:"https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png"
-						});
+
+					var marker=new google.maps.Marker({ position:Gisborne, icon:"https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png" });
 					marker.setMap(map);
 				}
 				google.maps.event.addDomListener(window, "load", initialize);

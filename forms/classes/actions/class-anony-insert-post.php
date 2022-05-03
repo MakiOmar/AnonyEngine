@@ -38,9 +38,9 @@ if ( ! class_exists( 'ANONY_Insert_Post' ) ) {
 		public function __construct( $validated_data, $action_data ) {
 
 			// Argumnets sent from the form.
-			$posted_required_arguments = array_intersect_key( $validated_data, $action_data );
+			$action_arguments = array_intersect_key( $validated_data, $action_data );
 
-			if ( ! ANONY_HELP::isset_not_empty( $posted_required_arguments['post_type'] ) || ! ANONY_HELP::isset_not_empty( $posted_required_arguments['post_status'] ) || ! ANONY_HELP::isset_not_empty( $posted_required_arguments['post_title'] ) ) {
+			if ( ! ANONY_HELP::empty( $action_arguments['post_type'], $action_arguments['post_status'], $action_arguments['post_title'] ) ) {
 
 			}
 

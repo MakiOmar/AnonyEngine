@@ -43,19 +43,19 @@ define( 'ANONY_MB_CLASSES', ANONY_MB_PATH . 'classes/' );
 
 $GLOBALS['anoe_metaboxes'] = array();
 
-add_action(
-	'init',
-	function() {
+/**
+ * Initialize metaboxes
+ */
+function anony_init_metaboxes() {
+	$metaboxes = apply_filters( 'anony_metaboxes', array() );
 
-		$metaboxes = apply_filters( 'anony_metaboxes', array() );
-
-		if ( ! is_array( $metaboxes ) || empty( $metaboxes ) ) {
-			return;
-		}
-
-		foreach ( $metaboxes as $metabox ) {
-			$mbObj = new ANONY_Meta_Box( $metabox );
-		}
+	if ( ! is_array( $metaboxes ) || empty( $metaboxes ) ) {
+		return;
 	}
-);
+
+	foreach ( $metaboxes as $metabox ) {
+		new ANONY_Meta_Box( $metabox );
+	}
+}
+add_action( 'init', 'anony_init_metaboxes' );
 

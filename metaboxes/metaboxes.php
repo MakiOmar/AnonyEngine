@@ -1,5 +1,18 @@
 <?php
 /**
+ * Metaboxes configuration file.
+ *
+ * PHP version 7.3 Or Later.
+ *
+ * @package  AnonyEngine
+ * @author   Makiomar <info@makior.com>
+ * @license  https://makiomar.com AnonyEngine Licence
+ * @link     https://makiomar.com/anonyengine_elements
+ */
+
+defined( 'ABSPATH' ) || die(); // Exit if accessed direct.
+
+/**
  * Holds google map api key
  *
  * @const

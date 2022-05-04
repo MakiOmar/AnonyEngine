@@ -5,7 +5,7 @@
  * PHP version 7.3 Or Later
  *
  * @package  AnonyEngine helpers
- * @author   Makiomar <info@makior.com>
+ * @author   Makiomar <info@makiomar.com>
  * @license  https://makiomar.com AnonyEngine Licence
  * @link     https://makiomar.com/anonyengine
  */
@@ -17,7 +17,7 @@ if ( ! class_exists( 'ANONY_TERM_HELP' ) ) {
 	 * Terms helpers' class
 	 *
 	 * @package    AnonyEngine helpers
-	 * @author     Makiomar <info@makior.com>
+	 * @author     Makiomar <info@makiomar.com>
 	 * @license    https://makiomar.com AnonyEngine Licence
 	 * @link       https://makiomar.com
 	 */

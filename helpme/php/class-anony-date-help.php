@@ -14,7 +14,7 @@ if ( ! class_exists( 'ANONY_DATE_HELP' ) ) {
 	 * PHP date helpers class
 	 *
 	 * @package    AnonyEngine
-	 * @author     Makiomar <info@makior.com>
+	 * @author     Makiomar <info@makiomar.com>
 	 * @license    https://makiomar.com AnonyEngine Licence
 	 * @link       https://makiomar.com
 	 */

@@ -5,7 +5,7 @@
  * PHP version 7.3 Or Later.
  *
  * @package  AnonyEngine.
- * @author   Makiomar <info@makior.com>.
+ * @author   Makiomar <info@makiomar.com>.
  * @license  https:// makiomar.com AnonyEngine Licence.
  * @link     https:// makiomar.com/anonyengine
  */

@@ -137,18 +137,20 @@ if ( ! class_exists( 'ANONY_Wp_Misc_Help' ) ) {
 			$region   = ! empty( $args['region'] ) ? $args['region'] : 'EG';
 			$language = ! empty( $args['language'] ) ? $args['language'] : 'ar';
 
-			if ( ! empty( $args['map_api'] ) ) {
+			$engine_options = ANONY_Options_Model::get_instance( ANONY_ENGINE_OPTIONS );
+
+			if ( !empty( $engine_options->google_maps_api_key ) && '1' === $engine_options->enable_google_maps_script ) {
 
 				$script_src = sprintf(
 					'https://maps.googleapis.com/maps/api/js?v=3.exp&key=%1$s&ver=4.9.10&language=%2$s&region=%3$s',
-					$args['map_api'],
+					$engine_options->google_maps_api_key,
 					$language,
 					$region
 				);
 				?>
 				<!--API should be always before map script-->
 				<?php // phpcs:disable  ?>
-				<script type='text/javascript' src='<?php echo esc_attr( $script_src ); ?>'></script>
+				<script type='text/javascript' src='<?php echo esc_url( $script_src ); ?>'></script>
 				<?php // phpcs:enable.  ?>
 			<?php } ?>
 

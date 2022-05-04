@@ -168,7 +168,7 @@ function anony_loop_proper_thumb_size( $html, $post_id, $post_thumbnail_id, $siz
 	return $html;
 }
 
-add_filter( 'post_thumbnail_html', 'anony_loop_proper_thumb_size' );
+add_filter( 'post_thumbnail_html', 'anony_loop_proper_thumb_size', 10, 5 );
 
 /**
  * Search products by meta key OR title.
@@ -237,6 +237,7 @@ add_action( 'pre_get_posts', 'anony_search_products_by_metakey_or_title' );
  * Has the ability to get results from same category or other categories.
  */
 function anony_get_related_products_by_meta_key() {
+	$init = apply_filters( 'anony_related_products_meta_key', '' );
 	$relation_meta_key = apply_filters( 'anony_related_products_meta_key', '' );
 
 	if ( ! empty( $relation_meta_key ) ) {
@@ -282,9 +283,6 @@ function anony_get_related_products_by_meta_key() {
 				2
 			);
 		}
-	} else {
-
-		ANONY_Wp_Debug_Help::error_log( 'Meta key name is missing. please check filter {anony_relation_meta_key}' );
 	}
 }
 add_action( 'init', 'anony_get_related_products_by_meta_key' );

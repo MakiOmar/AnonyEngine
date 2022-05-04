@@ -7,7 +7,7 @@
  * @package  AnonyEngine elements
  * @author   Makiomar <info@makior.com>
  * @license  https://makiomar.com AnonyEngine Licence
- * @link     https://makiomar.com/anonyengine_elements
+ * @link     https://makiomar.com/anonyengine
  */
 
 defined( 'ABSPATH' ) || die(); // Exit if accessed direct.

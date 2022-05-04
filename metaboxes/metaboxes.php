@@ -13,14 +13,6 @@
 defined( 'ABSPATH' ) || die(); // Exit if accessed direct.
 
 /**
- * Holds google map api key
- *
- * @const
- */
-define( 'ANONY_GOOGLE_MAP_API', 'AIzaSyB6ieIzFEqkoEHM9mP1Iq5bt9HR__F-04E' );
-
-
-/**
  * Holds a path to metaboxes folder
  *
  * @const

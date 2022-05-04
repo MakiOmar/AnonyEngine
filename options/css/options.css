@@ -1,88 +1,3 @@
-[id*='anony-options-'] input[type="color"],
-[id*='anony-options-'] input[type="date"],
-[id*='anony-options-'] input[type="datetime-local"],
-[id*='anony-options-'] input[type="datetime"],
-[id*='anony-options-'] input[type="email"],
-[id*='anony-options-'] input[type="month"],
-[id*='anony-options-'] input[type="number"],
-[id*='anony-options-'] input[type="password"],
-[id*='anony-options-'] input[type="radio"],
-[id*='anony-options-'] input[type="checkbox"],
-[id*='anony-options-'] input[type="search"],
-[id*='anony-options-'] input[type="tel"],
-[id*='anony-options-'] input[type="text"],
-[id*='anony-options-'] input[type="time"],
-[id*='anony-options-'] input[type="url"],
-[id*='anony-options-'] input[type="week"],
-[id*='anony-options-'] select,
-[id*='anony-options-'] textarea{
-	border: navajowhite;
-	box-shadow: inset 0 1px 5px rgba(0,0,0,.2);
-	background-color: #fff;
-	color: #32373c;
-	outline: 0;
-	transition: 50ms border-color ease-in-out;
-	border-radius: 10px;
-	padding: 5px;
-	min-height: 35px;
-	min-width: 200px;
-}
-[id*='anony-options-'] input[type="radio"],
-[id*='anony-options-'] input[type="checkbox"]{
-	min-height: auto;
-	min-width: auto;
-}
-/* -------------- .multi-text -------------- */
-#anony-options-wrapper .anony-section-group input.multi-text-add { margin-right:10px;}
-#anony-options-wrapper .anony-section-group .multi-text-btn { float:left;}
-#anony-options-wrapper .anony-section-group .multi-text-desc { float:left;}
-#anony-options-wrapper .anony-section-group .multi-text-ul { margin:auto;}
-#anony-options-wrapper .anony-section-group .multi-text-ul li { display:block; width: 338px; height:37px; color:#fff; position:relative; margin:8px 0 5px 0; background: #b73a4c;}
-#anony-options-wrapper .anony-section-group .multi-text-ul li.multi-text-default { display:none;}
-#anony-options-wrapper .anony-section-group .multi-text-ul li a.multi-text-remove { display:block; position:absolute; top:0; right:0; width: 37px; height:37px; overflow: hidden; text-indent: -9999px; color:#34495e; background: #d1354b;  }
-#anony-options-wrapper .anony-section-group .multi-text-ul li a.multi-text-remove em { width: 37px; height:37px; display: block; overflow: hidden; background:url(../imgs/icons/ico-delete.png) no-repeat center center;}
-#anony-options-wrapper .anony-section-group .multi-text-ul li a:hover.multi-text-remove { background: #FB5656;}
-#anony-options-wrapper .anony-section-group .multi-text-ul li span { color:#fff; font-weight:bold; line-height:37px; padding:0 17px; font-size:14px; margin:0;}
-#anony-options-wrapper .anony-section-group a.btn-blue{
-	font-size: 13px;
-	height: 34px;
-	line-height: 34px;
-	color: #787878;
-	border: 2px solid #ebecec;
-	text-decoration: none;
-	background: #fff;
-	padding: 0 17px;
-	font-weight: bold;
-}
-
-/* -------------- jQuery UI -------------- */
-
-/* .ui-slider */
-.ui-slider { position: relative; text-align: left; background: #ebedef; z-index: 1; width:150px; float:left; margin:0 14px;}
-.ui-slider .ui-slider-handle { background:#b73a4c; position: absolute; z-index: 2; width: 18px; height: 18px; cursor: default; border: none; outline: none; border-radius:9px;}
-.ui-slider .ui-state-hover, .ui-slider .ui-state-active { background:#b73a4c;}
-.ui-slider .ui-slider-range { background: #d1354b; position: absolute; z-index: 1; font-size: .7em; display: block; border: 0; background-position: 0 0; }
-
-.ui-slider-horizontal { height: 12px; border-radius:6px;}
-.ui-slider-horizontal .ui-slider-handle { top: -3px; margin-left: -13px; }
-.ui-slider-horizontal .ui-slider-range { /*! top: 0; */ height: 100%; }
-.ui-slider-horizontal .ui-slider-range-min { left: 0; border-radius:6px;}
-.ui-slider-horizontal .ui-slider-range-max { right: 0; }
-
-#anony-options-wrapper .form-table input.sliderbar_input { width:44px;}
-#anony-options-wrapper tr td span.sliderbar_desc { float:left; width:163px;}
-
-#anony-options-wrapper label{
-	display: flex;
-}
-
-
-.multi-text-btn:focus,.anony-btn-close:focus, .anony-remove-tab:focus{
-	color:#b73a4c;
-}
-#anony-options-wrapper .form-table input.small-text{
-	min-width: 150px;
-}
 .anony-label{
    font-weight: bold;
    margin: 15px 0;
@@ -105,10 +20,7 @@
 	display: flex;
 	align-items: center;
 }
-[id*='anony-options-'] input[type= "checkbox"]{
-	margin: 0 5px;
-	border-radius: 2px !important;
-}
+
 #anony-logo{
 	padding: 27px 10px;
 	background-color: #f8f8f8;

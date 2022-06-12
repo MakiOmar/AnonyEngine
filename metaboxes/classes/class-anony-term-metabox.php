@@ -15,7 +15,7 @@ if ( ! class_exists( 'ANONY_Term_Metabox' ) ) {
 			$this->metabox = $meta_box;
 
 			// Set metabox's data
-			$this->setMetaboxData( $this->metabox );
+			$this->set_metabox_data( $this->metabox );
 
 			add_action( 'init', array( $this, 'registerTermMetaKey' ) );
 			add_action( $this->taxonomy . '_add_form_fields', array( $this, 'addFormFields' ) );
@@ -27,7 +27,7 @@ if ( ! class_exists( 'ANONY_Term_Metabox' ) ) {
 		/**
 		 * Set metabox data
 		 */
-		public function setMetaboxData( $metabox ) {
+		public function set_metabox_data( $metabox ) {
 			$this->id       = $metabox['id'];
 			$this->taxonomy = $metabox['taxonomy'];
 			$this->fields   = $metabox['fields'];
@@ -82,7 +82,7 @@ if ( ! class_exists( 'ANONY_Term_Metabox' ) ) {
 				return;
 			}
 			echo '<div class="form-field anony-term-meta-wrap">';
-			echo $this->metaFieldsCallback();
+			echo $this->meta_fields_callback();
 			echo '</div>';
 		}
 
@@ -94,14 +94,14 @@ if ( ! class_exists( 'ANONY_Term_Metabox' ) ) {
 				return;
 			}
 			echo '<div class="form-field anony-term-meta-wrap">';
-			echo $this->metaFieldsCallback( $term->term_id );
+			echo $this->meta_fields_callback( $term->term_id );
 			echo '</div>';
 		}
 
 		/**
 		 * Render metabox' fields.
 		 */
-		public function metaFieldsCallback( $object_id = null ) {
+		public function meta_fields_callback( $object_id = null ) {
 
 			if ( ! class_exists( 'ANONY_Input_Field' ) ) {
 				esc_html_e( 'Input fields plugin is required', 'anonyengine' );
@@ -120,7 +120,7 @@ if ( ! class_exists( 'ANONY_Term_Metabox' ) ) {
 
 				echo $render_field->field_init();
 
-				$this->enqueueFieldScripts( $field );
+				$this->enqueue_field_scripts( $field );
 
 			}
 		}

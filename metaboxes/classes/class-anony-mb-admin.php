@@ -53,15 +53,15 @@ if ( ! class_exists( 'ANONY_Mb_Admin' ) ) {
 
 				if ( ! empty( $this_post_metaboxes ) && ( in_array( $post->post_type, $this_post_metaboxes['post_type'] ) || $this_post_metaboxes['post_type'] === $post->post_type ) ) {
 
-					$this->parent->setMetaboxData( $this_post_metaboxes );
+					$this->parent->set_metabox_data( $this_post_metaboxes );
 				}
 
 				foreach ( $this->parent->post_type as $post_type ) {
-					add_meta_box( $this->parent->id, $this->parent->label, array( $this->parent, 'metaFieldsCallback' ), $post_type, $this->parent->context, $this->parent->priority );
+					add_meta_box( $this->parent->id, $this->parent->label, array( $this->parent, 'meta_fields_callback' ), $post_type, $this->parent->context, $this->parent->priority );
 				}
 			} elseif ( $this->parent->post_type == $postType ) {
 
-				add_meta_box( $this->parent->id, $this->parent->label, array( $this->parent, 'metaFieldsCallback' ), $this->parent->post_type, $this->parent->context, $this->parent->priority );
+				add_meta_box( $this->parent->id, $this->parent->label, array( $this->parent, 'meta_fields_callback' ), $this->parent->post_type, $this->parent->context, $this->parent->priority );
 
 			}
 		}
@@ -108,7 +108,7 @@ if ( ! class_exists( 'ANONY_Mb_Admin' ) ) {
 				return;
 			}
 
-			$this->parent->startUpdate( $_POST, $post_ID );
+			$this->parent->start_update( $_POST, $post_ID );
 
 		}
 
@@ -129,7 +129,7 @@ if ( ! class_exists( 'ANONY_Mb_Admin' ) ) {
 		 * @return void
 		 */
 		public function adminEnqueueScripts() {
-			$this->parent->enqueueMainScripts();
+			$this->parent->enqueue_main_scripts();
 		}
 
 		/**
@@ -140,7 +140,7 @@ if ( ! class_exists( 'ANONY_Mb_Admin' ) ) {
 		public function adminFooterScripts() {
 			$screen = get_current_screen();
 			if ( $screen->base == 'post' && ( in_array( $screen->post_type, $this->parent->post_type ) || $screen->post_type == $this->parent->post_type ) ) {
-				$this->parent->footerScripts();
+				$this->parent->footer_scripts();
 			}
 
 		}

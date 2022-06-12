@@ -21,7 +21,7 @@ if ( ! class_exists( 'ANONY_Mb_Single' ) ) {
 		}
 
 		public function hooks() {
-			add_action( 'wp_enqueue_scripts', array( $this->parent, 'frontScripts' ) );
+			add_action( 'wp_enqueue_scripts', array( $this->parent, 'front_scripts' ) );
 
 			add_action( 'wp_head', array( $this, 'headStyles' ) );
 
@@ -64,11 +64,11 @@ if ( ! class_exists( 'ANONY_Mb_Single' ) ) {
 			$this->parent->metabox['id'] = $mbID;
 
 			// Set metabox's data
-			$this->parent->setMetaboxData( $this->parent->metabox );
+			$this->parent->set_metabox_data( $this->parent->metabox );
 
 			$this->updatePost();
 
-			$render = $this->parent->getNotices();
+			$render = $this->parent->get_notices();
 
 			do_action( $this->parent->id_as_hook . '_show_on_front' );
 
@@ -91,7 +91,7 @@ if ( ! class_exists( 'ANONY_Mb_Single' ) ) {
 					$render = $this->renderFrontendForm();
 
 			} else {
-				$render = $this->parent->returnMetaFields();
+				$render = $this->parent->return_meta_fields();
 
 				if ( get_current_user_id() == $post->post_author ) {
 
@@ -117,7 +117,7 @@ if ( ! class_exists( 'ANONY_Mb_Single' ) ) {
 
 			$render .= '<input type="hidden" id="post_ID" name="post_ID" value="' . $post->ID . '">';
 
-			$render .= $this->parent->returnMetaFields();
+			$render .= $this->parent->return_meta_fields();
 
 			$render .= '<input name="save" type="submit" class="button button-primary button-large" id="publish" value="' . esc_html__( 'Save changes' ) . '">';
 
@@ -165,7 +165,7 @@ if ( ! class_exists( 'ANONY_Mb_Single' ) ) {
 			// Can be used to validate $_POST data befoore insertion
 			do_action( $this->parent->id_as_hook . '_before_update' );
 
-			$this->parent->startUpdate( $_POST, $_POST['post_ID'] );
+			$this->parent->start_update( $_POST, $_POST['post_ID'] );
 
 		}
 
@@ -175,7 +175,7 @@ if ( ! class_exists( 'ANONY_Mb_Single' ) ) {
 
 				$post_type = get_post_type();
 				if ( in_array( $post_type, $this->parent->post_type ) || $post_type == $this->parent->post_type ) {
-					$this->parent->footerScripts();
+					$this->parent->footer_scripts();
 				}
 			}
 
@@ -223,7 +223,7 @@ if ( ! class_exists( 'ANONY_Mb_Single' ) ) {
 
 		public function wpEnqueueScripts() {
 			if ( is_single() ) {
-				$this->parent->footerScripts();
+				$this->parent->footer_scripts();
 			}
 		}
 

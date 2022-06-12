@@ -46,7 +46,7 @@ if ( ! class_exists( 'ANONY_Mb_Shortcode' ) ) {
 			$this->parent->metabox['id'] = $mbID;
 
 			// Set metabox's data
-			$this->parent->setMetaboxData( $this->parent->metabox );
+			$this->parent->set_metabox_data( $this->parent->metabox );
 
 			$current_user = wp_get_current_user();
 
@@ -88,7 +88,7 @@ if ( ! class_exists( 'ANONY_Mb_Shortcode' ) ) {
 				 * Start metabox render
 				 */
 
-				$render .= $this->parent->returnMetaFields();
+				$render .= $this->parent->return_meta_fields();
 
 				$render .= '<input name="save" type="submit" class="button button-primary button-large" id="publish" value="' . esc_html__( 'Save changes' ) . '">';
 
@@ -150,7 +150,7 @@ if ( ! class_exists( 'ANONY_Mb_Shortcode' ) ) {
 
 			if ( ! empty( $post_id ) ) {
 				// esc_html_e( 'Sorry! but you already have posted the same data before', 'anonyengine'  );
-				$this->parent->startUpdate( $_POST, intval( $post_id[0] ) );
+				$this->parent->start_update( $_POST, intval( $post_id[0] ) );
 
 				$url = add_query_arg( 'post', $post_id[0], get_the_permalink( $post_id[0] ) );
 
@@ -176,7 +176,7 @@ if ( ! class_exists( 'ANONY_Mb_Shortcode' ) ) {
 						$test = update_post_meta( $insert, 'parent_id', $post_parent );
 					}
 
-					$this->parent->startUpdate( $_POST, $insert );
+					$this->parent->start_update( $_POST, $insert );
 
 					$url = add_query_arg( 'post', $insert, get_the_permalink( $insert ) );
 
@@ -198,7 +198,7 @@ if ( ! class_exists( 'ANONY_Mb_Shortcode' ) ) {
 			global $post;
 
 			if ( ANONY_Post_Help::isPageHasShortcode( $post, $this->parent->id_as_hook ) ) {
-				$this->parent->frontScripts();
+				$this->parent->front_scripts();
 			}
 		}
 
@@ -209,7 +209,7 @@ if ( ! class_exists( 'ANONY_Mb_Shortcode' ) ) {
 			global $post;
 
 			if ( ANONY_Post_Help::isPageHasShortcode( $post, $this->parent->id_as_hook ) ) {
-				$this->parent->footerScripts();
+				$this->parent->footer_scripts();
 			}
 
 		}

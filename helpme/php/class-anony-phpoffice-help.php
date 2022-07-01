@@ -48,26 +48,20 @@ if ( ! class_exists( 'ANONY_PHPOFFICE_HELP' ) ) {
 				->setCategory( 'Test result file' );
 
 			// Add some data.
-			$spreadsheet->setActiveSheetIndex( 0 )
-				->setCellValue( 'A1', 'Hello' )
-				->setCellValue( 'B2', 'world!' )
-				->setCellValue( 'C1', 'Hello' )
-				->setCellValue( 'D2', 'world!' );
+			$sheet = $spreadsheet->setActiveSheetIndex( 0 )
+				->setCellValue( 'A1', 'Book codes' );
 
-			// Miscellaneous glyphs, UTF-8.
-			$spreadsheet->setActiveSheetIndex( 0 )
-				->setCellValue( 'A4', 'Miscellaneous glyphs' )
-				->setCellValue( 'A5', 'éàèùâêîôûëïüÿäöüç' );
+			$sheet->fromArray([$array], NULL, 'A2');
 
 			// Rename worksheet.
-			$spreadsheet->getActiveSheet()->setTitle( 'Simple' );
+			$spreadsheet->getActiveSheet()->setTitle( 'Book codes' );
 
 			// Set active sheet index to the first sheet, so Excel opens this as the first sheet.
 			$spreadsheet->setActiveSheetIndex( 0 );
 
 			// Redirect output to a client’s web browser (Xlsx).
 			header( 'Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' );
-			header( 'Content-Disposition: attachment;filename="01simple.xlsx"' );
+			header( 'Content-Disposition: attachment;filename="book-codes.xlsx"' );
 			header( 'Cache-Control: max-age=0' );
 			// If you're serving to IE 9, then the following may be needed.
 			header( 'Cache-Control: max-age=1' );

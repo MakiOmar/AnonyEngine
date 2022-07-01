@@ -32,6 +32,7 @@ if ( ! class_exists( 'ANONY_Woo_Direct_Cart_Add' ) ) {
                 return;
             }
 
+
             /*    
 
                 $session = array( 
@@ -80,9 +81,12 @@ if ( ! class_exists( 'ANONY_Woo_Direct_Cart_Add' ) ) {
         }
 
         public function direct_add_to_cart(){
-
+            if( empty( $_GET[ 'direct_add_to_cart' ] ) ) {
+                return;
+            }
+            
             $this->add_to_cart( $this->product_id );
-
+            
             $this->set_session_data();
 
             // Redirects to the checkout page.
@@ -96,7 +100,7 @@ if ( ! class_exists( 'ANONY_Woo_Direct_Cart_Add' ) ) {
         protected function set_session_data() {
 
             global $woocommerce;
-
+ 
             if ( !empty( $this->session ) ) {
                 
                 foreach ($this->session as $key => $args) {
@@ -118,7 +122,7 @@ if ( ! class_exists( 'ANONY_Woo_Direct_Cart_Add' ) ) {
                     if ( empty( $args[ 'checkout_target_field' ] ) || 'no' === $args[ 'checkout_target_field' ] ) {
                         continue;
                     }
-                    
+
                     if ( $key === $args[ 'checkout_target_field' ] ) {
 
                         return esc_attr( $woocommerce->session->get( $session_key ) );
@@ -254,6 +258,8 @@ if ( ! class_exists( 'ANONY_Woo_Direct_Cart_Add' ) ) {
                 }
 
             }
+            
+            return $display_key;
         
         }
     }

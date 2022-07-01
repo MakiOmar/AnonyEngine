@@ -104,7 +104,7 @@ add_filter(
 
 
 /**
- * Load user control plugin textdomain.
+ * Load plugin textdomain.
  *
  * @since 1.0.0
  */

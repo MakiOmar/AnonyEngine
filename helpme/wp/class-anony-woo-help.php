@@ -579,6 +579,37 @@ if ( ! class_exists( 'ANONY_Woo_Help' ) ) {
 			$wc_adp = new WC_Admin_Duplicate_Product();
 			return $wc_adp->product_duplicate( wc_get_product( $product_id ) );
 		}
+
+		public static function products_about_to_expire( $expiry_meta_key, $before_expiry = '180 days' ){
+		    $args = array(
+		        'post_type'         => 'product',
+		        'posts_per_page'    => -1,
+		        'post_status'       => 'publish',
+		        'order'             => 'DESC',
+		        'meta_query' => array(
+		            array(
+		                'key' => $expiry_meta_key,
+		                'value' => array(date('Y-m-d'), date('Y-m-d', strtotime('180 days'))),
+		                'compare' => 'BETWEEN',
+		                'type' => 'DATE'
+		            ),
+		        )
+		    );
+		    $query = new WP_Query( $args );
+		    $data= [];
+		    if( $query->have_posts() ){
+		        while( $query->have_posts() ){
+		            $query->the_post();
+		            
+		            $data[] = get_the_ID();
+		        }
+		        
+		        wp_reset_postdata();
+		    }
+
+		    return $data;
+		    
+		} 
 	}
 }
 

@@ -32,19 +32,19 @@ if ( ! class_exists( 'ANONY_Woo_Direct_Cart_Add' ) ) {
                 return;
             }
 
-        /*    
+            /*    
 
-            $session = array( 
-                'field_name' => array( 
-                    'field_value'           => 'value' ,
-                    'as_cart_item_data'     => 'yes' , 
-                    'as_order_item_meta'    => 'yes' , 
-                    'order_visible'         => 'yes' , 
-                    'custom_price'          => 'no' , 
-                    'checkout_target_field' => 'no' , // e.g. billing_last_name
-                ) 
-            );
-        */
+                $session = array( 
+                    'field_name' => array( 
+                        'field_value'           => 'value' ,
+                        'as_cart_item_data'     => 'yes' , 
+                        'as_order_item_meta'    => 'yes' , 
+                        'order_visible'         => 'yes' , 
+                        'custom_price'          => 'no' , 
+                        'checkout_target_field' => 'no' , // e.g. billing_last_name
+                    ) 
+                );
+            */
             
 
             $this->product_id = $product_id;
@@ -172,89 +172,90 @@ if ( ! class_exists( 'ANONY_Woo_Direct_Cart_Add' ) ) {
             
             return $v;
         }
-    }
+    
 
-    /**
-     * This captures the information from the previous function and attaches it to the item.
-     */ 
-    public function get_cart_items_from_session($item, $values, $key) {
+        /**
+         * This captures the information from the previous function and attaches it to the item.
+         */ 
+        public function get_cart_items_from_session($item, $values, $key) {
 
-        if (array_key_exists( '_custom_options', $values ) ) {
-            $item['_custom_options'] = $values['_custom_options'];
+            if (array_key_exists( '_custom_options', $values ) ) {
+                $item['_custom_options'] = $values['_custom_options'];
+            }
+
+            return $item;
         }
 
-        return $item;
-    }
+        /**
+         * Override the price you can use information saved against the product to do so
+         */
+        public function update_custom_price( $cart_object ) {
+            foreach ( $cart_object->cart_contents as $cart_item_key => $value ) {       
+                // Version 2.x
+                //$value['data']->price = $value['_custom_options']['custom_price'];
+                // Version 3.x / 4.x
+                if ( !empty( $value['_custom_options']['custom_price'] ) && 'no' !== $value['_custom_options']['custom_price']  && is_numeric( $value['_custom_options']['custom_price'] ) ) {
+                    $value['data']->set_price( $value['_custom_options']['custom_price'] );
+                }
+                
+            }
+        }
 
-    /**
-     * Override the price you can use information saved against the product to do so
-     */
-    public function update_custom_price( $cart_object ) {
-        foreach ( $cart_object->cart_contents as $cart_item_key => $value ) {       
-            // Version 2.x
-            //$value['data']->price = $value['_custom_options']['custom_price'];
-            // Version 3.x / 4.x
-            if ( !empty( $value['_custom_options']['custom_price'] ) && 'no' !== $value['_custom_options']['custom_price']  && is_numeric( $value['_custom_options']['custom_price'] ) ) {
-                $value['data']->set_price( $value['_custom_options']['custom_price'] );
+        /**
+         * This adds the information as meta data so that it can be seen as part of the order (to hide any meta data from the customer just start it with an underscore)
+         */ 
+        public function add_values_to_order_item_meta($item_id, $values) {
+            global $woocommerce,$wpdb;
+            
+            if ( !empty( $this->session ) && !empty( $values['_custom_options'] )) {
+                    
+                foreach ($this->session as $session_key => $args) {
+
+                    $val = $values['_custom_options'][ $session_key ];
+
+                    if ( empty( $args[ 'as_order_item_meta' ] ) || 'yes' !== $args[ 'as_order_item_meta' ] ) {
+                        continue;
+                    }
+                    
+                    if( empty( $args[ 'order_visible' ] ) || 'yes' !== $args[ 'order_visible' ] ){
+
+                        $item_meta_key = '_' . $session_key;
+
+                    }else{
+                        $item_meta_key = $session_key;
+                    }
+
+                    wc_add_order_item_meta($item_id, $item_meta_key, $val);
+                    
+                }
+
             }
             
         }
-    }
 
-    /**
-     * This adds the information as meta data so that it can be seen as part of the order (to hide any meta data from the customer just start it with an underscore)
-     */ 
-    public function add_values_to_order_item_meta($item_id, $values) {
-        global $woocommerce,$wpdb;
-        
-        if ( !empty( $this->session ) && !empty( $values['_custom_options'] )) {
-                
-            foreach ($this->session as $session_key => $args) {
+        /**
+         * Change displayed label for specific order item meta key
+         */ 
+        public function order_item_display_meta_key( $display_key, $meta, $item ) {
 
-                $val = $values['_custom_options'][ $session_key ];
+            if ( !empty( $this->session ) ) {
 
-                if ( empty( $args[ 'as_order_item_meta' ] ) || 'yes' !== $args[ 'as_order_item_meta' ] ) {
-                    continue;
-                }
-                
-                if( empty( $args[ 'order_visible' ] ) || 'yes' !== $args[ 'order_visible' ] ){
+                foreach ($this->session as $session_key => $args) {
 
-                    $item_meta_key = '_' . $session_key;
+                    if( $meta->key === $session_key ) {
 
-                }else{
-                    $item_meta_key = $session_key;
-                }
+                        if ( !empty( $args[ 'order_meta_label' ] )  ) {
+                            return $args[ 'order_meta_label' ];
+                        }
 
-                wc_add_order_item_meta($item_id, $item_meta_key, $val);
-                
-            }
+                        return $display_key;
 
-        }
-        
-    }
-
-    /**
-     * Change displayed label for specific order item meta key
-     */ 
-    public function order_item_display_meta_key( $display_key, $meta, $item ) {
-
-        if ( !empty( $this->session ) {
-
-            foreach ($this->session as $session_key => $args) {
-
-                if( $meta->key === $session_key ) {
-
-                    if ( !empty( $args[ 'order_meta_label' ] )  ) {
-                        return $args[ 'order_meta_label' ];
                     }
-
-                    return $display_key;
-
                 }
-            }
 
-        }
+            }
         
+        }
     }
 
 }

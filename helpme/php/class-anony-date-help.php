@@ -104,5 +104,25 @@ if ( ! class_exists( 'ANONY_DATE_HELP' ) ) {
 
 			return round( $date_diff / ( 60 * 60 * 24 ), $round );
 		}
+
+
+		/**
+		 * Calculate the difference between to dates.
+		 * Make sure to have time format with date formate.
+		 *
+		 * @param  string $date_to Date/Time string for future.
+		 * @param  int    $format   Date format.
+		 * @return DateInterval     Date interval object.
+		 */
+		public static function time_remaining( $date_to, $format = 'Y-m-d H:i:s' ) {
+			
+			$future_date = DateTime::createFromFormat( $format , $date_to );
+
+			$current_date = new DateTime();
+
+			return $future_date->diff($current_date);
+		}
+
+
 	}
 }

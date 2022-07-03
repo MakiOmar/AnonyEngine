@@ -27,69 +27,75 @@ if ( ! class_exists( 'ANONY_Woo_Help' ) ) {
 
 		/**
 		 * Get customer's paid orders
-		 * 
+		 *
 		 * @param int $user_id Customer's ID.
 		 * @return array An array of Customer's paid oders.
-		 */ 
-		public static function get_customer_paid_orders( int $user_id ): array {
+		 */
+		public static function get_customer_paid_orders( $user_id ) {
 
-	        $customer_orders = [];
-	        foreach ( wc_get_is_paid_statuses() as $paid_status ) {
-	            $customer_orders += wc_get_orders( [
-	                'type'        => 'shop_order',
-	                'limit'       => - 1,
-	                'customer_id' => $user_id,
-	                'status'      => $paid_status,
-	            ] );
-	        }
+			$customer_orders = array();
+			foreach ( wc_get_is_paid_statuses() as $paid_status ) {
+				$customer_orders += wc_get_orders(
+					array(
+						'type'        => 'shop_order',
+						'limit'       => - 1,
+						'customer_id' => $user_id,
+						'status'      => $paid_status,
+					)
+				);
+			}
 
-	        return $customer_orders;
-	    }
+			return $customer_orders;
+		}
 
-	    /**
+		/**
 		 * Get customer's paid orders
-		 * 
-		 * @param int $user_id Customer's ID.
+		 *
+		 * @param int    $user_id Customer's ID.
+		 * @param string $meta_key Meta key.
+		 * @param string $meta_value Meta value.
 		 * @return array An array of Customer's paid oders.
-		 */ 
-		public static function get_customer_paid_orders_by_meta( int $user_id, string $meta_key, $meta_value ): array {
+		 */
+		public static function get_customer_paid_orders_by_meta( $user_id, $meta_key, $meta_value ) {
 
-	        $customer_orders = [];
-	        foreach ( wc_get_is_paid_statuses() as $paid_status ) {
-	            $customer_orders    += wc_get_orders( [
-	                'type'           => 'shop_order',
-	                'limit'          => - 1,
-	                'customer_id'    => $user_id,
-	                'status'         => $paid_status,
-	                '_with_meta_key' => $meta_key . '|' . $meta_value ,
-	            ] );
-	        }
+			$customer_orders = array();
+			foreach ( wc_get_is_paid_statuses() as $paid_status ) {
+				$customer_orders += wc_get_orders(
+					array(
+						'type'           => 'shop_order',
+						'limit'          => - 1,
+						'customer_id'    => $user_id,
+						'status'         => $paid_status,
+						'_with_meta_key' => $meta_key . '|' . $meta_value,
+					)
+				);
+			}
 
-	        return $customer_orders;
-	    }
+			return $customer_orders;
+		}
 
-	    /**
-	     * Handles order custom meta query var
-	     * 
-	     * **Description** Should be hooked to used like this <code>add_filter( 'woocommerce_order_data_store_cpt_get_orders_query', 'handle_order_custom_meta_query_var', 10, 2 );</code>
-	     * 
-	     * @param array $query An Array of query parameters.
-	     * @param array $query_vars An Array of query variables.
-	     * 
-	     * @return array An Array of query parameters.
-	     */ 
-	    public static function handle_order_custom_meta_query_var( $query, $query_vars ) {
-		    if ( ! empty( $query_vars['_with_meta_key'] ) ) {
+		/**
+		 * Handles order custom meta query var
+		 *
+		 * **Description** Should be hooked to used like this <code>add_filter( 'woocommerce_order_data_store_cpt_get_orders_query', 'handle_order_custom_meta_query_var', 10, 2 );</code>
+		 *
+		 * @param array $query An Array of query parameters.
+		 * @param array $query_vars An Array of query variables.
+		 *
+		 * @return array An Array of query parameters.
+		 */
+		public static function handle_order_custom_meta_query_var( $query, $query_vars ) {
+			if ( ! empty( $query_vars['_with_meta_key'] ) ) {
 
-		    	$meta_data = explode( '|' , $query_vars['_with_meta_key'] );
+				$meta_data = explode( '|', $query_vars['_with_meta_key'] );
 
-		        $query['meta_query'][] = array(
-		            'key' => $meta_data[0],
-		            'value' => esc_attr( $meta_data[1] ),
-		        );
-		    }
+				$query['meta_query'][] = array(
+					'key'   => $meta_data[0],
+					'value' => esc_attr( $meta_data[1] ),
+				);
+			}
 
-		    return $query;
+			return $query;
 		}
 		/**
 		 * Create product attribute.
@@ -167,19 +173,19 @@ if ( ! class_exists( 'ANONY_Woo_Help' ) ) {
 			if ( 'product' !== $post->post_type ) {
 				return;
 			}
-			$agent = $_SERVER['HTTP_USER_AGENT'];
+			$agent        = isset( $_SERVER['HTTP_USER_AGENT'] ) ? sanitize_text_field( wp_unslash( $_SERVER['HTTP_USER_AGENT'] ) ) : '';
 			$comment_data = array(
-				'comment_post_ID' => $post->ID,
-				'comment_author' => 'أحمد',
+				'comment_post_ID'      => $post->ID,
+				'comment_author'       => 'أحمد',
 				'comment_author_email' => 'dave@domain.com',
-				'comment_author_url' => 'http://www.someiste.com',
-				'comment_content' => 'أكثر من رائع',
-				'comment_author_IP' => '127.3.1.1',
-				'comment_agent' => $agent,
-				'comment_type'  => '',
-				'comment_date' => date('Y-m-d H:i:s'),
-				'comment_date_gmt' => date('Y-m-d H:i:s'),
-				'comment_approved' => 1,
+				'comment_author_url'   => 'http://www.someiste.com',
+				'comment_content'      => 'أكثر من رائع',
+				'comment_author_IP'    => '127.3.1.1',
+				'comment_agent'        => $agent,
+				'comment_type'         => '',
+				'comment_date'         => gmdate( 'Y-m-d H:i:s' ),
+				'comment_date_gmt'     => gmdate( 'Y-m-d H:i:s' ),
+				'comment_approved'     => 1,
 
 			);
 
@@ -580,36 +586,62 @@ if ( ! class_exists( 'ANONY_Woo_Help' ) ) {
 			return $wc_adp->product_duplicate( wc_get_product( $product_id ) );
 		}
 
-		public static function products_about_to_expire( $expiry_meta_key, $before_expiry = '180 days' ){
-		    $args = array(
-		        'post_type'         => 'product',
-		        'posts_per_page'    => -1,
-		        'post_status'       => 'publish',
-		        'order'             => 'DESC',
-		        'meta_query' => array(
-		            array(
-		                'key' => $expiry_meta_key,
-		                'value' => array(date('Y-m-d'), date('Y-m-d', strtotime('180 days'))),
-		                'compare' => 'BETWEEN',
-		                'type' => 'DATE'
-		            ),
-		        )
-		    );
-		    $query = new WP_Query( $args );
-		    $data= [];
-		    if( $query->have_posts() ){
-		        while( $query->have_posts() ){
-		            $query->the_post();
-		            
-		            $data[] = get_the_ID();
-		        }
-		        
-		        wp_reset_postdata();
-		    }
+		/**
+		 * Get IDs of products about to expire.
+		 *
+		 * @param  string $expiry_meta_key The meta key that stores expiry date.
+		 * @param  string $before_expiry The period remaining to consider a product is about to expire after.
+		 * @return array An array of IDs of products about to expire.
+		 */
+		public static function products_about_to_expire( $expiry_meta_key, $before_expiry = '180 days' ) {
+			$args = array(
+				'post_type'      => 'product',
+				'posts_per_page' => 30,
+				'post_status'    => 'publish',
+				'order'          => 'DESC',
+				// phpcs:disable WordPress.DB.SlowDBQuery.slow_db_query_meta_query
+				'meta_query'     => array(
+					array(
+						'key'     => $expiry_meta_key,
+						'value'   => array( gmdate( 'Y-m-d' ), gmdate( 'Y-m-d', strtotime( '180 days' ) ) ),
+						'compare' => 'BETWEEN',
+						'type'    => 'DATE',
+					),
+				),
+				// phpcs:enable.
+			);
+			$query = new WP_Query( $args );
+			$data  = array();
+			if ( $query->have_posts() ) {
+				while ( $query->have_posts() ) {
+					$query->the_post();
 
-		    return $data;
-		    
-		} 
+					$data[] = get_the_ID();
+				}
+
+				wp_reset_postdata();
+			}
+
+			return $data;
+
+		}
+
+		/**
+		 * Get states of base country.
+		 *
+		 * @return array An array of country's states.
+		 */
+		public static function get_base_country_states() {
+			global $woocommerce;
+
+			$countries_obj = new WC_Countries();
+
+			$countries = $countries_obj->__get( 'countries' );
+
+			$default_country = $countries_obj->get_base_country();
+
+			return $countries_obj->get_states( $default_country );
+		}
 	}
 }
 

@@ -1,4 +1,4 @@
-<?php 
+<?php
 /**
  * Woocommerce direct cart addition.
  *
@@ -14,254 +14,288 @@ defined( 'ABSPATH' ) || die(); // Exit if accessed direct.
 
 if ( ! class_exists( 'ANONY_Woo_Direct_Cart_Add' ) ) {
 
-    /**
-     * Woocommerce direct cart addition class.
-     *
-     * PHP version 7.3 Or Later.
-     *
-     * @package  AnonyEngine
-     * @author   Makiomar <info@makiomar.com>
-     * @license  https:// makiomar.com AnonyEngine Licence.
-     * @link     https:// makiomar.com/anonyengine.
-     */
-    class ANONY_Woo_Direct_Cart_Add {
+	/**
+	 * Woocommerce direct cart addition class.
+	 *
+	 * PHP version 7.3 Or Later.
+	 *
+	 * @package  AnonyEngine
+	 * @author   Makiomar <info@makiomar.com>
+	 * @license  https:// makiomar.com AnonyEngine Licence.
+	 * @link     https:// makiomar.com/anonyengine.
+	 */
+	class ANONY_Woo_Direct_Cart_Add {
+
+		/**
+		 * Class instructor.
+		 *
+		 * @param integer $product_id Product ID.
+		 * @param array   $session Array of data that should be stored into cart session.
+		 */
+		public function __construct( $product_id, array $session = array() ) {
+
+			if ( ! class_exists( 'woocommerce' ) ) {
+				return;
+			}
+
+			// phpcs:disable Squiz.PHP.CommentedOutCode.Found
+
+			/*
+				$session = array(
+					'field_name' => array(
+						'field_value'           => 'value' ,
+						'as_cart_item_data'     => 'yes' ,
+						'as_order_item_meta'    => 'yes' ,
+						'order_visible'         => 'yes' ,
+						'custom_price'          => 'no' ,
+						'checkout_target_field' => 'no' , // e.g. billing_last_name
+					)
+				);
+			*/
+			// phpcs:enable.
+			$this->product_id = $product_id;
+			$this->session    = $session;
 
-        public function __construct( int $product_id, array $session = array() ) {
+			add_action( 'template_redirect', array( $this, 'direct_add_to_cart' ) );
 
-            if ( !class_exists('woocommerce') ) {
-                return;
-            }
+			add_filter( 'woocommerce_checkout_get_value', array( $this, 'pre_populate_checkout' ), 10, 2 );
+
+			add_filter( 'woocommerce_add_cart_item_data', array( $this, 'add_item_data' ), 1, 2 );
+
+			add_filter( 'woocommerce_get_cart_item_from_session', array( $this, 'get_cart_items_from_session' ), 1, 3 );
+
+			add_action( 'woocommerce_before_calculate_totals', array( $this, 'update_custom_price' ), 1, 1 );
+
+			add_action( 'woocommerce_add_order_item_meta', array( $this, 'add_values_to_order_item_meta' ), 1, 2 );
+
+			add_filter( 'woocommerce_order_item_display_meta_key', array( $this, 'order_item_display_meta_key' ), 20, 2 );
+		}
 
+		/**
+		 * Add product directly to cart, then redirect to checkout
+		 *
+		 * @param integer $product_id Product ID.
+		 */
+		protected function add_to_cart( $product_id ) {
 
-            /*    
+			WC()->cart->empty_cart();
 
-                $session = array( 
-                    'field_name' => array( 
-                        'field_value'           => 'value' ,
-                        'as_cart_item_data'     => 'yes' , 
-                        'as_order_item_meta'    => 'yes' , 
-                        'order_visible'         => 'yes' , 
-                        'custom_price'          => 'no' , 
-                        'checkout_target_field' => 'no' , // e.g. billing_last_name
-                    ) 
-                );
-            */
-            
+			// This adds the product with the ID; we can also add a second variable which will be the variation ID.
+			WC()->cart->add_to_cart( $product_id );
 
-            $this->product_id = $product_id;
-            $this->session = $session;
+		}
 
-            add_action( 'template_redirect', array($this, 'direct_add_to_cart'));
+		/**
+		 * Now add to cart.
+		 */
+		public function direct_add_to_cart() {
+			// phpcs:disable WordPress.Security.NonceVerification.Recommended
+			if ( empty( $_GET['direct_add_to_cart'] ) ) {
+				return;
+			}
+			// phpcs:enable.
 
-            add_filter('woocommerce_checkout_get_value', array($this, 'pre_populate_checkout'), 10, 2);
+			$this->add_to_cart( $this->product_id );
 
-            add_filter('woocommerce_add_cart_item_data', array($this, 'add_item_data'), 1, 2 );
+			$this->set_session_data();
 
-            add_filter('woocommerce_get_cart_item_from_session', array($this, 'get_cart_items_from_session'), 1, 3 );
+			// Redirects to the checkout page.
+			wp_safe_redirect( wc_get_checkout_url() );
 
-            add_action( 'woocommerce_before_calculate_totals', array($this, 'update_custom_price' ), 1, 1 );
+			// Safely closes the function.
+			exit();
 
-            add_action('woocommerce_add_order_item_meta', array($this, 'add_values_to_order_item_meta') ,1,2);
+		}
 
-            add_filter('woocommerce_order_item_display_meta_key', array($this, 'order_item_display_meta_key'), 20, 3 );
-        }
+		/**
+		 * Set session data.
+		 */
+		protected function set_session_data() {
 
-        /**
-         * Add product directly to cart, then redirect to checkout
-         * 
-         */ 
-        protected function add_to_cart( int $product_id ){
+			global $woocommerce;
 
-            WC()->cart->empty_cart();
+			if ( ! empty( $this->session ) ) {
 
-            // This adds the product with the ID; we can also add a second variable which will be the variation ID.
-            WC()->cart->add_to_cart( $product_id );
+				foreach ( $this->session as $key => $args ) {
+					$woocommerce->session->set( $key, $args['field_value'] );
+				}
+			}
 
+		}
 
-        }
+		/**
+		 * Pre populate checkout.
+		 *
+		 * @param string $input Input.
+		 * @param string $key Key.
+		 *
+		 * @return string Field's value.
+		 */
+		public function pre_populate_checkout( $input, $key ) {
+			global $woocommerce;
+			global $current_user;
 
-        public function direct_add_to_cart(){
-            if( empty( $_GET[ 'direct_add_to_cart' ] ) ) {
-                return;
-            }
-            
-            $this->add_to_cart( $this->product_id );
-            
-            $this->set_session_data();
+			if ( ! empty( $this->session ) ) {
 
-            // Redirects to the checkout page.
-            wp_safe_redirect( wc_get_checkout_url() );
-            
-            // Safely closes the function.
-            exit();
+				foreach ( $this->session as $session_key => $args ) {
 
-        }
+					if ( empty( $args['checkout_target_field'] ) || 'no' === $args['checkout_target_field'] ) {
+						continue;
+					}
 
-        protected function set_session_data() {
+					if ( $key === $args['checkout_target_field'] ) {
 
-            global $woocommerce;
- 
-            if ( !empty( $this->session ) ) {
-                
-                foreach ($this->session as $key => $args) {
-                    $woocommerce->session->set( $key , $args[ 'field_value' ] );
-                }
+						return esc_attr( $woocommerce->session->get( $session_key ) );
 
-            }
+					}
+				}
+			}
 
-        }
+		}
 
-        public function pre_populate_checkout($input, $key ) {
-            global $woocommerce;
-            global $current_user;
 
-            if ( !empty( $this->session ) ) {
-                
-                foreach ($this->session as $session_key => $args) {
+		/**
+		 * This captures additional posted information (all sent in one array).
+		 *
+		 * @param array   $cart_item_data Cart's item's data.
+		 * @param integer $product_id Product's ID.
+		 *
+		 * @return array An array of cart's item's data.
+		 */
+		public function add_item_data( $cart_item_data, $product_id ) {
 
-                    if ( empty( $args[ 'checkout_target_field' ] ) || 'no' === $args[ 'checkout_target_field' ] ) {
-                        continue;
-                    }
+			global $woocommerce;
+			$new_value = array();
 
-                    if ( $key === $args[ 'checkout_target_field' ] ) {
+			$custom_options = array();
 
-                        return esc_attr( $woocommerce->session->get( $session_key ) );
+			if ( ! empty( $this->session ) ) {
 
-                    }
+				foreach ( $this->session as $session_key => $args ) {
 
-                }
+					if ( empty( $args['as_cart_item_data'] ) || 'yes' !== $args['as_cart_item_data'] ) {
 
-            }
+						continue;
 
-        }
+					}
 
+					$custom_options[ $session_key ] = $args['field_value'];
 
-        /**
-         * This captures additional posted information (all sent in one array).
-         */ 
-        public function add_item_data($cart_item_data, $product_id) {
+				}
+			}
 
-            global $woocommerce;
-            $new_value = array();
-            
-            $custom_options = array();
+			$new_value['_custom_options'] = $custom_options;
 
-            if ( !empty( $this->session ) ) {
+			if ( empty( $cart_item_data ) ) {
 
-                foreach ($this->session as $session_key => $args) {
+				$v = $new_value;
 
-                    if( empty( $args[ 'as_cart_item_data' ] ) || 'yes' !== $args[ 'as_cart_item_data' ] ){
+			} else {
 
-                        continue;
+				$v = array_merge( $cart_item_data, $new_value );
+			}
 
-                    }
+			return $v;
+		}
 
-                    $custom_options[ $session_key ] = $args[ 'field_value' ];
 
-                }
+		/**
+		 * This captures the information from the previous function and attaches it to the item.
+		 *
+		 * @param array  $item Cart's item'.
+		 * @param array  $values Item's values.
+		 * @param string $key Key.
+		 *
+		 * @return array An array of cart's item's data.
+		 */
+		public function get_cart_items_from_session( $item, $values, $key ) {
 
-            }
-            
-            
-            $new_value['_custom_options'] = $custom_options;
+			if ( array_key_exists( '_custom_options', $values ) ) {
+				$item['_custom_options'] = $values['_custom_options'];
+			}
 
-            if(empty($cart_item_data)) {
+			return $item;
+		}
 
-                $v = $new_value;
+		/**
+		 * Override the price you can use information saved against the product to do so
+		 *
+		 * @param object $cart_object Cart's object.
+		 */
+		public function update_custom_price( $cart_object ) {
+			foreach ( $cart_object->cart_contents as $cart_item_key => $value ) {
+				// Version 2.x.
+				// $value['data']->price = $value['_custom_options']['custom_price'];.
+				// Version 3.x / 4.x.
+				if ( ! empty( $value['_custom_options']['custom_price'] ) && 'no' !== $value['_custom_options']['custom_price'] && is_numeric( $value['_custom_options']['custom_price'] ) ) {
+					$value['data']->set_price( $value['_custom_options']['custom_price'] );
+				}
+			}
+		}
 
-            } else {
+		/**
+		 * This adds the information as meta data so that it can be seen as part of the order (to hide any meta data from the customer just start it with an underscore)
+		 *
+		 * @param string $item_id Item's ID.
+		 * @param array  $values Item's values.
+		 */
+		public function add_values_to_order_item_meta( $item_id, $values ) {
+			global $woocommerce,$wpdb;
 
-                $v = array_merge($cart_item_data, $new_value);
-            }
-            
-            return $v;
-        }
-    
+			if ( ! empty( $this->session ) && ! empty( $values['_custom_options'] ) ) {
 
-        /**
-         * This captures the information from the previous function and attaches it to the item.
-         */ 
-        public function get_cart_items_from_session($item, $values, $key) {
+				foreach ( $this->session as $session_key => $args ) {
 
-            if (array_key_exists( '_custom_options', $values ) ) {
-                $item['_custom_options'] = $values['_custom_options'];
-            }
+					$val = $values['_custom_options'][ $session_key ];
 
-            return $item;
-        }
+					if ( empty( $args['as_order_item_meta'] ) || 'yes' !== $args['as_order_item_meta'] ) {
+						continue;
+					}
 
-        /**
-         * Override the price you can use information saved against the product to do so
-         */
-        public function update_custom_price( $cart_object ) {
-            foreach ( $cart_object->cart_contents as $cart_item_key => $value ) {       
-                // Version 2.x
-                //$value['data']->price = $value['_custom_options']['custom_price'];
-                // Version 3.x / 4.x
-                if ( !empty( $value['_custom_options']['custom_price'] ) && 'no' !== $value['_custom_options']['custom_price']  && is_numeric( $value['_custom_options']['custom_price'] ) ) {
-                    $value['data']->set_price( $value['_custom_options']['custom_price'] );
-                }
-                
-            }
-        }
+					if ( empty( $args['order_visible'] ) || 'yes' !== $args['order_visible'] ) {
 
-        /**
-         * This adds the information as meta data so that it can be seen as part of the order (to hide any meta data from the customer just start it with an underscore)
-         */ 
-        public function add_values_to_order_item_meta($item_id, $values) {
-            global $woocommerce,$wpdb;
-            
-            if ( !empty( $this->session ) && !empty( $values['_custom_options'] )) {
-                    
-                foreach ($this->session as $session_key => $args) {
+						$item_meta_key = '_' . $session_key;
 
-                    $val = $values['_custom_options'][ $session_key ];
+					} else {
+						$item_meta_key = $session_key;
+					}
 
-                    if ( empty( $args[ 'as_order_item_meta' ] ) || 'yes' !== $args[ 'as_order_item_meta' ] ) {
-                        continue;
-                    }
-                    
-                    if( empty( $args[ 'order_visible' ] ) || 'yes' !== $args[ 'order_visible' ] ){
+					wc_add_order_item_meta( $item_id, $item_meta_key, $val );
 
-                        $item_meta_key = '_' . $session_key;
+				}
+			}
 
-                    }else{
-                        $item_meta_key = $session_key;
-                    }
+		}
 
-                    wc_add_order_item_meta($item_id, $item_meta_key, $val);
-                    
-                }
+		/**
+		 * Change displayed label for specific order item meta key.
+		 *
+		 * @param string $display_key Meta's display key.
+		 * @param object $meta Meta's object.
+		 *
+		 * @return string Meta's display key.
+		 */
+		public function order_item_display_meta_key( $display_key, $meta ) {
 
-            }
-            
-        }
+			if ( ! empty( $this->session ) ) {
 
-        /**
-         * Change displayed label for specific order item meta key
-         */ 
-        public function order_item_display_meta_key( $display_key, $meta, $item ) {
+				foreach ( $this->session as $session_key => $args ) {
 
-            if ( !empty( $this->session ) ) {
+					if ( $meta->key === $session_key ) {
 
-                foreach ($this->session as $session_key => $args) {
+						if ( ! empty( $args['order_meta_label'] ) ) {
+							return $args['order_meta_label'];
+						}
 
-                    if( $meta->key === $session_key ) {
+						return $display_key;
 
-                        if ( !empty( $args[ 'order_meta_label' ] )  ) {
-                            return $args[ 'order_meta_label' ];
-                        }
+					}
+				}
+			}
 
-                        return $display_key;
+			return $display_key;
 
-                    }
-                }
-
-            }
-            
-            return $display_key;
-        
-        }
-    }
+		}
+	}
 
 }

@@ -51,7 +51,7 @@ if ( ! class_exists( 'ANONY_PHPOFFICE_HELP' ) ) {
 			$sheet = $spreadsheet->setActiveSheetIndex( 0 )
 				->setCellValue( 'A1', 'Book codes' );
 
-			$sheet->fromArray([$array], NULL, 'A2');
+			$sheet->fromArray( array( $array ), null, 'A2' );
 
 			// Rename worksheet.
 			$spreadsheet->getActiveSheet()->setTitle( 'Book codes' );

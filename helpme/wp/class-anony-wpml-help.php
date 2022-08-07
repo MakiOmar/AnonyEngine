@@ -306,7 +306,7 @@ if ( ! class_exists( 'ANONY_Wpml_Help' ) ) {
 		 * @param array $translated_post_terms An array of taxonomies as its keys and terms' IDs as values.
 		 * @param int   $new_post_id The ID of the post.
 		 */
-		public static function set_translated_post_terms( array $translated_post_terms, int $new_post_id ) {
+		public static function set_translated_post_terms( array $translated_post_terms, $new_post_id ) {
 
 			ANONY_Post_Help::set_post_terms( $translated_post_terms, $new_post_id );
 		}

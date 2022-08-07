@@ -139,7 +139,7 @@ if ( ! class_exists( 'ANONY_Wp_Misc_Help' ) ) {
 
 			$engine_options = ANONY_Options_Model::get_instance( ANONY_ENGINE_OPTIONS );
 
-			if ( !empty( $engine_options->google_maps_api_key ) && '1' === $engine_options->enable_google_maps_script ) {
+			if ( ! empty( $engine_options->google_maps_api_key ) && '1' === $engine_options->enable_google_maps_script ) {
 
 				$script_src = sprintf(
 					'https://maps.googleapis.com/maps/api/js?v=3.exp&key=%1$s&ver=4.9.10&language=%2$s&region=%3$s',

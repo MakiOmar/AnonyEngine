@@ -237,7 +237,7 @@ add_action( 'pre_get_posts', 'anony_search_products_by_metakey_or_title' );
  * Has the ability to get results from same category or other categories.
  */
 function anony_get_related_products_by_meta_key() {
-	$init = apply_filters( 'anony_related_products_meta_key', '' );
+	$init              = apply_filters( 'anony_related_products_meta_key', '' );
 	$relation_meta_key = apply_filters( 'anony_related_products_meta_key', '' );
 
 	if ( ! empty( $relation_meta_key ) ) {

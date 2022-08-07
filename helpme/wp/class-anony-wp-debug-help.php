@@ -76,12 +76,15 @@ if ( ! class_exists( 'ANONY_Wp_Debug_Help' ) ) {
 		 * @param string $version  The version of WordPress that deprecated the argument used.
 		 * @return void
 		 */
-		public static function deprecated_argument_run ($function, $message, $version) {
-		    error_log ('Deprecated Argument Detected');
-		    $trace = debug_backtrace ();
-		    foreach ($trace as $frame) {
-		        error_log (var_export ($frame, true));
-		    }
+		public static function deprecated_argument_run( $function, $message, $version ) {
+			// phpcs:disable WordPress.PHP.DevelopmentFunctions
+			error_log( 'Deprecated Argument Detected' );
+
+			$trace = debug_backtrace();
+			foreach ( $trace as $frame ) {
+				error_log( var_export( $frame, true ) );
+			}
+			// phpcs:enable
 		}
 
 	}

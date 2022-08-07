@@ -342,7 +342,7 @@ if ( ! class_exists( 'ANONY_Post_Help' ) ) {
 		 * @param array $post_terms An array of taxonomies as its keys and terms' IDs as values.
 		 * @param int   $post_id The ID of the post.
 		 */
-		public static function set_post_terms( array $post_terms, int $post_id ) {
+		public static function set_post_terms( array $post_terms, $post_id ) {
 
 			if ( empty( $post_terms ) ) {
 				return;

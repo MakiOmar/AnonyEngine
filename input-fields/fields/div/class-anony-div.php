@@ -51,7 +51,13 @@ class ANONY_Div {
 			}
 		}
 
-		$html .= '<div id="' . $this->parent->field['id'] . '"></div>';
+		$div_content = '';
+
+		if( !empty( $this->parent->field['content'] ) ){
+			$div_content = $this->parent->field['content'];
+		}
+
+		$html .= '<div id="' . $this->parent->field['id'] . '">' . $div_content . '</div>';
 
 		$html .= '</fieldset>';
 

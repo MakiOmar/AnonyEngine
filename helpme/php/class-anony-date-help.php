@@ -115,12 +115,35 @@ if ( ! class_exists( 'ANONY_DATE_HELP' ) ) {
 		 * @return DateInterval     Date interval object.
 		 */
 		public static function time_remaining( $date_to, $format = 'Y-m-d H:i:s' ) {
-			
-			$future_date = DateTime::createFromFormat( $format , $date_to );
+
+			$future_date = DateTime::createFromFormat( $format, $date_to );
 
 			$current_date = new DateTime();
 
-			return $future_date->diff($current_date);
+			if ( self::is_past_date( $date_to ) ) {
+				return false;
+			}
+			return $future_date->diff( $current_date );
+		}
+
+		/**
+		 * Calculate the difference between to dates.
+		 * Make sure to have time format with date formate.
+		 *
+		 * @param  string $date Date/Time string for future.
+		 * @param  string $format   Date format.
+		 * @return boolean     True if past date, otherwise false.
+		 */
+		public static function is_past_date( $date, $format = 'Y-m-d H:i:s' ) {
+			$item_date = DateTime::createFromFormat( $format, $date );
+
+			$current_date = new DateTime();
+
+			if ( $current_date > $item_date ) {
+				return true;
+			}
+
+			return false;
 		}
 
 

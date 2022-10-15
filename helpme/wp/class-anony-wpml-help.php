@@ -436,7 +436,7 @@ if ( ! class_exists( 'ANONY_Wpml_Help' ) ) {
 		 * @param  bool   $force Weather to force translation or not. This will delete exxisting translation and retranslate the post.
 		 * @return Mixed  Translated post id on success or null/wp_error on failure.
 		 */
-		public static function translate_post( $post_id, $post_type = 'post', $lang, $force = false ) {
+		public static function translate_post( $post_id, $lang, $post_type = 'post', $force = false ) {
 
 			if ( 'page' === $post_type ) {
 				return $post_id;

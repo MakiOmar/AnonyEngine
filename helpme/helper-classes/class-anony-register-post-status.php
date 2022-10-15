@@ -33,14 +33,11 @@ if ( ! class_exists( 'ANONY_Register_Post_Status' ) ) {
 		 * @param string $status_name status's name.
 		 * @param string $post_type Post's type's name.
 		 */
-		public function __construct( $status_name = '', $post_type = '' ) {
+		public function __construct( $status_name, $label, $post_type ) {
 
 			$this->status_name = $status_name;
+			$this->label       = $label;
 			$this->post_type   = $post_type;
-
-			if ( '' === $this->status_name || '' === $this->post_type ) {
-				return;
-			}
 
 			add_action( 'init', array( $this, 'status_creation' ) );
 			add_action( 'admin_footer-edit.php', array( $this, 'add_in_quick_edit' ) );
@@ -55,9 +52,9 @@ if ( ! class_exists( 'ANONY_Register_Post_Status' ) ) {
 			register_post_status(
 				$this->status_name,
 				array(
-					'label'                     => ucfirst( $this->status_name ),
+					'label'                     => $this->label ,
 					// Translators: Label count.
-					'label_count'               => ucfirst( $this->status_name ) . ' <span class="count">(%s)</span>',
+					'label_count'               => _n_noop( $this->label  . ' <span class="count">(%s)</span>', $this->label  . ' <span class="count">(%s)</span>'),
 					'public'                    => true,
 					'exclude_from_search'       => true,
 					'show_in_admin_all_list'    => true,
@@ -75,12 +72,12 @@ if ( ! class_exists( 'ANONY_Register_Post_Status' ) ) {
 				return false;
 			}
 
-			$status = ( $post->post_status === $this->status_name ) ? "jQuery( '#post-status-display' ).text( '" . ucfirst( $this->status_name ) . "' );
+			$status = ( $post->post_status === $this->status_name ) ? "jQuery( '#post-status-display' ).text( '" . $this->label  . "' );
 			jQuery( 'select[name=\"post_status\"]' ).val('" . $this->status_name . "');" : '';
 
 			echo "<script>
 			jQuery(document).ready( function() {
-			jQuery( 'select[name=\"post_status\"]' ).append( '<option value=\"" . $this->status_name . '">' . ucfirst( $this->status_name ) . "</option>' );
+			jQuery( 'select[name=\"post_status\"]' ).append( '<option value=\"" . $this->status_name . '">' . $this->label  . "</option>' );
 			" . $status . '
 			});
 			</script>';
@@ -96,7 +93,7 @@ if ( ! class_exists( 'ANONY_Register_Post_Status' ) ) {
 			}
 			echo "<script>
 			jQuery(document).ready( function() {
-			jQuery( 'select[name=\"_status\"]' ).append( '<option value=\"" . $this->status_name . '">' . ucfirst( $this->status_name ) . "</option>' );
+			jQuery( 'select[name=\"_status\"]' ).append( '<option value=\"" . $this->status_name . '">' . $this->label  . "</option>' );
 			});
 			</script>";
 		}
@@ -117,11 +114,11 @@ if ( ! class_exists( 'ANONY_Register_Post_Status' ) ) {
 
 					echo "<script>
 					jQuery(document).ready( function() {
-					jQuery( '#post-status-display' ).text( '" . ucfirst( $this->status_name ) . "' );
+					jQuery( '#post-status-display' ).text( '" . $this->label  . "' );
 					});
 					</script>";
 
-					return array( ucfirst( $this->status_name ) );
+					return array( $this->label  );
 				}
 			}
 			return $states;
@@ -140,9 +137,9 @@ if ( ! class_exists( 'ANONY_Register_Post_Status' ) ) {
 
 				if ( $post->post_status === $this->status_name ) {
 					$complete = ' selected=\"selected\"';
-					$label    = ucfirst( $this->status_name );
+					$label    = $this->label ;
 				}
-				$uppercase = ucfirst( $this->status_name );
+				$uppercase = $this->label ;
 
 				ob_start();?>
 					jQuery(document).ready(function($){

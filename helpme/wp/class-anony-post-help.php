@@ -73,7 +73,7 @@ if ( ! class_exists( 'ANONY_Post_Help' ) ) {
 
 			if ( ANONY_Wp_Plugin_Help::is_active( $wpml_plugin ) && function_exists( 'icl_get_languages' ) ) {
 
-				return ANONY_Wpml_Help::query_post_typeSimple( $post_type );
+				return ANONY_Wpml_Help::query_post_type_simple( $post_type );
 			}
 
 			global $wpdb;
@@ -415,6 +415,26 @@ if ( ! class_exists( 'ANONY_Post_Help' ) ) {
 		}
 
 		/**
+		 * Copy Post's meta to another post.
+		 *
+		 * @return [array] An array of post types as ( 'post_type_name' => post_type_lable ).
+		 */
+		public static function copy_post_meta ( $original_post_id, $target_post_id ) {
+			// Copy post metadata.
+			$data = get_post_custom( $original_post_id );
+			foreach ( $data as $key => $values ) {
+
+				if ( '_wp_old_slug' === $key || '_thumbnail_id' === $key ) { // do nothing for this meta key.
+					continue;
+				}
+
+				foreach ( $values as $value ) {
+					add_post_meta( $target_post_id, $key, maybe_unserialize( $value ) );// it is important to unserialize data to avoid conflicts.
+				}
+			}
+		}
+
+		/**
 		 * Get a list of public post types.
 		 *
 		 * @return [array] An array of post types as ( 'post_type_name' => post_type_lable ).
@@ -555,7 +575,7 @@ if ( ! class_exists( 'ANONY_Post_Help' ) ) {
 					),
 				);
 
-				register_post_type( lcfirst( $custom_post ), $args );
+				register_post_type( lcfirst( $custom_post ), apply_filters( "anony_{$custom_post}_args", $args ) );
 			}
 		}
 

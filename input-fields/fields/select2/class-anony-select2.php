@@ -35,7 +35,8 @@ class ANONY_Select2 {
 
 		$autocomplete = ( isset( $this->parent->field['auto-complete'] ) && $this->parent->field['auto-complete'] == 'on' ) ? 'autocomplete="on"' : 'autocomplete="off"';
 
-		if ( isset( $this->parent->field['multiple'] ) && $this->parent->field['multiple'] ) {
+		if ( isset( $this->parent->field['multiple'] ) && $this->parent->field['multiple'] ) 
+		{
 			$multiple                 = ' multiple ';
 			$this->parent->input_name = $this->parent->input_name . '[]';
 

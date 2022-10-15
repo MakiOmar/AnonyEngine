@@ -161,6 +161,15 @@ fieldset .anony-form-heading{
 .anony-label{
    font-weight: bold;
    margin: 15px;
+   vertical-align:top;
+}
+.input-field-description{
+	padding: 20px;
+	background-color: #fbeccf;
+	border-radius: 10px;
+	box-shadow: 1px -1px 5px 0px rgba(156,156,156,0.27);
+	-webkit-box-shadow: 1px -1px 5px 0px rgba(156,156,156,0.27);
+	-moz-box-shadow: 1px -1px 5px 0px rgba(156, 156, 156, 0.27);
 }
 .icon{
 	margin: 5px;
@@ -387,7 +396,7 @@ input[type=tel]{
 	background-color: #9A3E4B;
 }
 
-.has-switch label {
+.form-table td fieldset .has-switch label,.postbox fieldset .has-switch label {
 	border: 4px solid #230005;
 	border-radius: 50%;
 	float: left;
@@ -396,7 +405,7 @@ input[type=tel]{
 	vertical-align: middle;
 	width: 29px;
 	z-index: 100;
-	margin: 0 -15px 0 -14px;
+	margin: 0 -15px 0 -14px!important;
 	padding: 0;
 	-webkit-transition: .25s ease-out;
 	-moz-transition: .25s ease-out;

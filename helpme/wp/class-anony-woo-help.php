@@ -642,6 +642,24 @@ if ( ! class_exists( 'ANONY_Woo_Help' ) ) {
 
 			return $countries_obj->get_states( $default_country );
 		}
+
+		/**
+		 * Get best selling products.
+		 *
+		 * @return Object WP_Query object.
+		 */
+		public static function best_sellers( $posts_per_page = 4 ) {
+			$args = array(
+			    'post_type' => 'product',
+			    'meta_key' => 'total_sales',
+			    'orderby' => 'meta_value_num',
+			    'posts_per_page' => $posts_per_page,
+			);
+
+			$query = new WP_Query( $args );
+			wp_reset_query();
+			return $query;
+		}
 	}
 }
 

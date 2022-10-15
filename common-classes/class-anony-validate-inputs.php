@@ -261,20 +261,7 @@ if ( ! class_exists( 'ANONY_Validate_Inputs' ) ) {
 		 * Check through multiple options (select, radio, multi-checkbox)
 		 */
 		public function valid_multiple_options() {
-
-			// If checked/selected multiple options.
-			if ( is_array( $this->value ) ) {
-
-				foreach ( $this->value as $value ) {
-					$this->value = $value;
-					$this->valid_no_html();
-				}
-
-				// If checked/selected one option e.g. radio.
-			} else {
-
-				$this->valid_no_html();
-			}// if level 1.
+			$this->valid_no_html();
 
 		}//end valid_multiple_options()
 
@@ -283,7 +270,7 @@ if ( ! class_exists( 'ANONY_Validate_Inputs' ) ) {
 		 */
 		public function valid_html() {
 
-			$this->value = wp_kses_post( $this->value );
+			$this->value = $this->value;
 		}//end valid_html()
 
 

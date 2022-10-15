@@ -516,7 +516,7 @@ if ( ! class_exists( 'ANONY_Theme_Settings' ) ) {
 				return;
 			}?>
 
-			<div id="anony-options-wrapper">
+			<div id="anony-options-wrapper" class="anony-form">
 				<h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
 
 				<form action="options.php" method="post" enctype="multipart/form-data" autocomplete="off">

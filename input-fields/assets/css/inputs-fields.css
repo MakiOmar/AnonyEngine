@@ -505,7 +505,7 @@ input[type=tel]{
 	display: flex;
 	flex-direction: column;
 }
-.wp-core-ui .button-primary {
+.anony-form .button-primary {
 	background: #d1354b;
 	border-color: #d1354b #d1354b #d1354b;
 	box-shadow: 0 1px 0 #d1354b;

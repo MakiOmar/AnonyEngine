@@ -15,6 +15,13 @@
 defined( 'ABSPATH' ) || die(); // Exit if accessed direct.
 
 /**
+ * Holds plugin's slug
+ *
+ * @const
+ */
+define( 'ANOE_PLUGIN_SLUG', plugin_basename(__FILE__) );
+
+/**
  * Holds plugin PATH
  *
  * @const
@@ -38,10 +45,20 @@ define( 'ANOE_FUNC_DIR', ANOE_DIR . 'functions/' );
 
 require ANOE_DIR . 'vendor/autoload.php';
 
+require ANOE_DIR . 'plugin-update-checker/plugin-update-checker.php';
 
 require_once ANOE_LIBS_URI . 'fonts.php';
 
 require_once wp_normalize_path( ANOE_DIR . 'config.php' );
+
+$anonyengine_update_checker = Puc_v4_Factory::buildUpdateChecker(
+    'https://github.com/MakiOmar/AnonyEngine/',
+    __FILE__,
+    ANOE_PLUGIN_SLUG
+);
+
+//Set the branch that contains the stable release.
+$anonyengine_update_checker->setBranch('master');
 
 /**
  * Enqueue admin/frontend common scripts.

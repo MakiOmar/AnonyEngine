@@ -208,5 +208,55 @@ if ( ! class_exists( 'ANONY_Wp_Misc_Help' ) ) {
 				}
 			}
 		}
+
+		/**
+		 * Get lis to js files loaded with a post/page.
+		 * 
+		 * @param int $post_id Post's ID.
+		 * 
+		 * @return array An array of js files urls.
+		 */ 
+		public static function get_post_scripts( $post_id ) {
+			
+		    // Let's get the content of post number 123
+		    $response = wp_remote_get( get_the_permalink($post_id) );
+
+		    // An empty array to store all the 'srcs'
+			$scripts_array = [];
+
+		    if ( is_array( $response ) ) {
+
+		      $content = $response['body'];
+
+		      $document = new DOMDocument();
+
+		      $document->loadHTML( $content );
+
+		      // Store every script's source inside the array.
+		      foreach( $document->getElementsByTagName('script') as $script ) {
+
+		        if( $script->hasAttribute('src') ) {
+
+		          $scripts_array[] = $script->getAttribute('src');
+
+		        }
+
+		      }
+
+		    }
+
+		    return $scripts_array;
+
+		}
+
+		public static function list_post_scripts () {
+			global $post;
+
+			if ( !$post || is_null( $post ) ) {
+				return array();
+			}
+
+			return self::get_post_scripts( $post->ID );
+		}
 	}
 }

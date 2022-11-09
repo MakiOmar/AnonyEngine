@@ -22,6 +22,8 @@ class ANONY_Checkbox {
 		}
 
 		$this->parent = $parent;
+	
+		error_log(print_r($options, true));
 
 		$this->data = array(
 
@@ -63,3 +65,5 @@ class ANONY_Checkbox {
 
 
 }
+
+?>

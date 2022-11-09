@@ -24,6 +24,16 @@ if ( ! class_exists( 'ANONY_TERM_HELP' ) ) {
 	class ANONY_TERM_HELP extends ANONY_HELP {
 
 		/**
+		 * Gets an array of term's post types.
+		 *
+		 * @return array An indexed array of post types.
+		 */
+		public static function get_term_post_type()
+		{
+			return get_taxonomy(get_queried_object()->taxonomy)->object_type
+		}
+
+		/**
 		 * Gets an array of human readable terms slug names by taxonomy.
 		 *
 		 * Use instead of get_terms for admin purpuses.

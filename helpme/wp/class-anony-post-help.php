@@ -377,7 +377,7 @@ if ( ! class_exists( 'ANONY_Post_Help' ) ) {
 
 			unset( $oldpost['ID'], $oldpost['guid'] );
 
-			$oldpost = ANONY_WPARRAY_HELP::wpParseArgs( $oldpost, $args );
+			$oldpost = ANONY_Wp_Array_Help::parse_args( $oldpost, $args );
 
 			$new_post_id = wp_insert_post( $oldpost );
 

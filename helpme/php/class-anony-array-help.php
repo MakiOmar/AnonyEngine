@@ -165,6 +165,20 @@ if ( ! class_exists( 'ANONY_ARRAY_HELP' ) ) {
 			return array_map( array( self, 'object_to_array' ), (array) $object );
 		}
 
+		public static function convert_object_to_array($data) {
+
+		    if (is_object($data)) {
+		        $data = get_object_vars($data);
+		    }
+
+		    if (is_array($data)) {
+		        return array_map(__FUNCTION__, $data);
+		    }
+		    else {
+		        return $data;
+		    }
+		}
+
 		/**
 		 *  Check if a value exists in the array/object.
 		 *
@@ -282,6 +296,25 @@ if ( ! class_exists( 'ANONY_ARRAY_HELP' ) ) {
 					$result[''][] = $val;
 				}
 			}
+
+			return $result;
+		}
+
+		/**
+		 * Get first key/value pair.
+		 *
+		 * @param array $my_array Target array.
+		 * @param array
+		 */
+		public static function array_1st_element($my_array)
+		{
+			if( empty( $my_array ) ) return $my_array;
+			
+			list($k) = array_keys($my_array);
+
+			$result  = array( $k => $my_array[$k] );
+
+			unset($my_array[$k]);
 
 			return $result;
 		}

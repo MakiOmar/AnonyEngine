@@ -571,7 +571,7 @@ if ( ! class_exists( 'ANONY_Wpml_Help' ) ) {
 		 *
 		 * @param  string $lang Language of translation.
 		 * @param  string $post_type Post type.
-		 * @param  bool   $force This forcely deletes ol connections in icl_translations table.
+		 * @param  bool   $force This forcely deletes old connections in icl_translations table.
 		 */
 		public static function bulk_translate_posts( $lang, $post_type = 'post', $force = false ) {
 

@@ -220,7 +220,7 @@ if ( ! class_exists( 'ANONY_Wp_Misc_Help' ) ) {
 			
 		    // Let's get the content of post number 123
 		    $response = wp_remote_get( get_the_permalink($post_id) );
-
+		    
 		    // An empty array to store all the 'srcs'
 			$scripts_array = [];
 
@@ -237,7 +237,7 @@ if ( ! class_exists( 'ANONY_Wp_Misc_Help' ) ) {
 
 		        if( $script->hasAttribute('src') ) {
 
-		          $scripts_array[] = $script->getAttribute('src');
+		          $scripts_array[$script->getAttribute('src')] = array( 'title' => $script->getAttribute('src') );
 
 		        }
 
@@ -257,6 +257,15 @@ if ( ! class_exists( 'ANONY_Wp_Misc_Help' ) ) {
 			}
 
 			return self::get_post_scripts( $post->ID );
+		}
+
+		/**
+		 * Get the current archive post type name (e.g: post, page, product).
+		 *
+		 * @return String|Boolean  The archive post type name or false if not in an archive page.
+		 */
+		public static  function get_archive_post_type() {
+		    return is_archive() ? get_queried_object()->name : false;
 		}
 	}
 }

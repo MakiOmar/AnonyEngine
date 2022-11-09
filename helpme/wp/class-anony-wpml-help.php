@@ -583,6 +583,7 @@ if ( ! class_exists( 'ANONY_Wpml_Help' ) ) {
 				array(
 					'fields'         => 'ids', // Only get post IDs.
 					'posts_per_page' => -1,
+					'post_type'      =>  $post_type
 				)
 			);
 

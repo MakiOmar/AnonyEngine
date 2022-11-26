@@ -26,6 +26,23 @@ if ( ! class_exists( 'ANONY_Post_Help' ) ) {
 	class ANONY_Post_Help extends ANONY_HELP {
 
 		/**
+		 * Check if post type's edit screen.
+		 *
+		 * @param string $post_type Post's type.
+		 * @return bool
+		 */
+		public function is_edit_post_screen( $post_type )
+		{
+			global $pagenow, $post;
+
+			if ( !$pagenow || !in_array($pagenow, array( 'post-new.php', 'post.php' )) || $post_type !== $post->post_type ){
+				return false;
+			}
+
+			return true;
+		}
+
+		/**
 		 * Get all meta keys for post by id.
 		 *
 		 * @param int $post_id Post's ID..

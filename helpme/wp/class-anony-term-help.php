@@ -30,7 +30,7 @@ if ( ! class_exists( 'ANONY_TERM_HELP' ) ) {
 		 */
 		public static function get_term_post_type()
 		{
-			return get_taxonomy(get_queried_object()->taxonomy)->object_type
+			return get_taxonomy(get_queried_object()->taxonomy)->object_type;
 		}
 
 		/**

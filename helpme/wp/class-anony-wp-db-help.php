@@ -198,5 +198,26 @@ if ( ! class_exists( 'ANONY_Wp_Db_Help' ) ) {
 			// phpcs:enable.
 			return $result;
 		}
+
+		public function delete_posts_of_type( $post_type )
+		{
+			global $wpdb;
+
+			$result = $wpdb->query( $wpdb->prepare( "DELETE a,b,c\n"
+
+				    . "    FROM {$wpdb->prefix}_posts a\n"
+
+				    . "    LEFT JOIN {$wpdb->prefix}_term_relationships b\n"
+
+				    . "        ON (a.ID = b.object_id)\n"
+
+				    . "    LEFT JOIN {$wpdb->prefix}_postmeta c\n"
+
+				    . "        ON (a.ID = c.post_id)\n"
+
+				    . "    WHERE a.post_type = \'%s\'" ), $post_type );
+
+
+		}
 	}
 }

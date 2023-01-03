@@ -221,4 +221,25 @@ jQuery(document).ready(function($){
 		const regexpUnicodeModified = /\p{RI}\p{RI}|\p{Emoji}(\p{EMod}+|\u{FE0F}\u{20E3}?|[\u{E0020}-\u{E007E}]+\u{E007F})?(\u{200D}\p{Emoji}(\p{EMod}+|\u{FE0F}\u{20E3}?|[\u{E0020}-\u{E007E}]+\u{E007F})?)+|\p{EPres}(\p{EMod}+|\u{FE0F}\u{20E3}?|[\u{E0020}-\u{E007E}]+\u{E007F})?|\p{Emoji}(\p{EMod}+|\u{FE0F}\u{20E3}?|[\u{E0020}-\u{E007E}]+\u{E007F})/gu
 		return sentence.match(regexpUnicodeModified);
 	}
+
+	$.fn.dateTimeInputNextDay = function(element){
+		// Using Date.parse to covert datetime string to timestamp.
+		var selectedDate = Date.parse(element.val()),
+		var currentDate      = new Date(selectedDate + 24 * 60 * 60 * 1000);	
+		var day              = currentDate.getDate(),
+		month                = currentDate.getMonth() + 1,
+		year                 = currentDate.getFullYear(),
+		hour                 = currentDate.getHours(),
+		min                  = currentDate.getMinutes();
+
+		month                = (month < 10 ? "0" : "") + month;
+		day                  = (day < 10 ? "0" : "") + day;
+		hour                 = (hour < 10 ? "0" : "") + hour;
+		min                  = (min < 10 ? "0" : "") + min;
+
+		var today            = year + "-" + month + "-" + day,
+		displayTime          = hour + ":" + min;
+
+		return today + 'T' + displayTime;
+	}
 });

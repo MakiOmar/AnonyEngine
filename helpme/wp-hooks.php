@@ -305,3 +305,22 @@ function disable_all_deprecated_warnings($bolean) {
 	}
     return true;
 }
+
+add_action('woocommerce_order_status_changed', 'remove_order_status_change_notes', 10, 3);
+function remove_order_status_change_notes($order_id, $status_from, $status_to)
+{
+	$enabled = false;
+	if( !$enabled )
+	{
+		return;
+	}
+    $transition_note = sprintf( __( 'Order status changed from %1$s to %2$s.', 'woocommerce' ), wc_get_order_status_name($status_from), wc_get_order_status_name($status_to) );
+    add_filter('woocommerce_new_order_note_data', function ($args) use ($transition_note)
+    {
+        if ($args['comment_content'] ===  $transition_note) {
+            return [];
+        } else {
+            return $args;
+        }
+    });
+}

@@ -26,6 +26,30 @@ if ( ! class_exists( 'ANONY_Woo_Help' ) ) {
 	class ANONY_Woo_Help extends ANONY_HELP {
 
 		/**
+		 * Get all approved WooCommerce order notes.
+		 *
+		 * @param  int|string $order_id The order ID.
+		 * @return array      $notes    The order notes, or an empty array if none.
+		 */
+		public static function get_order_notes( $order_id ) {
+
+			remove_filter( 'comments_clauses', array( 'WC_Comments', 'exclude_order_comments' ) );
+
+			$comments = get_comments( array(
+				'post_id' => $order_id,
+				'orderby' => 'comment_ID',
+				'order'   => 'DESC',
+				'approve' => 'approve',
+				'type'    => 'order_note',
+			) );
+
+			$notes = wp_list_pluck( $comments, 'comment_content' );
+
+			add_filter( 'comments_clauses', array( 'WC_Comments', 'exclude_order_comments' ) );
+
+			return $notes;
+		}
+		/**
 		 * Get customer's paid orders
 		 *
 		 * @param int $user_id Customer's ID.

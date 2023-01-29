@@ -27,6 +27,7 @@ if ( ! class_exists( 'ANONY_Woo_Help' ) ) {
 
 		/**
 		 * Get all approved WooCommerce order notes.
+		 * wc_get_order_notes can be used instead. for more accurate results.
 		 *
 		 * @param  int|string $order_id The order ID.
 		 * @return array      $notes    The order notes, or an empty array if none.

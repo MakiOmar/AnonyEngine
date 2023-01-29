@@ -31,7 +31,7 @@ if ( ! class_exists( 'ANONY_Post_Help' ) ) {
 		 * @param string $post_type Post's type.
 		 * @return bool
 		 */
-		public function is_edit_post_screen( $post_type )
+		public static function is_edit_post_screen( $post_type )
 		{
 			global $pagenow, $post;
 
@@ -42,6 +42,26 @@ if ( ! class_exists( 'ANONY_Post_Help' ) ) {
 			return true;
 		}
 
+		public static function remove_post_status_in_edit_posts_screen($post_type, $post_statuses) {
+
+			add_filter("views_edit-{$post_type}", function( $views ){
+				if (is_array( $post_statuses )) {
+					foreach( $post_statuses as $post_statuse){
+						unset($views[$post_status]);
+		  				
+					}
+				}
+		  		return $views;
+			});
+		}
+		
+		public static function available_post_statuses_in_admin( $post_type, $post_statuses ){
+			if(is_admin() && $query->is_main_query() && $query->get('post_type') == "e_quotation" && is_array( $post_statuses ) && !empty( $post_statuses )) {
+				$post_statuses = $query->get('post_status');
+				
+		        $query->set('post_status',$post_statuses );
+		    }
+		}
 		/**
 		 * Get all meta keys for post by id.
 		 *

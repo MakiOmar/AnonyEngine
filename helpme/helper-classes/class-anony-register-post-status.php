@@ -14,6 +14,7 @@ defined( 'ABSPATH' ) || die(); // Exit if accessed direct.
 
 // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
 if ( ! class_exists( 'ANONY_Register_Post_Status' ) ) {
+	
 
 	/**
 	 * Register custom status for post type class.
@@ -87,15 +88,17 @@ if ( ! class_exists( 'ANONY_Register_Post_Status' ) ) {
 		 * Add in quick edit
 		 */
 		public function add_in_quick_edit() {
-			global $post;
-			if ( $this->post_type !== $post->post_type ) {
-				return false;
+			global $pagenow;
+			if (( $pagenow == 'post.php' ) || (get_post_type() == $this->post_type )) {
+
+				echo "<script>
+				jQuery(document).ready( function() {
+				jQuery( 'select[name=\"_status\"]' ).append( '<option value=\"" . $this->status_name . '">' . $this->label  . "</option>' );
+				});
+				</script>";
 			}
-			echo "<script>
-			jQuery(document).ready( function() {
-			jQuery( 'select[name=\"_status\"]' ).append( '<option value=\"" . $this->status_name . '">' . $this->label  . "</option>' );
-			});
-			</script>";
+			
+			
 		}
 
 		/**

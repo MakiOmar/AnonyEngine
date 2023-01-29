@@ -220,14 +220,14 @@ if ( ! class_exists( 'ANONY_Wp_Misc_Help' ) ) {
 			
 		    // Let's get the content of post number 123
 		    $response = wp_remote_get( get_the_permalink($post_id) );
-		    
+		   
 		    // An empty array to store all the 'srcs'
 			$scripts_array = [];
 
 		    if ( is_array( $response ) ) {
 
 		      $content = $response['body'];
-
+		       
 		      $document = new DOMDocument();
 
 		      $document->loadHTML( $content );
@@ -250,13 +250,18 @@ if ( ! class_exists( 'ANONY_Wp_Misc_Help' ) ) {
 		}
 
 		public static function list_post_scripts () {
-			global $post;
+			if (defined( 'DOING_AJAX' ) && DOING_AJAX ) {
+				return;
+			}
+			
 
-			if ( !$post || is_null( $post ) ) {
-				return array();
+			if ( !empty( $_GET['post'] ) ) {
+				
+				return self::get_post_scripts( $_GET['post'] );
 			}
 
-			return self::get_post_scripts( $post->ID );
+			return array();
+			
 		}
 
 		/**

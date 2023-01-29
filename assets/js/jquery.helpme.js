@@ -224,7 +224,7 @@ jQuery(document).ready(function($){
 
 	$.fn.dateTimeInputNextDay = function(element){
 		// Using Date.parse to covert datetime string to timestamp.
-		var selectedDate = Date.parse(element.val()),
+		var selectedDate = Date.parse(element.val());
 		var currentDate      = new Date(selectedDate + 24 * 60 * 60 * 1000);	
 		var day              = currentDate.getDate(),
 		month                = currentDate.getMonth() + 1,

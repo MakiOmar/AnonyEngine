@@ -340,6 +340,43 @@ if ( ! class_exists( 'ANONY_TERM_HELP' ) ) {
 		}
 
 		/**
+		 * Groups top level terms with their children.
+		 *
+		 * @param  array $args Arguments required for get_terms.
+		 * @return array Groupped terms by IDs.
+		 */
+		public static function top_level_terms_children_merged( $args ) {
+
+			$args['parent'] = 0;
+			$categories     = get_terms( $args );
+
+			$grouped = array();
+
+			$no_children = array();
+
+			foreach ( $categories as $category ) {
+			    
+			    $children_args = $args;
+			    
+		        $children_args['parent'] = $category->term_id;
+		        
+				$children = get_terms(  $children_args );
+
+				if ( empty( $children ) ) {
+					$no_children[] = array( 'ID' => $category->term_id, 'name' => $category->name )  ;
+				} else {
+				    foreach( $children as $child ){
+				        $grouped[] = array( 'ID' => $child->term_id, 'name' => $child->name ) 
+				            ;
+				    }
+					
+				}
+			}
+
+			return  array_merge($no_children,$grouped);
+		}
+
+		/**
 		 * Render top level terms as parent/children groups.
 		 *
 		 * @param  array $args       Arguments required for get_terms.

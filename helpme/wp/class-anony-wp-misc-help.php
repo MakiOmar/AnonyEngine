@@ -227,6 +227,11 @@ if ( ! class_exists( 'ANONY_Wp_Misc_Help' ) ) {
 		    if ( is_array( $response ) ) {
 
 		      $content = $response['body'];
+
+		      if( !$content || empty( $content ) )
+		      {
+		      	return $scripts_array;
+		      }
 		       
 		      $document = new DOMDocument();
 

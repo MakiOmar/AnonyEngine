@@ -297,7 +297,7 @@ add_filter('deprecated_file_trigger_error',     'disable_all_deprecated_warnings
 add_filter( 'deprecated_hook_trigger_error',    'disable_all_deprecated_warnings');
 
 function disable_all_deprecated_warnings($bolean) {
-	$enabled = false;
+	$enabled = apply_filters( 'disable_all_deprecated_warnings', false );
 
 	if( $enabled )
 	{

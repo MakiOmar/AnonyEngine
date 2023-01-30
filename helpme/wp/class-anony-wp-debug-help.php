@@ -87,5 +87,13 @@ if ( ! class_exists( 'ANONY_Wp_Debug_Help' ) ) {
 			// phpcs:enable
 		}
 
+		public static function suppress_deprecated_notices()
+		{
+			add_filter('deprecated_function_trigger_error', '__return_false');
+			add_filter('deprecated_argument_trigger_error', '__return_false');
+			add_filter('deprecated_file_trigger_error',     '__return_false');
+			add_filter( 'deprecated_hook_trigger_error',    '__return_false');
+		}
+
 	}
 }

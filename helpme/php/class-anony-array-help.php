@@ -162,7 +162,7 @@ if ( ! class_exists( 'ANONY_ARRAY_HELP' ) ) {
 			if ( ! is_object( $object ) || ! is_array( $object ) ) {
 				return $object;
 			}
-			return array_map( array( self, 'object_to_array' ), (array) $object );
+			return array_map( array( self, 'convert_object_to_array' ), (array) $object );
 		}
 
 		public static function convert_object_to_array($data) {

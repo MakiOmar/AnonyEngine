@@ -41,9 +41,9 @@ if ( $note ) :?>
 			$checked = ( is_array( $value ) && in_array( $opt, $value ) ) ? ' checked="checked"' : '';
 			?>
 
-			<label class="anony-inputs-row"> <?php echo $title; ?> 
+			<label class="anony-inputs-row"> 
 						
-				<input type="checkbox" class="checkbox <?php echo $class; ?>" id="<?php echo $id; ?>[<?php echo $opt; ?>]" name="<?php echo $name; ?>[]" value="<?php echo $opt; ?>"<?php echo $checked; ?><?php echo $disabled; ?>/>
+				<input type="checkbox" class="checkbox <?php echo $class; ?>" id="<?php echo $id; ?>[<?php echo $opt; ?>]" name="<?php echo $name; ?>[]" value="<?php echo $opt; ?>"<?php echo $checked; ?><?php echo $disabled; ?>/><?php echo $title; ?>
 
 			</label>
 

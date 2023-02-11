@@ -242,7 +242,7 @@ if ( ! class_exists( 'ANONY_Wp_Misc_Help' ) ) {
 
 		        if( $script->hasAttribute('src') ) {
 
-		          $scripts_array[$script->getAttribute('src')] = array( 'title' => $script->getAttribute('src') );
+		          $scripts_array[$script->getAttribute('src')] =  $script->getAttribute('src');
 
 		        }
 
@@ -261,8 +261,15 @@ if ( ! class_exists( 'ANONY_Wp_Misc_Help' ) ) {
 			
 
 			if ( !empty( $_GET['post'] ) ) {
+
+				$scripts = self::get_post_scripts( $_GET['post'] );
 				
-				return self::get_post_scripts( $_GET['post'] );
+				if( !empty( $scripts ) )
+				{
+					return $scripts;
+				}
+				
+				
 			}
 
 			return array();

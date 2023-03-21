@@ -42,6 +42,12 @@ class ANONY_Textarea {
 		$text_align = isset( $this->parent->field['text-align'] ) ? $this->parent->field['text-align'] : 'initial';
 		$direction = isset( $this->parent->field['direction'] ) ? $this->parent->field['direction'] : 'initial';
 
+		$conditions = '';
+		if( !empty( $this->parent->field['conditions'] ) )
+		{
+			$conditions = json_encode($this->parent->field['conditions']);
+		}
+
 		if ( $this->parent->as_template ) {
 			$html  = sprintf(
 				'<fieldset class="anony-row%2$s" id="fieldset_%1$s">',
@@ -82,7 +88,7 @@ class ANONY_Textarea {
 		}
 
 		$html .= sprintf(
-			'<textarea style="text-align:%1$s;direction:%2$s" class="%3$s" rows="' . $rows . '" cols="' . $cols . '" id="%4$s" name="%4$s" %5$s %6$s %7$s>%8$s</textarea>',
+			'<textarea style="text-align:%1$s;direction:%2$s" class="%3$s" rows="' . $rows . '" cols="' . $cols . '" id="%4$s" name="%4$s" %5$s %6$s %7$s data-conditions="%8$s">%9$s</textarea>',
 			$text_align,
 			$direction,
 			$class,
@@ -90,7 +96,9 @@ class ANONY_Textarea {
 			$readonly,
 			$disabled,
 			$placeholder,
+			$conditions,
 			$this->parent->value
+			
 		);
 
 		$html .= '</div>';

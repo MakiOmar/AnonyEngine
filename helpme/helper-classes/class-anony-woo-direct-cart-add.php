@@ -89,11 +89,6 @@ if ( ! class_exists( 'ANONY_Woo_Direct_Cart_Add' ) ) {
 		 * Now add to cart.
 		 */
 		public function direct_add_to_cart() {
-			// phpcs:disable WordPress.Security.NonceVerification.Recommended
-			if ( empty( $_GET['direct_add_to_cart'] ) ) {
-				return;
-			}
-			// phpcs:enable.
 
 			$this->add_to_cart( $this->product_id );
 

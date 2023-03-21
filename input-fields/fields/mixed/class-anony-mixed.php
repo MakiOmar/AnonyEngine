@@ -51,6 +51,10 @@ class ANONY_Mixed {
 	 */
 	public function render() {
 
+		$readonly = '';
+		if ( !empty($this->parent->field['readonly']) && $this->parent->field['readonly'] ) {
+			$readonly = ' readonly';
+		}
 		$placeholder = ( isset( $this->parent->field['placeholder'] ) ) ? 'placeholder="' . $this->parent->field['placeholder'] . '"' : '';
 
 		if ( $this->parent->field['type'] == 'number' ) {
@@ -70,13 +74,14 @@ class ANONY_Mixed {
 				$this->parent->width
 			);
 			$html .= sprintf(
-				'<input  type="%1$s" name="%2$s" class="%3$s anony-row" %4$s %5$s %6$s/>',
+				'<input  type="%1$s" name="%2$s" class="%3$s anony-row" %4$s %5$s %6$s %7$s/>',
 				$this->parent->field['type'],
 				$this->parent->input_name,
 				$this->parent->class_attr,
 				isset( $step ) ? ' ' . $step : '',
 				isset( $lang ) ? ' ' . $lang : '',
-				$placeholder
+				$placeholder,
+				$readonly
 			);
 			$html .= '</fieldset>';
 
@@ -106,7 +111,7 @@ class ANONY_Mixed {
 		$max = isset( $this->parent->field['max'] ) ? ' max="' . $this->parent->field['max'] . '"' : '';
 
 		$html .= sprintf(
-			'<input id="%1$s" type="%2$s" name="%3$s" value="%4$s" class="%5$s" %6$s %7$s %8$s%9$s%10$s/>',
+			'<input id="%1$s" type="%2$s" name="%3$s" value="%4$s" class="%5$s" %6$s %7$s %8$s%9$s%10$s%11$s/>',
 			$this->parent->field['id'],
 			$this->parent->field['type'],
 			$this->parent->input_name,
@@ -116,7 +121,9 @@ class ANONY_Mixed {
 			isset( $lang ) ? ' ' . $lang : '',
 			$placeholder,
 			$min,
-			$max
+			$max,
+			$readonly
+
 		);
 
 		$html .= ( isset( $this->parent->field['desc'] ) && ! empty( $this->parent->field['desc'] ) ) ? ' <div class="description ' . $this->parent->class_attr . '">' . $this->parent->field['desc'] . '</div>' : '';

@@ -110,6 +110,7 @@ if ( ! class_exists( 'ANONY_Register_Post_Status' ) ) {
 		 */
 		public function display_post_state( $states ) {
 			global $post;
+			if( !$post || is_null($post) ) return $states;
 			$arg = get_query_var( 'post_status' );
 			if ( $arg !== $this->status_name ) {
 

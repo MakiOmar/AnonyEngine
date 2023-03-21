@@ -71,7 +71,14 @@ class ANONY_Select {
 
 		if ( is_array( $this->parent->field['options'] ) && ! empty( $this->parent->field['options'] ) ) {
 
-			$html .= sprintf( '<option value="">%1$s</option>', esc_html__( 'Select', 'anonyengine' ) );
+			$html .= sprintf( 
+				'<option value="">%1$s</option>', 
+				apply_filters(
+				    'anony-select-first-option-label', 
+				    esc_html__( 'Select', 'anonyengine' ) , 
+				    $this->parent->field['id']
+				)
+			);
 
 			$option_number = 1;
 

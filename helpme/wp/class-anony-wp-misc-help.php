@@ -219,7 +219,7 @@ if ( ! class_exists( 'ANONY_Wp_Misc_Help' ) ) {
 		public static function get_post_scripts( $post_id ) {
 			
 		    // Let's get the content of post number 123
-		    $response = wp_remote_get( get_the_permalink($post_id) );
+		    $response = wp_remote_get( get_the_permalink($post_id) .'?list_scripts=1' );
 		   
 		    // An empty array to store all the 'srcs'
 			$scripts_array = [];
@@ -235,7 +235,7 @@ if ( ! class_exists( 'ANONY_Wp_Misc_Help' ) ) {
 		       
 		      $document = new DOMDocument();
 
-		      $document->loadHTML( $content );
+		      @$document->loadHTML( $content );
 
 		      // Store every script's source inside the array.
 		      foreach( $document->getElementsByTagName('script') as $script ) {

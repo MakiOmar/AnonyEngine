@@ -89,6 +89,11 @@ if ( ! class_exists( 'ANONY_Woo_Direct_Cart_Add' ) ) {
 		 * Now add to cart.
 		 */
 		public function direct_add_to_cart() {
+			// phpcs:disable WordPress.Security.NonceVerification.Recommended
+			if ( empty( $_GET['direct_add_to_cart'] ) ) {
+				return;
+			}
+			// phpcs:enable.
 
 			$this->add_to_cart( $this->product_id );
 
@@ -174,7 +179,8 @@ if ( ! class_exists( 'ANONY_Woo_Direct_Cart_Add' ) ) {
 
 					}
 
-					$custom_options[ $session_key ] = $args['field_value'];
+					$custom_options[ $session_key ] = $args;
+					
 
 				}
 			}
@@ -219,12 +225,26 @@ if ( ! class_exists( 'ANONY_Woo_Direct_Cart_Add' ) ) {
 		 */
 		public function update_custom_price( $cart_object ) {
 			foreach ( $cart_object->cart_contents as $cart_item_key => $value ) {
+
 				// Version 2.x.
 				// $value['data']->price = $value['_custom_options']['custom_price'];.
 				// Version 3.x / 4.x.
-				if ( ! empty( $value['_custom_options']['custom_price'] ) && 'no' !== $value['_custom_options']['custom_price'] && is_numeric( $value['_custom_options']['custom_price'] ) ) {
-					$value['data']->set_price( $value['_custom_options']['custom_price'] );
+				
+				$custom_price = 0;
+				if( ! empty( $value['_custom_options'] ) && is_array(  $value['_custom_options'] ) )
+				{
+				    foreach( $value['_custom_options'] as $session_key => $session_value )
+				    {
+				        if ( ! empty( $session_value['custom_price'] ) && 'no' !== $session_value['custom_price'] && is_numeric( $session_value['custom_price'] ) ) {
+				            
+				                $custom_price += $session_value['custom_price'];
+            					
+            				}
+				    }
+				    
+				    $value['data']->set_price( $custom_price );
 				}
+				
 			}
 		}
 
@@ -236,12 +256,12 @@ if ( ! class_exists( 'ANONY_Woo_Direct_Cart_Add' ) ) {
 		 */
 		public function add_values_to_order_item_meta( $item_id, $values ) {
 			global $woocommerce,$wpdb;
-
+            
 			if ( ! empty( $this->session ) && ! empty( $values['_custom_options'] ) ) {
 
 				foreach ( $this->session as $session_key => $args ) {
 
-					$val = $values['_custom_options'][ $session_key ];
+					$val = $values['_custom_options'][ $session_key ]['field_value'];
 
 					if ( empty( $args['as_order_item_meta'] ) || 'yes' !== $args['as_order_item_meta'] ) {
 						continue;

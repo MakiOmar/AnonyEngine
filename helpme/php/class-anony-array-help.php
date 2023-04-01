@@ -229,17 +229,17 @@ if ( ! class_exists( 'ANONY_ARRAY_HELP' ) ) {
 		 * @param  array  $original_array Original array.
 		 * @return array  Array after insertion.
 		 */
-		public static function insert_after_assoc_key( $key, $insert_array, $original_array ) {
+		public static function insert_after_assoc_key( $array, $key, $new_key, $new_value ) {
 
-			$offset = array_search( $key, array_keys( $original_array ), true );
-
-			$result = array_merge(
-				array_slice( $original_array, 0, $offset ),
-				$insert_array,
-				array_slice( $original_array, $offset, null )
-			);
-
-			return $resutl;
+			$keys = array_keys($array);
+		    $index = array_search($key, $keys);
+		    if ($index !== false) {
+		        $result = array_slice($array, 0, $index + 1, true) +
+		                  array($new_key => $new_value) +
+		                  array_slice($array, $index + 1, count($array) - 1, true);
+		        return $result;
+		    }
+		    return $array;
 		}
 
 		/**

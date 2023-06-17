@@ -38,13 +38,7 @@ add_action( 'post_edit_form_tag', 'anony_post_metabox_form_multipart' );
  * @return string                Filtered post image HTML.
  */
 function anony_remove_thumb_style_dimensions( $html, $post_id, $post_image_id ) {
-	$html = sprintf(
-		'<a href="%1$s" title="%2$s">%3$s</a>',
-		esc_url( get_permalink( $post_id ) ),
-		esc_attr( get_the_title( $post_id ) ),
-		$html
-	);
-
+	
 	return preg_replace( '/(width|height)="\d+"\s/', '', $html );
 }
 add_filter( 'post_thumbnail_html', 'anony_remove_thumb_style_dimensions', 10, 3 );

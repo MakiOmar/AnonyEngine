@@ -326,7 +326,7 @@ if ( ! class_exists( 'ANONY_Woo_Help' ) ) {
 		 * @param array $comment_data Array of arguments for inserting a new comment (Required).
 		 * @param int   $rating Rating value.
 		 */
-		public static function add_product_review( $comment_data, $rating = 3 ) {
+		public static function add_product_review( $comment_data = '', $rating = 3 ) {
 			global $post, $product;
 
 			if ( 'product' !== $post->post_type ) {
@@ -912,6 +912,199 @@ if ( ! class_exists( 'ANONY_Woo_Help' ) ) {
 
 			return sprintf( '<span class="onsale %1$s">%2$s</span>', $class, $sale_badge_text );
 		}
+
+		public static function display_sales_report($atts) {
+		    $user_id = get_current_user_id();
+		    
+		    // Retrieve all products for the user
+		    $products = wc_get_products(array(
+		        'limit' => -1,
+		        'status' => 'publish',
+		        'author' => $user_id,
+		    ));
+		    
+		    $sales_data = array();
+		    
+		    // Loop through each product and get the sales data
+		    foreach ($products as $product) {
+		        $product_id = $product->get_id();
+		        $product_name = $product->get_name();
+		        $product_permalink = $product->get_permalink();
+		        
+		        $quantity_sold = 0;
+		        $total_sales = 0;
+		        $pending_sales = 0; // Initialize pending sales
+		        
+		        $orders = wc_get_orders(array(
+		            'limit' => -1,
+		            'status' => 'completed',
+		            'customer' => $user_id,
+		        ));
+		        
+		        // Loop through each order and get the sales data for the product
+		        foreach ($orders as $order) {
+		            $items = $order->get_items('line_item');
+		            
+		            foreach ($items as $item) {
+		                $product = $item->get_product();
+		                
+		                if ($product->get_id() == $product_id) {
+		                    $quantity_sold += $item->get_quantity();
+		                    $total_sales += $item->get_total();
+		                    
+		                    // Check if the order is pending
+		                    if ($order->get_status() == 'pending') {
+		                        $pending_sales += $item->get_total();
+		                    }
+		                }
+		            }
+		        }
+		        
+		        // Subtract 10% from the total sales
+		        $total_sales *= 0.9;
+		        $pending_sales *= 0.9; // Subtract 10% from pending sales
+		        
+		        // Get the current currency symbol
+		        $currency_symbol = get_woocommerce_currency_symbol();
+		        
+		        // Add the sales data to the sales_data array
+		        $sales_data[] = array(
+		            'product_name' => $product_name,
+		            'product_permalink' => $product_permalink,
+		            'quantity_sold' => $quantity_sold,
+		            'pending_sales' => $pending_sales, // Add pending sales value before total sales
+		            'total_sales' => $total_sales,
+		            'currency_symbol' => $currency_symbol,
+		        );
+		    }
+		    
+		    // Sort the sales data array by total sales in descending order
+		    usort($sales_data, function($a, $b) {
+		        return $b['total_sales'] - $a['total_sales'];
+		    });
+		    
+		    // Display the sales data as a table
+		    $output = '<table>';
+		    $output .= '<tr><th>Product Name</th><th>Quantity Sold</th><th>Pending Sales</th><th>Total Sales</th></tr>'; // Change column order
+		    foreach ($sales_data as $product) {
+		        $output .= '<tr><td><a href="' . $product['product_permalink'] . '">' . $product['product_name'] . '</a></td><td>' . $product['quantity_sold'] . '</td><td>' . number_format($product['pending_sales'], 2) . ' ' . $product['currency_symbol'] . '</td><td>' . number_format($product['total_sales'], 2) . ' ' . $product['currency_symbol'] . '</td></tr>'; // Change column order
+		    }
+		    $output .= '</table>';
+		    return $output;
+		}
+
+		public static  function current_user_sales_orders_table( $atts ) {
+			$order = wc_get_order($order_id);
+			  if (!$order) {
+			    return false;
+			  }
+
+			  $items = array();
+			  foreach ($order->get_items() as $item_id => $item) {
+			    $product = $item->get_product();
+			    $items[] = array(
+			      'name' => $item->get_name(),
+			      'quantity' => $item->get_quantity(),
+			      'price' => $item->get_total(),
+			      'product_id' => $product ? $product->get_id() : '',
+			      'product_sku' => $product ? $product->get_sku() : '',
+			    );
+			  }
+
+			  $billing = array();
+			  if ($order->get_billing_first_name()) {
+			    $billing['first_name'] = $order->get_billing_first_name();
+			  }
+			  if ($order->get_billing_last_name()) {
+			    $billing['last_name'] = $order->get_billing_last_name();
+			  }
+			  if ($order->get_billing_email()) {
+			    $billing['email'] = $order->get_billing_email();
+			  }
+			  if ($order->get_billing_phone()) {
+			    $billing['phone'] = $order->get_billing_phone();
+			  }
+
+			  $shipping = array();
+			  if ($order->get_shipping_first_name()) {
+			    $shipping['first_name'] = $order->get_shipping_first_name();
+			  }
+			  if ($order->get_shipping_last_name()) {
+			    $shipping['last_name'] = $order->get_shipping_last_name();
+			  }
+			  if ($order->get_shipping_address_1()) {
+			    $shipping['address_1'] = $order->get_shipping_address_1();
+			  }
+			  if ($order->get_shipping_address_2()) {
+			    $shipping['address_2'] = $order->get_shipping_address_2();
+			  }
+			  if ($order->get_shipping_city()) {
+			    $shipping['city'] = $order->get_shipping_city();
+			  }
+			  if ($order->get_shipping_state()) {
+			    $shipping['state'] = $order->get_shipping_state();
+			  }
+			  if ($order->get_shipping_postcode()) {
+			    $shipping['postcode'] = $order->get_shipping_postcode();
+			  }
+			  if ($order->get_shipping_country()) {
+			    $shipping['country'] = $order->get_shipping_country();
+			  }
+
+			  $order_data = array(
+			    'order_id' => $order->get_id(),
+			    'order_number' => $order->get_order_number(),
+			    'status' => $order->get_status(),
+			    'date_created' => $order->get_date_created(),
+			    'billing' => $billing,
+			    'shipping' => $shipping,
+			    'items' => $items,
+			    'total' => $order->get_total(),
+			  );
+
+			  return $order_data;
+		}
+
+		public static function single_order( $order_id ){ ?>
+			<table>
+			  <thead>
+			    <tr>
+			      <th>Order Number</th>
+			      <th>Status</th>
+			      <th>Date Created</th>
+			      <th>Billing Information</th>
+			      <th>Shipping Information</th>
+			      <th>Line Items</th>
+			      <th>Total</th>
+			    </tr>
+			  </thead>
+			  <tbody>
+			    <?php
+			      $order_details = get_order_details($order_id);
+
+			      if ($order_details) {
+			        echo '<tr>';
+			        echo '<td>' . $order_details['order_number'] . '</td>';
+			        echo '<td>' . $order_details['status'] . '</td>';
+			        echo '<td>' . $order_details['date_created']->format('Y-m-d H:i:s') . '</td>';
+			        echo '<td>' . $order_details['billing']['first_name'] . ' ' . $order_details['billing']['last_name'] . '<br>' . $order_details['billing']['email'] . '<br>' . $order_details['billing']['phone'] . '</td>';
+			        echo '<td>' . $order_details['shipping']['first_name'] . ' ' . $order_details['shipping']['last_name'] . '<br>' . $order_details['shipping']['address_1'] . '<br>' . $order_details['shipping']['city'] . ', ' . $order_details['shipping']['state'] . ' ' . $order_details['shipping']['postcode'] . '<br>' . $order_details['shipping']['country'] . '</td>';
+			        echo '<td>';
+			        foreach ($order_details['items'] as $item) {
+			          echo $item['name'] . ' x ' . $item['quantity'] . '<br>';
+			        }
+			        echo '</td>';
+			        echo '<td>' . wc_price($order_details['total']) . '</td>';
+			        echo '</tr>';
+			      } else {
+			        echo '<tr><td colspan="7">Order not found</td></tr>';
+			      }
+			    ?>
+			  </tbody>
+			</table>
+			<?php
+		}
+
 	}
 }
 

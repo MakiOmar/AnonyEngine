@@ -86,8 +86,11 @@ jQuery(document).ready(function($){
 	        mutations.forEach(function(mutation) {
 
 	          if(mutation.addedNodes.length){
-
-	          	if (typeof callback === "function")  callback();
+				/*
+				 * You should define a function that will accept a querySelector to manipulate.
+				 * This functions's name should replace the callback paramenter of $.fn.AnonyObserve. Note that the name should be passed without quotes.
+				 */
+	          	if (typeof callback === "function")  callback(querySelector);
 
 	          }
 	    
@@ -241,5 +244,27 @@ jQuery(document).ready(function($){
 		displayTime          = hour + ":" + min;
 
 		return today + 'T' + displayTime;
+	}
+
+	$.fn.jsonObjectHighlight = function (json) {
+		if (typeof json != 'string') {
+			 json = JSON.stringify(json, undefined, 2);
+		}
+		json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+		return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
+			var cls = 'number';
+			if (/^"/.test(match)) {
+				if (/:$/.test(match)) {
+					cls = 'key';
+				} else {
+					cls = 'string';
+				}
+			} else if (/true|false/.test(match)) {
+				cls = 'boolean';
+			} else if (/null/.test(match)) {
+				cls = 'null';
+			}
+			return '<span class="' + cls + '">' + match + '</span>';
+		});
 	}
 });

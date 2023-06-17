@@ -112,7 +112,7 @@ add_filter(
 	'plugin_action_links_' . plugin_basename( __FILE__ ),
 	function ( $links ) {
 			$links[] = sprintf(
-				'<a href="admin.php?page=anony-settings">%s</a>',
+				'<a href="admin.php?page=Anony_Engine_Options">%s</a>',
 				esc_html__( 'Settings', 'anonyengine' )
 			);
 			return $links;

@@ -95,9 +95,11 @@ if ( ! class_exists( 'ANONY_Woo_Direct_Cart_Add' ) ) {
 			}
 			// phpcs:enable.
 
+			$this->set_session_data();
+			
 			$this->add_to_cart( $this->product_id );
 
-			$this->set_session_data();
+			
 
 			// Redirects to the checkout page.
 			wp_safe_redirect( wc_get_checkout_url() );

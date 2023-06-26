@@ -318,5 +318,11 @@ if ( ! class_exists( 'ANONY_ARRAY_HELP' ) ) {
 
 			return $result;
 		}
+
+		public static function array_to_cookie($array, $cookie_name, $expiry){
+			$serialized_result = serialize($array);
+			$encoded_values = urlencode($serialized_result);
+			setcookie($cookie_name, $encoded_values, $expiry, '/');
+		}
 	}
 }

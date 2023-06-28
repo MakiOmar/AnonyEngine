@@ -94,6 +94,9 @@ fieldset .iti div.iti__arrow{
 	display: flex;
 	align-items: center;
 }
+*{
+	box-sizing: border-box;
+}
 /* -------------- jQuery UI -------------- */
 
 /* .ui-slider */
@@ -350,6 +353,7 @@ input[type=tel]{
 	position: relative;
 	text-align: left;
 	width: 80px;
+	box-sizing: border-box;
    /* -webkit-mask: url(../img/switch-mask.png) 0 0 no-repeat;
 	mask: url(../img/switch-mask.png) 0 0 no-repeat;*/
 	-webkit-user-select: none;
@@ -358,10 +362,7 @@ input[type=tel]{
 	-o-user-select: none;
 	user-select: none;
 }
-.has-switch {
-	cursor: pointer;
-	text-align: left;
-}
+
 .has-switch input[type="checkbox"] {
 	display: none;
 }

@@ -119,11 +119,16 @@ fieldset .iti div.iti__arrow{
 	font-weight: bold;
 }
 .anony-form-group-heading{
-	background-color: #c4c4c4;
+	background-color: #fff;
 	color: #333;
 	padding: 8px;
 	font-size: 25px;
-	position:relative
+	position:relative;
+	box-shadow: 0px 0px 5px 0px rgba(157,151,151,0.68);
+	-webkit-box-shadow: 0px 0px 5px 0px rgba(157,151,151,0.68);
+	-moz-box-shadow: 0px 0px 5px 0px rgba(157,151,151,0.68);
+	border-radius: 5px;
+
 }
 
 .anony-form-group-heading > i{

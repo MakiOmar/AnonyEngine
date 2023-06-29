@@ -41,13 +41,16 @@ class ANONY_Group_start {
 
 		$collapsible = isset( $this->parent->field['collapsible'] ) ? '<i class="fa fa-chevron-down" aria-hidden="true"></i>
 ' : '';
+		$heading_link_style = 'style="display:flex;height:100%"';
 
 		$html = sprintf(
-			'<%1$s class="anony-form-group-heading" data-id="%3$s">%2$s%4$s</%1$s>',
+			'<%1$s><a class="anony-form-group-heading" href="#" data-id="%2$s" %3$s>%4$s%5$s</a></%1$s>',
 			$tag,
-			$this->parent->field['title'],
 			$this->parent->field['id'],
+			$heading_link_style,
+			$this->parent->field['title'],
 			$collapsible
+			
 		);
 
 		$html .= sprintf(

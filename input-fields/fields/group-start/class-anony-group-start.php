@@ -34,7 +34,9 @@ class ANONY_Group_start {
 	}
 
 	/**
-	 * Render input field
+	 * Render input field.
+	 * 
+	 * Please note that if you want to show groups as tabs, you need to add the `layout = tabs` in the metabox definition.
 	 */
 	public function render() {
 		$tag = isset( $this->parent->field['tag'] ) && ! is_null( $this->parent->field['tag'] ) ? $this->parent->field['tag'] : 'h1';
@@ -43,8 +45,9 @@ class ANONY_Group_start {
 ' : '';
 		$heading_link_style = 'style="display:flex;height:100%"';
 
+		
 		$html = sprintf(
-			'<%1$s><a class="anony-form-group-heading" href="#" data-id="%2$s" %3$s>%4$s%5$s</a></%1$s>',
+			'<%1$s class="anony-form-group-heading-tag"><a class="anony-form-group-heading" href="#" data-id="%2$s" %3$s>%4$s%5$s</a></%1$s>',
 			$tag,
 			$this->parent->field['id'],
 			$heading_link_style,

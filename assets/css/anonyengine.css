@@ -52,6 +52,7 @@ url('../fonts/raleway-thin-webfont.svg#ralewaythin') format('svg');
 a{
 	text-decoration: none!important;
 }
+
 .file-upload-override-button{
 	display: inline-block;
 	margin: 10px;

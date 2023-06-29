@@ -114,7 +114,7 @@ if ( ! class_exists( 'ANONY_Meta_Box' ) ) {
 		 *
 		 * @var bool
 		 */
-		public $taps;
+		public $layout;
 
 		/**
 		 * Constructor
@@ -158,15 +158,15 @@ if ( ! class_exists( 'ANONY_Meta_Box' ) ) {
 		 * @return void.
 		 */
 		public function set_metabox_data( $metabox ) {
-
+			
 			$this->id            = $metabox['id'];
 			$this->label         = $metabox['title'];
 			$this->context       = $metabox['context'];
 			$this->priority      = $metabox['priority'];
 			$this->hook_priority = isset( $metabox['hook_priority'] ) ? $metabox['hook_priority'] : $this->hook_priority;
 			$this->post_type     = $metabox['post_type'];
-			$this->taps          = !empty($metabox['taps'])  ? $metabox['taps'] : false;
-
+			$this->layout          = !empty($metabox['layout'])  ? $metabox['layout'] : false;
+			
 			// To use id for hooks definitions.
 			$this->id_as_hook = str_replace( '-', '_', $this->id );
 
@@ -199,6 +199,25 @@ if ( ! class_exists( 'ANONY_Meta_Box' ) ) {
 			$p_id = ! empty( $_GET['post'] ) ? intval( $_GET['post'] ) : $post->ID;
 			// phpcs:enable
 			wp_nonce_field( $this->id . '_action', $this->id . '_nonce', false );
+			if( $this->layout ){
+				$tabs = '';
+			?>
+			<div class="anony-tabbed-metabox">
+			<ul class="anony-metabox-layout-wrapper anony-metabox-tab-wrapper" id="anony-metabox-<?php $this->id ?>-layout-wrapper">
+			<?php
+				foreach ( $this->fields as $field ) { 
+					if(  'group_start' !== $field['type'] ){
+						continue;
+					}
+					?>
+
+					<li><a onclick="event.preventDefault();" class="anony-metabox-tab-item" data-id="<?php echo $field['id'] ?>" href="#"><?php echo $field['title'] ?></a></li>
+
+				<?php }
+			?>
+			</ul>
+			<?php
+			}
 
 			// Loop through inputs to render.
 			foreach ( $this->fields as $field ) {
@@ -213,6 +232,9 @@ if ( ! class_exists( 'ANONY_Meta_Box' ) ) {
 				// phpcs:enable.
 				$this->enqueue_field_scripts( $field );
 
+			}
+			if( $this->layout ){
+				echo '</div>';
 			}
 		}
 
@@ -285,7 +307,7 @@ if ( ! class_exists( 'ANONY_Meta_Box' ) ) {
 
 			foreach ( $this->fields as $field ) {
 
-				if ( ! isset( $sent_data[ $this->id ][ $field['id'] ] ) ) {
+				if ( !isset($field['id']) || ! isset( $sent_data[ $this->id ][ $field['id'] ] ) ) {
 					continue;
 				}
 

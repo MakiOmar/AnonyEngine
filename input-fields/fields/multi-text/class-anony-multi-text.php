@@ -8,7 +8,12 @@
  */
 
 class ANONY_Multi_text {
-
+		
+	/**
+	 * @var object
+	 */
+	private $parent;
+	
 	/**
 	 * Color field Constructor.
 	 *

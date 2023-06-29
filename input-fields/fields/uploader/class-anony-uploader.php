@@ -22,6 +22,11 @@ defined( 'ABSPATH' ) || die(); // Exit if accessed direct.
 class ANONY_Uploader {
 
 	/**
+	 * @var object
+	 */
+	private $parent;
+	
+	/**
 	 * Field Constructor.
 	 *
 	 * Required - must call the parent constructor, then assign field and value to vars,

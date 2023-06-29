@@ -8,6 +8,12 @@
  */
 class ANONY_Switch {
 
+	
+	/**
+	 * @var object
+	 */
+	private $parent;
+	
 	/**
 	 * Field Constructor.
 	 *

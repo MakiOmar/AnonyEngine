@@ -11,6 +11,11 @@ if ( ! class_exists( 'ANONY_Mb_Admin' ) ) {
 	class ANONY_Mb_Admin extends ANONY_Meta_Box {
 
 		/**
+		 * @var object
+		 */
+		private $parent;
+
+		/**
 		 * Constructor
 		 */
 		public function __construct( $parent, $meta_box = array() ) {

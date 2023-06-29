@@ -8,7 +8,12 @@
  */
 
 class ANONY_Gallery {
-
+	
+	/**
+	 * @var object
+	 */
+	private $parent;
+	
 	/**
 	 * Field Constructor.
 	 *

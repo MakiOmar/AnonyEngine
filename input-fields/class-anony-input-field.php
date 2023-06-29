@@ -72,6 +72,11 @@ if ( ! class_exists( 'ANONY_Input_Field' ) ) {
 		public $index;
 
 		/**
+		 * @var string Metabox's ID
+		 */
+		public $metabox_id;
+
+		/**
 		 * @var string field width . Default is 12 columns
 		 */
 		public $width = ' anony-grid-col-12';

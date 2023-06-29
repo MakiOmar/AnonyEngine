@@ -5,7 +5,12 @@
  * This color input depends on wp-color-picker
  */
 class ANONY_Color_gradient {
-
+	
+	/**
+	 * @var object
+	 */
+	private $parent;
+	
 	// Consructor
 	public function __construct( $parent = null ) {
 

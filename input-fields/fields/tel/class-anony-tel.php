@@ -23,6 +23,21 @@ if ( ! class_exists( 'ANONY_Tel' ) ) {
 	 * @link       https://makiomar.com
 	 */
 	class ANONY_Tel {
+	
+		/**
+		 * @var object
+		 */
+		private $parent;
+	
+		/**
+		 * @var string
+		 */
+		private $with_dial_codes;
+	
+		/**
+		 * @var string
+		 */
+		private $pattern;
 
 		/**
 		 * Tel field Constructor.

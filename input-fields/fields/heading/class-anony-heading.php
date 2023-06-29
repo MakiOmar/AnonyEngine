@@ -8,6 +8,12 @@
  */
 
 class ANONY_Heading {
+	
+	/**
+	 * @var object
+	 */
+	private $parent;
+	
 	/**
 	 * Color field Constructor.
 	 *

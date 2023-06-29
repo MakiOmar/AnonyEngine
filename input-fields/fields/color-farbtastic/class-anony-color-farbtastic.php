@@ -14,6 +14,11 @@
 class ANONY_Color_farbtastic {
 
 	/**
+	 * @var object
+	 */
+	private $parent;
+	
+	/**
 	 * Color field Constructor.
 	 *
 	 * @param array  $field Array of field's data

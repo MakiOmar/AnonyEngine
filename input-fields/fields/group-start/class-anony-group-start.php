@@ -8,6 +8,12 @@
  */
 
 class ANONY_Group_start {
+	
+	/**
+	 * @var object
+	 */
+	private $parent;
+	
 	/**
 	 * Color field Constructor.
 	 *

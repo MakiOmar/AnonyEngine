@@ -8,6 +8,12 @@
  */
 
 class ANONY_Textarea {
+
+	/**
+	 * @var object
+	 */
+	private $parent;
+	
 	/**
 	 * Color field Constructor.
 	 *

@@ -7,6 +7,12 @@
  * @link http://makiomar.com
  */
 class ANONY_Info {
+	
+	/**
+	 * @var object
+	 */
+	private $parent;
+	
 
 	/**
 	 * Color field Constructor.

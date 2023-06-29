@@ -12,6 +12,11 @@
 class ANONY_Div {
 
 	/**
+	 * @var object
+	 */
+	private $parent;
+	
+	/**
 	 * Color field Constructor.
 	 *
 	 * @param object $parent Field parent object

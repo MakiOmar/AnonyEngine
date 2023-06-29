@@ -9,7 +9,17 @@
 
 class ANONY_Checkbox {
 
-	public $parent;
+
+	/**
+	 * @var object
+	 */
+	private $parent;
+
+	/**
+	 * @var array
+	 */
+	private $data;
+
 	/**
 	 * Checkbox field Constructor.
 	 *

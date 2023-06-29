@@ -8,6 +8,11 @@
  */
 
 class ANONY_Select {
+	
+	/**
+	 * @var object
+	 */
+	private $parent;
 
 	/**
 	 * Color field Constructor.

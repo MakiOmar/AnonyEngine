@@ -175,9 +175,7 @@ if ( ! class_exists( 'ANONY_Meta_Box' ) ) {
 
 			$this->meta_fields_callback();
 
-			$render = ob_get_contents();
-
-			ob_end_clean();
+			$render = ob_get_clean();
 
 			return $render;
 		}

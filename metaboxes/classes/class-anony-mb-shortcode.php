@@ -9,6 +9,12 @@
 
 if ( ! class_exists( 'ANONY_Mb_Shortcode' ) ) {
 	class ANONY_Mb_Shortcode extends ANONY_Meta_Box {
+		
+		/**
+		 * @var object
+		 */
+		private $parent;
+		
 		/**
 		 * Constructor
 		 */

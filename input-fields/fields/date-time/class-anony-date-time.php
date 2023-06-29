@@ -10,6 +10,32 @@
 class ANONY_Date_time {
 
 	/**
+	 * @var object
+	 */
+	private $parent;
+
+	
+	/**
+	 * @var string
+	 */
+	private $date_format;
+
+	/**
+	 * @var string
+	 */
+	private $time_format;
+
+	/**
+	 * @var string
+	 */
+	private $get;	
+	
+	/**
+	 * @var string
+	 */
+	private $picker_options;
+
+	/**
 	 * Field Constructor.
 	 *
 	 * Required - must call the parent constructor, then assign field and value to vars, and obviously call the render field function

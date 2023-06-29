@@ -8,7 +8,12 @@
  */
 
 class ANONY_Multi_value {
-
+		
+	/**
+	 * @var object
+	 */
+	private $parent;
+	
 	/**
 	 * Color field Constructor.
 	 *

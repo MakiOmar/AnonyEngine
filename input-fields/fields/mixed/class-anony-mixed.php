@@ -10,7 +10,12 @@
  */
 
 class ANONY_Mixed {
-
+	
+	/**
+	 * @var object
+	 */
+	private $parent;
+	
 	/**
 	 * Color field Constructor.
 	 *

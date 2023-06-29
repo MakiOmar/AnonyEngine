@@ -12,7 +12,12 @@
  * This field uses the WP color picker.
  */
 class ANONY_Color {
-
+	
+	/**
+	 * @var object
+	 */
+	private $parent;
+	
 	/**
 	 * Color field Constructor.
 	 *

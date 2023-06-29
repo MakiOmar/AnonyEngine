@@ -7,7 +7,12 @@
  * @link http://makiomar.com
  */
 class ANONY_Color_gradient_farbtastic {
-
+	
+	/**
+	 * @var object
+	 */
+	private $parent;
+	
 	/**
 	 * Field Constructor.
 	 *

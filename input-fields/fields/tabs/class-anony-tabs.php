@@ -8,6 +8,11 @@
  */
 
 class ANONY_Tabs {
+		
+	/**
+	 * @var object
+	 */
+	private $parent;
 
 	/**
 	 * Field Constructor.

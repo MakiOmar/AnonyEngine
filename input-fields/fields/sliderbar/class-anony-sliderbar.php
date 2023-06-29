@@ -7,6 +7,11 @@
  * @link http://makiomar.com
  */
 class ANONY_Sliderbar {
+	
+	/**
+	 * @var object
+	 */
+	private $parent;
 
 
 	/**

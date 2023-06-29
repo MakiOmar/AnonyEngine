@@ -10,6 +10,11 @@
 class ANONY_Font_select {
 
 	/**
+	 * @var object
+	 */
+	private $parent;
+	
+	/**
 	 * Color field Constructor.
 	 *
 	 * @param object $parent Field parent object

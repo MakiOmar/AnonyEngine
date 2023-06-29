@@ -8,6 +8,12 @@
  */
 
 class ANONY_Group_Close {
+	
+	/**
+	 * @var object
+	 */
+	private $parent;
+	
 	/**
 	 * Color field Constructor.
 	 *

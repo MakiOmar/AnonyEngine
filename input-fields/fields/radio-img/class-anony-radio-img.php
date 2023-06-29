@@ -8,6 +8,11 @@
  */
 
 class ANONY_Radio_img {
+		
+	/**
+	 * @var object
+	 */
+	private $parent;
 
 	/**
 	 * Field Constructor.

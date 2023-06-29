@@ -107,7 +107,7 @@ if ( ! class_exists( 'ANONY_Meta_Box' ) ) {
 		 *
 		 * @var string
 		 */
-		private $id_as_hook;
+		public $id_as_hook;
 
 		/**
 		 * Constructor

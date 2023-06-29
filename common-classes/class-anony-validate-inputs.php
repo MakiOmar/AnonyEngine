@@ -74,7 +74,14 @@ if ( ! class_exists( 'ANONY_Validate_Inputs' ) ) {
 		 *
 		 * @var string
 		 */
-		public $sanitization;
+		public $sanitization;		
+		
+		/**
+		 * Field's title.
+		 *
+		 * @var string
+		 */
+		public $field_title;
 
 		/**
 		 * Constructor.
@@ -278,13 +285,15 @@ if ( ! class_exists( 'ANONY_Validate_Inputs' ) ) {
 		 * Validate multi-value input
 		 */
 		public function valid_multi_value() {
-
-			foreach ( $this->value as $index => $value ) {
-				// Check if all supplied values are empty.
-				if ( implode( '', $value ) === '' ) {
-					unset( $this->value[ $index ] );
+			if( is_array($this->value) ){
+				foreach ( $this->value as $index => $value ) {
+					// Check if all supplied values are empty.
+					if ( implode( '', $value ) === '' ) {
+						unset( $this->value[ $index ] );
+					}
 				}
 			}
+	
 
 		}//end valid_multi_value()
 
@@ -293,31 +302,34 @@ if ( ! class_exists( 'ANONY_Validate_Inputs' ) ) {
 		 * Accept html within input.
 		 */
 		public function valid_tabs() {
-			$count = array_shift( $this->value );
-			if ( ! ctype_digit( $count ) ) {
-				$count = count( $this->value ) + 1;
-			}
-			$temp = array();
-
-			$temp['count'] = $count;
-			foreach ( $this->value as $name => $v ) {
-				foreach ( $v as $key => $value ) {
-					$value = wp_strip_all_tags( $value );
-
-					$temp[ $name ][ $key ] = $value;
-
+			if( is_array($this->value) ){
+				$count = array_shift( $this->value );
+				if ( ! ctype_digit( $count ) ) {
+					$count = count( $this->value ) + 1;
 				}
-
-				$temp_name_values = array_values( $temp[ $name ] );
-
-				// Check if all supplied values are empty.
-				if ( implode( '', $temp_name_values ) === '' ) {
-					unset( $temp[ $name ] );
+				$temp = array();
+	
+				$temp['count'] = $count;
+				foreach ( $this->value as $name => $v ) {
+					foreach ( $v as $key => $value ) {
+						$value = wp_strip_all_tags( $value );
+	
+						$temp[ $name ][ $key ] = $value;
+	
+					}
+	
+					$temp_name_values = array_values( $temp[ $name ] );
+	
+					// Check if all supplied values are empty.
+					if ( implode( '', $temp_name_values ) === '' ) {
+						unset( $temp[ $name ] );
+					}
 				}
+				$temp['count'] = empty( $temp ) ? 2 : count( $temp ) + 1;
+	
+				$this->value = $temp;
 			}
-			$temp['count'] = empty( $temp ) ? 2 : count( $temp ) + 1;
 
-			$this->value = $temp;
 		}//end valid_tabs()
 
 		/**

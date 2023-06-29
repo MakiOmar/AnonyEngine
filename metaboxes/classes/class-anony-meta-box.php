@@ -96,6 +96,20 @@ if ( ! class_exists( 'ANONY_Meta_Box' ) ) {
 		private $validate;
 
 		/**
+		 * Meta box array.
+		 *
+		 * @var array
+		 */
+		private $metabox;
+
+		/**
+		 * ID used for metabox's actions.
+		 *
+		 * @var string
+		 */
+		private $id_as_hook;
+
+		/**
 		 * Constructor
 		 *
 		 * @param array $meta_box Metabox's data.

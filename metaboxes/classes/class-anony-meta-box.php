@@ -100,7 +100,7 @@ if ( ! class_exists( 'ANONY_Meta_Box' ) ) {
 		 *
 		 * @var array
 		 */
-		private $metabox;
+		public $metabox;
 
 		/**
 		 * ID used for metabox's actions.

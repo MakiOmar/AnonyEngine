@@ -110,6 +110,13 @@ if ( ! class_exists( 'ANONY_Meta_Box' ) ) {
 		public $id_as_hook;
 
 		/**
+		 * If we should use tabs.
+		 *
+		 * @var bool
+		 */
+		public $taps;
+
+		/**
 		 * Constructor
 		 *
 		 * @param array $meta_box Metabox's data.
@@ -158,6 +165,7 @@ if ( ! class_exists( 'ANONY_Meta_Box' ) ) {
 			$this->priority      = $metabox['priority'];
 			$this->hook_priority = isset( $metabox['hook_priority'] ) ? $metabox['hook_priority'] : $this->hook_priority;
 			$this->post_type     = $metabox['post_type'];
+			$this->taps          = !empty($metabox['taps'])  ? $metabox['taps'] : false;
 
 			// To use id for hooks definitions.
 			$this->id_as_hook = str_replace( '-', '_', $this->id );

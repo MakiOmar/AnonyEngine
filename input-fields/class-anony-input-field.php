@@ -177,7 +177,7 @@ if ( ! class_exists( 'ANONY_Input_Field' ) ) {
 
 				$this->field['id'] = $this->field['id'] . '-' . $index;
 			} else {
-				$this->input_name = $this->metabox_id . '[' . $this->field['id'] . ']';
+				$this->input_name = !empty( $this->field['id'] ) ? $this->metabox_id . '[' . $this->field['id'] . ']' : '';
 			}
 
 			$single = ( isset( $this->field['multiple'] ) && $this->field['multiple'] ) ? false : true;
@@ -196,7 +196,7 @@ if ( ! class_exists( 'ANONY_Input_Field' ) ) {
 					$metabox_options = get_post_meta( $this->object_id, $this->metabox_id, $single );
 				}
 
-				$meta = ( is_array( $metabox_options ) && isset( $metabox_options[ $this->field['id'] ] ) ) ? $metabox_options[ $this->field['id'] ] : '';
+				$meta = ( is_array( $metabox_options ) && !empty( $this->field['id'] ) && isset( $metabox_options[ $this->field['id'] ] ) ) ? $metabox_options[ $this->field['id'] ] : '';
 			}
 
 			$this->value = ( $meta != '' ) ? $meta : $this->default;

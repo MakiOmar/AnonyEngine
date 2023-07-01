@@ -68,8 +68,8 @@ class ANONY_Switch {
 			);
 		}
 
-		if ( isset( $field['note'] ) ) {
-			$html .= '<p class=anony-warning>' . $field['note'] . '<p>';
+		if ( !empty( $this->parent->field['note'] ) ) {
+			$html .= '<p class=anony-warning>' . $this->parent->field['note'] . '<p>';
 		}
 
 

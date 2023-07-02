@@ -1104,7 +1104,47 @@ if ( ! class_exists( 'ANONY_Woo_Help' ) ) {
 			</table>
 			<?php
 		}
-
+		/**
+		 * Adds a form after orders table, so we can get total savings per month of year.
+		 * Should be hooked with `woocommerce_account_orders_endpoint`
+		 *
+		 * @return void
+		 */
+		public static function orders_display_total_savings_form() {
+			if ( is_wc_endpoint_url( 'orders' ) ) {
+				$selected_month = isset($_POST['month']) ? sanitize_text_field( $_POST['month'] ) : false;
+				$selected_year = isset($_POST['year']) ? sanitize_text_field( $_POST['year'] ) : false;
+				?>
+				<form method="post" action="">
+					<label for="month">Select a month:</label>
+					<select name="month" id="month">
+						<?php
+						for ($i = 1; $i <= 12; $i++) {
+							$month = date('F', mktime(0, 0, 0, $i, 1));
+							echo '<option value="' . $month . '" '. selected($selected_month, $month, false) .'>' . $month . '</option>';
+						}
+						?>
+					</select>
+					<label for="year">Select a year:</label>
+					<select name="year" id="year">
+						<?php
+						$current_year = date('Y');
+						for ($i = $current_year; $i >= 2020; $i--) {
+							echo '<option value="' . $i . '" '. selected($selected_year, $i, false) .'>' . $i . '</option>';
+						}
+						?>
+					</select>
+					<input type="submit" name="submit" value="Show Total Savings">
+				</form>
+				<?php
+			}
+		}
+		/**
+		 * Get savings based on regular and sale prices.
+		 *
+		 * @param object $order
+		 * @return int
+		 */
 		public static function pricing_based_order_total_savings( $order ) {
 			$total_savings = 0;
 			foreach( $order->get_items() as $item_id => $item ) {
@@ -1119,6 +1159,39 @@ if ( ! class_exists( 'ANONY_Woo_Help' ) ) {
 			}
 
 			return $total_savings;
+		}
+
+		public static function display_total_savings_for_customer_orders() {
+			if ( is_wc_endpoint_url( 'orders' ) ) {
+				$customer_id = get_current_user_id();
+				$total_savings = 0;
+				$selected_month = isset($_POST['month']) ? sanitize_text_field( $_POST['month'] ) : false;
+				$selected_year = isset($_POST['year']) ? sanitize_text_field( $_POST['year'] ) : false;
+				
+				$args = array(
+					'customer' => $customer_id,
+					'status' => array( 'completed', 'delivered' )
+				);
+				
+				$result_msg = 'Total Savings for all orders: ';
+				if($selected_month && $selected_year){
+					$first_day_of_month = date('Y-m-01', strtotime($selected_month . ' ' . $selected_year));
+					$last_day_of_month = date('Y-m-t', strtotime($first_day_of_month));
+					
+					// To get products between to dates, use the following format.
+					$args['date_created']        = $first_day_of_month . '...' . $last_day_of_month;
+					
+					$result_msg = 'Total Savings for all orders of ' . $selected_month . ' ' . $selected_year . ' is: ';
+				}
+		
+				$orders = wc_get_orders( $args );
+				foreach( $orders as $order ) {
+					$total_savings += self::pricing_based_order_total_savings( $order );
+				}
+				if ( $total_savings > 0 ) {
+					echo '<p><strong>'.$result_msg.'</strong> ' . wc_price( $total_savings ) . '</p>';
+				}
+			}
 		}
 
 	}

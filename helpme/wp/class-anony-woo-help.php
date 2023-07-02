@@ -30,7 +30,7 @@ if ( ! class_exists( 'ANONY_Woo_Help' ) ) {
 		 *
 		 * @param WP_Query $query The WP_Query instance (passed by reference).
 		 */
-		function anony_search_products_by_metakey_or_title( $query ) {
+		public static function anony_search_products_by_metakey_or_title( $query ) {
 			add_action( 'pre_get_posts', function(){
 				if ( ! is_admin() && is_search($query) ) {
 
@@ -141,7 +141,7 @@ if ( ! class_exists( 'ANONY_Woo_Help' ) ) {
 					}
 				}
 			} );
-}
+		}
 
 
 		public static function remove_order_status_change_notes()
@@ -1103,6 +1103,22 @@ if ( ! class_exists( 'ANONY_Woo_Help' ) ) {
 			  </tbody>
 			</table>
 			<?php
+		}
+
+		public static function pricing_based_order_total_savings( $order ) {
+			$total_savings = 0;
+			foreach( $order->get_items() as $item_id => $item ) {
+				$product = $item->get_product();
+				if ( $product->is_on_sale() ) {
+					$regular_price = $product->get_regular_price( 'edit' );
+					$sale_price = $product->get_sale_price( 'edit' );
+					$quantity = $item->get_quantity();
+					$item_savings = ( $regular_price - $sale_price ) * $quantity;
+					$total_savings += $item_savings;
+				}
+			}
+
+			return $total_savings;
 		}
 
 	}

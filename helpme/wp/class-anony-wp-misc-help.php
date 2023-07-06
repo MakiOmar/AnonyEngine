@@ -281,8 +281,28 @@ if ( ! class_exists( 'ANONY_Wp_Misc_Help' ) ) {
 		 *
 		 * @return String|Boolean  The archive post type name or false if not in an archive page.
 		 */
-		public static  function get_archive_post_type() {
+		public static function get_archive_post_type() {
 		    return is_archive() ? get_queried_object()->name : false;
+		}
+
+		public static function anony_get_current_permalink_shortcode() {
+			global $post;
+		
+			$permalink = '';
+		
+			if (is_singular()) {
+				$permalink = get_permalink($post->ID);
+			} elseif (is_post_type_archive()) {
+				$post_type = get_post_type();
+				$permalink = get_post_type_archive_link($post_type);
+			} elseif (is_tax() || is_category() || is_tag()) {
+				$term = get_queried_object();
+				$permalink = get_term_link($term);
+			} elseif (is_archive()) {
+				$permalink = get_the_archive_link();
+			}
+		
+			return $permalink;
 		}
 	}
 }

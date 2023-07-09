@@ -1194,6 +1194,89 @@ if ( ! class_exists( 'ANONY_Woo_Help' ) ) {
 			}
 		}
 
+		/**
+		 * Validate cart so as to have single seller per order.
+		 */
+		public static function cart_exclusive_seller() {
+			/**
+			 * @param boolean $passed True if the item passed validation.
+			 * @param integer $product_id        Product ID being validated.
+			 * @param integer $quantity          Quantity added to the cart.
+			 * @return void
+			 */
+			add_action('woocommerce_add_to_cart_validation', function( $passed, $product_id, $quantity ){
+				// Get the author ID of the product being added
+				$product_author_id = get_post_field( 'post_author', $product_id );
+						
+				// Loop through the cart items to check for products from a different author
+				foreach ( WC()->cart->get_cart() as $cart_item_key => $cart_item ) {
+					// Get the product ID and author ID of the cart item
+					$cart_item_product_id = $cart_item['product_id'];
+					$cart_item_author_id = get_post_field( 'post_author', $cart_item_product_id );
+
+					// Check if the cart item has a different author than the product being added
+					if ( $cart_item_author_id !== $product_author_id ) {
+						// Set an error message
+						wc_add_notice( __( 'You cannot add products from different seller to the cart.', 'anonyengine' ), 'error' );
+
+						// Prevent the product from being added to the cart
+						return false;
+					}
+				}
+
+				// If no products from a different author were found, allow the product to be added to the cart
+				return $passed;
+			}, 10, 3);
+			
+		}
+
+		public static function product_type_column() {
+			// Add a new column to the Products admin page
+			add_filter( 'manage_edit-product_columns', function ( $columns ) {
+				$columns['product_type'] = __( 'Product Type', 'anonyengine' );
+				return $columns;
+			} );
+
+			// Populate the Product Type column with the product type
+			add_action( 'manage_product_posts_custom_column', function( $column, $post_id ) {
+				if ( $column == 'product_type' ) {
+					$product = wc_get_product( $post_id );
+					echo $product->get_type();
+				}
+			}, 10, 2 );
+		}
+
+		public static function cart_prevent_add_out_of_stock(){
+			add_filter( 'woocommerce_add_to_cart_validation', function( $passed, $product_id, $quantity ) {
+				$product = wc_get_product( $product_id );
+				
+				if ( $product->is_type( 'variable' ) ) {
+					// For variable products, we need to check the stock quantity of the selected variation.
+					$variation_id = $_POST['variation_id'];
+					$variation = wc_get_product( $variation_id );
+					
+					if ( ! $variation->is_in_stock() || $quantity > $variation->get_stock_quantity() ) {
+						wc_add_notice( 'This variation is out of stock or there is not enough stock quantity.', 'error' );
+						$passed = false;
+					}
+				} else {
+					// For simple and other product types, we can check the global stock quantity.
+					if ( ! $product->is_in_stock() || $quantity > $product->get_stock_quantity() ) {
+						wc_add_notice( 'This product is out of stock or there is not enough stock quantity.', 'error' );
+						$passed = false;
+					}
+				}
+				
+				return $passed;
+			}, 10, 3 );
+		}
+
 	}
 }
+
+
+
+
+
+
 

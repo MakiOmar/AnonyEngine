@@ -141,13 +141,13 @@ if ( ! class_exists( 'ANONY_Mb_Single' ) ) {
 			/**
 			 * Check if there are any posted data return if empty
 			 */
-			if ( empty( $_POST ) ) {
+			if ( empty( $_POST['postType'] )  ) {
 				return;
 			}
 
 			global $post;
 
-			if ( $post->post_type !== $_POST['postType'] ) {
+			if ( !$post || is_null($post) || $post->post_type !== $_POST['postType'] ) {
 				return;
 			}
 

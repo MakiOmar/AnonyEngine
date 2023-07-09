@@ -91,5 +91,58 @@ if ( ! class_exists( 'ANONY_Wp_User_Help' ) ) {
 				return $member_number;
 			}
 		}
+
+		public function login_with_email_only(){
+			/* ------------------------------------------------------------------------- *
+			* Add custom authentication function
+			/* ------------------------------------------------------------------------- */
+			add_filter('authenticate', function($user, $email, $password){
+
+				//Check for empty fields
+				if(empty($email)){
+					//create new error object and add errors to it.
+					$error = new WP_Error();
+
+					if(empty($email)){ //No email
+						$error->add('empty_username', __('<strong>ERROR</strong>: Email field is empty.'));
+					}
+					else if(!filter_var($email, FILTER_VALIDATE_EMAIL)){ //Invalid Email
+						$error->add('invalid_username', __('<strong>ERROR</strong>: Email is invalid.'));
+					}
+
+					return $error;
+				}
+
+				//Check if user exists in WordPress database
+				$user = get_user_by('email', $email);
+
+				//bad email
+				if(!$user){
+					$error = new WP_Error();
+					$error->add('invalid', __('<strong>ERROR</strong>: Either the email or password you entered is invalid.'));
+					return $error;
+				}
+				return $user;
+			}, 20, 3);
+
+			/* ------------------------------------------------------------------------- *
+			* Change text "Username" in wp-login.php to "Email"
+			/* ------------------------------------------------------------------------- */
+			add_filter('gettext', function($translation, $text, $domain){
+				if('woocommerce' === $domain ){
+					if('Username or email address' == $text){
+						return esc_html__( 'Email address', 'woocommerce' );
+					}
+				}
+
+				if(in_array($GLOBALS['pagenow'], array('wp-login.php'))){
+					if('Username' == $text){
+						return esc_html__( 'Email address', 'wordpress' );
+					}
+				}
+				return $translation;
+			}, 20, 3);
+
+		}
 	}
 }

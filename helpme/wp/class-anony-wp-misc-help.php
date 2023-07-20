@@ -304,5 +304,40 @@ if ( ! class_exists( 'ANONY_Wp_Misc_Help' ) ) {
 		
 			return $permalink;
 		}
+		public static function current_object_title() {
+			
+		
+			$permalink = '';
+			$title = '';
+		
+			if (is_singular()) {
+				global $post;
+				$permalink = get_permalink($post->ID);
+				$title = '<a href="'.$permalink.'">'.$post->post_title.'</a>';
+			} elseif (is_post_type_archive()) {
+				$post_type = get_post_type();
+				$permalink = get_post_type_archive_link($post_type);
+				$post_type_object = get_post_type_object($post_type);
+				if ($post_type_object) {
+					$post_type_label = $post_type_object->labels->name; // or use 'singular_name' for the singular label
+					$title = '<a href="'.$permalink.'">'.$post_type_label.'</a>';
+				}
+				
+			} elseif (is_tax() || is_category() || is_tag()) {
+				$term = get_queried_object();
+				$permalink = get_term_link($term);
+				$title = '<a href="'.$permalink.'">'.$term->name.'</a>';
+			} elseif (is_archive()) {
+				$permalink = get_the_archive_link();
+				$queried_object = get_queried_object();
+				if ($queried_object && isset($queried_object->label)) {
+					$archive_label = $queried_object->label;
+					$title = '<a href="'.$permalink.'">'.$archive_label.'</a>';
+				}
+			}
+		
+			return $title;
+		}
+
 	}
 }

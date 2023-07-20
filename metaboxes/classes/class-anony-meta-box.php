@@ -201,12 +201,14 @@ if ( ! class_exists( 'ANONY_Meta_Box' ) ) {
 			wp_nonce_field( $this->id . '_action', $this->id . '_nonce', false );
 			if( $this->layout ){
 				$tabs = '';
+
+				ob_start();
 			?>
 			<div class="anony-tabbed-metabox">
 			<ul class="anony-metabox-layout-wrapper anony-metabox-tab-wrapper" id="anony-metabox-<?php $this->id ?>-layout-wrapper">
 			<?php
 				foreach ( $this->fields as $field ) { 
-					if(  'group_start' !== $field['type'] ){
+					if(  'group_start' !== $field['type'] || ( ! is_admin() && ( ! isset( $field['show_on_front'] ) || ! $field['show_on_front'] ) ) ){
 						continue;
 					}
 					?>
@@ -217,8 +219,9 @@ if ( ! class_exists( 'ANONY_Meta_Box' ) ) {
 			?>
 			</ul>
 			<?php
+			$tabs = ob_get_clean();
 			}
-
+			echo $tabs;
 			// Loop through inputs to render.
 			foreach ( $this->fields as $field ) {
 				if ( ! is_admin() && ( ! isset( $field['show_on_front'] ) || ! $field['show_on_front'] ) ) {

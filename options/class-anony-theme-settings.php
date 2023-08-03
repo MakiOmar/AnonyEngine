@@ -229,7 +229,10 @@ if ( ! class_exists( 'ANONY_Theme_Settings' ) ) {
 						if ( ! isset( $field['default'] ) ) {
 							$field['default'] = '';
 						}
-						$defaults[ $field['id'] ] = $field['default'];
+
+						if( !empty ( $field['id'] )  ){
+							$defaults[ $field['id'] ] = $field['default'];
+						}
 					}
 				}
 			}

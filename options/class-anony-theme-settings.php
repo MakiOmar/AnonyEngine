@@ -422,6 +422,9 @@ if ( ! class_exists( 'ANONY_Theme_Settings' ) ) {
 					if ( isset( $section['fields'] ) ) {
 
 						foreach ( $section['fields'] as $field_key => $field ) {
+							if( empty( $field['id'] ) ){
+								continue;
+							}
 
 							$field_i_d = $field['id'];
 

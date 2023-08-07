@@ -199,9 +199,8 @@ if ( ! class_exists( 'ANONY_Meta_Box' ) ) {
 			$p_id = ! empty( $_GET['post'] ) ? intval( $_GET['post'] ) : $post->ID;
 			// phpcs:enable
 			wp_nonce_field( $this->id . '_action', $this->id . '_nonce', false );
+			$tabs = '';
 			if( $this->layout ){
-				$tabs = '';
-
 				ob_start();
 			?>
 			<div class="anony-tabbed-metabox">

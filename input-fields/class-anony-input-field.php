@@ -149,6 +149,9 @@ if ( ! class_exists( 'ANONY_Input_Field' ) ) {
 		 * Set options field data
 		 */
 		public function opt_field_data() {
+			if( !isset( $this->field['id'] ) ){
+				return;
+			}
 			$input_name = isset( $this->field['name'] ) ? $this->field['name'] : $this->field['id'];
 
 			$this->input_name = $this->field['option_name'] . '[' . $input_name . ']';

@@ -18,7 +18,7 @@ defined( 'ABSPATH' ) || die();
 class Anony_Elementor_Custom_Fonts
 {
     
-    public function __construct(argument)
+    public function __construct($argument)
     {
         add_action( 'elementor/editor/wp_head', array( $this, 'editor_custom_fonts' ) );
 
@@ -35,7 +35,7 @@ class Anony_Elementor_Custom_Fonts
         if ( !empty( $custom_fonts ) ) {
 
             foreach( $custom_fonts as $id => $title ) {
-                $font_faces .= $this->anony_render_font_face ( $id );
+                $font_faces .= $this->render_font_face ( $id );
             }
         }
 

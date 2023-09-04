@@ -35,13 +35,16 @@ if ( ! class_exists( 'ANONY_IMAGES_HELP' ) ) {
 		public static function add_missing_dimensions( $content, $lazyload = false ) {
 			$pattern = '/<img [^>]*?src="(\w+?:\/\/[^"]+?)"[^>]*?>/iu';
 			preg_match_all( $pattern, $content, $imgs );
+			
 			foreach ( $imgs[0] as $i => $img ) {
+				
 				if( $lazyload ){
 					// Use Defer.js to lazyload.
 					// https://github.com/shinsenter/defer.js/#Defer.lazy.
 					$replaced_img = preg_replace('/<img([^>]*)src=("|\')([^"\']*)(\2)([^>]*)>/', '<img$1data-src=$2$3$4$5>', $imgs[0][ $i ]);
 					$replaced_img = preg_replace('/<img([^>]*)srcset=("|\')([^"\']*)(\2)([^>]*)>/', '<img$1data-srcset=$2$3$4$5>', $replaced_img);
-					$replaced_img = str_replace( '<img ', '<img loading=lazy ' , $replaced_img );
+					$replaced_img = str_replace( '<img ', '<img loading="lazy" ' , $replaced_img );
+					
 				}else{
 					$replaced_img = $imgs[0][ $i ];
 				}
@@ -58,7 +61,6 @@ if ( ! class_exists( 'ANONY_IMAGES_HELP' ) ) {
 
 				$content      = str_replace( $img, $replaced_img, $content );
 			}
-
 			return $content;
 		}
 

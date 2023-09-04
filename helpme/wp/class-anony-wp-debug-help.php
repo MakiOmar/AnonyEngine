@@ -69,7 +69,7 @@ if ( ! class_exists( 'ANONY_Wp_Debug_Help' ) ) {
 
 		/**
 		 * Track deprecated functions.
-		 * **Description: ** Should be hooked to deprecated_argument_run | doing_it_wrong_run
+		 * **Description: ** Should be hooked to deprecated_argument_run | doing_it_wrong_run |deprecated_function_run
 		 *
 		 * @param string $function The function that was called.
 		 * @param string $message  A message regarding the change.

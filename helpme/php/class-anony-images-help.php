@@ -41,8 +41,16 @@ if ( ! class_exists( 'ANONY_IMAGES_HELP' ) ) {
 				if( $lazyload ){
 					// Use Defer.js to lazyload.
 					// https://github.com/shinsenter/defer.js/#Defer.lazy.
-					$replaced_img = preg_replace('/<img([^>]*)src=("|\')([^"\']*)(\2)([^>]*)>/', '<img$1data-src=$2$3$4$5>', $imgs[0][ $i ]);
-					$replaced_img = preg_replace('/<img([^>]*)srcset=("|\')([^"\']*)(\2)([^>]*)>/', '<img$1data-srcset=$2$3$4$5>', $replaced_img);
+					if( false === strpos($imgs[0][ $i ], 'data-src') ){
+						$replaced_img = preg_replace('/<img([^>]*)src=("|\')([^"\']*)(\2)([^>]*)>/', '<img$1data-src=$2$3$4$5>', $imgs[0][ $i ]);
+					}else{
+						$replaced_img = $imgs[0][ $i ];
+					}
+					
+					if( false === $replaced_img, 'data-srcset') ){
+						$replaced_img = preg_replace('/<img([^>]*)srcset=("|\')([^"\']*)(\2)([^>]*)>/', '<img$1data-srcset=$2$3$4$5>', $replaced_img);
+					}
+					
 					$replaced_img = str_replace( '<img ', '<img loading="lazy" ' , $replaced_img );
 					
 				}else{

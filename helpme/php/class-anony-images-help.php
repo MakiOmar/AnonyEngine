@@ -47,7 +47,7 @@ if ( ! class_exists( 'ANONY_IMAGES_HELP' ) ) {
 						$replaced_img = $imgs[0][ $i ];
 					}
 					
-					if( false === $replaced_img, 'data-srcset') ){
+					if( false === strpos( $replaced_img, 'data-srcset') ){
 						$replaced_img = preg_replace('/<img([^>]*)srcset=("|\')([^"\']*)(\2)([^>]*)>/', '<img$1data-srcset=$2$3$4$5>', $replaced_img);
 					}
 					

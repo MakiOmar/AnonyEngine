@@ -42,7 +42,7 @@ if ( ! class_exists( 'ANONY_IMAGES_HELP' ) ) {
 					// Use Defer.js to lazyload.
 					// https://github.com/shinsenter/defer.js/#Defer.lazy.
 					if( false === strpos($imgs[0][ $i ], 'data-src') ){
-						$replaced_img = preg_replace('/<img([^>]*)src=("|\')([^"\']*)(\2)([^>]*)>/', '<img$1data-src=$2$3$4$5 src="' . ANOE_URI . 'assets/images/placeholders/lazyload-placeholder.png">', $imgs[0][ $i ]);
+						$replaced_img = preg_replace('/<img([^>]*)src=("|\')([^"\']*)(\2)([^>]*)>/', '<img$1data-src=$2$3$4$5 src="' . ANOE_URI . 'assets/images/placeholders/lazyload-placeholder.svg">', $imgs[0][ $i ]);
 					}else{
 						$replaced_img = $imgs[0][ $i ];
 					}

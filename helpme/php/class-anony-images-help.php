@@ -61,10 +61,42 @@ if ( ! class_exists( 'ANONY_IMAGES_HELP' ) ) {
 					$img_url  = $imgs[1][ $i ];
 					$img_size = getimagesize( $img_url );
 
+
+
 					if ( false !== $img_size ) {
-						$replaced_img = str_replace( '<img ', '<img ' . $img_size[3] . ' ', $replaced_img );
+						$replaced_img = str_replace( '<img ', '<img style="width:'. $img_size[0] .';max-height:'. $img_size[1] .'"' . $img_size[3] . ' ', $replaced_img );
 					}
 
+				}else{
+					$img_url  = $imgs[1][ $i ];
+					$img_size = getimagesize( $img_url );
+
+
+
+					if ( false !== $img_size ) {
+						
+						if (preg_match('/<img[^>]+style=["\']([^"\']+)["\']/', $replaced_img, $matches)) {
+							// The img element has a style attribute
+							$style_attribute = $matches[1];
+
+							if (!preg_match('/\bwidth\s*:\s*[^;]+/', $style_attribute)) {
+								// Width is not set in style attribute, add it
+								$style_attribute .= ' width: '.$img_size[0].'px;';
+							}
+							
+							if (!preg_match('/\bmax-height\s*:\s*[^;]+/', $style_attribute)) {
+								// Height is not set in style attribute, add it
+								$style_attribute .= ' max-height: '.$img_size[1].'px;';
+							}
+							
+							// Replace the updated style attribute in the HTML
+							$replaced_img = str_replace($matches[1], $style_attribute , $replaced_img);
+						}else{
+
+							$replaced_img = str_replace( '<img ', '<img style="width:'. $img_size[0] .'px;max-height:'. $img_size[1] .'px" ', $replaced_img );
+						}
+						
+					}
 				}
 
 				$content      = str_replace( $img, $replaced_img, $content );

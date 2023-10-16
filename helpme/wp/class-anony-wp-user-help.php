@@ -91,7 +91,21 @@ if ( ! class_exists( 'ANONY_Wp_User_Help' ) ) {
 				return $member_number;
 			}
 		}
+		public static function admin_search_users_by_meta( $meta_key ){
+			add_action( 'pre_user_query', function ( $query ) {
+				global $wpdb;
+				global $pagenow;
 
+				if (is_admin() && 'users.php' == $pagenow) {
+					if( empty($_REQUEST['s']) ){return;}
+					$query->query_fields = 'DISTINCT '.$query->query_fields;
+					$query->query_from .= ' LEFT JOIN '.$wpdb->usermeta.' ON '.$wpdb->usermeta.'.user_id = '.$wpdb->users.'.ID';
+					$query->query_where = "WHERE 1=1 AND ( user_login LIKE '%".$_REQUEST['s']."%' OR ID = '".$_REQUEST['s']."' OR (meta_value LIKE '%".$_REQUEST['s']."%' AND meta_key = '".$meta_key."'))";
+				}
+				return $query;
+			}  );
+			
+		}
 		public function login_with_email_only(){
 			/* ------------------------------------------------------------------------- *
 			* Add custom authentication function

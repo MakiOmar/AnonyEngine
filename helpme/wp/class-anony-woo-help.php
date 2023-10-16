@@ -1270,8 +1270,64 @@ if ( ! class_exists( 'ANONY_Woo_Help' ) ) {
 				return $passed;
 			}, 10, 3 );
 		}
+		
+		public static function create_order($customer_id , $product_id, $total = 0){
+			$product = wc_get_product( $product_id );
+			
+			$user = get_user_by('id', $customer_id);
+			
+			if( !$product && !$user ){
+				return;
+			}
+			
+			
+			// Create the order
+			$order_data = array(
+				'customer_id' => $customer_id,
+				'status' => 'processing',
+			);
+
+			// Create the order
+			$order = wc_create_order($order_data);
+			if( $order ){
+
+				// add products
+				$order->add_product( $product, 1, [
+					'subtotal'     => $total,
+					'total'        => $total,
+				] );
+
+				
+
+				// Get an instance of the WC_Customer Object from the user ID
+				$customer = new WC_Customer( $customer_id );
+            
+				// add billing and shipping addresses
+				$address = array(
+					'first_name' => $customer->get_billing_first_name(),
+					'last_name'  => $customer->get_billing_last_name(),
+					'email'      => $customer->get_email(),
+					'phone'      => $customer->get_billing_phone(),
+					'address_1'  => $customer->get_billing_address_1(),
+					'address_2'  => $customer->get_billing_address_2(),
+					'city'       => $customer->get_billing_city(),
+					'country'    => $customer->get_billing_country()
+				);
+
+				$order->set_address( $address, 'billing' );
+        
+        		$order->set_address( $address, 'shipping' );
+
+				// calculate and save
+				$order->calculate_totals();
+        				
+				$order->save();
+			}
+		}
 
 	}
+	
+	
 }
 
 

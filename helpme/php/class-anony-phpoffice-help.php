@@ -15,6 +15,9 @@ defined( 'ABSPATH' ) || die(); // Exit if accessed direct..
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
+use PhpOffice\PhpSpreadsheet\Style\Border;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
 
 if ( ! class_exists( 'ANONY_PHPOFFICE_HELP' ) ) {
 	/**
@@ -33,35 +36,78 @@ if ( ! class_exists( 'ANONY_PHPOFFICE_HELP' ) ) {
 		 * @param  array $array Data array.
 		 * @return void
 		 */
-		public static function array_to_spreadsheet( $array ) {
+		public static function array_to_spreadsheet( $array, $reportHeaders = false ) {
 
 			// Create new Spreadsheet object.
 			$spreadsheet = new Spreadsheet();
 
 			// Set document properties.
-			$spreadsheet->getProperties()->setCreator( 'Maarten Balliauw' )
-				->setLastModifiedBy( 'Maarten Balliauw' )
+			$spreadsheet->getProperties()->setCreator( 'Reporter' )
+				->setLastModifiedBy( 'Reporter' )
 				->setTitle( 'Office 2007 XLSX Test Document' )
 				->setSubject( 'Office 2007 XLSX Test Document' )
-				->setDescription( 'Test document for Office 2007 XLSX, generated using PHP classes.' )
+				->setDescription( 'Report' )
 				->setKeywords( 'office 2007 openxml php' )
 				->setCategory( 'Test result file' );
 
+			
+			
 			// Add some data.
-			$sheet = $spreadsheet->setActiveSheetIndex( 0 )
-				->setCellValue( 'A1', 'Book codes' );
+			$sheet = $spreadsheet->setActiveSheetIndex( 0 )->setCellValue( 'A1', 'Report ' . date('Y-m-d') );
+			
+			// Get the active sheet
+			$sheet = $spreadsheet->getActiveSheet();
 
-			$sheet->fromArray( array( $array ), null, 'A2' );
+			// Set headers
+			if( $reportHeaders && is_array( $reportHeaders ) ){
+				
+				$headerRow = 2;
+				$col = 'A';
+				foreach ($reportHeaders as $header) {
+					$sheet->setCellValue($col . $headerRow, $header);
+					$sheet->getStyle($col . $headerRow)->applyFromArray([
+						'font' => ['bold' => true, 'color' => ['rgb' => 'FFFFFF']],
+						'fill' => ['fillType' => Fill::FILL_SOLID, 'startColor' => ['rgb' => '4CAF50']],
+					]);
+					$sheet->getColumnDimension($col)->setAutoSize(true);
+					$col++;
+				}
+			}
+
+			// Set data and formatting
+			$dataRow = 3;
+			foreach ($array as $rowData) {
+				$col = 'A';
+				foreach ($rowData as $value) {
+					$sheet->setCellValue($col . $dataRow, $value);
+					$sheet->getStyle($col . $dataRow)->applyFromArray([
+						'alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER],
+						'borders' => [
+							'allBorders' => [
+								'borderStyle' => Border::BORDER_THIN,
+								'color' => ['rgb' => '000000'],
+							],
+						],
+					]);
+					$col++;
+				}
+				$dataRow++;
+			}
+			
+			// Autofit columns to content
+			foreach(range('A', $sheet->getHighestColumn()) as $column) {
+				$sheet->getColumnDimension($column)->setAutoSize(true);
+			}
 
 			// Rename worksheet.
-			$spreadsheet->getActiveSheet()->setTitle( 'Book codes' );
+			$spreadsheet->getActiveSheet()->setTitle( 'Orders Report' );
 
 			// Set active sheet index to the first sheet, so Excel opens this as the first sheet.
 			$spreadsheet->setActiveSheetIndex( 0 );
 
 			// Redirect output to a client’s web browser (Xlsx).
 			header( 'Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' );
-			header( 'Content-Disposition: attachment;filename="book-codes.xlsx"' );
+			header( 'Content-Disposition: attachment;filename="Report-'.date('Y-m-d').'.xlsx"' );
 			header( 'Cache-Control: max-age=0' );
 			// If you're serving to IE 9, then the following may be needed.
 			header( 'Cache-Control: max-age=1' );

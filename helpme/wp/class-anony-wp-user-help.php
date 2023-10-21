@@ -31,18 +31,22 @@ if ( ! class_exists( 'ANONY_Wp_User_Help' ) ) {
 		 */
 		public static function get_current_user_role() {
 
-			if ( is_user_logged_in() ) {
-
-				$user = wp_get_current_user();
-
-				$role = (array) $user->roles;
-
-				return $role[0];
+			$roles = self::get_current_user_roles();
+			if( $roles && is_array( $roles ) ){
+				return $roles[0] ;
 			}
-
 			return false;
 		}
-
+		public static function get_current_user_roles() {
+		   if(is_user_logged_in()) {
+			   $user = wp_get_current_user();
+			   $roles = (array) $user->roles;
+			   return $roles;
+		   } 
+		   else {
+			 return false;
+		   }
+		}
 		/**
 		 * Generate member_number when a user is registered.
 		 * Should be hooked to user_register.

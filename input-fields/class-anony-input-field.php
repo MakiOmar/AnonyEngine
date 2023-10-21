@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * Deprecated class ANONY_Input_Field.
+ *
+ * @deprecated 1.0.0170 Deprecated in favor of ANONY_Input.
+ */
 if ( ! class_exists( 'ANONY_Input_Field' ) ) {
 	/**
 	 * A class that renders input fields according to context
@@ -117,8 +121,6 @@ if ( ! class_exists( 'ANONY_Input_Field' ) ) {
 
 			$this->enqueue_scripts();
 		}
-
-
 		/**
 		 * Set field data depending on the context
 		 */

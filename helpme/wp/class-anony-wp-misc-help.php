@@ -150,7 +150,7 @@ if ( ! class_exists( 'ANONY_Wp_Misc_Help' ) ) {
 				?>
 				<!--API should be always before map script-->
 				<?php // phpcs:disable  ?>
-				<script type='text/javascript' src='<?php echo esc_url( $script_src ); ?>'></script>
+				<script type='text/javascript' src='<?php echo esc_url( $script_src ); ?>' async defer></script>
 				<?php // phpcs:enable.  ?>
 			<?php } ?>
 
@@ -170,6 +170,67 @@ if ( ! class_exists( 'ANONY_Wp_Misc_Help' ) ) {
 				}
 				google.maps.event.addDomListener(window, "load", initialize);
 			</script>
+			<?php
+		}
+		
+		public static function anony_google_map_address_init( array $args ) {
+			
+			if ( empty( $args['target_id'] ) || empty( $args['address'] ) ) {
+				ANONY_Wp_Debug_Help::error_log( 'Map arguments is not complete' );
+			}
+
+			$region   = ! empty( $args['region'] ) ? $args['region'] : 'EG';
+			$language = ! empty( $args['language'] ) ? $args['language'] : 'ar';
+
+			$engine_options = ANONY_Options_Model::get_instance( ANONY_ENGINE_OPTIONS );
+			
+			if ( ! empty( $engine_options->google_maps_api_key ) && '1' === $engine_options->enable_google_maps_script ) {
+				add_action('wp_head', function(){
+					global $address_on_map_styles;
+					if(!isset( $address_on_map_styles )){ ?>
+
+						<style>
+							.anony-address-on-map{
+								min-width: 60%;
+								min-height: 350px;
+							}
+						</style>
+
+						<?php 
+						$address_on_map_styles = true;
+					} 
+				});
+				$script_src = add_query_arg(array(
+					'v'=> '3.exp',
+					'key'=> $engine_options->google_maps_api_key,
+					'language'=> $language,
+					'region'=> $region,
+				), 'https://maps.googleapis.com/maps/api/js');
+
+				add_action('wp_enqueue_scripts', function() use( $script_src ){
+
+					/*API should be always before map script*/
+					wp_enqueue_script( 'anony-address-on-map-api', $script_src, array() ,'4.9.10' , array('in_footer' => true, 'strategy' => 'defer') );
+					wp_enqueue_script( 
+						'anony-address-on-map', 
+						ANOE_URI . 'assets/js/address-on-map.js', 
+						array( 'anony-address-on-map-api' ), 
+						filemtime( wp_normalize_path( ANOE_DIR . 'assets/js/address-on-map.js' ) ),
+						array('in_footer' => true) 
+					);
+				});
+
+				add_action('wp_print_footer_scripts', function() use( $args ){
+					?>
+						<script type="text/javascript">
+							if( typeof mapDisplay !== 'undefined' ){
+								mapDisplay('<?php echo $args['address'] ?>', "<?php echo $args['target_id'] ?>");
+							}
+							
+						</script>
+					<?php
+				});
+			} ?>
 			<?php
 		}
 

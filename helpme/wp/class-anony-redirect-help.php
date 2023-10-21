@@ -26,8 +26,8 @@ if ( ! class_exists( 'ANONY_Redirect_Help' ) ) {
 		function login_redirect( $url ) {
 		  add_action('init',function () use($url){
 				global $pagenow;
-				if( 'wp-login.php' == $pagenow ) {
-					wp_redirect($url);
+				if( (!isset($_GET['action']) && 'wp-login.php' == $pagenow) ||  ( isset($_GET['action']) && $_GET['action'] == 'login' ) ) {
+					wp_redirect(site_url('/login/'));
 					exit();
 				}
 			});

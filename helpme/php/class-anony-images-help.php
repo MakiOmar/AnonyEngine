@@ -35,7 +35,9 @@ if ( ! class_exists( 'ANONY_IMAGES_HELP' ) ) {
 		public static function add_missing_dimensions( $content, $lazyload = false ) {
 			$pattern = '/<img [^>]*?src="(\w+?:\/\/[^"]+?)"[^>]*?>/iu';
 			preg_match_all( $pattern, $content, $imgs );
-			
+			if(!function_exists('getimagesize')){
+				return $content;
+			}
 			foreach ( $imgs[0] as $i => $img ) {
 				
 				if( $lazyload ){

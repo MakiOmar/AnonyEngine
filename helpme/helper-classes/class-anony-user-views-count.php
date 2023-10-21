@@ -30,7 +30,7 @@ if ( ! class_exists( 'ANONY_USER_VIEWS_COUNT' ) ) {
 			$this->user_id = $user_id;
 			add_action('wp', array($this, 'track_user_views'));
 		}
-		public function increment_user_view_count($this->user_id) {
+		public function increment_user_view_count($user_id) {
 			
 			$view_count = get_user_meta($this->user_id, 'user_view_count', true);
 			
@@ -40,7 +40,7 @@ if ( ! class_exists( 'ANONY_USER_VIEWS_COUNT' ) ) {
 			
 		}
 		
-		public function should_count_view($this->user_id) {
+		public function should_count_view($user_id) {
 			$expiration_period = 24 * 60 * 60; // 24 hours
 			$cookie_name = 'user_viewed_' . $this->user_id;
 

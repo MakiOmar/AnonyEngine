@@ -95,6 +95,21 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 		 */
 		public $fields;
 
+		/**
+		 * Form submit label.
+		 *
+		 * @var array
+		 */
+		public $submit_label;
+
+
+		/**
+		 * Form error messages.
+		 *
+		 * @var array
+		 */
+		public $error_msgs;
+
 
 		/**
 		 * Holds an object from ANONY_Validate_Inputs.
@@ -116,13 +131,7 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 		 * @param array $form A multi-dimensional array of form's fields.
 		 */
 		public function __construct( array $form ) {
-			if (
-				count( array_intersect( $this->form_init, array_keys( $form ) ) ) !== count( $this->form_init )
-				||
-				'' === $form['id']
-			) {
-				$this->errors['missing-for-id'] = esc_html__( 'Form id is missing' );
-			}
+
 
 			// Set form Settings.
 			if ( isset( $settings ) && is_array( $settings ) ) {
@@ -133,15 +142,30 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 				$this->to_do_list = $form['to_do_list'];
 			}
 
-			$this->id           = $form['id'];
-			$this->fields       = $form['fields'];
-			$this->submit_label = isset( $form['submit_label'] ) && ! empty( $form['submit_label'] ) ? $form['submit_label'] : __( 'Submit', 'anonyengine' );
+			$this->id           = !empty( $form['id'] ) ? $form['id'] : '';
+			$this->fields       = !empty( $form['fields'] ) ? $form['fields'] : array();
+			
+			if (
+				count( array_intersect( $this->form_init, array_keys( $form ) ) ) !== count( $this->form_init )
+				||
+				'' === $this->id
+			) {
+				echo sprintf(__( 'Form must be of structure %s' ), var_export( $this->form_init, true ));
+				return;
+			}else{
+				$this->submit_label = isset( $form['submit_label'] ) && ! empty( $form['submit_label'] ) ? $form['submit_label'] : __( 'Submit', 'anonyengine' );
 
-			add_shortcode( $this->id, array( $this, 'create_shortcode' ) );
+				add_shortcode( $this->id, array( $this, 'create_shortcode' ) );
 
-			// Submitted form.
-			add_action( 'init', array( $this, 'form_submitted' ) );
+				// Submitted form.
+				add_action( 'init', array( $this, 'form_submitted' ) );
+			}
+			
 
+		}
+
+		public function render(){
+			$this->create( $this->fields );
 		}
 
 		/**
@@ -154,15 +178,8 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 			$this->create( $this->fields );
 			return ob_get_clean();
 		}
-
-		/**
-		 * Form render function.
-		 *
-		 * @param array $fields An array of fields.
-		 */
-		public function create( array $fields ) {
-
-			$this->error_msgs = get_transient( 'anony_form_errors_' . $this->id );
+		protected function render_submit_errors(){
+			$this->error_msgs = get_transient( 'anony_form_submit_errors_' . $this->id );
 
 			if ( false !== $this->error_msgs ) {
 				echo '<ul>';
@@ -173,14 +190,38 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 				}
 				echo '</ul>';
 
-				delete_transient( 'anony_form_errors_' . $this->id );
+				delete_transient( 'anony_form_submit_errors_' . $this->id );
 			}
+		}
+		/**
+		 * Form render function.
+		 *
+		 * @param array $fields An array of fields.
+		 */
+		public function create( array $fields ) {
+
+			$this->render_submit_errors();
 			?>
 			<form id="<?php echo esc_attr( $this->id ); ?>" class="anony-form" action="<?php echo esc_attr( $this->action ); ?>" method="<?php echo esc_attr( $this->method ); ?>" <?php echo esc_html( $this->form_attributes ); ?>>
 
 				<?php
 				foreach ( $fields as $field ) :
-					$render_field = new ANONY_Input_Field( $field, $this->id, 'form' );
+
+					$args = array(
+						'field'      => $field,
+						'context'    => 'form',
+						'metabox_id' => $this->id,
+					);
+
+					if( class_exists( 'ANONY_Input' ) ){
+
+						$render_field = new ANONY_Input( $args );
+
+					}else{
+						// Deprecated ANONY_Input_Field.
+						$render_field = new ANONY_Input_Field( $field, $this->id, 'form' );
+					}
+
 					//phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
 					echo $render_field->field_init();
 					//phpcs:enable.
@@ -254,11 +295,9 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 			if ( in_array( $field['type'], $this->no_validation, true ) ) {
 				return;
 			}
-
+			$field_id = $field['id'];
 			// Check if validation required.
 			if ( isset( $field['validate'] ) ) {
-
-				$field_id = $field['id'];
 
 				$args = array(
 					'field'     => $field,
@@ -307,7 +346,7 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 			$this->validate_form_fields( $this->fields ); // Validation problem because fields' ids looks like field[key].
 
 			if ( isset( $this->error_msgs ) ) {
-				set_transient( 'anony_form_errors_' . $this->id, $this->error_msgs );
+				set_transient( 'anony_form_submit_errors_' . $this->id, $this->error_msgs );
 
 				return;
 			}

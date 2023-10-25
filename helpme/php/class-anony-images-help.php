@@ -61,8 +61,11 @@ if ( ! class_exists( 'ANONY_IMAGES_HELP' ) ) {
 
 				if ( false === strpos( $img, ' width' ) && false === strpos( $img, ' height' ) ) {
 					$img_url  = $imgs[1][ $i ];
-					$img_size = getimagesize( $img_url );
-
+					if( ANONY_LINK_HELP::linkExists($img_url) && function_exists( 'getimagesize' ) ){
+						$img_size = getimagesize( $img_url );
+					}else{
+						$img_size = false;
+					}
 
 
 					if ( false !== $img_size ) {
@@ -71,8 +74,11 @@ if ( ! class_exists( 'ANONY_IMAGES_HELP' ) ) {
 
 				}else{
 					$img_url  = $imgs[1][ $i ];
-					$img_size = getimagesize( $img_url );
-
+					if( ANONY_LINK_HELP::linkExists($img_url) && function_exists( 'getimagesize' ) ){
+						$img_size = getimagesize( $img_url );
+					}else{
+						$img_size = false;
+					}
 
 
 					if ( false !== $img_size ) {

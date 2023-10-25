@@ -373,7 +373,7 @@ if ( ! class_exists( 'ANONY_Wp_Misc_Help' ) ) {
 				$term = get_queried_object();
 				$permalink = get_term_link($term);
 			} elseif (is_archive()) {
-				$permalink = get_the_archive_link();
+				$permalink = get_post_type_archive_link(get_post_type());;
 			}
 		
 			return $permalink;
@@ -402,7 +402,7 @@ if ( ! class_exists( 'ANONY_Wp_Misc_Help' ) ) {
 				$permalink = get_term_link($term);
 				$title = '<a href="'.$permalink.'">'.$term->name.'</a>';
 			} elseif (is_archive()) {
-				$permalink = get_the_archive_link();
+				$permalink = get_post_type_archive_link(get_post_type());;
 				$queried_object = get_queried_object();
 				if ($queried_object && isset($queried_object->label)) {
 					$archive_label = $queried_object->label;

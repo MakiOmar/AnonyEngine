@@ -179,9 +179,25 @@ if ( ! class_exists( 'ANONY_Wp_Misc_Help' ) ) {
 				ANONY_Wp_Debug_Help::error_log( 'Map arguments is not complete' );
 			}
 
-			$region   = ! empty( $args['region'] ) ? $args['region'] : 'EG';
-			$language = ! empty( $args['language'] ) ? $args['language'] : 'ar';
+			$map_fields = get_option('anony-maps-details');
+			if(!$map_fields){
+				add_option('anony-maps-details', array($args));
+			}else{
+				$exists = false;
+				foreach( $map_fields as $map_field ){
+					if( $map_field['target_id'] == $args['target_id'] ){
+						$exists = true;
+						break;
+					}
+				}
 
+				if( !$exists ){
+					$map_fields[] = $args;
+				}
+				
+
+				update_option('anony-maps-details', $map_fields);
+			}
 			$engine_options = ANONY_Options_Model::get_instance( ANONY_ENGINE_OPTIONS );
 			
 			if ( ! empty( $engine_options->google_maps_api_key ) && '1' === $engine_options->enable_google_maps_script ) {
@@ -200,36 +216,33 @@ if ( ! class_exists( 'ANONY_Wp_Misc_Help' ) ) {
 						$address_on_map_styles = true;
 					} 
 				});
-				$script_src = add_query_arg(array(
-					'v'=> '3.exp',
-					'key'=> $engine_options->google_maps_api_key,
-					'language'=> $language,
-					'region'=> $region,
-				), 'https://maps.googleapis.com/maps/api/js');
+				add_action('wp_head', function(){
+					global $maps_details_edded;
+					if(!$maps_details_edded){
+						$map_fields = get_option('anony-maps-details');
+						if( $map_fields ){
+							?>
+							<script>
+								var mapsDetails = <?php echo json_encode($map_fields) ?>;
+							</script>
+							<?php
+						}
 
-				add_action('wp_enqueue_scripts', function() use( $script_src ){
-
-					/*API should be always before map script*/
-					wp_enqueue_script( 'anony-address-on-map-api', $script_src, array() ,'4.9.10' , array('in_footer' => true, 'strategy' => 'defer') );
+						$maps_details_edded = true;
+					}
+					
+				});
+				add_action('wp_enqueue_scripts', function(){
 					wp_enqueue_script( 
 						'anony-address-on-map', 
 						ANOE_URI . 'assets/js/address-on-map.js', 
-						array( 'anony-address-on-map-api' ), 
+						array(), 
 						filemtime( wp_normalize_path( ANOE_DIR . 'assets/js/address-on-map.js' ) ),
 						array('in_footer' => true) 
 					);
-				});
-
-				add_action('wp_print_footer_scripts', function() use( $args ){
-					?>
-						<script type="text/javascript">
-							if( typeof mapDisplay !== 'undefined' ){
-								mapDisplay('<?php echo $args['address'] ?>', "<?php echo $args['target_id'] ?>");
-							}
-							
-						</script>
-					<?php
-				});
+					wp_enqueue_script( 'anony-google-map-api', array('anony-address-on-map'));
+					
+				}, 20);
 			} ?>
 			<?php
 		}

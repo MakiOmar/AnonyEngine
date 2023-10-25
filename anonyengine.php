@@ -138,4 +138,25 @@ add_action( 'init', array ( 'ANONY_Post_Help', 'register_post_types') );
 // Register Taxonomies.
 add_action( 'init', array ( 'ANONY_Taxonomy_Help', 'register_taxonomies' ));
 
+add_action('wp_enqueue_scripts', function() {
+	$engine_options = ANONY_Options_Model::get_instance( ANONY_ENGINE_OPTIONS );
+	if ( ! empty( $engine_options->google_maps_api_key ) && '1' === $engine_options->enable_google_maps_script ) {
+		$region   = ! empty( $engine_options->google_maps_region ) ? $engine_options->google_maps_region : 'EG';
+		$language = ! empty( $engine_options->google_maps_language ) ? $engine_options->google_maps_language : 'ar';
+		$script_src = add_query_arg(array(
+			'v'=> '3.exp',
+			'key'=> $engine_options->google_maps_api_key,
+			'language'=> $language,
+			'region'=> $region,
+			'libraries'=> 'places',
+			'callback'=> 'initMap',
+		), 'https://maps.googleapis.com/maps/api/js');
+
+		/*API should be always before map script*/
+		wp_register_script( 'anony-google-map-api', $script_src, array() ,'4.9.10' , array('in_footer' => true, 'strategy' => 'async') );
+	}
+	
+	
+});
+
 do_action('anonyengine_loaded');

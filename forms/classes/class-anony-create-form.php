@@ -50,7 +50,7 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 		 *
 		 * @var array
 		 */
-		public $to_do_list = array();
+		public $action_list = array();
 
 		/**
 		 * Form's attributes.
@@ -96,6 +96,13 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 		public $fields;
 
 		/**
+		 * Form fields layout.
+		 *
+		 * @var array
+		 */
+		public $fields_layout = 'rows';
+
+		/**
 		 * Form submit label.
 		 *
 		 * @var array
@@ -138,8 +145,8 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 				$this->form_settings( $settings );
 			}
 
-			if ( isset( $form['to_do_list'] ) && is_array( $form['to_do_list'] ) ) {
-				$this->to_do_list = $form['to_do_list'];
+			if ( isset( $form['action_list'] ) && is_array( $form['action_list'] ) ) {
+				$this->action_list = $form['action_list'];
 			}
 
 			$this->id           = !empty( $form['id'] ) ? $form['id'] : '';
@@ -153,12 +160,24 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 				echo sprintf(__( 'Form must be of structure %s' ), var_export( $this->form_init, true ));
 				return;
 			}else{
-				$this->submit_label = isset( $form['submit_label'] ) && ! empty( $form['submit_label'] ) ? $form['submit_label'] : __( 'Submit', 'anonyengine' );
 
+				if( !empty( $form['fields_layout'] ) ){
+					$this->fields_layout = $form['fields_layout'];
+				}
+
+				$this->submit_label = isset( $form['submit_label'] ) && ! empty( $form['submit_label'] ) ? $form['submit_label'] : __( 'Submit', 'anonyengine' );
+				wp_enqueue_style(
+					'anony-metaboxs',
+					ANONY_MB_URI . 'assets/css/metaboxes.css',
+					false,
+					// phpcs:disable WordPress.WP.EnqueuedResourceParameters.MissingVersion
+					filemtime( wp_normalize_path( ANONY_MB_PATH . 'assets/css/metaboxes.css' ) )
+					// phpcs:enable.
+				);
 				add_shortcode( $this->id, array( $this, 'create_shortcode' ) );
 
 				// Submitted form.
-				add_action( 'init', array( $this, 'form_submitted' ) );
+				add_action( 'template_redirect', array( $this, 'form_submitted' ) );
 			}
 			
 
@@ -201,6 +220,17 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 		public function create( array $fields ) {
 
 			$this->render_submit_errors();
+			if( 'columns' === $this->fields_layout ){
+				?>
+					<style>
+
+						fieldset.anony-row{
+							flex-direction:column;
+							align-items: flex-start;
+						}
+					</style>
+				<?php
+			}
 			?>
 			<form id="<?php echo esc_attr( $this->id ); ?>" class="anony-form" action="<?php echo esc_attr( $this->action ); ?>" method="<?php echo esc_attr( $this->method ); ?>" <?php echo esc_html( $this->form_attributes ); ?>>
 
@@ -331,33 +361,35 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 		 */
 		public function form_submitted() {
 
-			$not_validated = wp_unslash( $_POST );
-
-			if ( isset( $_SERVER['REQUEST_METHOD'] ) !== 'POST' && ! isset( $not_validated[ 'submit-' . $this->id ] ) ) {
+			$not_validated = wp_unslash( $_REQUEST );
+			
+			if ( ! isset( $not_validated[ 'submit-' . $this->id ] ) ) {
 				return;
 			}
+
+			
 
 			// Verify nonce.
 			if ( ! isset( $not_validated[ 'anony_form_submit_nonce_' . $this->id ] ) || ! wp_verify_nonce( $not_validated[ 'anony_form_submit_nonce_' . $this->id ], 'anony_form_submit_' . $this->id ) ) {
 				return;
 			}
-
+			
 			// Validation.
 			$this->validate_form_fields( $this->fields ); // Validation problem because fields' ids looks like field[key].
-
+			
 			if ( isset( $this->error_msgs ) ) {
 				set_transient( 'anony_form_submit_errors_' . $this->id, $this->error_msgs );
 
 				return;
 			}
+			
+			if ( ! empty( $this->action_list ) ) {
 
-			if ( ! empty( $this->to_do_list ) ) {
-
-				foreach ( $this->to_do_list as $to_do => $to_do_data ) {
-					$class_name = "ANONY_{$to_do}";
+				foreach ( $this->action_list as $action => $action_data ) {
+					$class_name = "ANONY_{$action}";
 					if ( class_exists( $class_name ) ) :
-
-						new $class_name( $this->validated, $to_do_data );
+						
+						new $class_name( $this->validated, $action_data, $this );
 
 					endif;
 				}

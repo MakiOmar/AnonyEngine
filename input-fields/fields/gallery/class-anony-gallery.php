@@ -99,6 +99,22 @@ class ANONY_Gallery {
 	 * Enqueue scripts.
 	 */
 	function enqueue() {
+		if( is_user_logged_in() ){
+			$this->logged_in_scripts();
+		}else{
+			$this->not_logged_in_scripts();
+		}
+		wp_localize_script(
+			'anony-opts-field-upload-js',
+			'anony_gallery',
+			array(
+				'url'  => ANONY_FIELDS_URI . 'gallery/blank.png',
+				'name' => $this->parent->input_name,
+			)
+		);
+	}
+
+	protected function logged_in_scripts(){
 		$wp_version = floatval( get_bloginfo( 'version' ) );
 		if ( $wp_version < '3.5' ) {
 			wp_enqueue_script(
@@ -119,13 +135,9 @@ class ANONY_Gallery {
 			);
 			wp_enqueue_media();
 		}
-		wp_localize_script(
-			'anony-opts-field-upload-js',
-			'anony_gallery',
-			array(
-				'url'  => ANONY_FIELDS_URI . 'gallery/blank.png',
-				'name' => $this->parent->input_name,
-			)
-		);
+	}
+
+	protected function not_logged_in_scripts(){
+
 	}
 }

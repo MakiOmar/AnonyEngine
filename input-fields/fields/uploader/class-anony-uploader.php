@@ -135,6 +135,15 @@ class ANONY_Uploader {
 	 * @return void.
 	 */
 	public function enqueue() {
+		if( is_user_logged_in() ){
+			$this->logged_in_scripts();
+		}else{
+			$this->not_logged_in_scripts();
+		}
+		
+		wp_localize_script( 'anony-opts-field-upload-js', 'anony_upload', array( 'url' => ANOE_URI . 'assets/images/placeholders/file.png' ) );
+	}
+	protected function logged_in_scripts() {
 		$wp_version = floatval( get_bloginfo( 'version' ) );
 		if ( $wp_version < '3.5' ) {
 			wp_enqueue_script(
@@ -155,6 +164,9 @@ class ANONY_Uploader {
 			);
 			wp_enqueue_media();
 		}
-		wp_localize_script( 'anony-opts-field-upload-js', 'anony_upload', array( 'url' => ANOE_URI . 'assets/images/placeholders/file.png' ) );
+	}
+
+	protected function not_logged_in_scripts(){
+		
 	}
 }

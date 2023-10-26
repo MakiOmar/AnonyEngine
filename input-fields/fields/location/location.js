@@ -11,7 +11,7 @@ jQuery(document).ready(function($){
               var geocoder = new google.maps.Geocoder();
               var latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
       
-              geocoder.geocode({ 'latLng': latLng }, function(results, status) {
+              geocoder.geocode({ 'latLng': latLng, language: "en" }, function(results, status) {
                 if (status === google.maps.GeocoderStatus.OK) {
                   if (results[0]) {
                     $('#' + targetID).val(results[0].formatted_address);

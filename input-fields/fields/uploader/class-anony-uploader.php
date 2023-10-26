@@ -54,17 +54,28 @@ class ANONY_Uploader {
 	 * @return string HTML output
 	 */
 	public function render() {
+		if( is_user_logged_in() ){
+			return $this->render_priv();
+		}else{
+			return $this->render_nopriv();
+		}
 
-		$html = '';
+	}
 
+	protected function note(&$html){
 		if ( isset( $this->parent->field['note'] ) ) {
 			$html .= '<p class=anony-warning>' . $this->parent->field['note'] . '<p>';
 		}
+	}
 
+	protected function fieldset_open(&$html){
 		$html .= sprintf(
 			'<fieldset class="anony-row anony-row-inline" id="fieldset_%1$s">',
 			$this->parent->field['id']
 		);
+	}
+
+	protected function label(&$html){
 		if ( ( 'meta' === $this->parent->context || 'form' === $this->parent->context ) && isset( $this->parent->field['title'] ) ) {
 			$html .= sprintf(
 				'<label class="anony-label" for="%1$s">%2$s</label>',
@@ -72,14 +83,27 @@ class ANONY_Uploader {
 				esc_html( $this->parent->field['title'] )
 			);
 		}
+	}
 
-		$html        .= sprintf(
+	protected function input_priv(&$html){
+		$html .= sprintf(
 			'<input id="%4$s" type="hidden" name="%1$s" value="%2$s" class="%3$s" />',
 			$this->parent->input_name,
 			$this->parent->value,
 			$this->parent->class_attr,
 			esc_attr( $this->parent->field['id'] )
 		);
+	}
+
+	protected function input_nopriv(&$html){
+		$html .= sprintf(
+			'<input type="file" id="%1$s" name="%1$s" style="display:none"/>',
+			esc_attr( $this->parent->field['id'] ),
+			$this->parent->input_name,
+		);
+	}
+	
+	protected function uploads_preview_priv(&$html){
 		$html        .= '<div class="uploads-wrapper">';
 		$image_exts   = array( 'jpg', 'jpeg', 'jpe', 'gif', 'png', 'svg' );
 		$img_ext_preg = '!\.(' . join( '|', $image_exts ) . ')$!i';
@@ -98,7 +122,30 @@ class ANONY_Uploader {
 			$html .= '<img class="anony-opts-screenshot" style="max-width:80px;" src="' . ANOE_URI . 'assets/images/placeholders/browse.png"/>';
 			$html .= '<span class="uploaded-file-name"></span>';
 		}
+	}
+	
+	protected function uploads_preview_nopriv(&$html){
+		$html        .= '<div class="uploads-wrapper">';
+		$image_exts   = array( 'jpg', 'jpeg', 'jpe', 'gif', 'png', 'svg' );
+		$img_ext_preg = '!\.(' . join( '|', $image_exts ) . ')$!i';
 
+		if ( ! empty( $this->parent->value ) && wp_http_validate_url( $this->parent->value ) ) {
+			if ( preg_match( $img_ext_preg, $this->parent->value ) ) {
+				$html .= '<img class="anony-opts-screenshot" style="max-width:80px;" src="' . $this->parent->value . '" />';
+			} else {
+				$file_basename = wp_basename( $this->parent->value );
+				$html         .= '<a href="' . $this->parent->value . '">';
+				$html         .= '<img class="anony-opts-screenshot" style="max-width:80px;" src="' . ANOE_URI . 'assets/images/placeholders/file.png"/><br>';
+				$html         .= '<span class="uploaded-file-name">' . $file_basename . '</span>';
+				$html         .= '</a>';
+			}
+		} else {
+			$html .= '<img class="anony-opts-screenshot" style="max-width:80px;" src="' . ANOE_URI . 'assets/images/placeholders/browse.png"/>';
+			$html .= '<span class="uploaded-file-name"></span>';
+		}
+	}
+	
+	protected function button(&$html){
 		if ( '' === $this->parent->value ) {
 			$remove = ' style="display:none;"';
 			$upload = '';
@@ -106,9 +153,10 @@ class ANONY_Uploader {
 			$remove = '';
 			$upload = ' style="display:none;"';
 		}
+		
 
 		$html .= sprintf(
-			' <a href="javascript:void(0);" data-id="%3$s" data-choose="Choose a File" data-update="Select File" class="anony-opts-upload"%1$s><span></span>%2$s</a>',
+			' <a href="javascript:void(0);" data-id="%3$s" data-choose="Choose a File" data-update="Select File" class="anony-opts-upload uploader-trigger"%1$s><span></span>%2$s</a>',
 			$upload,
 			esc_html__( 'Browse', 'anonyengine' ),
 			esc_attr( $this->parent->field['id'] )
@@ -120,9 +168,48 @@ class ANONY_Uploader {
 			esc_html__( 'Remove Upload', 'anonyengine' ),
 			esc_attr( $this->parent->field['id'] )
 		);
+	}
+
+	protected function close_preview(&$html){
 		$html .= '<div>';
+	}
+
+	protected function description(&$html){
 		$html .= ( isset( $this->parent->field['desc'] ) && ! empty( $this->parent->field['desc'] ) ) ? '<div class="description">' . $this->parent->field['desc'] . '</div>' : '';
+	}
+	
+	protected function close_fieldset(&$html){
 		$html .= '</fieldset>';
+	}
+	
+	protected function render_nopriv(){
+		$html = '';
+
+		$this->note($html);
+		$this->fieldset_open($html);
+		$this->label($html);
+		$this->input_nopriv($html);
+		$this->uploads_preview_nopriv($html);
+		$this->button($html);
+		$this->close_preview($html);
+		$this->description($html);
+		$this->close_fieldset($html);
+
+		return $html;
+	}
+	protected function render_priv(){
+		
+		$html = '';
+
+		$this->note($html);
+		$this->fieldset_open($html);
+		$this->label($html);
+		$this->input_priv($html);
+		$this->uploads_preview_priv($html);
+		$this->button($html);
+		$this->close_preview($html);
+		$this->description($html);
+		$this->close_fieldset($html);
 
 		return $html;
 	}
@@ -137,11 +224,18 @@ class ANONY_Uploader {
 	public function enqueue() {
 		if( is_user_logged_in() ){
 			$this->logged_in_scripts();
+			$handle = 'anony-opts-field-upload-js';
 		}else{
 			$this->not_logged_in_scripts();
+			$handle = 'anony-opts-field-upload-nopriv-js';
 		}
 		
-		wp_localize_script( 'anony-opts-field-upload-js', 'anony_upload', array( 'url' => ANOE_URI . 'assets/images/placeholders/file.png' ) );
+		wp_localize_script( $handle , 'anony_upload', array( 
+			'url' => ANOE_URI . 'assets/images/placeholders/file.png', 
+			'browse_url' => ANOE_URI . 'assets/images/placeholders/browse.png', 
+			'target_id' => esc_js( $this->parent->field['id'])  
+			) 
+		);
 	}
 	protected function logged_in_scripts() {
 		$wp_version = floatval( get_bloginfo( 'version' ) );
@@ -167,6 +261,12 @@ class ANONY_Uploader {
 	}
 
 	protected function not_logged_in_scripts(){
-		
+		wp_enqueue_script(
+			'anony-opts-field-upload-nopriv-js',
+			ANONY_FIELDS_URI . 'uploader/field_upload_nopriv.js',
+			array( 'jquery' ),
+			time(),
+			true
+		);
 	}
 }

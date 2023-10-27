@@ -416,6 +416,7 @@ input[type=tel]{
 	-o-transition: left .25s ease-out;
 	transition: left .25s ease-out;
 	-webkit-backface-visibility: hidden;
+	backface-visibility: hidden;
 }
 .has-switch > div.switch-off label {
 	background-color: #999;
@@ -445,6 +446,7 @@ input[type=tel]{
 	-o-transition: .25s ease-out;
 	transition: .25s ease-out;
 	-webkit-backface-visibility: hidden;
+	backface-visibility: hidden;
 }
 
 .has-switch span.switch-left {
@@ -482,6 +484,18 @@ input[type=tel]{
 	-o-transition: .25s ease-out;
 	transition: .25s ease-out;
 	-webkit-backface-visibility: hidden;
+	backface-visibility: hidden;
+}
+.form-error{
+	padding: 5px;
+	border-radius: 5px;
+	box-shadow: 0px 0px 5px 3px rgba(0,0,0,0.19);
+	-webkit-box-shadow: 0px 0px 5px 3px rgba(0,0,0,0.19);
+	-moz-box-shadow: 0px 0px 5px 3px rgba(0,0,0,0.19);
+	list-style-type: none;
+	background: #fff;
+    margin: 5px;
+    color: #c13838;
 }
 .fieldset-location div{
 	position: relative;
@@ -555,6 +569,10 @@ input[type=tel]{
 .form-table td{
 	display: flex;
 	flex-direction: column;
+}
+button{
+	outline: none;
+	padding: 8px 30px;
 }
 .anony-form .button-primary {
 	background: #d1354b;

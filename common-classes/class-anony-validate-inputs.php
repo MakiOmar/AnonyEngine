@@ -102,7 +102,7 @@ if ( ! class_exists( 'ANONY_Validate_Inputs' ) ) {
 				$this->field = $args['field'];
 
 				// translators: %s is for field's id.
-				$this->field_title = ANONY_HELP::isset_not_empty( $this->field['title'] ) ? $this->field['title'] : sprintf( __( 'Field with id %s', 'anonyengine' ), $this->field['id'] );
+				$this->field_title = !empty( $this->field['title'] ) ? $this->field['title'] : sprintf( __( 'Field with id %s', 'anonyengine' ), $this->field['id'] );
 
 				if ( isset( $this->field['validate'] ) ) {
 

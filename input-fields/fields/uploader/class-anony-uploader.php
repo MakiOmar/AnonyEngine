@@ -54,7 +54,7 @@ class ANONY_Uploader {
 	 * @return string HTML output
 	 */
 	public function render() {
-		if( is_user_logged_in() ){
+		if( current_user_can( 'upload_files' ) ){
 			return $this->render_priv();
 		}else{
 			return $this->render_nopriv();
@@ -97,7 +97,7 @@ class ANONY_Uploader {
 
 	protected function input_nopriv(&$html){
 		$html .= sprintf(
-			'<input type="file" id="%1$s" name="%1$s" style="display:none"/>',
+			'<input type="file" id="%1$s" class="anony-uploader" name="%1$s" style="display:none"/>',
 			esc_attr( $this->parent->field['id'] ),
 			$this->parent->input_name,
 		);
@@ -222,22 +222,26 @@ class ANONY_Uploader {
 	 * @return void.
 	 */
 	public function enqueue() {
-		if( is_user_logged_in() ){
-			$this->logged_in_scripts();
+		if( current_user_can( 'upload_files' ) ){
+			$this->user_can_upload_files_scripts();
 			$handle = 'anony-opts-field-upload-js';
 		}else{
-			$this->not_logged_in_scripts();
+			$this->user_can_not_upload_files_scripts();
 			$handle = 'anony-opts-field-upload-nopriv-js';
 		}
+		global $localized_uploader;
+		if( !isset( $localized_uploader ) ){
+			wp_localize_script( $handle , 'anony_upload', array( 
+				'url' => ANOE_URI . 'assets/images/placeholders/file.png', 
+				'browse_url' => ANOE_URI . 'assets/images/placeholders/browse.png'
+				) 
+			);
+
+			$localized_uploader = true;
+		}
 		
-		wp_localize_script( $handle , 'anony_upload', array( 
-			'url' => ANOE_URI . 'assets/images/placeholders/file.png', 
-			'browse_url' => ANOE_URI . 'assets/images/placeholders/browse.png', 
-			'target_id' => esc_js( $this->parent->field['id'])  
-			) 
-		);
 	}
-	protected function logged_in_scripts() {
+	protected function user_can_upload_files_scripts() {
 		$wp_version = floatval( get_bloginfo( 'version' ) );
 		if ( $wp_version < '3.5' ) {
 			wp_enqueue_script(
@@ -260,7 +264,7 @@ class ANONY_Uploader {
 		}
 	}
 
-	protected function not_logged_in_scripts(){
+	protected function user_can_not_upload_files_scripts(){
 		wp_enqueue_script(
 			'anony-opts-field-upload-nopriv-js',
 			ANONY_FIELDS_URI . 'uploader/field_upload_nopriv.js',

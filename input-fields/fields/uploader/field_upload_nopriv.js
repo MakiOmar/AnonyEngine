@@ -4,10 +4,11 @@
 		var target = $(this).data('id');
 		$('#' + target).trigger('click');
 	});
-
-	$("body").on('change', '#' + anony_upload.target_id, function(event){
+	console.log('hello');
+	$("body").on('change', '.anony-uploader' , function(event){
+		var parent = $(this).closest('fieldset');
 		var file = event.target.files[0];
-		var previewContainer = $(".anony-opts-screenshot");
+		var previewContainer = parent.find(".anony-opts-screenshot");
 
 		if (file) {
 			if (file.type.startsWith("image/")) {
@@ -24,11 +25,11 @@
 				
 				previewContainer.attr("src", anony_upload.url);
 				var fileName = $("<span>").text(file.name);
-				$('.uploaded-file-name').append(fileName);
+				parent.find('.uploaded-file-name').append(fileName);
 			}
 		} else {
 			previewContainer.attr("src", anony_upload.browse_url);
-			$('.uploaded-file-name').empty();
+			parent.find('.uploaded-file-name').empty();
 		}
 	});
 

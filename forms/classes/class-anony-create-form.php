@@ -459,7 +459,7 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 			}
 
 			if( !empty($this->results) ){
-				error_log(print_r($this->results, true));
+				//error_log(print_r($this->results, true));
 			}
 
 			do_action( 'anony_form_submitted', $this->validated, $this->id );

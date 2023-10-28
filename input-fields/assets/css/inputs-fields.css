@@ -641,6 +641,19 @@ button{
 	margin: 0 20px;
 }
 
+.file-preview-wrapper{
+	display: inline-flex;
+    flex-direction: column;
+    max-width: 80px;
+    justify-content: center;
+    align-items: center;
+    margin: 10px;
+}
+
+.file-preview-wrapper span{
+	word-break: break-all;
+}
+
 .anony-term-meta-wrap fieldset .anony-gallery-thumbs-wrap{
 	background-color: #fff;
 	padding: 10px;

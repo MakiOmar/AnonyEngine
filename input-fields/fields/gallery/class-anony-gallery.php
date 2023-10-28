@@ -31,25 +31,20 @@ class ANONY_Gallery {
 		$this->parent = $parent;
 		$this->enqueue();
 	}
-
-
-	/**
-	 * Upload field render Function.
-	 *
-	 * @return void
-	 */
-	function render( $meta = false ) {
-
-		$html = '';
-
+	protected function note(&$html){
 		if ( isset( $this->parent->field['note'] ) ) {
 			$html .= '<p class=anony-warning>' . $this->parent->field['note'] . '<p>';
 		}
+	}
 
+	protected function fieldset_open(&$html){
 		$html .= sprintf(
 			'<fieldset class="anony-row anony-row-inline" id="fieldset_%1$s">',
 			$this->parent->field['id']
 		);
+	}
+
+	protected function label(&$html){
 		if ( $this->parent->context != 'option' && isset( $this->parent->field['title'] ) ) {
 			$html .= sprintf(
 				'<label class="anony-label" for="%1$s">%2$s</label>',
@@ -57,12 +52,24 @@ class ANONY_Gallery {
 				$this->parent->field['title']
 			);
 		}
-
+	}
+	protected function input_priv(&$html){
 		$html .= sprintf(
 			'<input type="hidden" name="%1$s" value="" class="%2$s" />',
 			$this->parent->input_name,
 			$this->parent->class_attr
 		);
+	}
+
+	protected function input_nopriv(&$html){
+		$html .= sprintf(
+			'<input type="file" name="%1$s[]" class="%2$s anony_gallery" multiple="multiple"/>',
+			$this->parent->input_name,
+			$this->parent->class_attr
+		);
+	}
+
+	protected function uploads_preview_priv(&$html){
 		$html .= '<div class="anony-gallery-thumbs-wrap" id="anony-gallery-thumbs-' . $this->parent->field['id'] . '">';
 		$style = 'display:none;';
 		if ( is_array( $this->parent->value ) && ! empty( $this->parent->value ) ) {
@@ -77,7 +84,27 @@ class ANONY_Gallery {
 		} else {
 			$html .= '<div class="anony-gallery-thumbs"></div>';
 		}
+	}
 
+	protected function uploads_preview_nopriv(&$html){
+		$html .= '<div class="anony-gallery-thumbs-wrap" id="anony-gallery-thumbs-' . $this->parent->field['id'] . '">';
+		
+		if ( is_array( $this->parent->value ) && ! empty( $this->parent->value ) ) {
+			$style = 'display:inline-block;';
+			$html .= '<div class="anony-gallery-thumbs">';
+			foreach ( $this->parent->value as $attachment_id ) {
+
+				$html .= '<div class="gallery-item-container" style="display:inline-flex; flex-direction:column; align-items: center;margin-left:15px;"><a href="#" style="display:block; width:50px; height:50px;background-color: #d2d2d2;border-radius: 3px;padding:5px"><img src="' . wp_get_attachment_url( intval( $attachment_id ) ) . '" alt="" style="width:100%;height:100%;display:block;"/></a><input class="gallery-item" type="hidden" name="' . $this->parent->input_name . '[]" id="anony-gallery-thumb-' . $attachment_id . '" value="' . $attachment_id . '" /><a href="#" class="anony_remove_gallery_image" style="display:block" rel-id="' . $attachment_id . '">Remove</a></div>';
+			}
+
+			$html .= '</div>';
+		} else {
+			$html .= '<div class="anony-gallery-thumbs"></div>';
+		}
+	}
+
+	protected function button(&$html){
+		$style = 'display:none;';
 		$html .= sprintf(
 			'<a href="javascript:void(0);" data-choose="Choose a File" data-update="Select File" class="anony-opts-gallery button button-primary button-large"><span></span>%1$s</a>',
 			esc_html__( 'Browse', 'anonyengine' )
@@ -87,38 +114,94 @@ class ANONY_Gallery {
 			' <a href="javascript:void(0);" class="anony-opts-clear-gallery button button-primary button-large" style="' . $style . '"><span></span>%1$s</a>',
 			esc_html__( 'Remove all', 'anonyengine' )
 		);
-		$html .= '</div>';
+	}
 
+	protected function close_preview(&$html){
+		$html .= '<div>';
+	}
+
+	protected function description(&$html){
 		$html .= ( isset( $this->parent->field['desc'] ) && ! empty( $this->parent->field['desc'] ) ) ? '<div class="description">' . $this->parent->field['desc'] . '</div>' : '';
+	}
+
+	protected function close_fieldset(&$html){
 		$html .= '</fieldset>';
+	}
+	/**
+	 * Upload field render Function.
+	 *
+	 * @return void
+	 */
+	function render( $meta = false ) {
+		if( current_user_can( 'upload_files' ) ){
+			return $this->render_priv();
+		}else{
+			return $this->render_nopriv();
+		}
+
+		
+	}
+	protected function render_nopriv(){
+		$html = '';
+
+		$this->note($html);
+		$this->fieldset_open($html);
+		$this->label($html);
+		$this->input_nopriv($html);
+		$this->uploads_preview_nopriv($html);
+		$this->button($html);
+		$this->close_preview($html);
+		$this->description($html);
+		$this->close_fieldset($html);
 
 		return $html;
 	}
+	protected function render_priv(){
+		$html = '';
 
+		$this->note($html);
+		$this->fieldset_open($html);
+		$this->label($html);
+		$this->input_priv($html);
+		$this->uploads_preview_priv($html);
+		$this->button($html);
+		$this->close_preview($html);
+		$this->description($html);
+		$this->close_fieldset($html);
+
+		return $html;
+	}
 	/**
 	 * Enqueue scripts.
 	 */
 	function enqueue() {
-		if( is_user_logged_in() ){
-			$this->logged_in_scripts();
+		if( current_user_can( 'upload_files' ) ){
+			$this->user_can_upload_files_scripts();
+			$handle = 'anony-opts-field-gallery-js';
 		}else{
-			$this->not_logged_in_scripts();
+			$this->user_can_not_upload_files_scripts();
+			$handle = 'anony-opts-field-gallery-nopriv-js';
 		}
-		wp_localize_script(
-			'anony-opts-field-upload-js',
-			'anony_gallery',
-			array(
-				'url'  => ANONY_FIELDS_URI . 'gallery/blank.png',
-				'name' => $this->parent->input_name,
-			)
-		);
+		global $localized_gallery;
+		if( !isset( $localized_gallery ) ){
+			wp_localize_script(
+				$handle,
+				'anony_gallery',
+				array(
+					'blank_icon_url'  => ANONY_FIELDS_URI . 'gallery/blank.png',
+					'file_icon_url'   => ANOE_URI . 'assets/images/placeholders/file.png', 
+				)
+			);
+
+			$localized_gallery = true;
+		}
 	}
 
-	protected function logged_in_scripts(){
+	protected function user_can_upload_files_scripts(){
 		$wp_version = floatval( get_bloginfo( 'version' ) );
 		if ( $wp_version < '3.5' ) {
 			wp_enqueue_script(
-				'anony-opts-field-upload-js',
+				'anony-opts-field-gallery-js',
 				ANONY_FIELDS_URI . 'gallery/field_upload_3_4.js',
 				array( 'jquery', 'thickbox', 'media-upload' ),
 				time(),
@@ -127,7 +210,7 @@ class ANONY_Gallery {
 			wp_enqueue_style( 'thickbox' );
 		} else {
 			wp_enqueue_script(
-				'anony-opts-field-upload-js',
+				'anony-opts-field-gallery-js',
 				ANONY_FIELDS_URI . 'gallery/field_upload.js',
 				array( 'jquery' ),
 				time(),
@@ -137,7 +220,13 @@ class ANONY_Gallery {
 		}
 	}
 
-	protected function not_logged_in_scripts(){
-
+	protected function user_can_not_upload_files_scripts(){
+		wp_enqueue_script(
+			'anony-opts-field-gallery-nopriv-js',
+			ANONY_FIELDS_URI . 'gallery/field_upload_nopriv.js',
+			array( 'jquery' ),
+			time(),
+			true
+		);
 	}
 }

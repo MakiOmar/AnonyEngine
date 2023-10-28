@@ -41,7 +41,6 @@ class ANONY_Uploader {
 		}
 
 		$this->parent        = $parent;
-		$this->parent->value = esc_url( $this->parent->value );
 		$this->enqueue();
 	}
 
@@ -107,13 +106,13 @@ class ANONY_Uploader {
 		$html        .= '<div class="uploads-wrapper">';
 		$image_exts   = array( 'jpg', 'jpeg', 'jpe', 'gif', 'png', 'svg' );
 		$img_ext_preg = '!\.(' . join( '|', $image_exts ) . ')$!i';
-
-		if ( ! empty( $this->parent->value ) && wp_http_validate_url( $this->parent->value ) ) {
+		$src = wp_get_attachment_url($this->parent->value );
+		if ( ! empty( $this->parent->value ) && wp_http_validate_url( $src ) ) {
 			if ( preg_match( $img_ext_preg, $this->parent->value ) ) {
-				$html .= '<img class="anony-opts-screenshot" style="max-width:80px;" src="' . $this->parent->value . '" />';
+				$html .= '<img class="anony-opts-screenshot" style="max-width:80px;" src="' . $src . '" />';
 			} else {
-				$file_basename = wp_basename( $this->parent->value );
-				$html         .= '<a href="' . $this->parent->value . '">';
+				$file_basename = wp_basename( $src );
+				$html         .= '<a href="' . $src . '">';
 				$html         .= '<img class="anony-opts-screenshot" style="max-width:80px;" src="' . ANOE_URI . 'assets/images/placeholders/file.png"/><br>';
 				$html         .= '<span class="uploaded-file-name">' . $file_basename . '</span>';
 				$html         .= '</a>';
@@ -128,13 +127,13 @@ class ANONY_Uploader {
 		$html        .= '<div class="uploads-wrapper">';
 		$image_exts   = array( 'jpg', 'jpeg', 'jpe', 'gif', 'png', 'svg' );
 		$img_ext_preg = '!\.(' . join( '|', $image_exts ) . ')$!i';
-
-		if ( ! empty( $this->parent->value ) && wp_http_validate_url( $this->parent->value ) ) {
+		$src = wp_get_attachment_url($this->parent->value );
+		if ( ! empty( $this->parent->value ) && wp_http_validate_url( $src ) ) {
 			if ( preg_match( $img_ext_preg, $this->parent->value ) ) {
-				$html .= '<img class="anony-opts-screenshot" style="max-width:80px;" src="' . $this->parent->value . '" />';
+				$html .= '<img class="anony-opts-screenshot" style="max-width:80px;" src="' . $src . '" />';
 			} else {
-				$file_basename = wp_basename( $this->parent->value );
-				$html         .= '<a href="' . $this->parent->value . '">';
+				$file_basename = wp_basename( $src );
+				$html         .= '<a href="' . $src . '">';
 				$html         .= '<img class="anony-opts-screenshot" style="max-width:80px;" src="' . ANOE_URI . 'assets/images/placeholders/file.png"/><br>';
 				$html         .= '<span class="uploaded-file-name">' . $file_basename . '</span>';
 				$html         .= '</a>';

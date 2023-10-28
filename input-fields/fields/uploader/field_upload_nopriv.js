@@ -4,7 +4,7 @@
 		var target = $(this).data('id');
 		$('#' + target).trigger('click');
 	});
-	console.log('hello');
+	
 	$("body").on('change', '.anony-uploader' , function(event){
 		var parent = $(this).closest('fieldset');
 		var file = event.target.files[0];

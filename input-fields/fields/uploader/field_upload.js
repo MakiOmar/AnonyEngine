@@ -43,9 +43,8 @@
 						 $( '.uploaded-file-name', activeFileUploadContext ).show();
 					}
 
-					$( '#' + clicked )
-					.val( attachment.attributes.url ).trigger( 'change' );
-					console.log( $( '#' + clicked ) );
+					$( '#' + clicked ).val( attachment.attributes.id ).trigger( 'change' );
+					
 					$( '.anony-opts-upload', activeFileUploadContext ).hide();
 					$( '.anony-opts-screenshot', activeFileUploadContext ).show();
 					$( '.anony-opts-upload-remove', activeFileUploadContext ).show();

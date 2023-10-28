@@ -24,8 +24,9 @@ if ( ! class_exists( 'ANONY_Wp_File_Help' ) ) {
 	class ANONY_Wp_File_Help extends ANONY_HELP {
 
 		public static function handle_attachments( $file_handler, $post_id ) {
+			
 		  // check to make sure its a successful upload
-		  if ( $_FILES[$file_handler]['error'] !== UPLOAD_ERR_OK || is_null($_FILES)) __return_false();
+		  if (  !isset( $_FILES[$file_handler] ) || $_FILES[$file_handler]['error'] !== UPLOAD_ERR_OK || is_null($_FILES)) __return_false();
 
 		  require_once(ABSPATH . "wp-admin" . '/includes/image.php');
 		  require_once(ABSPATH . "wp-admin" . '/includes/file.php');
@@ -39,7 +40,9 @@ if ( ! class_exists( 'ANONY_Wp_File_Help' ) ) {
 			if(!empty($_FILES) && isset($_FILES[$input_name])){
 				$files = $_FILES[$input_name];
 				$ids = array();
-				foreach ($files['name'] as $key => $value) {            
+
+				if( is_array( $files['name'] ) ){
+					foreach ($files['name'] as $key => $value) {            
 						if ($files['name'][$key]) { 
 							$file = array( 
 								'name' => $files['name'][$key],
@@ -57,7 +60,15 @@ if ( ! class_exists( 'ANONY_Wp_File_Help' ) ) {
 								}
 							}
 						}
+					}
+				}else{
+					$newupload = self::handle_attachments($files,0);
+								
+					if(!is_wp_error($newupload)){
+						$ids[] = $newupload;
+					}
 				}
+				
 				
 				if(!empty($ids)){
 					return $ids;

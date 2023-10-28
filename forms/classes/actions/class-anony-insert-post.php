@@ -74,19 +74,18 @@ if ( ! class_exists( 'ANONY_Insert_Post' ) ) {
 					'post_author'  => get_current_user_id(),
 				);
 
-				
-
 				$id = wp_insert_post($args);
-
-				
+		
 				if( $id && !is_wp_error( $id ) ){
 					$args = array('ID' => $id);
 					if($action_data['meta'] && !empty( $action_data['meta'] )){
 						foreach( $action_data['meta'] as $key => $value ){
-							$args['meta_input'][$key] = $this->get_field_value( $value, $this->get_field($value));
+							$_value = $this->get_field_value( $value, $this->get_field($value));
+							if( !empty( $_value ) ){
+								$args['meta_input'][$key] = $_value ;
+							}
 						}
 					}
-
 					
 					wp_update_post($args);
 
@@ -112,43 +111,68 @@ if ( ! class_exists( 'ANONY_Insert_Post' ) ) {
 
 			return false;
 		}
+
+		protected function get_attachment( $input_field ){
+			$attachment = ANONY_Wp_File_Help::handle_attachments($input_field, 0);
+			if( $attachment && !is_wp_error( $attachment ) ){
+				return $attachment;
+			}
+			return '';
+		}
+		protected function maybe_array( $value ){
+			if( is_array( $value ) ){
+				$map = array_map( 'wp_strip_all_tags', $value );
+
+				return implode(',', $map);
+			}else{
+				return wp_strip_all_tags($value);
+			}
+		}
 		protected function get_field_value($value, $field = false){
 			if(strpos($value, '#' ) !== false){
 
 				$input_field = str_replace('#','', $value);
 
-				if( $field ){
+				if( $field && isset( $_FILES[ $input_field ] ) ){
 
 					switch( $field['type'] ){
 						case ( 'upload' ):
-							return ANONY_Wp_File_Help::handle_attachments($input_field, 0);
+							return $this->get_attachment($input_field);
 							break;
 
 						case ( 'file-upload' ):
-							return ANONY_Wp_File_Help::handle_attachments($input_field, 0);
+							return $this->get_attachment($input_field);
 							break;
 
 						case ( 'gallery' ):
+
 							$ids  = ANONY_Wp_File_Help::gallery_upload($input_field);
 
-							if( $ids ){
+							if( $ids && is_array( $ids ) ){
 								return implode(',', $ids);
 							}
 
-							return $ids;
+							return '';
 							
 							break;
 
 						case ( 'uploader' ):
-							return ANONY_Wp_File_Help::handle_attachments($input_field, 0);
+							return $this->get_attachment($input_field);
 							break;
 							
 						default:
-							return wp_strip_all_tags($this->request[$input_field]);
+							
+						return $this->maybe_array( $this->request[$input_field] );
+							
 					}
 
 				}else{
-					return wp_strip_all_tags($this->request[$input_field]);
+					if( isset($this->request[$input_field]) ){
+						return $this->maybe_array( $this->request[$input_field] );
+					}else{
+						return '';
+					}
+					
 				}
 
 				

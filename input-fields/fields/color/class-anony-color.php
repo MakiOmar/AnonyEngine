@@ -33,8 +33,6 @@ class ANONY_Color {
 		$this->parent_obj->value = esc_attr( $this->parent_obj->value );
 
 		add_action( 'admin_print_footer_scripts', array( $this, 'footer_scripts' ) );
-
-		$this->enqueue();
 	}
 
 	/**

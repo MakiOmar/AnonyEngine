@@ -29,8 +29,6 @@ class ANONY_File_upload {
 		}
 
 		$this->parent_obj = $parent_obj;
-
-		$this->enqueue();
 	}
 
 

@@ -25,7 +25,6 @@ class ANONY_Location {
 		}
 
 		$this->parent_obj = $parent_obj;
-		$this->enqueue();
 	}
 
 	/**

@@ -27,8 +27,6 @@ class ANONY_Multi_text {
 		$this->parent_obj = $parent_obj;
 
 		$this->parent_obj->value = is_array( $this->parent_obj->value ) ? array_map( 'esc_html', $this->parent_obj->value ) : $this->parent_obj->value;
-
-		$this->enqueue();
 	}
 
 

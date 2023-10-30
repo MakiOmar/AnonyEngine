@@ -21,8 +21,6 @@ class ANONY_Color_gradient {
 		$this->parent_obj = $parent_obj;
 
 		add_action( 'admin_print_footer_scripts', array( $this, 'footer_scripts' ) );
-
-		$this->enqueue();
 	}
 
 	public function render() {

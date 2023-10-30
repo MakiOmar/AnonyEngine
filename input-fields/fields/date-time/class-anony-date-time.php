@@ -70,8 +70,6 @@ class ANONY_Date_time {
 		if ( isset( $this->parent_obj->field['show_on_front'] ) && $this->parent_obj->field['show_on_front'] == true ) {
 			add_action( 'wp_print_footer_scripts', array( &$this, 'footer_scripts' ) );
 		}
-
-		$this->enqueue();
 	}
 
 	/**

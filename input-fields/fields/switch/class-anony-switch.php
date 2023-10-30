@@ -31,8 +31,6 @@ class ANONY_Switch {
 		$this->parent_obj = $parent_obj;
 
 		$this->parent_obj->value = esc_attr( $this->parent_obj->value );
-
-		$this->enqueue();
 	}
 
 	/**

@@ -84,7 +84,7 @@ if ( ! class_exists( 'ANONY_Input' ) ) {
 		/**
 		 * Inpud field constructor That decides field context
 		 *
-		 * @param array    $args    Field arguments.
+		 * @param array $args    Field arguments.
 		 */
 		function __construct( $args ) {
 

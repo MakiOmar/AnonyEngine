@@ -29,8 +29,6 @@ class ANONY_Multi_input {
 		if ( ! isset( $this->parent_obj->field['fields'] ) ) {
 			return;
 		}
-
-		$this->enqueue();
 	}
 
 

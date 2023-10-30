@@ -43,7 +43,6 @@ class ANONY_Uploader {
 		}
 
 		$this->parent_obj = $parent_obj;
-		$this->enqueue();
 	}
 
 
@@ -325,7 +324,7 @@ class ANONY_Uploader {
 	 *
 	 * @return void
 	 */
-	protected function user_can_upload_files_scripts() {
+	public function user_can_upload_files_scripts() {
 		$wp_version = floatval( get_bloginfo( 'version' ) );
 		if ( $wp_version < '3.5' ) {
 			wp_enqueue_script(
@@ -352,7 +351,7 @@ class ANONY_Uploader {
 	 *
 	 * @return void
 	 */
-	protected function user_can_not_upload_files_scripts() {
+	public function user_can_not_upload_files_scripts() {
 		wp_enqueue_script(
 			'anony-opts-field-upload-nopriv-js',
 			ANONY_FIELDS_URI . 'uploader/field_upload_nopriv.js',

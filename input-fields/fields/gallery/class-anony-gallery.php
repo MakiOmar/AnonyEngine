@@ -29,7 +29,6 @@ class ANONY_Gallery {
 		}
 
 		$this->parent_obj = $parent_obj;
-		$this->enqueue();
 	}
 	protected function note( &$html ) {
 		if ( isset( $this->parent_obj->field['note'] ) ) {

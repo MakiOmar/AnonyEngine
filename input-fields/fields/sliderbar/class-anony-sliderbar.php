@@ -29,7 +29,6 @@ class ANONY_Sliderbar {
 		}
 
 		$this->parent_obj = $parent_obj;
-		$this->enqueue();
 	}
 
 	/**

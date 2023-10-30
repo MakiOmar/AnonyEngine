@@ -73,8 +73,6 @@ if ( ! class_exists( 'ANONY_Tel' ) ) {
 			if ( isset( $this->parent_obj->field['pattern'] ) ) {
 				$this->pattern = $this->parent_obj->field['pattern'];
 			}
-
-			$this->enqueue();
 		}
 
 		/**

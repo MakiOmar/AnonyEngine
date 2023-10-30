@@ -25,8 +25,6 @@ class ANONY_Select2 {
 		}
 
 		$this->parent_obj = $parent_obj;
-
-		$this->enqueue();
 	}
 
 	/**

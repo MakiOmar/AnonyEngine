@@ -34,12 +34,6 @@ class ANONY_Color_farbtastic {
 		$this->parent_obj->value = esc_attr( $this->parent_obj->value );
 
 		add_action( 'admin_print_footer_scripts', array( $this, 'footer_scripts' ) );
-
-		if ( is_admin() ) {
-			add_action( 'admin_enqueue_scripts', array( $this, 'enqueue' ) );
-		} else {
-			add_action( 'wp_enqueue_scripts', array( $this, 'enqueue' ) );
-		}
 	}
 
 	/**

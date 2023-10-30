@@ -28,8 +28,6 @@ class ANONY_Group_start {
 		$this->parent_obj = $parent_obj;
 
 		$this->parent_obj->value = '';
-
-		$this->enqueue();
 	}
 
 	/**

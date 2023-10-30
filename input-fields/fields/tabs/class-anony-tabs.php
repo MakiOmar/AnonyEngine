@@ -29,7 +29,6 @@ class ANONY_Tabs {
 		}
 
 		$this->parent_obj = $parent_obj;
-		$this->enqueue();
 	}
 
 	/**

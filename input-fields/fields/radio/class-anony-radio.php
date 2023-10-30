@@ -53,7 +53,6 @@ class ANONY_Radio {
 		if ( 'yes' === $this->show_only_labels ) {
 			$this->parent_obj->class_attr .= ' anony-hidden-radio';
 		}
-		$this->enqueue();
 	}
 
 	/**

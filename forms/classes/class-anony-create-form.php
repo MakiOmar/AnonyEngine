@@ -32,6 +32,13 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 		public $id = null;
 
 		/**
+		 * An array of inputs that have same HTML markup.
+		 *
+		 * @var array
+		 */
+		public $mixed_types = array( 'text', 'number', 'email', 'password', 'url', 'hidden' );
+
+		/**
 		 * A list of actions the form should perfom.
 		 *
 		 * @var array
@@ -169,6 +176,8 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 				}
 
 				$this->submit_label = isset( $form['submit_label'] ) && ! empty( $form['submit_label'] ) ? $form['submit_label'] : __( 'Submit', 'anonyengine' );
+
+				$this->enqueue_fields_scripts();
 
 				add_shortcode( $this->id, array( $this, 'create_shortcode' ) );
 
@@ -323,6 +332,49 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 			<?php
 
 			do_action( 'anony_form_after', $fields );
+		}
+		/**
+		 * Select field class.
+		 *
+		 * @param array $field Field data array.
+		 * @return string Field class name.
+		 */
+		protected function select_field( $field ) {
+			if ( isset( $field['type'] ) ) {
+				// Static class name for inputs that have same HTML markup.
+				if ( in_array( $field['type'], $this->mixed_types, true ) ) {
+					$field_class = 'ANONY_Mixed';
+				} else {
+					$field_class = str_replace( '-', '_', 'ANONY_' . ucfirst( $field['type'] ) );
+
+				}
+
+				return $field_class;
+			}
+
+			return false;
+		}
+
+		/**
+		 * Enqueue fields scripts.
+		 *
+		 * @return void
+		 */
+		protected function enqueue_fields_scripts() {
+			foreach ( $this->fields as $field ) {
+				if ( $this->select_field( $field ) ) {
+					$class = $this->select_field( $field );
+
+					if ( class_exists( $class ) && method_exists( $class, 'enqueue' ) ) {
+
+						if ( is_admin() ) {
+							add_action( 'admin_enqueue_scripts', array( new $class(), 'enqueue' ) );
+						} else {
+							add_action( 'wp_enqueue_scripts', array( new $class(), 'enqueue' ) );
+						}
+					}
+				}
+			}
 		}
 
 		/**

@@ -25,7 +25,6 @@ function anony_post_metabox_form_multipart( $post ) {
 		// Append multipart/form-data form attributes.
 		printf( ' enctype="multipart/form-data" encoding="multipart/form-data" ' );
 	}
-
 }
 add_action( 'post_edit_form_tag', 'anony_post_metabox_form_multipart' );
 
@@ -38,7 +37,7 @@ add_action( 'post_edit_form_tag', 'anony_post_metabox_form_multipart' );
  * @return string                Filtered post image HTML.
  */
 function anony_remove_thumb_style_dimensions( $html, $post_id, $post_image_id ) {
-	
+
 	return preg_replace( '/(width|height)="\d+"\s/', '', $html );
 }
 add_filter( 'post_thumbnail_html', 'anony_remove_thumb_style_dimensions', 10, 3 );
@@ -163,4 +162,3 @@ function anony_loop_proper_thumb_size( $html, $post_id, $post_thumbnail_id, $siz
 }
 
 add_filter( 'post_thumbnail_html', 'anony_loop_proper_thumb_size', 10, 5 );
-

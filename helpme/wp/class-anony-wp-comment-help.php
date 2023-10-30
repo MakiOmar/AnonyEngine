@@ -107,26 +107,26 @@ if ( ! class_exists( 'ANONY_Wp_Comment_Help' ) ) {
 		 * @param int $post_id
 		 * @return array Returns an array that contains comment's content and comment's date
 		 */
-		public static function get_last_user_comment($user_id, $post_id) {
+		public static function get_last_user_comment( $user_id, $post_id ) {
 			// Set up the comment query arguments
 			$query_args = array(
-				'post_id'    => $post_id,
-				'user_id'    => $user_id,
-				'number'     => 1,
-				'status'     => 'approve',
-				'order'      => 'DESC',
-				'orderby'    => 'comment_date',
+				'post_id' => $post_id,
+				'user_id' => $user_id,
+				'number'  => 1,
+				'status'  => 'approve',
+				'order'   => 'DESC',
+				'orderby' => 'comment_date',
 			);
-		
+
 			// Get the comments based on the query arguments
-			$comments = get_comments($query_args);
-		
+			$comments = get_comments( $query_args );
+
 			// Check if there are comments
-			if (!empty($comments)) {
-				$last_comment = $comments[0];
+			if ( ! empty( $comments ) ) {
+				$last_comment         = $comments[0];
 				$last_comment_content = $last_comment->comment_content;
-				$last_comment_date = $last_comment->comment_date;
-		
+				$last_comment_date    = $last_comment->comment_date;
+
 				// Return the last comment information
 				return array(
 					'comment_content' => $last_comment_content,
@@ -137,6 +137,5 @@ if ( ! class_exists( 'ANONY_Wp_Comment_Help' ) ) {
 				return false;
 			}
 		}
-
 	}
 }

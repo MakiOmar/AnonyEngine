@@ -57,7 +57,7 @@ if ( ! class_exists( 'ANONY_Mb_Single' ) ) {
 				! is_single() ||
 				( is_array( $this->parent->post_type ) && ! in_array( $post->post_type, $this->parent->post_type ) ) ||
 				( ! is_array( $this->parent->post_type ) && $post->post_type !== $this->parent->post_type )
-			 ) {
+			) {
 				return $content;
 			}
 
@@ -80,7 +80,6 @@ if ( ! class_exists( 'ANONY_Mb_Single' ) ) {
 			$render .= $this->renderForAction( $post );
 
 			return $content . '<br/>' . $render;
-
 		}
 
 
@@ -141,13 +140,13 @@ if ( ! class_exists( 'ANONY_Mb_Single' ) ) {
 			/**
 			 * Check if there are any posted data return if empty
 			 */
-			if ( empty( $_POST['postType'] )  ) {
+			if ( empty( $_POST['postType'] ) ) {
 				return;
 			}
 
 			global $post;
 
-			if ( !$post || is_null($post) || $post->post_type !== $_POST['postType'] ) {
+			if ( ! $post || is_null( $post ) || $post->post_type !== $_POST['postType'] ) {
 				return;
 			}
 
@@ -171,7 +170,6 @@ if ( ! class_exists( 'ANONY_Mb_Single' ) ) {
 			do_action( $this->parent->id_as_hook . '_before_update' );
 
 			$this->parent->start_update( $_POST, $_POST['post_ID'] );
-
 		}
 
 		public function singleFooterScripts() {
@@ -183,7 +181,6 @@ if ( ! class_exists( 'ANONY_Mb_Single' ) ) {
 					$this->parent->footer_scripts();
 				}
 			}
-
 		}
 
 		/**
@@ -223,7 +220,6 @@ if ( ! class_exists( 'ANONY_Mb_Single' ) ) {
 			}
 
 			return $locScripts;
-
 		}
 
 		public function wpEnqueueScripts() {
@@ -231,6 +227,5 @@ if ( ! class_exists( 'ANONY_Mb_Single' ) ) {
 				$this->parent->footer_scripts();
 			}
 		}
-
 	}
 }

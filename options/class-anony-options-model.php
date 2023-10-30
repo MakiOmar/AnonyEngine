@@ -24,9 +24,9 @@ if ( ! class_exists( 'ANONY_Options_Model' ) ) {
 	class ANONY_Options_Model {
 
 		protected $option_group;
-		 // equivalent 'option_name' of wp_options table. 'option_value' contains all options of the theme
+		// equivalent 'option_name' of wp_options table. 'option_value' contains all options of the theme
 		protected $options_arr = array();
-		 // array contains the option_value of the option_name
+		// array contains the option_value of the option_name
 
 		/**
 		 * This will not instantiate new object if option_name is not changed
@@ -65,7 +65,6 @@ if ( ! class_exists( 'ANONY_Options_Model' ) ) {
 			if ( $existed ) {
 				$this->options_arr = $existed;
 			}
-
 		}
 
 		/**

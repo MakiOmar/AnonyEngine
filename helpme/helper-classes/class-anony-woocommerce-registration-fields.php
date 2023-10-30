@@ -81,7 +81,6 @@ if ( ! class_exists( 'ANONY_Woocommerce_Registration_Fields' ) ) {
 			add_action( 'woocommerce_edit_account_form', array( $this, 'render_edit_my_account_fields' ) );
 			add_action( 'woocommerce_save_account_details', array( $this, 'update_my_account_user_meta' ) );
 			add_action( 'woocommerce_save_account_details_errors', array( $this, 'validate_my_account_user_meta' ), 10, 2 );
-
 		}
 
 		/**
@@ -134,7 +133,6 @@ if ( ! class_exists( 'ANONY_Woocommerce_Registration_Fields' ) ) {
 					$this->submitted_data[ $field_name ] = $validated->value;
 				}
 			}
-
 		}
 
 		/**
@@ -211,7 +209,6 @@ if ( ! class_exists( 'ANONY_Woocommerce_Registration_Fields' ) ) {
 					update_user_meta( $customer_id, $field_name, $this->submitted_data[ $field_name ] );
 				}
 			}
-
 		}
 		/**
 		 * Filter registration fields.
@@ -270,14 +267,13 @@ if ( ! class_exists( 'ANONY_Woocommerce_Registration_Fields' ) ) {
 
 				add_action(
 					$this->decide_position(),
-					function() use ( $field_name, $field_data ) {
+					function () use ( $field_name, $field_data ) {
 
 						$render_field = new ANONY_Input_Field( $field_data, null, 'form' );
 
 						// phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
 						echo $render_field->field_init();
 						// phpcs:enable
-
 					}
 				);
 
@@ -353,7 +349,6 @@ if ( ! class_exists( 'ANONY_Woocommerce_Registration_Fields' ) ) {
 			}
 
 			return $validation_errors;
-
 		}
 	}
 }

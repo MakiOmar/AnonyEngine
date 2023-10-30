@@ -71,7 +71,7 @@ $auto_load = apply_filters(
 		ANONY_INPUT_FIELDS,
 		/*-----Forms-----*/
 		ANONY_FORMS_CLASSES,
-		ANONY_FORMS_ACTIONS
+		ANONY_FORMS_ACTIONS,
 
 	)
 );
@@ -90,7 +90,7 @@ define( 'ANOE_AUTOLOADS', wp_json_encode( $auto_load ) );
  * @param string $class_name Class name.
  */
 spl_autoload_register(
-	function( $class_name ) {
+	function ( $class_name ) {
 
 		if ( false === strpos( $class_name, 'ANONY_' ) ) {
 			return;
@@ -127,9 +127,5 @@ spl_autoload_register(
 				}
 			}
 		}
-
 	}
 );
-
-
-

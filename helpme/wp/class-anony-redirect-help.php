@@ -24,14 +24,16 @@ if ( ! class_exists( 'ANONY_Redirect_Help' ) ) {
 	class ANONY_Redirect_Help extends ANONY_HELP {
 
 		function login_redirect( $url ) {
-		  add_action('init',function () use($url){
-				global $pagenow;
-				if( (!isset($_GET['action']) && 'wp-login.php' == $pagenow) ||  ( isset($_GET['action']) && $_GET['action'] == 'login' ) ) {
-					wp_redirect(site_url('/login/'));
-					exit();
+			add_action(
+				'init',
+				function () use( $url ) {
+					global $pagenow;
+					if ( ( ! isset( $_GET['action'] ) && 'wp-login.php' == $pagenow ) || ( isset( $_GET['action'] ) && $_GET['action'] == 'login' ) ) {
+						wp_redirect( site_url( '/login/' ) );
+						exit();
+					}
 				}
-			});
-
+			);
 		}
 	}
 }

@@ -337,7 +337,6 @@ if ( ! class_exists( 'ANONY_Wpml_Help' ) ) {
 			add_filter( 'get_term', array( $sitepress, 'get_term_adjust_id' ), 1, 1 );
 
 			return $translated_term_object;
-
 		}
 
 		/**
@@ -456,7 +455,6 @@ if ( ! class_exists( 'ANONY_Wpml_Help' ) ) {
 			self::set_translated_post_terms( $translated_terms, $post_translated_id );
 
 			return $post_translated_id;
-
 		}
 
 		/**
@@ -534,7 +532,6 @@ if ( ! class_exists( 'ANONY_Wpml_Help' ) ) {
 			$post_translated_id = self::translate_post_type( $source_post, 'page', $lang, $force );
 
 			return $post_translated_id;
-
 		}
 
 		/**
@@ -563,7 +560,6 @@ if ( ! class_exists( 'ANONY_Wpml_Help' ) ) {
 
 				self::translate_page( $page_id, $lang, $force );
 			}
-
 		}
 
 		/**
@@ -583,7 +579,7 @@ if ( ! class_exists( 'ANONY_Wpml_Help' ) ) {
 				array(
 					'fields'         => 'ids', // Only get post IDs.
 					'posts_per_page' => -1,
-					'post_type'      =>  $post_type
+					'post_type'      => $post_type,
 				)
 			);
 
@@ -599,7 +595,6 @@ if ( ! class_exists( 'ANONY_Wpml_Help' ) ) {
 
 				self::translate_post_type( get_post( $post_id ), $post_type, $lang, $force );
 			}
-
 		}
 		/**
 		 * Connects post translation
@@ -619,7 +614,6 @@ if ( ! class_exists( 'ANONY_Wpml_Help' ) ) {
 			$trid = wpml_get_content_trid( 'post_' . $post_type, $post_id );
 
 			$set = $sitepress->set_element_language_details( $post_translated_id, 'post_' . $post_type, $trid, $lang );
-
 		}
 
 		/**
@@ -640,7 +634,6 @@ if ( ! class_exists( 'ANONY_Wpml_Help' ) ) {
 			$trid = $sitepress->get_element_trid( $term_taxonomy_id, 'tax_' . $taxonomy );
 
 			$sitepress->set_element_language_details( $translated_term_taxonomy_id, 'tax_' . $taxonomy, $trid, $lang, $sitepress->get_default_language() );
-
 		}
 
 		/**
@@ -724,7 +717,6 @@ if ( ! class_exists( 'ANONY_Wpml_Help' ) ) {
 			self::connect_term_translation( $inserted_term_id['term_taxonomy_id'], $term->term_taxonomy_id, $taxonomy, $lang );
 
 			return get_term_by( 'id', $inserted_term_id['term_id'], $taxonomy );
-
 		}
 
 		/**

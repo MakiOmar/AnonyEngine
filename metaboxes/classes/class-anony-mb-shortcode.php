@@ -9,12 +9,12 @@
 
 if ( ! class_exists( 'ANONY_Mb_Shortcode' ) ) {
 	class ANONY_Mb_Shortcode extends ANONY_Meta_Box {
-		
+
 		/**
 		 * @var object
 		 */
 		private $parent;
-		
+
 		/**
 		 * Constructor
 		 */
@@ -195,9 +195,8 @@ if ( ! class_exists( 'ANONY_Mb_Shortcode' ) ) {
 
 			if ( isset( $url ) ) {
 				wp_redirect( $url );
-				 exit();
+				exit();
 			}
-
 		}
 
 		public function enqueueShortcodeScripts() {
@@ -217,7 +216,6 @@ if ( ! class_exists( 'ANONY_Mb_Shortcode' ) ) {
 			if ( ANONY_Post_Help::isPageHasShortcode( $post, $this->parent->id_as_hook ) ) {
 				$this->parent->footer_scripts();
 			}
-
 		}
 	}
 }

@@ -31,36 +31,38 @@ if ( ! class_exists( 'ANONY_Post_Help' ) ) {
 		 * @param string $post_type Post's type.
 		 * @return bool
 		 */
-		public static function is_edit_post_screen( $post_type )
-		{
+		public static function is_edit_post_screen( $post_type ) {
 			global $pagenow, $post;
 
-			if ( !$pagenow || !in_array($pagenow, array( 'post-new.php', 'post.php' )) || $post_type !== $post->post_type ){
+			if ( ! $pagenow || ! in_array( $pagenow, array( 'post-new.php', 'post.php' ) ) || $post_type !== $post->post_type ) {
 				return false;
 			}
 
 			return true;
 		}
 
-		public static function remove_post_status_in_edit_posts_screen($post_type, $post_statuses) {
+		public static function remove_post_status_in_edit_posts_screen( $post_type, $post_statuses ) {
 
-			add_filter("views_edit-{$post_type}", function( $views ){
-				if (is_array( $post_statuses )) {
-					foreach( $post_statuses as $post_statuse){
-						unset($views[$post_status]);
-		  				
+			add_filter(
+				"views_edit-{$post_type}",
+				function ( $views ) {
+					if ( is_array( $post_statuses ) ) {
+						foreach ( $post_statuses as $post_statuse ) {
+							unset( $views[ $post_status ] );
+
+						}
 					}
+					return $views;
 				}
-		  		return $views;
-			});
+			);
 		}
-		
-		public static function available_post_statuses_in_admin( $post_type, $post_statuses ){
-			if(is_admin() && $query->is_main_query() && $query->get('post_type') == "e_quotation" && is_array( $post_statuses ) && !empty( $post_statuses )) {
-				$post_statuses = $query->get('post_status');
-				
-		        $query->set('post_status',$post_statuses );
-		    }
+
+		public static function available_post_statuses_in_admin( $post_type, $post_statuses ) {
+			if ( is_admin() && $query->is_main_query() && $query->get( 'post_type' ) == 'e_quotation' && is_array( $post_statuses ) && ! empty( $post_statuses ) ) {
+				$post_statuses = $query->get( 'post_status' );
+
+				$query->set( 'post_status', $post_statuses );
+			}
 		}
 		/**
 		 * Get all meta keys for post by id.
@@ -151,7 +153,6 @@ if ( ! class_exists( 'ANONY_Post_Help' ) ) {
 			}
 
 			return $posts_ids;
-
 		}
 		/**
 		 * Gets post id by it;s title
@@ -193,7 +194,6 @@ if ( ! class_exists( 'ANONY_Post_Help' ) ) {
 			} else {
 				return false;
 			}
-
 		}
 
 		/**
@@ -389,7 +389,6 @@ if ( ! class_exists( 'ANONY_Post_Help' ) ) {
 
 				$set = wp_set_object_terms( $post_id, $terms, $taxonomy, false );
 			}
-
 		}
 
 		/**
@@ -456,7 +455,7 @@ if ( ! class_exists( 'ANONY_Post_Help' ) ) {
 		 *
 		 * @return [array] An array of post types as ( 'post_type_name' => post_type_lable ).
 		 */
-		public static function copy_post_meta ( $original_post_id, $target_post_id ) {
+		public static function copy_post_meta( $original_post_id, $target_post_id ) {
 			// Copy post metadata.
 			$data = get_post_custom( $original_post_id );
 			foreach ( $data as $key => $values ) {
@@ -491,7 +490,6 @@ if ( ! class_exists( 'ANONY_Post_Help' ) ) {
 			endforeach;
 
 			return $list;
-
 		}
 
 		/**
@@ -615,6 +613,5 @@ if ( ! class_exists( 'ANONY_Post_Help' ) ) {
 				register_post_type( lcfirst( $custom_post ), apply_filters( "anony_{$custom_post}_args", $args ) );
 			}
 		}
-
 	}
 }

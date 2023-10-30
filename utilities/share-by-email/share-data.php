@@ -10,7 +10,7 @@ require_once 'ajax.php';
 
 add_action(
 	'wp_enqueue_scripts',
-	function() {
+	function () {
 		$path = ANOE_UTLS_DIR . 'share-by-email/';
 		$uri  = ANOE_UTLS_URI . 'share-by-email/';
 
@@ -22,7 +22,7 @@ add_action(
 
 add_action(
 	'anony_after_page_footer',
-	function() {
+	function () {
 
 		$titel      = esc_html__( 'Share by email', 'anonyengine' );
 		$subtitle   = esc_html__( 'Please write down client\'s email address', 'anonyengine' );
@@ -49,5 +49,3 @@ add_action(
 		include 'share-form.php';
 	}
 );
-
-

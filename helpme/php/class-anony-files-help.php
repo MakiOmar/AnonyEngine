@@ -25,6 +25,6 @@ if ( ! class_exists( 'ANONY_FILES_HELP' ) ) {
 	 * @link     https:// makiomar.com/anonyengine
 	 */
 	class ANONY_FILES_HELP extends ANONY_HELP {
-		
+
 	}
 }

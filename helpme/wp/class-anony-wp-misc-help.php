@@ -172,38 +172,40 @@ if ( ! class_exists( 'ANONY_Wp_Misc_Help' ) ) {
 			</script>
 			<?php
 		}
-		
+
 		public static function anony_google_map_address_init( array $args ) {
-			
+
 			if ( empty( $args['target_id'] ) || empty( $args['address'] ) ) {
 				ANONY_Wp_Debug_Help::error_log( 'Map arguments is not complete' );
 			}
 
-			$map_fields = get_option('anony-maps-details');
-			if(!$map_fields){
-				add_option('anony-maps-details', array($args));
-			}else{
+			$map_fields = get_option( 'anony-maps-details' );
+			if ( ! $map_fields ) {
+				add_option( 'anony-maps-details', array( $args ) );
+			} else {
 				$exists = false;
-				foreach( $map_fields as $map_field ){
-					if( $map_field['target_id'] == $args['target_id'] ){
+				foreach ( $map_fields as $map_field ) {
+					if ( $map_field['target_id'] == $args['target_id'] ) {
 						$exists = true;
 						break;
 					}
 				}
 
-				if( !$exists ){
+				if ( ! $exists ) {
 					$map_fields[] = $args;
 				}
-				
 
-				update_option('anony-maps-details', $map_fields);
+				update_option( 'anony-maps-details', $map_fields );
 			}
 			$engine_options = ANONY_Options_Model::get_instance( ANONY_ENGINE_OPTIONS );
-			
+
 			if ( ! empty( $engine_options->google_maps_api_key ) && '1' === $engine_options->enable_google_maps_script ) {
-				add_action('wp_head', function(){
-					global $address_on_map_styles;
-					if(!isset( $address_on_map_styles )){ ?>
+				add_action(
+					'wp_head',
+					function () {
+						global $address_on_map_styles;
+						if ( ! isset( $address_on_map_styles ) ) {
+							?>
 
 						<style>
 							.anony-address-on-map{
@@ -212,38 +214,45 @@ if ( ! class_exists( 'ANONY_Wp_Misc_Help' ) ) {
 							}
 						</style>
 
-						<?php 
-						$address_on_map_styles = true;
-					} 
-				});
-				add_action('wp_head', function(){
-					global $maps_details_edded;
-					if(!$maps_details_edded){
-						$map_fields = get_option('anony-maps-details');
-						if( $map_fields ){
-							?>
-							<script>
-								var mapsDetails = <?php echo json_encode($map_fields) ?>;
-							</script>
 							<?php
+							$address_on_map_styles = true;
 						}
-
-						$maps_details_edded = true;
 					}
-					
-				});
-				add_action('wp_enqueue_scripts', function(){
-					wp_enqueue_script( 
-						'anony-address-on-map', 
-						ANOE_URI . 'assets/js/address-on-map.js', 
-						array(), 
-						filemtime( wp_normalize_path( ANOE_DIR . 'assets/js/address-on-map.js' ) ),
-						array('in_footer' => true) 
-					);
-					wp_enqueue_script( 'anony-google-map-api', array('anony-address-on-map'));
-					
-				}, 20);
-			} ?>
+				);
+				add_action(
+					'wp_head',
+					function () {
+						global $maps_details_edded;
+						if ( ! $maps_details_edded ) {
+							$map_fields = get_option( 'anony-maps-details' );
+							if ( $map_fields ) {
+								?>
+							<script>
+								var mapsDetails = <?php echo json_encode( $map_fields ); ?>;
+							</script>
+								<?php
+							}
+
+							$maps_details_edded = true;
+						}
+					}
+				);
+				add_action(
+					'wp_enqueue_scripts',
+					function () {
+						wp_enqueue_script(
+							'anony-address-on-map',
+							ANOE_URI . 'assets/js/address-on-map.js',
+							array(),
+							filemtime( wp_normalize_path( ANOE_DIR . 'assets/js/address-on-map.js' ) ),
+							array( 'in_footer' => true )
+						);
+						wp_enqueue_script( 'anony-google-map-api', array( 'anony-address-on-map' ) );
+					},
+					20
+				);
+			}
+			?>
 			<?php
 		}
 
@@ -285,69 +294,60 @@ if ( ! class_exists( 'ANONY_Wp_Misc_Help' ) ) {
 
 		/**
 		 * Get lis to js files loaded with a post/page.
-		 * 
+		 *
 		 * @param int $post_id Post's ID.
-		 * 
+		 *
 		 * @return array An array of js files urls.
-		 */ 
+		 */
 		public static function get_post_scripts( $post_id ) {
-			
-		    // Let's get the content of post number 123
-		    $response = wp_remote_get( get_the_permalink($post_id) .'?list_scripts=1' );
-		   
-		    // An empty array to store all the 'srcs'
-			$scripts_array = [];
 
-		    if ( is_array( $response ) ) {
+			// Let's get the content of post number 123
+			$response = wp_remote_get( get_the_permalink( $post_id ) . '?list_scripts=1' );
 
-		      $content = $response['body'];
+			// An empty array to store all the 'srcs'
+			$scripts_array = array();
 
-		      if( !$content || empty( $content ) )
-		      {
-		      	return $scripts_array;
-		      }
-		       
-		      $document = new DOMDocument();
+			if ( is_array( $response ) ) {
 
-		      @$document->loadHTML( $content );
+				$content = $response['body'];
 
-		      // Store every script's source inside the array.
-		      foreach( $document->getElementsByTagName('script') as $script ) {
+				if ( ! $content || empty( $content ) ) {
+					return $scripts_array;
+				}
 
-		        if( $script->hasAttribute('src') ) {
+				$document = new DOMDocument();
 
-		          $scripts_array[$script->getAttribute('src')] =  $script->getAttribute('src');
+				@$document->loadHTML( $content );
 
-		        }
+				// Store every script's source inside the array.
+				foreach ( $document->getElementsByTagName( 'script' ) as $script ) {
 
-		      }
+					if ( $script->hasAttribute( 'src' ) ) {
 
-		    }
+						$scripts_array[ $script->getAttribute( 'src' ) ] = $script->getAttribute( 'src' );
 
-		    return $scripts_array;
+					}
+				}
+			}
 
+			return $scripts_array;
 		}
 
-		public static function list_post_scripts () {
-			if (defined( 'DOING_AJAX' ) && DOING_AJAX ) {
+		public static function list_post_scripts() {
+			if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
 				return;
 			}
-			
 
-			if ( !empty( $_GET['post'] ) ) {
+			if ( ! empty( $_GET['post'] ) ) {
 
 				$scripts = self::get_post_scripts( $_GET['post'] );
-				
-				if( !empty( $scripts ) )
-				{
+
+				if ( ! empty( $scripts ) ) {
 					return $scripts;
 				}
-				
-				
 			}
 
 			return array();
-			
 		}
 
 		/**
@@ -356,62 +356,61 @@ if ( ! class_exists( 'ANONY_Wp_Misc_Help' ) ) {
 		 * @return String|Boolean  The archive post type name or false if not in an archive page.
 		 */
 		public static function get_archive_post_type() {
-		    return is_archive() ? get_queried_object()->name : false;
+			return is_archive() ? get_queried_object()->name : false;
 		}
 
 		public static function anony_get_current_permalink_shortcode() {
 			global $post;
-		
+
 			$permalink = '';
-		
-			if (is_singular()) {
-				$permalink = get_permalink($post->ID);
-			} elseif (is_post_type_archive()) {
+
+			if ( is_singular() ) {
+				$permalink = get_permalink( $post->ID );
+			} elseif ( is_post_type_archive() ) {
 				$post_type = get_post_type();
-				$permalink = get_post_type_archive_link($post_type);
-			} elseif (is_tax() || is_category() || is_tag()) {
-				$term = get_queried_object();
-				$permalink = get_term_link($term);
-			} elseif (is_archive()) {
-				$permalink = get_post_type_archive_link(get_post_type());;
+				$permalink = get_post_type_archive_link( $post_type );
+			} elseif ( is_tax() || is_category() || is_tag() ) {
+				$term      = get_queried_object();
+				$permalink = get_term_link( $term );
+			} elseif ( is_archive() ) {
+				$permalink = get_post_type_archive_link( get_post_type() );
+
 			}
-		
+
 			return $permalink;
 		}
 		public static function current_object_title() {
-			
-		
+
 			$permalink = '';
-			$title = '';
-		
-			if (is_singular()) {
+			$title     = '';
+
+			if ( is_singular() ) {
 				global $post;
-				$permalink = get_permalink($post->ID);
-				$title = '<a href="'.$permalink.'">'.$post->post_title.'</a>';
-			} elseif (is_post_type_archive()) {
-				$post_type = get_post_type();
-				$permalink = get_post_type_archive_link($post_type);
-				$post_type_object = get_post_type_object($post_type);
-				if ($post_type_object) {
+				$permalink = get_permalink( $post->ID );
+				$title     = '<a href="' . $permalink . '">' . $post->post_title . '</a>';
+			} elseif ( is_post_type_archive() ) {
+				$post_type        = get_post_type();
+				$permalink        = get_post_type_archive_link( $post_type );
+				$post_type_object = get_post_type_object( $post_type );
+				if ( $post_type_object ) {
 					$post_type_label = $post_type_object->labels->name; // or use 'singular_name' for the singular label
-					$title = '<a href="'.$permalink.'">'.$post_type_label.'</a>';
+					$title           = '<a href="' . $permalink . '">' . $post_type_label . '</a>';
 				}
-				
-			} elseif (is_tax() || is_category() || is_tag()) {
-				$term = get_queried_object();
-				$permalink = get_term_link($term);
-				$title = '<a href="'.$permalink.'">'.$term->name.'</a>';
-			} elseif (is_archive()) {
-				$permalink = get_post_type_archive_link(get_post_type());;
+			} elseif ( is_tax() || is_category() || is_tag() ) {
+				$term      = get_queried_object();
+				$permalink = get_term_link( $term );
+				$title     = '<a href="' . $permalink . '">' . $term->name . '</a>';
+			} elseif ( is_archive() ) {
+				$permalink = get_post_type_archive_link( get_post_type() );
+
 				$queried_object = get_queried_object();
-				if ($queried_object && isset($queried_object->label)) {
+				if ( $queried_object && isset( $queried_object->label ) ) {
 					$archive_label = $queried_object->label;
-					$title = '<a href="'.$permalink.'">'.$archive_label.'</a>';
+					$title         = '<a href="' . $permalink . '">' . $archive_label . '</a>';
 				}
 			}
-		
+
 			return $title;
 		}
-
 	}
 }

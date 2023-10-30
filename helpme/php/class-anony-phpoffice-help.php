@@ -50,53 +50,61 @@ if ( ! class_exists( 'ANONY_PHPOFFICE_HELP' ) ) {
 				->setKeywords( 'office 2007 openxml php' )
 				->setCategory( 'Test result file' );
 
-			
-			
 			// Add some data.
-			$sheet = $spreadsheet->setActiveSheetIndex( 0 )->setCellValue( 'A1', 'Report ' . date('Y-m-d') );
-			
+			$sheet = $spreadsheet->setActiveSheetIndex( 0 )->setCellValue( 'A1', 'Report ' . date( 'Y-m-d' ) );
+
 			// Get the active sheet
 			$sheet = $spreadsheet->getActiveSheet();
 
 			// Set headers
-			if( $reportHeaders && is_array( $reportHeaders ) ){
-				
+			if ( $reportHeaders && is_array( $reportHeaders ) ) {
+
 				$headerRow = 2;
-				$col = 'A';
-				foreach ($reportHeaders as $header) {
-					$sheet->setCellValue($col . $headerRow, $header);
-					$sheet->getStyle($col . $headerRow)->applyFromArray([
-						'font' => ['bold' => true, 'color' => ['rgb' => 'FFFFFF']],
-						'fill' => ['fillType' => Fill::FILL_SOLID, 'startColor' => ['rgb' => '4CAF50']],
-					]);
-					$sheet->getColumnDimension($col)->setAutoSize(true);
-					$col++;
+				$col       = 'A';
+				foreach ( $reportHeaders as $header ) {
+					$sheet->setCellValue( $col . $headerRow, $header );
+					$sheet->getStyle( $col . $headerRow )->applyFromArray(
+						array(
+							'font' => array(
+								'bold'  => true,
+								'color' => array( 'rgb' => 'FFFFFF' ),
+							),
+							'fill' => array(
+								'fillType'   => Fill::FILL_SOLID,
+								'startColor' => array( 'rgb' => '4CAF50' ),
+							),
+						)
+					);
+					$sheet->getColumnDimension( $col )->setAutoSize( true );
+					++$col;
 				}
 			}
 
 			// Set data and formatting
 			$dataRow = 3;
-			foreach ($array as $rowData) {
+			foreach ( $array as $rowData ) {
 				$col = 'A';
-				foreach ($rowData as $value) {
-					$sheet->setCellValue($col . $dataRow, $value);
-					$sheet->getStyle($col . $dataRow)->applyFromArray([
-						'alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER],
-						'borders' => [
-							'allBorders' => [
-								'borderStyle' => Border::BORDER_THIN,
-								'color' => ['rgb' => '000000'],
-							],
-						],
-					]);
-					$col++;
+				foreach ( $rowData as $value ) {
+					$sheet->setCellValue( $col . $dataRow, $value );
+					$sheet->getStyle( $col . $dataRow )->applyFromArray(
+						array(
+							'alignment' => array( 'horizontal' => Alignment::HORIZONTAL_CENTER ),
+							'borders'   => array(
+								'allBorders' => array(
+									'borderStyle' => Border::BORDER_THIN,
+									'color'       => array( 'rgb' => '000000' ),
+								),
+							),
+						)
+					);
+					++$col;
 				}
-				$dataRow++;
+				++$dataRow;
 			}
-			
+
 			// Autofit columns to content
-			foreach(range('A', $sheet->getHighestColumn()) as $column) {
-				$sheet->getColumnDimension($column)->setAutoSize(true);
+			foreach ( range( 'A', $sheet->getHighestColumn() ) as $column ) {
+				$sheet->getColumnDimension( $column )->setAutoSize( true );
 			}
 
 			// Rename worksheet.
@@ -107,7 +115,7 @@ if ( ! class_exists( 'ANONY_PHPOFFICE_HELP' ) ) {
 
 			// Redirect output to a client’s web browser (Xlsx).
 			header( 'Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' );
-			header( 'Content-Disposition: attachment;filename="Report-'.date('Y-m-d').'.xlsx"' );
+			header( 'Content-Disposition: attachment;filename="Report-' . date( 'Y-m-d' ) . '.xlsx"' );
 			header( 'Cache-Control: max-age=0' );
 			// If you're serving to IE 9, then the following may be needed.
 			header( 'Cache-Control: max-age=1' );
@@ -121,7 +129,6 @@ if ( ! class_exists( 'ANONY_PHPOFFICE_HELP' ) ) {
 			$writer = IOFactory::createWriter( $spreadsheet, 'Xlsx' );
 			$writer->save( 'php://output' );
 			exit;
-
 		}
 
 		/**

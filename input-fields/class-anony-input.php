@@ -89,32 +89,32 @@ if ( ! class_exists( 'ANONY_Input' ) ) {
 		 * @param int|null $object_id  Should be an integer if the context is meta box
 		 */
 		function __construct( $args ) {
-			
-			if( !isset( $args['field'] ) || empty( $args['field'] ) ){
+
+			if ( ! isset( $args['field'] ) || empty( $args['field'] ) ) {
 				return;
 			}
 
-			$this->field =  $args['field'] ;
+			$this->field = $args['field'];
 
-			$this->as_template = !empty( $args['as_template'] ) ? $args['as_template'] : false;
+			$this->as_template = ! empty( $args['as_template'] ) ? $args['as_template'] : false;
 
-			$this->field_value = !empty( $args['field_value'] ) ? $args['field_value'] : false;
+			$this->field_value = ! empty( $args['field_value'] ) ? $args['field_value'] : false;
 
-			$this->index = !empty( $args['index'] ) ? $args['index'] : null;
+			$this->index = ! empty( $args['index'] ) ? $args['index'] : null;
 
-			$this->options = ( !empty( $args['field']['option_name'] ) && class_exists( 'ANONY_Options_Model' ) ) ? ANONY_Options_Model::get_instance( $args['field']['option_name'] ) : '';
+			$this->options = ( ! empty( $args['field']['option_name'] ) && class_exists( 'ANONY_Options_Model' ) ) ? ANONY_Options_Model::get_instance( $args['field']['option_name'] ) : '';
 
-			$this->metabox_id = !empty( $args['metabox_id'] ) ? $args['metabox_id'] : null;
+			$this->metabox_id = ! empty( $args['metabox_id'] ) ? $args['metabox_id'] : null;
 
-			$this->object_id = !empty( $args['object_id'] ) ? $args['object_id'] : null;
+			$this->object_id = ! empty( $args['object_id'] ) ? $args['object_id'] : null;
 
-			$this->context = !empty( $args['context'] ) ? $args['context'] : 'option';
+			$this->context = ! empty( $args['context'] ) ? $args['context'] : 'option';
 
-			$this->default = !empty( $this->field['default'] ) ? $this->field['default'] : '';
+			$this->default = ! empty( $this->field['default'] ) ? $this->field['default'] : '';
 
-			$this->class_attr = isset( $this->field['class'] )  ? $this->field['class'] : 'anony-input-field';
+			$this->class_attr = isset( $this->field['class'] ) ? $this->field['class'] : 'anony-input-field';
 
-			$this->width = isset( $this->field['width'] )  ? ' anony-grid-col-' . $this->field['width'] : $this->width;
+			$this->width = isset( $this->field['width'] ) ? ' anony-grid-col-' . $this->field['width'] : $this->width;
 
 			$this->set_field_data();
 
@@ -154,7 +154,7 @@ if ( ! class_exists( 'ANONY_Input' ) ) {
 		 * Set options field data
 		 */
 		public function opt_field_data() {
-			if( !isset( $this->field['id'] ) ){
+			if ( ! isset( $this->field['id'] ) ) {
 				return;
 			}
 			$input_name = isset( $this->field['name'] ) ? $this->field['name'] : $this->field['id'];
@@ -164,7 +164,6 @@ if ( ! class_exists( 'ANONY_Input' ) ) {
 			$fieldID = $this->field['id'];
 
 			$this->value = ( isset( $this->options->$fieldID ) && ! empty( $this->options->$fieldID ) ) ? $this->options->$fieldID : $this->default;
-
 		}
 
 		public function form_field_data() {
@@ -185,7 +184,7 @@ if ( ! class_exists( 'ANONY_Input' ) ) {
 
 				$this->field['id'] = $this->field['id'] . '-' . $index;
 			} else {
-				$this->input_name = !empty( $this->field['id'] ) ? $this->metabox_id . '[' . $this->field['id'] . ']' : '';
+				$this->input_name = ! empty( $this->field['id'] ) ? $this->metabox_id . '[' . $this->field['id'] . ']' : '';
 			}
 
 			$single = ( isset( $this->field['multiple'] ) && $this->field['multiple'] ) ? false : true;
@@ -204,11 +203,10 @@ if ( ! class_exists( 'ANONY_Input' ) ) {
 					$metabox_options = get_post_meta( $this->object_id, $this->metabox_id, $single );
 				}
 
-				$meta = ( is_array( $metabox_options ) && !empty( $this->field['id'] ) && isset( $metabox_options[ $this->field['id'] ] ) ) ? $metabox_options[ $this->field['id'] ] : '';
+				$meta = ( is_array( $metabox_options ) && ! empty( $this->field['id'] ) && isset( $metabox_options[ $this->field['id'] ] ) ) ? $metabox_options[ $this->field['id'] ] : '';
 			}
 
 			$this->value = ( $meta != '' ) ? $meta : $this->default;
-
 		}
 
 		/**
@@ -292,8 +290,6 @@ if ( ! class_exists( 'ANONY_Input' ) ) {
 				wp_register_style( 'anony-inputs-rtl', ANONY_INPUT_FIELDS_URI . 'assets/css/inputs-fields-rtl.css', array( 'anony-inputs' ), time(), 'all' );
 				wp_enqueue_style( 'anony-inputs-rtl' );
 			}
-
 		}
-
 	}
 }

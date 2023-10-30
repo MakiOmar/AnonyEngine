@@ -56,7 +56,6 @@ if ( ! class_exists( 'ANONY_Term_Metabox' ) ) {
 			} elseif ( $old_value !== $_POST[ $this->id ] ) {
 				update_term_meta( $term_id, $this->id, $term_value );
 			}
-
 		}
 
 		/**

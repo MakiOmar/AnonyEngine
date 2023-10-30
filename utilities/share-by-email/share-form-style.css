@@ -146,8 +146,8 @@ input[type='email']:focus{
 }
 
 @media screen and (max-width: 599px){
-   #anony-share-container{
-	   max-width: 350px;
-   }
+	#anony-share-container{
+		max-width: 350px;
+	}
 
 }

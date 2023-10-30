@@ -19,7 +19,7 @@ defined( 'ABSPATH' ) || die(); // Exit if accessed direct.
  *
  * @const
  */
-define( 'ANOE_PLUGIN_SLUG', plugin_basename(__FILE__) );
+define( 'ANOE_PLUGIN_SLUG', plugin_basename( __FILE__ ) );
 
 /**
  * Holds plugin PATH
@@ -52,13 +52,13 @@ require_once ANOE_LIBS_URI . 'fonts.php';
 require_once wp_normalize_path( ANOE_DIR . 'config.php' );
 
 $anonyengine_update_checker = Puc_v4_Factory::buildUpdateChecker(
-    'https://github.com/MakiOmar/AnonyEngine/',
-    __FILE__,
-    ANOE_PLUGIN_SLUG
+	'https://github.com/MakiOmar/AnonyEngine/',
+	__FILE__,
+	ANOE_PLUGIN_SLUG
 );
 
-//Set the branch that contains the stable release.
-$anonyengine_update_checker->setBranch('master');
+// Set the branch that contains the stable release.
+$anonyengine_update_checker->setBranch( 'master' );
 
 /**
  * Enqueue admin/frontend common scripts.
@@ -102,7 +102,7 @@ add_action( 'admin_enqueue_scripts', 'anony_common_scripts' );
 
 add_action(
 	'activated_plugin',
-	function() {
+	function () {
 		flush_rewrite_rules();
 	}
 );
@@ -127,36 +127,49 @@ add_filter(
  */
 add_action(
 	'plugins_loaded',
-	function() {
-		load_plugin_textdomain( 'anonyengine', false, basename( dirname( __FILE__ ) ) . '/languages' );
+	function () {
+		load_plugin_textdomain( 'anonyengine', false, basename( __DIR__ ) . '/languages' );
 	}
 );
 
 // Register Post Types.
-add_action( 'init', array ( 'ANONY_Post_Help', 'register_post_types') );
+add_action( 'init', array( 'ANONY_Post_Help', 'register_post_types' ) );
 
 // Register Taxonomies.
-add_action( 'init', array ( 'ANONY_Taxonomy_Help', 'register_taxonomies' ));
+add_action( 'init', array( 'ANONY_Taxonomy_Help', 'register_taxonomies' ) );
 
-add_action('wp_enqueue_scripts', function() {
-	$engine_options = ANONY_Options_Model::get_instance( ANONY_ENGINE_OPTIONS );
-	if ( ! empty( $engine_options->google_maps_api_key ) && '1' === $engine_options->enable_google_maps_script ) {
-		$region   = ! empty( $engine_options->google_maps_region ) ? $engine_options->google_maps_region : 'EG';
-		$language = ! empty( $engine_options->google_maps_language ) ? $engine_options->google_maps_language : 'ar';
-		$script_src = add_query_arg(array(
-			'v'=> '3.exp',
-			'key'=> $engine_options->google_maps_api_key,
-			'language'=> $language,
-			'region'=> $region,
-			'libraries'=> 'places',
-			'callback'=> 'initMap',
-		), 'https://maps.googleapis.com/maps/api/js');
+add_action(
+	'wp_enqueue_scripts',
+	function () {
+		$engine_options = ANONY_Options_Model::get_instance( ANONY_ENGINE_OPTIONS );
+		if ( ! empty( $engine_options->google_maps_api_key ) && '1' === $engine_options->enable_google_maps_script ) {
+			$region     = ! empty( $engine_options->google_maps_region ) ? $engine_options->google_maps_region : 'EG';
+			$language   = ! empty( $engine_options->google_maps_language ) ? $engine_options->google_maps_language : 'ar';
+			$script_src = add_query_arg(
+				array(
+					'v'         => '3.exp',
+					'key'       => $engine_options->google_maps_api_key,
+					'language'  => $language,
+					'region'    => $region,
+					'libraries' => 'places',
+					'callback'  => 'initMap',
+				),
+				'https://maps.googleapis.com/maps/api/js'
+			);
 
-		/*API should be always before map script*/
-		wp_register_script( 'anony-google-map-api', $script_src, array() ,'4.9.10' , array('in_footer' => true, 'strategy' => 'async') );
+			/*API should be always before map script*/
+			wp_register_script(
+				'anony-google-map-api',
+				$script_src,
+				array(),
+				'4.9.10',
+				array(
+					'in_footer' => true,
+					'strategy'  => 'async',
+				)
+			);
+		}
 	}
-	
-	
-});
+);
 
-do_action('anonyengine_loaded');
+do_action( 'anonyengine_loaded' );

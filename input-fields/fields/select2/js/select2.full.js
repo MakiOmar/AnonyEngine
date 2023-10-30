@@ -7240,8 +7240,8 @@
 				},
 
 				getLineHeight: function (elem) {
-					var $elem = $( elem ),
-					$parent_obj   = $elem['offsetParent' in $.fn ? 'offsetParent' : 'parent']();
+					var $elem   = $( elem ),
+					$parent_obj = $elem['offsetParent' in $.fn ? 'offsetParent' : 'parent']();
 					if ( ! $parent_obj.length) {
 								$parent_obj = $( 'body' );
 					}

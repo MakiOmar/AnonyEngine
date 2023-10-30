@@ -74,8 +74,8 @@ if ( ! class_exists( 'ANONY_Validate_Inputs' ) ) {
 		 *
 		 * @var string
 		 */
-		public $sanitization;		
-		
+		public $sanitization;
+
 		/**
 		 * Field's title.
 		 *
@@ -102,7 +102,7 @@ if ( ! class_exists( 'ANONY_Validate_Inputs' ) ) {
 				$this->field = $args['field'];
 
 				// translators: %s is for field's id.
-				$this->field_title = !empty( $this->field['title'] ) ? $this->field['title'] : sprintf( __( 'Field with id %s', 'anonyengine' ), $this->field['id'] );
+				$this->field_title = ! empty( $this->field['title'] ) ? $this->field['title'] : sprintf( __( 'Field with id %s', 'anonyengine' ), $this->field['id'] );
 
 				if ( isset( $this->field['validate'] ) ) {
 
@@ -113,7 +113,6 @@ if ( ! class_exists( 'ANONY_Validate_Inputs' ) ) {
 					$this->validate_inputs();
 				}
 			}// if level 1.
-
 		}//end __construct()
 
 		/**
@@ -144,7 +143,6 @@ if ( ! class_exists( 'ANONY_Validate_Inputs' ) ) {
 					$this->sanitization = 'sanitize_text_field';
 					break;
 			}
-
 		}//end select_sanitization()
 
 		/**
@@ -201,7 +199,6 @@ if ( ! class_exists( 'ANONY_Validate_Inputs' ) ) {
 			}// if level 1.
 
 			return $method;
-
 		}//end select_method()
 
 		/**
@@ -269,7 +266,6 @@ if ( ! class_exists( 'ANONY_Validate_Inputs' ) ) {
 		 */
 		public function valid_multiple_options() {
 			$this->valid_no_html();
-
 		}//end valid_multiple_options()
 
 		/**
@@ -285,7 +281,7 @@ if ( ! class_exists( 'ANONY_Validate_Inputs' ) ) {
 		 * Validate multi-value input
 		 */
 		public function valid_multi_value() {
-			if( is_array($this->value) ){
+			if ( is_array( $this->value ) ) {
 				foreach ( $this->value as $index => $value ) {
 					// Check if all supplied values are empty.
 					if ( implode( '', $value ) === '' ) {
@@ -293,8 +289,6 @@ if ( ! class_exists( 'ANONY_Validate_Inputs' ) ) {
 					}
 				}
 			}
-	
-
 		}//end valid_multi_value()
 
 
@@ -302,34 +296,33 @@ if ( ! class_exists( 'ANONY_Validate_Inputs' ) ) {
 		 * Accept html within input.
 		 */
 		public function valid_tabs() {
-			if( is_array($this->value) ){
+			if ( is_array( $this->value ) ) {
 				$count = array_shift( $this->value );
 				if ( ! ctype_digit( $count ) ) {
 					$count = count( $this->value ) + 1;
 				}
 				$temp = array();
-	
+
 				$temp['count'] = $count;
 				foreach ( $this->value as $name => $v ) {
 					foreach ( $v as $key => $value ) {
 						$value = wp_strip_all_tags( $value );
-	
+
 						$temp[ $name ][ $key ] = $value;
-	
+
 					}
-	
+
 					$temp_name_values = array_values( $temp[ $name ] );
-	
+
 					// Check if all supplied values are empty.
 					if ( implode( '', $temp_name_values ) === '' ) {
 						unset( $temp[ $name ] );
 					}
 				}
 				$temp['count'] = empty( $temp ) ? 2 : count( $temp ) + 1;
-	
+
 				$this->value = $temp;
 			}
-
 		}//end valid_tabs()
 
 		/**
@@ -343,7 +336,6 @@ if ( ! class_exists( 'ANONY_Validate_Inputs' ) ) {
 				$this->valid = false;
 				return $this->set_error_code( 'not-date' );
 			}
-
 		}//end valid_date()
 
 		/**
@@ -361,18 +353,14 @@ if ( ! class_exists( 'ANONY_Validate_Inputs' ) ) {
 						return $this->set_error_code( 'remove-html' );
 					}
 				}
-			} else {
-
-				if ( intval( wp_strip_all_tags( $this->value ) ) !== intval( $this->value ) ) {
+			} elseif ( intval( wp_strip_all_tags( $this->value ) ) !== intval( $this->value ) ) {
 
 					$this->valid = false;
 
 					return $this->set_error_code( 'remove-html' );
-				}
 			}
 
 			$this->sanitize();
-
 		}//end valid_no_html()
 
 		/**
@@ -411,7 +399,6 @@ if ( ! class_exists( 'ANONY_Validate_Inputs' ) ) {
 			}
 
 			$this->sanitize();
-
 		}//end valid_url()
 
 		/**
@@ -427,7 +414,6 @@ if ( ! class_exists( 'ANONY_Validate_Inputs' ) ) {
 			}
 
 			$this->sanitize();
-
 		}//end valid_number()
 
 		/**
@@ -445,7 +431,6 @@ if ( ! class_exists( 'ANONY_Validate_Inputs' ) ) {
 				$this->sanitize();
 
 			}
-
 		}//end valid_abs()
 
 		/**
@@ -460,7 +445,6 @@ if ( ! class_exists( 'ANONY_Validate_Inputs' ) ) {
 			} else {
 				$this->sanitize();
 			}
-
 		}
 
 		/**
@@ -481,7 +465,6 @@ if ( ! class_exists( 'ANONY_Validate_Inputs' ) ) {
 			}
 
 			$this->sanitize();
-
 		}//end valid_file_type()
 
 		/**

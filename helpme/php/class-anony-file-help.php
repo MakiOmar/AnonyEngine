@@ -44,6 +44,5 @@ if ( ! class_exists( 'ANONY_File_Help' ) ) {
 
 			return $file;
 		}
-
 	}
 }

@@ -82,7 +82,6 @@ if ( ! class_exists( 'ANONY_Woo_Direct_Cart_Add' ) ) {
 
 			// This adds the product with the ID; we can also add a second variable which will be the variation ID.
 			WC()->cart->add_to_cart( $product_id );
-
 		}
 
 		/**
@@ -96,17 +95,14 @@ if ( ! class_exists( 'ANONY_Woo_Direct_Cart_Add' ) ) {
 			// phpcs:enable.
 
 			$this->set_session_data();
-			
-			$this->add_to_cart( $this->product_id );
 
-			
+			$this->add_to_cart( $this->product_id );
 
 			// Redirects to the checkout page.
 			wp_safe_redirect( wc_get_checkout_url() );
 
 			// Safely closes the function.
 			exit();
-
 		}
 
 		/**
@@ -122,7 +118,6 @@ if ( ! class_exists( 'ANONY_Woo_Direct_Cart_Add' ) ) {
 					$woocommerce->session->set( $key, $args['field_value'] );
 				}
 			}
-
 		}
 
 		/**
@@ -152,7 +147,6 @@ if ( ! class_exists( 'ANONY_Woo_Direct_Cart_Add' ) ) {
 					}
 				}
 			}
-
 		}
 
 
@@ -182,7 +176,6 @@ if ( ! class_exists( 'ANONY_Woo_Direct_Cart_Add' ) ) {
 					}
 
 					$custom_options[ $session_key ] = $args;
-					
 
 				}
 			}
@@ -231,22 +224,19 @@ if ( ! class_exists( 'ANONY_Woo_Direct_Cart_Add' ) ) {
 				// Version 2.x.
 				// $value['data']->price = $value['_custom_options']['custom_price'];.
 				// Version 3.x / 4.x.
-				
+
 				$custom_price = 0;
-				if( ! empty( $value['_custom_options'] ) && is_array(  $value['_custom_options'] ) )
-				{
-				    foreach( $value['_custom_options'] as $session_key => $session_value )
-				    {
-				        if ( ! empty( $session_value['custom_price'] ) && 'no' !== $session_value['custom_price'] && is_numeric( $session_value['custom_price'] ) ) {
-				            
-				                $custom_price += $session_value['custom_price'];
-            					
-            				}
-				    }
-				    
-				    $value['data']->set_price( $custom_price );
+				if ( ! empty( $value['_custom_options'] ) && is_array( $value['_custom_options'] ) ) {
+					foreach ( $value['_custom_options'] as $session_key => $session_value ) {
+						if ( ! empty( $session_value['custom_price'] ) && 'no' !== $session_value['custom_price'] && is_numeric( $session_value['custom_price'] ) ) {
+
+								$custom_price += $session_value['custom_price'];
+
+						}
+					}
+
+					$value['data']->set_price( $custom_price );
 				}
-				
 			}
 		}
 
@@ -257,8 +247,8 @@ if ( ! class_exists( 'ANONY_Woo_Direct_Cart_Add' ) ) {
 		 * @param array  $values Item's values.
 		 */
 		public function add_values_to_order_item_meta( $item_id, $values ) {
-			global $woocommerce,$wpdb;
-            
+			global $woocommerce, $wpdb;
+
 			if ( ! empty( $this->session ) && ! empty( $values['_custom_options'] ) ) {
 
 				foreach ( $this->session as $session_key => $args ) {
@@ -281,7 +271,6 @@ if ( ! class_exists( 'ANONY_Woo_Direct_Cart_Add' ) ) {
 
 				}
 			}
-
 		}
 
 		/**
@@ -311,7 +300,6 @@ if ( ! class_exists( 'ANONY_Woo_Direct_Cart_Add' ) ) {
 			}
 
 			return $display_key;
-
 		}
 	}
 

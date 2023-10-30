@@ -35,82 +35,77 @@ if ( ! class_exists( 'ANONY_IMAGES_HELP' ) ) {
 		public static function add_missing_dimensions( $content, $lazyload = false ) {
 			$pattern = '/<img [^>]*?src="(\w+?:\/\/[^"]+?)"[^>]*?>/iu';
 			preg_match_all( $pattern, $content, $imgs );
-			if(!function_exists('getimagesize')){
+			if ( ! function_exists( 'getimagesize' ) ) {
 				return $content;
 			}
 			foreach ( $imgs[0] as $i => $img ) {
-				
-				if( $lazyload ){
+
+				if ( $lazyload ) {
 					// Use Defer.js to lazyload.
 					// https://github.com/shinsenter/defer.js/#Defer.lazy.
-					if( false === strpos($imgs[0][ $i ], 'data-src') ){
-						$replaced_img = preg_replace('/<img([^>]*)src=("|\')([^"\']*)(\2)([^>]*)>/', '<img$1data-src=$2$3$4$5 src="' . ANOE_URI . 'assets/images/placeholders/lazyload-placeholder.svg">', $imgs[0][ $i ]);
-					}else{
+					if ( false === strpos( $imgs[0][ $i ], 'data-src' ) ) {
+						$replaced_img = preg_replace( '/<img([^>]*)src=("|\')([^"\']*)(\2)([^>]*)>/', '<img$1data-src=$2$3$4$5 src="' . ANOE_URI . 'assets/images/placeholders/lazyload-placeholder.svg">', $imgs[0][ $i ] );
+					} else {
 						$replaced_img = $imgs[0][ $i ];
 					}
-					
-					if( false === strpos( $replaced_img, 'data-srcset') ){
-						$replaced_img = preg_replace('/<img([^>]*)srcset=("|\')([^"\']*)(\2)([^>]*)>/', '<img$1data-srcset=$2$3$4$5>', $replaced_img);
+
+					if ( false === strpos( $replaced_img, 'data-srcset' ) ) {
+						$replaced_img = preg_replace( '/<img([^>]*)srcset=("|\')([^"\']*)(\2)([^>]*)>/', '<img$1data-srcset=$2$3$4$5>', $replaced_img );
 					}
-					
-					$replaced_img = str_replace( '<img ', '<img loading="lazy" ' , $replaced_img );
-					
-				}else{
+
+					$replaced_img = str_replace( '<img ', '<img loading="lazy" ', $replaced_img );
+
+				} else {
 					$replaced_img = $imgs[0][ $i ];
 				}
 
 				if ( false === strpos( $img, ' width' ) && false === strpos( $img, ' height' ) ) {
-					$img_url  = $imgs[1][ $i ];
-					if( ANONY_LINK_HELP::linkExists($img_url) && function_exists( 'getimagesize' ) ){
+					$img_url = $imgs[1][ $i ];
+					if ( ANONY_LINK_HELP::linkExists( $img_url ) && function_exists( 'getimagesize' ) ) {
 						$img_size = getimagesize( $img_url );
-					}else{
+					} else {
 						$img_size = false;
 					}
 
-
 					if ( false !== $img_size ) {
-						$replaced_img = str_replace( '<img ', '<img style="width:'. $img_size[0] .';max-height:'. $img_size[1] .'"' . $img_size[3] . ' ', $replaced_img );
+						$replaced_img = str_replace( '<img ', '<img style="width:' . $img_size[0] . ';max-height:' . $img_size[1] . '"' . $img_size[3] . ' ', $replaced_img );
 					}
-
-				}else{
-					$img_url  = $imgs[1][ $i ];
-					if( ANONY_LINK_HELP::linkExists($img_url) && function_exists( 'getimagesize' ) ){
+				} else {
+					$img_url = $imgs[1][ $i ];
+					if ( ANONY_LINK_HELP::linkExists( $img_url ) && function_exists( 'getimagesize' ) ) {
 						$img_size = getimagesize( $img_url );
-					}else{
+					} else {
 						$img_size = false;
 					}
 
-
 					if ( false !== $img_size ) {
-						
-						if (preg_match('/<img[^>]+style=["\']([^"\']+)["\']/', $replaced_img, $matches)) {
+
+						if ( preg_match( '/<img[^>]+style=["\']([^"\']+)["\']/', $replaced_img, $matches ) ) {
 							// The img element has a style attribute
 							$style_attribute = $matches[1];
 
-							if (!preg_match('/\bwidth\s*:\s*[^;]+/', $style_attribute)) {
+							if ( ! preg_match( '/\bwidth\s*:\s*[^;]+/', $style_attribute ) ) {
 								// Width is not set in style attribute, add it
-								$style_attribute .= ' width: '.$img_size[0].'px;';
+								$style_attribute .= ' width: ' . $img_size[0] . 'px;';
 							}
-							
-							if (!preg_match('/\bmax-height\s*:\s*[^;]+/', $style_attribute)) {
-								// Height is not set in style attribute, add it
-								$style_attribute .= ' max-height: '.$img_size[1].'px;';
-							}
-							
-							// Replace the updated style attribute in the HTML
-							$replaced_img = str_replace($matches[1], $style_attribute , $replaced_img);
-						}else{
 
-							$replaced_img = str_replace( '<img ', '<img style="width:'. $img_size[0] .'px;max-height:'. $img_size[1] .'px" ', $replaced_img );
+							if ( ! preg_match( '/\bmax-height\s*:\s*[^;]+/', $style_attribute ) ) {
+								// Height is not set in style attribute, add it
+								$style_attribute .= ' max-height: ' . $img_size[1] . 'px;';
+							}
+
+							// Replace the updated style attribute in the HTML
+							$replaced_img = str_replace( $matches[1], $style_attribute, $replaced_img );
+						} else {
+
+							$replaced_img = str_replace( '<img ', '<img style="width:' . $img_size[0] . 'px;max-height:' . $img_size[1] . 'px" ', $replaced_img );
 						}
-						
 					}
 				}
 
-				$content      = str_replace( $img, $replaced_img, $content );
+				$content = str_replace( $img, $replaced_img, $content );
 			}
 			return $content;
 		}
-
 	}
 }

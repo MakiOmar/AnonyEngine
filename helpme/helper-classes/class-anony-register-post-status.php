@@ -14,7 +14,7 @@ defined( 'ABSPATH' ) || die(); // Exit if accessed direct.
 
 // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
 if ( ! class_exists( 'ANONY_Register_Post_Status' ) ) {
-	
+
 
 	/**
 	 * Register custom status for post type class.
@@ -53,9 +53,9 @@ if ( ! class_exists( 'ANONY_Register_Post_Status' ) ) {
 			register_post_status(
 				$this->status_name,
 				array(
-					'label'                     => $this->label ,
+					'label'                     => $this->label,
 					// Translators: Label count.
-					'label_count'               => _n_noop( $this->label  . ' <span class="count">(%s)</span>', $this->label  . ' <span class="count">(%s)</span>'),
+					'label_count'               => _n_noop( $this->label . ' <span class="count">(%s)</span>', $this->label . ' <span class="count">(%s)</span>' ),
 					'public'                    => true,
 					'exclude_from_search'       => true,
 					'show_in_admin_all_list'    => true,
@@ -73,12 +73,12 @@ if ( ! class_exists( 'ANONY_Register_Post_Status' ) ) {
 				return false;
 			}
 
-			$status = ( $post->post_status === $this->status_name ) ? "jQuery( '#post-status-display' ).text( '" . $this->label  . "' );
+			$status = ( $post->post_status === $this->status_name ) ? "jQuery( '#post-status-display' ).text( '" . $this->label . "' );
 			jQuery( 'select[name=\"post_status\"]' ).val('" . $this->status_name . "');" : '';
 
 			echo "<script>
 			jQuery(document).ready( function() {
-			jQuery( 'select[name=\"post_status\"]' ).append( '<option value=\"" . $this->status_name . '">' . $this->label  . "</option>' );
+			jQuery( 'select[name=\"post_status\"]' ).append( '<option value=\"" . $this->status_name . '">' . $this->label . "</option>' );
 			" . $status . '
 			});
 			</script>';
@@ -89,16 +89,14 @@ if ( ! class_exists( 'ANONY_Register_Post_Status' ) ) {
 		 */
 		public function add_in_quick_edit() {
 			global $pagenow;
-			if (( $pagenow == 'post.php' ) || (get_post_type() == $this->post_type )) {
+			if ( ( $pagenow == 'post.php' ) || ( get_post_type() == $this->post_type ) ) {
 
 				echo "<script>
 				jQuery(document).ready( function() {
-				jQuery( 'select[name=\"_status\"]' ).append( '<option value=\"" . $this->status_name . '">' . $this->label  . "</option>' );
+				jQuery( 'select[name=\"_status\"]' ).append( '<option value=\"" . $this->status_name . '">' . $this->label . "</option>' );
 				});
 				</script>";
 			}
-			
-			
 		}
 
 		/**
@@ -110,7 +108,9 @@ if ( ! class_exists( 'ANONY_Register_Post_Status' ) ) {
 		 */
 		public function display_post_state( $states ) {
 			global $post;
-			if( !$post || is_null($post) ) return $states;
+			if ( ! $post || is_null( $post ) ) {
+				return $states;
+			}
 			$arg = get_query_var( 'post_status' );
 			if ( $arg !== $this->status_name ) {
 
@@ -118,11 +118,11 @@ if ( ! class_exists( 'ANONY_Register_Post_Status' ) ) {
 
 					echo "<script>
 					jQuery(document).ready( function() {
-					jQuery( '#post-status-display' ).text( '" . $this->label  . "' );
+					jQuery( '#post-status-display' ).text( '" . $this->label . "' );
 					});
 					</script>";
 
-					return array( $this->label  );
+					return array( $this->label );
 				}
 			}
 			return $states;
@@ -141,9 +141,9 @@ if ( ! class_exists( 'ANONY_Register_Post_Status' ) ) {
 
 				if ( $post->post_status === $this->status_name ) {
 					$complete = ' selected=\"selected\"';
-					$label    = $this->label ;
+					$label    = $this->label;
 				}
-				$uppercase = $this->label ;
+				$uppercase = $this->label;
 
 				ob_start();?>
 					jQuery(document).ready(function($){
@@ -169,9 +169,7 @@ if ( ! class_exists( 'ANONY_Register_Post_Status' ) ) {
 
 				echo '<script type="text/javascript">' . $script . '</script>';
 			}
-
 		}
-
 	}
 
 }

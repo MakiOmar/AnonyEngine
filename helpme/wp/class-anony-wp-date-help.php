@@ -44,7 +44,5 @@ if ( ! class_exists( 'ANONY_Wp_Date_Help' ) ) {
 
 			return true; // date has been passed.
 		}
-
-
 	}
 }

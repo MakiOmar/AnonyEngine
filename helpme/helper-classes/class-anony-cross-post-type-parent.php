@@ -51,7 +51,7 @@ if ( ! class_exists( 'ANONY_Cross_Post_Type_Parent' ) ) {
 
 			add_action(
 				'admin_menu',
-				function() {
+				function () {
 					remove_meta_box( 'pageparentdiv', $this->child, 'normal' );
 				}
 			);
@@ -65,7 +65,6 @@ if ( ! class_exists( 'ANONY_Cross_Post_Type_Parent' ) ) {
 					return $supports;
 				}
 			);
-
 		}
 
 		/**
@@ -172,7 +171,6 @@ if ( ! class_exists( 'ANONY_Cross_Post_Type_Parent' ) ) {
 
 			return $permalink;
 		}
-
 	}
 
 }

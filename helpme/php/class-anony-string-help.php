@@ -63,8 +63,6 @@ if ( ! class_exists( 'ANONY_STRING_HELP' ) ) {
 		public static function line_by_line_textarea( $content ) {
 
 			return explode( "\r\n", trim( $content ) );
-
 		}
-
 	}
 }

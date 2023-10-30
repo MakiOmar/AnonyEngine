@@ -2,7 +2,7 @@ var searchPlaces = 'anony__geolocation';
 var Gisborne;
 
 jQuery( document ).ready(
-	function($){
+	function ($) {
 
 		var autocomplete;
 

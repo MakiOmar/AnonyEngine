@@ -152,7 +152,6 @@ if ( ! class_exists( 'ANONY_Theme_Settings' ) ) {
 			$this->register_widgets();
 
 			$this->hooks();
-
 		}
 
 		/**
@@ -212,7 +211,6 @@ if ( ! class_exists( 'ANONY_Theme_Settings' ) ) {
 
 			// Show admin notices.
 			add_action( 'admin_notices', array( &$this, 'admin_notices' ) );
-
 		}
 
 		/**
@@ -230,7 +228,7 @@ if ( ! class_exists( 'ANONY_Theme_Settings' ) ) {
 							$field['default'] = '';
 						}
 
-						if( !empty ( $field['id'] )  ){
+						if ( ! empty( $field['id'] ) ) {
 							$defaults[ $field['id'] ] = $field['default'];
 						}
 					}
@@ -238,7 +236,6 @@ if ( ! class_exists( 'ANONY_Theme_Settings' ) ) {
 			}
 
 			$this->default_options = $defaults;
-
 		}
 
 		/**
@@ -410,7 +407,7 @@ if ( ! class_exists( 'ANONY_Theme_Settings' ) ) {
 		 */
 		public function options_validate( $not_validated ) {
 
-			self::$called++;
+			++self::$called;
 
 			// Make sure this code runs once to prevent error messages duplication.
 			if ( self::$called <= 1 ) {
@@ -422,7 +419,7 @@ if ( ! class_exists( 'ANONY_Theme_Settings' ) ) {
 					if ( isset( $section['fields'] ) ) {
 
 						foreach ( $section['fields'] as $field_key => $field ) {
-							if( empty( $field['id'] ) ){
+							if ( empty( $field['id'] ) ) {
 								continue;
 							}
 
@@ -504,7 +501,6 @@ if ( ! class_exists( 'ANONY_Theme_Settings' ) ) {
 
 				return $validated;
 			}
-
 		}
 
 		/**
@@ -627,7 +623,6 @@ if ( ! class_exists( 'ANONY_Theme_Settings' ) ) {
 					}
 				}
 			}
-
 		}
 
 		/**
@@ -642,7 +637,6 @@ if ( ! class_exists( 'ANONY_Theme_Settings' ) ) {
 					function () use ( $widget ) {
 
 						register_widget( $widget );
-
 					}
 				);
 
@@ -680,7 +674,6 @@ if ( ! class_exists( 'ANONY_Theme_Settings' ) ) {
 					}
 				</style>
 			<?php }
-
 		}
 
 		/**

@@ -27,7 +27,7 @@ if (typeof google !== 'undefined') {
 	google.maps.event.addDomListener( window, 'load', initialize );
 
 	jQuery( document ).ready(
-		function($){
+		function ($) {
 			$( '#anony_map' ).parent( 'fieldset' ).css( 'flex-direction', 'column' );
 		}
 	);

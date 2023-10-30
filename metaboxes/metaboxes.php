@@ -58,4 +58,3 @@ function anony_init_metaboxes() {
 	}
 }
 add_action( 'init', 'anony_init_metaboxes' );
-

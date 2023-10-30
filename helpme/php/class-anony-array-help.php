@@ -107,7 +107,6 @@ if ( ! class_exists( 'ANONY_ARRAY_HELP' ) ) {
 					// phpcs: enable.
 				echo '</pre>';
 			}
-
 		}
 
 		/**
@@ -136,7 +135,6 @@ if ( ! class_exists( 'ANONY_ARRAY_HELP' ) ) {
 			}
 
 			return $new_array;
-
 		}
 
 		/**
@@ -165,18 +163,17 @@ if ( ! class_exists( 'ANONY_ARRAY_HELP' ) ) {
 			return array_map( array( self, 'convert_object_to_array' ), (array) $object );
 		}
 
-		public static function convert_object_to_array($data) {
+		public static function convert_object_to_array( $data ) {
 
-		    if (is_object($data)) {
-		        $data = get_object_vars($data);
-		    }
+			if ( is_object( $data ) ) {
+				$data = get_object_vars( $data );
+			}
 
-		    if (is_array($data)) {
-		        return array_map(__FUNCTION__, $data);
-		    }
-		    else {
-		        return $data;
-		    }
+			if ( is_array( $data ) ) {
+				return array_map( __FUNCTION__, $data );
+			} else {
+				return $data;
+			}
 		}
 
 		/**
@@ -231,15 +228,15 @@ if ( ! class_exists( 'ANONY_ARRAY_HELP' ) ) {
 		 */
 		public static function insert_after_assoc_key( $array, $key, $new_key, $new_value ) {
 
-			$keys = array_keys($array);
-		    $index = array_search($key, $keys);
-		    if ($index !== false) {
-		        $result = array_slice($array, 0, $index + 1, true) +
-		                  array($new_key => $new_value) +
-		                  array_slice($array, $index + 1, count($array) - 1, true);
-		        return $result;
-		    }
-		    return $array;
+			$keys  = array_keys( $array );
+			$index = array_search( $key, $keys );
+			if ( $index !== false ) {
+				$result = array_slice( $array, 0, $index + 1, true ) +
+							array( $new_key => $new_value ) +
+							array_slice( $array, $index + 1, count( $array ) - 1, true );
+				return $result;
+			}
+			return $array;
 		}
 
 		/**
@@ -277,7 +274,6 @@ if ( ! class_exists( 'ANONY_ARRAY_HELP' ) ) {
 			array_multisort( $sort_country, $flag, $array );
 
 			return $array;
-
 		}
 
 		/**
@@ -306,23 +302,24 @@ if ( ! class_exists( 'ANONY_ARRAY_HELP' ) ) {
 		 * @param array $my_array Target array.
 		 * @param array
 		 */
-		public static function array_1st_element($my_array)
-		{
-			if( empty( $my_array ) ) return $my_array;
-			
-			list($k) = array_keys($my_array);
+		public static function array_1st_element( $my_array ) {
+			if ( empty( $my_array ) ) {
+				return $my_array;
+			}
 
-			$result  = array( $k => $my_array[$k] );
+			list($k) = array_keys( $my_array );
 
-			unset($my_array[$k]);
+			$result = array( $k => $my_array[ $k ] );
+
+			unset( $my_array[ $k ] );
 
 			return $result;
 		}
 
-		public static function array_to_cookie($array, $cookie_name, $expiry){
-			$serialized_result = serialize($array);
-			$encoded_values = urlencode($serialized_result);
-			setcookie($cookie_name, $encoded_values, $expiry, '/');
+		public static function array_to_cookie( $array, $cookie_name, $expiry ) {
+			$serialized_result = serialize( $array );
+			$encoded_values    = urlencode( $serialized_result );
+			setcookie( $cookie_name, $encoded_values, $expiry, '/' );
 		}
 	}
 }

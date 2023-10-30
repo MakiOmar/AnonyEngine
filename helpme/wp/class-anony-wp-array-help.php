@@ -44,6 +44,5 @@ if ( ! class_exists( 'ANONY_Wp_Array_Help' ) ) {
 			}
 			return $result;
 		}
-
 	}
 }

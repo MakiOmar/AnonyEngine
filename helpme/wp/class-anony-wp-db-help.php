@@ -199,40 +199,43 @@ if ( ! class_exists( 'ANONY_Wp_Db_Help' ) ) {
 			return $result;
 		}
 
-		public function delete_posts_of_type( $post_type )
-		{
+		public function delete_posts_of_type( $post_type ) {
 			global $wpdb;
 
-			$result = $wpdb->query( $wpdb->prepare( "DELETE a,b,c\n"
+			$result = $wpdb->query(
+				$wpdb->prepare(
+					"DELETE a,b,c\n"
 
-				    . "    FROM {$wpdb->prefix}_posts a\n"
+					. "    FROM {$wpdb->prefix}_posts a\n"
 
-				    . "    LEFT JOIN {$wpdb->prefix}_term_relationships b\n"
+					. "    LEFT JOIN {$wpdb->prefix}_term_relationships b\n"
 
-				    . "        ON (a.ID = b.object_id)\n"
+					. "        ON (a.ID = b.object_id)\n"
 
-				    . "    LEFT JOIN {$wpdb->prefix}_postmeta c\n"
+					. "    LEFT JOIN {$wpdb->prefix}_postmeta c\n"
 
-				    . "        ON (a.ID = c.post_id)\n"
+					. "        ON (a.ID = c.post_id)\n"
 
-				    . "    WHERE a.post_type = \'%s\'" ), $post_type );
-
-
+					. "    WHERE a.post_type = \'%s\'"
+				),
+				$post_type
+			);
 		}
 		/**
 		 * This function works for Jet Engine plugin's relation ships.
 		 */
-		public static function anony_get_related_objects( $cache_key, $select, $where ,$object_id, $rel_id, $separate_table = false ){
+		public static function anony_get_related_objects( $cache_key, $select, $where, $object_id, $rel_id, $separate_table = false ) {
 			global $wpdb;
-		
+
 			$table_suffix = ( $separate_table ) ? $rel_id : 'default';
-			
+
 			$results = wp_cache_get( $cache_key );
-			
+
 			if ( false === $results ) {
-		
+
 				$results = $wpdb->get_results(
-					$wpdb->prepare("
+					$wpdb->prepare(
+						"
 						SELECT {$select} 
 						FROM 
 							{$wpdb->prefix}jet_rel_{$table_suffix} t
@@ -244,42 +247,39 @@ if ( ! class_exists( 'ANONY_Wp_Db_Help' ) ) {
 					),
 					ARRAY_A
 				);
-				
-				if ( $results && ! empty( $results ) && !is_null( $results ) ) 
-				{
+
+				if ( $results && ! empty( $results ) && ! is_null( $results ) ) {
 					wp_cache_set( $cache_key, $results );
 				}
-				
 			}
-			
+
 			$data = array();
-			
-			if ( $results && ! empty( $results ) && !is_null( $results ) ) {
+
+			if ( $results && ! empty( $results ) && ! is_null( $results ) ) {
 				foreach ( $results as $result ) {
-						$obj= new stdClass();
-						$obj->child_object_id = $result[$select];
-						$data[] = $obj;
+						$obj                  = new stdClass();
+						$obj->child_object_id = $result[ $select ];
+						$data[]               = $obj;
 				}
 			}
-			
+
 			return $data;
 		}
-		
-		function anony_query_related_children( $object_jd, $rel_id, $separate_table = false ){
+
+		function anony_query_related_children( $object_jd, $rel_id, $separate_table = false ) {
 			global $wpdb;
-		
-			$cache_key = 'anony_get_related_children_'.$object_jd;
-			
-			return self::anony_get_related_objects( $cache_key, 'child_object_id', 'parent_object_id' ,$object_jd, $rel_id, $separate_table);
+
+			$cache_key = 'anony_get_related_children_' . $object_jd;
+
+			return self::anony_get_related_objects( $cache_key, 'child_object_id', 'parent_object_id', $object_jd, $rel_id, $separate_table );
 		}
-		
-		function anony_query_related_parent( $object_jd, $rel_id, $separate_table = false  ){
+
+		function anony_query_related_parent( $object_jd, $rel_id, $separate_table = false ) {
 				global $wpdb;
-			
-				$cache_key = 'anony_get_related_parent_'.$object_jd;
-				
-				return self::anony_get_related_objects( $cache_key, 'parent_object_id', 'child_object_id' ,$object_jd ,$rel_id, $separate_table);
-			
+
+				$cache_key = 'anony_get_related_parent_' . $object_jd;
+
+				return self::anony_get_related_objects( $cache_key, 'parent_object_id', 'child_object_id', $object_jd, $rel_id, $separate_table );
 		}
 	}
 }

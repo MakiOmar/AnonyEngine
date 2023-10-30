@@ -34,6 +34,5 @@ if ( ! class_exists( 'ANONY_Wp_Json_Help' ) ) {
 		public static function to_js_json( array $array ) {
 			return wp_json_encode( $arr, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES );
 		}
-
 	}
 }

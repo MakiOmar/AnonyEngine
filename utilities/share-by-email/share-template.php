@@ -20,25 +20,25 @@
 <body width="100%" style="margin: 0; padding: 0 !important; mso-line-height-rule: exactly; background-color: #222222;">
 	<center style="width: 100%; background-color: #f1f1f1;">
 		<div style="display: none; font-size: 1px;max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden; mso-hide: all; font-family: sans-serif;">
-		  &zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;
+			&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;
 		</div>
 
 		<div style="max-width: 600px; margin: 0 auto;" class="email-container">
 			<!-- BEGIN BODY -->
 			<table align="center" role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin: auto;">
 
-				  <!-- Title -->
-				  <tr>
+					<!-- Title -->
+					<tr>
 
-				  <td class="bg_white logo" style="padding: 1em 2.5em; text-align: center">
+					<td class="bg_white logo" style="padding: 1em 2.5em; text-align: center">
 
 					<h1><a href="#"><?php echo $anony_share_title; ?></a></h1>
-				  </td>
+					</td>
 				</tr>
 				
 				<!-- Header -->
 				<tr>
-				  <td valign="middle" class="hero" style="background-image: url('<?php echo $anony_share_img; ?>'); background-size: cover; height: 400px;">
+					<td valign="middle" class="hero" style="background-image: url('<?php echo $anony_share_img; ?>'); background-size: cover; height: 400px;">
 					<table style="margin:auto">
 						<tr>
 							<td>
@@ -50,7 +50,7 @@
 							</td>
 						</tr>
 					</table>
-				  </td>
+					</td>
 				</tr><!-- end tr -->
 
 				<!-- Body -->
@@ -62,8 +62,8 @@
 								<td class="bg_dark email-section" style="text-align:center;">
 									<div class="heading-section heading-section-white">
 										<span class="subheading">Welcome</span>
-									  <h2>Welcome To anony</h2>
-									  <p>We hope to be always you first choice</p>
+										<h2>Welcome To anony</h2>
+										<p>We hope to be always you first choice</p>
 									</div>
 								</td>
 							</tr><!-- end: tr -->
@@ -74,8 +74,8 @@
 									<!-- Services title -->
 									<div class="heading-section" style="text-align: center; padding: 0 30px;">
 										<span class="subheading">Services</span>
-										  <h2>Our Services</h2>
-										  <p>Lorem ipsum is placeholder text commonly used in the graphic and print</p>
+											<h2>Our Services</h2>
+											<p>Lorem ipsum is placeholder text commonly used in the graphic and print</p>
 									</div>
 
 									<table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
@@ -87,14 +87,14 @@
 												<table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
 													<tr>
 														<td class="icon">
-														  <img src="images/001-diet.png" alt="" style="width: 60px; max-width: 600px; height: auto; margin: auto; display: block;">
+															<img src="images/001-diet.png" alt="" style="width: 60px; max-width: 600px; height: auto; margin: auto; display: block;">
 														</td>
 													</tr>
 
 													<tr>
 														<td class="text-services">
 															<h3>Service</h3>
-															 <p>Far far away, behind the word mountains, far from the countries</p>
+															<p>Far far away, behind the word mountains, far from the countries</p>
 														</td>
 													</tr>
 												</table>
@@ -106,14 +106,14 @@
 												<table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
 													<tr>
 														<td class="icon">
-														  <img src="images/003-recipe-book.png" alt="" style="width: 60px; max-width: 600px; height: auto; margin: auto; display: block;">
+															<img src="images/003-recipe-book.png" alt="" style="width: 60px; max-width: 600px; height: auto; margin: auto; display: block;">
 														</td>
 													</tr>
 
 													<tr>
 														<td class="text-services">
 															<h3>Service</h3>
-														  <p>Far far away, behind the word mountains, far from the countries</p>
+															<p>Far far away, behind the word mountains, far from the countries</p>
 														</td>
 													</tr>
 												</table>
@@ -160,8 +160,8 @@
 
 									<div class="heading-section" style="text-align: center; padding: 0 30px;">
 										<span class="subheading">Menu</span>
-										  <h2>Our properties</h2>
-										  <p>Lorem ipsum is placeholder text commonly used in the graphic and print</p>
+											<h2>Our properties</h2>
+											<p>Lorem ipsum is placeholder text commonly used in the graphic and print</p>
 									</div>
 
 									<table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
@@ -172,7 +172,7 @@
 													<!-- Property 1 img -->
 													<tr>
 														<td style="padding-right: 10px;">
-														  <img src="images/menu-1.jpg" alt="" style="width: 100%; max-width: 600px; height: auto; margin: auto; display: block;">
+															<img src="images/menu-1.jpg" alt="" style="width: 100%; max-width: 600px; height: auto; margin: auto; display: block;">
 														</td>
 													</tr>
 
@@ -180,8 +180,8 @@
 													<tr>
 														<td class="text-services" style="text-align: left;">
 															<h3>Property</h3>
-															 <p>Far far away, behind the word mountains, far from the countries</p>
-															 <p><a href="#" class="btn btn-primary">Read more</a></p>
+															<p>Far far away, behind the word mountains, far from the countries</p>
+															<p><a href="#" class="btn btn-primary">Read more</a></p>
 														</td>
 													</tr>
 												</table>
@@ -193,7 +193,7 @@
 													<!-- Property 2 img -->
 													<tr>
 														<td style="padding-right: 10px;">
-														  <img src="images/menu-1.jpg" alt="" style="width: 100%; max-width: 600px; height: auto; margin: auto; display: block;">
+															<img src="images/menu-1.jpg" alt="" style="width: 100%; max-width: 600px; height: auto; margin: auto; display: block;">
 														</td>
 													</tr>
 
@@ -201,8 +201,8 @@
 													<tr>
 														<td class="text-services" style="text-align: left;">
 															<h3>Property</h3>
-															 <p>Far far away, behind the word mountains, far from the countries</p>
-															 <p><a href="#" class="btn btn-primary">Read more</a></p>
+															<p>Far far away, behind the word mountains, far from the countries</p>
+															<p><a href="#" class="btn btn-primary">Read more</a></p>
 														</td>
 													</tr>
 												</table>
@@ -221,48 +221,48 @@
 											<!-- Counter 1 -->
 											<td valign="middle" width="25%">
 												<table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
-												  <tr>
+													<tr>
 													<td class="counter-text">
 														<span class="num">9457</span>
 														<span class="name">Happy Customer</span>
 													</td>
-												  </tr>
+													</tr>
 												</table>
-											  </td>
+												</td>
 
-											  <!-- Counter 2 -->
+												<!-- Counter 2 -->
 											<td valign="middle" width="25%">
 												<table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
-												  <tr>
+													<tr>
 													<td class="counter-text">
 														<span class="num">20</span>
 														<span class="name">Years of Experienced</span>
 													</td>
-												  </tr>
+													</tr>
 												</table>
 											</td>
 
 											<!-- Counter 3 -->
 											<td valign="middle" width="25%">
 												<table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
-												  <tr>
+													<tr>
 													<td class="counter-text">
 														<span class="num">80</span>
 														<span class="name">Branches</span>
 													</td>
-												  </tr>
+													</tr>
 												</table>
 											</td>
 
 											<!-- Counter 4 -->
 											<td valign="middle" width="25%">
 												<table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
-												  <tr>
+													<tr>
 													<td class="counter-text">
 														<span class="num">980</span>
 														<span class="name">Staff</span>
 													</td>
-												  </tr>
+													</tr>
 												</table>
 											</td>
 										</tr>
@@ -277,8 +277,8 @@
 									<!-- Testimonials Title-->
 									<div class="heading-section" style="text-align: center; padding: 0 30px;">
 										<span class="subheading">Says</span>
-										  <h2>Testimonial</h2>
-										  <p>Lorem ipsum is placeholder text commonly used in the graphic and print</p>
+											<h2>Testimonial</h2>
+											<p>Lorem ipsum is placeholder text commonly used in the graphic and print</p>
 									</div>
 
 									<table role="presentation" border="0" cellpadding="10" cellspacing="0" width="100%">
@@ -289,7 +289,7 @@
 													<tr>
 														<td>
 
-														  <img src="images/person_1.jpg" alt="" style="width: 100px; max-width: 600px; height: auto; margin: auto; margin-bottom: 20px; display: block; border-radius: 50%;">
+															<img src="images/person_1.jpg" alt="" style="width: 100px; max-width: 600px; height: auto; margin: auto; margin-bottom: 20px; display: block; border-radius: 50%;">
 														</td>
 													</tr>
 
@@ -297,8 +297,8 @@
 														<td class="text-testimony" style="text-align: center;">
 															<h3 class="name">Ronald Tuff</h3>
 															<span class="position">Businessman</span>
-															 <p>Far far away, behind the word mountains, far from the countries</p>
-															 <p><a href="#" class="btn btn-primary">Read more</a></p>
+															<p>Far far away, behind the word mountains, far from the countries</p>
+															<p><a href="#" class="btn btn-primary">Read more</a></p>
 														</td>
 													</tr>
 												</table>
@@ -310,7 +310,7 @@
 													<tr>
 														<td>
 
-														  <img src="images/person_1.jpg" alt="" style="width: 100px; max-width: 600px; height: auto; margin: auto; margin-bottom: 20px; display: block; border-radius: 50%;">
+															<img src="images/person_1.jpg" alt="" style="width: 100px; max-width: 600px; height: auto; margin: auto; margin-bottom: 20px; display: block; border-radius: 50%;">
 														</td>
 													</tr>
 
@@ -318,8 +318,8 @@
 														<td class="text-testimony" style="text-align: center;">
 															<h3 class="name">Ronald Tuff</h3>
 															<span class="position">Businessman</span>
-															 <p>Far far away, behind the word mountains, far from the countries</p>
-															 <p><a href="#" class="btn btn-primary">Read more</a></p>
+															<p>Far far away, behind the word mountains, far from the countries</p>
+															<p><a href="#" class="btn btn-primary">Read more</a></p>
 														</td>
 													</tr>
 												</table>
@@ -342,7 +342,7 @@
 			<table align="center" role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin: auto;">
 
 				<!-- Widets -->
-				  <tr>
+					<tr>
 					<td valign="middle" class="bg_black footer email-section">
 						<table>
 							<tr>
@@ -352,11 +352,11 @@
 									<table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
 										<tr>
 											<td style="text-align: left; padding-right: 10px;">
-												  <h3 class="heading">anony</h3>
-												  <p>Lorem ipsum is placeholder text commonly used in the graphic and print</p>
+													<h3 class="heading">anony</h3>
+													<p>Lorem ipsum is placeholder text commonly used in the graphic and print</p>
 											</td>
 										</tr>
-									  </table>
+										</table>
 								</td>
 
 								<!-- Contact -->
@@ -364,29 +364,29 @@
 									<table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
 										<tr>
 											<td style="text-align: left; padding-left: 5px; padding-right: 5px;">
-												  <h3 class="heading">Contact Info</h3>
-												  <ul>
+													<h3 class="heading">Contact Info</h3>
+													<ul>
 													<li><span class="text">203 Fake St. Dubai, UAE</span></li>
 													<li><span class="text">+971 55 551 5164</span></a></li>
 												</ul>
 											</td>
 										</tr>
-									  </table>
+										</table>
 								</td>
 								
-								   <!-- Links -->
+									<!-- Links -->
 								<td valign="top" width="33.333%" style="padding-top: 20px;">
 									<table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
 										<tr>
 											<td style="text-align: left; padding-left: 5px; padding-right: 5px;">
-												  <h3 class="heading">Contact Info</h3>
-												  <ul>
+													<h3 class="heading">Contact Info</h3>
+													<ul>
 													<li><span class="text">203 Fake St. Dubai, UAE</span></li>
 													<li><span class="text">+971 55 551 5164</span></a></li>
 												</ul>
 											</td>
 										</tr>
-									  </table>
+										</table>
 								</td>
 							
 							</tr>
@@ -402,21 +402,21 @@
 								<td valign="top" width="33.333%">
 									<table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
 										<tr>
-										  <td style="text-align: left; padding-right: 10px;">
-											  <p>&copy; 2020 anony. All Rights Reserved</p>
-										  </td>
+											<td style="text-align: left; padding-right: 10px;">
+												<p>&copy; 2020 anony. All Rights Reserved</p>
+											</td>
 										</tr>
 									</table>
 								</td>
 
 								<td valign="top" width="33.333%">
-								  <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+									<table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
 									<tr>
-									  <td style="text-align: right; padding-left: 5px; padding-right: 5px;">
-										  <p><a href="#" style="color: rgba(255,255,255,.4);">Unsubcribe</a></p>
-									  </td>
+										<td style="text-align: right; padding-left: 5px; padding-right: 5px;">
+											<p><a href="#" style="color: rgba(255,255,255,.4);">Unsubcribe</a></p>
+										</td>
 									</tr>
-								  </table>
+									</table>
 								</td>
 							</tr>
 						</table>
@@ -426,6 +426,6 @@
 			</table>
 
 		</div>
-	  </center>
+		</center>
 </body>
 </html>

@@ -114,6 +114,5 @@ if ( ! class_exists( 'ANONY_OPTS_HELP' ) ) {
 				<?php
 			}
 		}
-
 	}
 }

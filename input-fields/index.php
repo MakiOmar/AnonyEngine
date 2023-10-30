@@ -31,7 +31,7 @@ define( 'ANONY_FIELDS_URI', wp_normalize_path( ANONY_INPUT_FIELDS_URI . 'fields/
 
 add_action(
 	'wp_head',
-	function(){?>
+	function (){?>
 		<style type="text/css">
 			[id*="fieldset_anony"] {
 				display: inline-flex;

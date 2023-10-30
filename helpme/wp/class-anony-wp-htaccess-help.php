@@ -25,8 +25,9 @@ if ( ! class_exists( 'ANONY_Wp_Htaccess_Help' ) ) {
 	 * @link     https:// makiomar.com/anonyengine
 	 */
 	class ANONY_Wp_Htaccess_Help extends ANONY_HELP {
-		
-		public static function maintenance_mode(){ ?>
+
+		public static function maintenance_mode() {
+			?>
 			<IfModule mod_rewrite.c>
 			RewriteEngine on
 
@@ -39,7 +40,7 @@ if ( ! class_exists( 'ANONY_Wp_Htaccess_Help' ) ) {
 
 			RewriteRule ^(.*)$ /maintenance.html [R=permanent,L]
 			</IfModule>
-		<?php }
-
+			<?php
+		}
 	}
 }

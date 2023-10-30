@@ -36,16 +36,16 @@ function anonyGetCookie( name ) {
 
 
 jQuery( document ).ready(
-	function($){
+	function ($) {
 		var SettingsView = Backbone.View.extend(
 			{
 				el: "#options-wrap",
-				initialize: function(){
+				initialize: function () {
 					this.showFirstSection();
 					this.highlightErrors();
 				},
 				events: {
-					'click .nav-toggle': function(e){
+					'click .nav-toggle': function (e) {
 						"use strict";
 						e.preventDefault();
 
@@ -58,7 +58,7 @@ jQuery( document ).ready(
 
 					},
 
-					'click .nav-toggle': function(e){
+					'click .nav-toggle': function (e) {
 						"use strict";
 						e.preventDefault();
 
@@ -71,24 +71,24 @@ jQuery( document ).ready(
 
 					},
 
-					'click #submit': function(e){
+					'click #submit': function (e) {
 						var currentFragment = Backbone.history.getFragment();
 						if (currentFragment !== "undefined" || currentFragment !== '') {
 							document.cookie = "currentFragment=" + currentFragment;
 						}
 					},
 
-					'change input[type="checkbox"]': function(e){
+					'change input[type="checkbox"]': function (e) {
 						$( '.' + e.target.id + '_' ).toggle();
 					},
 
-					'change input[type="radio"]': function(e){
+					'change input[type="radio"]': function (e) {
 						$( '.' + e.target.className + '_' ).hide();
 						$( '.' + e.target.value ).toggle();
 					}
 				},
 
-				showFirstSection: function(){
+				showFirstSection: function () {
 					if ($( '.anony-show-section' ).length == 0) {
 						$( '.anony-section-group:first' ).addClass( 'anony-show-section' );
 						$( '.anony-nav-link:first' ).closest( '.anony-dropdown' ).show();
@@ -96,12 +96,14 @@ jQuery( document ).ready(
 					}
 				},
 
-				highlightErrors: function() {
-					$('.anony-validation-error').each( function(){
+				highlightErrors: function () {
+					$( '.anony-validation-error' ).each(
+						function () {
 
-						var targetId = $(this).data('id');
-						$("#" + targetId).css('border', '1px solid red');
-					} );
+							var targetId = $( this ).data( 'id' );
+							$( "#" + targetId ).css( 'border', '1px solid red' );
+						}
+					);
 				}
 			}
 		);
@@ -111,7 +113,7 @@ jQuery( document ).ready(
 		var SettingsRouter = Backbone.Router.extend(
 			{
 				routes: {
-					'anony-section/:section': function(section){
+					'anony-section/:section': function (section) {
 						"use strict";
 						var target = $( 'a[href="#anony-section/' + section + '"]' ),
 						content    = $( '#anony_' + section + '_section' );

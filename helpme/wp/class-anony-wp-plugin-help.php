@@ -61,6 +61,5 @@ if ( ! class_exists( 'ANONY_Wp_Plugin_Help' ) ) {
 				do_action( 'activated_plugin', trim( $plugin ) );
 			}
 		}
-
 	}
 }

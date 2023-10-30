@@ -28,9 +28,8 @@ if ( ! class_exists( 'ANONY_TERM_HELP' ) ) {
 		 *
 		 * @return array An indexed array of post types.
 		 */
-		public static function get_term_post_type()
-		{
-			return get_taxonomy(get_queried_object()->taxonomy)->object_type;
+		public static function get_term_post_type() {
+			return get_taxonomy( get_queried_object()->taxonomy )->object_type;
 		}
 
 		/**
@@ -236,7 +235,6 @@ if ( ! class_exists( 'ANONY_TERM_HELP' ) ) {
 			}
 
 			return get_term_by( 'id', $term_id, $taxonomy );
-
 		}
 
 		/**
@@ -355,25 +353,29 @@ if ( ! class_exists( 'ANONY_TERM_HELP' ) ) {
 			$no_children = array();
 
 			foreach ( $categories as $category ) {
-			    
-			    $children_args = $args;
-			    
-		        $children_args['parent'] = $category->term_id;
-		        
-				$children = get_terms(  $children_args );
+
+				$children_args = $args;
+
+				$children_args['parent'] = $category->term_id;
+
+				$children = get_terms( $children_args );
 
 				if ( empty( $children ) ) {
-					$no_children[] = array( 'ID' => $category->term_id, 'name' => $category->name )  ;
+					$no_children[] = array(
+						'ID'   => $category->term_id,
+						'name' => $category->name,
+					);
 				} else {
-				    foreach( $children as $child ){
-				        $grouped[] = array( 'ID' => $child->term_id, 'name' => $child->name ) 
-				            ;
-				    }
-					
+					foreach ( $children as $child ) {
+						$grouped[] = array(
+							'ID'   => $child->term_id,
+							'name' => $child->name,
+						);
+					}
 				}
 			}
 
-			return  array_merge($no_children,$grouped);
+			return array_merge( $no_children, $grouped );
 		}
 
 		/**
@@ -405,8 +407,6 @@ if ( ! class_exists( 'ANONY_TERM_HELP' ) ) {
 					$select .= '</optgroup>';
 				}
 			}
-
 		}
-
 	}
 }

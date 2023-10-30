@@ -148,7 +148,6 @@ if ( ! class_exists( 'ANONY_Meta_Box' ) ) {
 			new ANONY_Mb_Shortcode( $this, $this->metabox );
 
 			new ANONY_Mb_Single( $this, $this->metabox );
-
 		}
 
 		/**
@@ -158,15 +157,15 @@ if ( ! class_exists( 'ANONY_Meta_Box' ) ) {
 		 * @return void.
 		 */
 		public function set_metabox_data( $metabox ) {
-			
+
 			$this->id            = $metabox['id'];
 			$this->label         = $metabox['title'];
 			$this->context       = $metabox['context'];
 			$this->priority      = $metabox['priority'];
 			$this->hook_priority = isset( $metabox['hook_priority'] ) ? $metabox['hook_priority'] : $this->hook_priority;
 			$this->post_type     = $metabox['post_type'];
-			$this->layout          = !empty($metabox['layout'])  ? $metabox['layout'] : false;
-			
+			$this->layout        = ! empty( $metabox['layout'] ) ? $metabox['layout'] : false;
+
 			// To use id for hooks definitions.
 			$this->id_as_hook = str_replace( '-', '_', $this->id );
 
@@ -200,25 +199,26 @@ if ( ! class_exists( 'ANONY_Meta_Box' ) ) {
 			// phpcs:enable
 			wp_nonce_field( $this->id . '_action', $this->id . '_nonce', false );
 			$tabs = '';
-			if( $this->layout ){
+			if ( $this->layout ) {
 				ob_start();
-			?>
+				?>
 			<div class="anony-tabbed-metabox">
-			<ul class="anony-metabox-layout-wrapper anony-metabox-tab-wrapper" id="anony-metabox-<?php $this->id ?>-layout-wrapper">
-			<?php
-				foreach ( $this->fields as $field ) { 
-					if(  'group_start' !== $field['type'] || ( ! is_admin() && ( ! isset( $field['show_on_front'] ) || ! $field['show_on_front'] ) ) ){
+			<ul class="anony-metabox-layout-wrapper anony-metabox-tab-wrapper" id="anony-metabox-<?php $this->id; ?>-layout-wrapper">
+				<?php
+				foreach ( $this->fields as $field ) {
+					if ( 'group_start' !== $field['type'] || ( ! is_admin() && ( ! isset( $field['show_on_front'] ) || ! $field['show_on_front'] ) ) ) {
 						continue;
 					}
 					?>
 
-					<li><a onclick="event.preventDefault();" class="anony-metabox-tab-item" data-id="<?php echo $field['id'] ?>" href="#"><?php echo $field['title'] ?></a></li>
+					<li><a onclick="event.preventDefault();" class="anony-metabox-tab-item" data-id="<?php echo $field['id']; ?>" href="#"><?php echo $field['title']; ?></a></li>
 
-				<?php }
-			?>
+					<?php
+				}
+				?>
 			</ul>
-			<?php
-			$tabs = ob_get_clean();
+				<?php
+				$tabs = ob_get_clean();
 			}
 			echo $tabs;
 			// Loop through inputs to render.
@@ -235,7 +235,7 @@ if ( ! class_exists( 'ANONY_Meta_Box' ) ) {
 				$this->enqueue_field_scripts( $field );
 
 			}
-			if( $this->layout ){
+			if ( $this->layout ) {
 				echo '</div>';
 			}
 		}
@@ -309,7 +309,7 @@ if ( ! class_exists( 'ANONY_Meta_Box' ) ) {
 
 			foreach ( $this->fields as $field ) {
 
-				if ( !isset($field['id']) || ! isset( $sent_data[ $this->id ][ $field['id'] ] ) ) {
+				if ( ! isset( $field['id'] ) || ! isset( $sent_data[ $this->id ][ $field['id'] ] ) ) {
 					continue;
 				}
 
@@ -407,7 +407,8 @@ if ( ! class_exists( 'ANONY_Meta_Box' ) ) {
 
 			if ( $errors ) {
 
-				foreach ( $errors as $field => $data ) {?>
+				foreach ( $errors as $field => $data ) {
+					?>
 
 					<div class="error <?php echo esc_attr( $field ); ?>">
 
@@ -458,7 +459,6 @@ if ( ! class_exists( 'ANONY_Meta_Box' ) ) {
 				// Don't remove outside the if statement.
 				wp_localize_script( 'anony-metaboxs', 'AnonyMB', $this->localize_scripts );
 			}
-
 		}
 
 		/**
@@ -473,7 +473,6 @@ if ( ! class_exists( 'ANONY_Meta_Box' ) ) {
 			wp_enqueue_style( 'select2', ANONY_FIELDS_URI . 'select2/css/select2.min.css', false, time() );
 
 			wp_enqueue_script( 'metaboxes-front', ANONY_MB_URI . 'assets/js/metaboxes-front.js', array( 'jquery' ), time(), true );
-
 		}
 
 		/**

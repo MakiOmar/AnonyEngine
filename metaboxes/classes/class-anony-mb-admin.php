@@ -42,28 +42,24 @@ if ( ! class_exists( 'ANONY_Mb_Admin' ) ) {
 
 			add_action( 'admin_footer', array( $this, 'adminFooterScripts' ) );
 
-			if ( !is_array( $this->parent->post_type ) ) 
-			{
-				add_filter("postbox_classes_{$this->parent->post_type}_{$this->parent->id}", array( $this, 'add_metabox_classes' ));
-			}else{
-				foreach( $this->parent->post_type as $post_tpe ) 
-				{
-					add_filter("postbox_classes_{$post_tpe}_{$this->parent->id}", array( $this, 'add_metabox_classes' ));
+			if ( ! is_array( $this->parent->post_type ) ) {
+				add_filter( "postbox_classes_{$this->parent->post_type}_{$this->parent->id}", array( $this, 'add_metabox_classes' ) );
+			} else {
+				foreach ( $this->parent->post_type as $post_tpe ) {
+					add_filter( "postbox_classes_{$post_tpe}_{$this->parent->id}", array( $this, 'add_metabox_classes' ) );
 				}
 			}
-			
 		}
 
 		/**
 		 * Add custom class to metabox's wrapper.
-		 * 
+		 *
 		 * @param array $classes An array of css classes.
 		 * @return array An array of css classes.
-		 */ 
-		public function add_metabox_classes( $classes )
-		{
-			array_push($classes,'anony-form');
-    		return $classes;
+		 */
+		public function add_metabox_classes( $classes ) {
+			array_push( $classes, 'anony-form' );
+			return $classes;
 		}
 
 		/**
@@ -136,7 +132,6 @@ if ( ! class_exists( 'ANONY_Mb_Admin' ) ) {
 			}
 
 			$this->parent->start_update( $_POST, $post_ID );
-
 		}
 
 		/**
@@ -169,7 +164,6 @@ if ( ! class_exists( 'ANONY_Mb_Admin' ) ) {
 			if ( $screen->base == 'post' && ( in_array( $screen->post_type, $this->parent->post_type ) || $screen->post_type == $this->parent->post_type ) ) {
 				$this->parent->footer_scripts();
 			}
-
 		}
 
 		/**

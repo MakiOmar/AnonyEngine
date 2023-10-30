@@ -151,7 +151,7 @@ if ( ! class_exists( 'ANONY_Input_Field' ) ) {
 		 * Set options field data
 		 */
 		public function opt_field_data() {
-			if( !isset( $this->field['id'] ) ){
+			if ( ! isset( $this->field['id'] ) ) {
 				return;
 			}
 			$input_name = isset( $this->field['name'] ) ? $this->field['name'] : $this->field['id'];
@@ -161,7 +161,6 @@ if ( ! class_exists( 'ANONY_Input_Field' ) ) {
 			$fieldID = $this->field['id'];
 
 			$this->value = ( isset( $this->options->$fieldID ) && ! empty( $this->options->$fieldID ) ) ? $this->options->$fieldID : $this->default;
-
 		}
 
 		public function form_field_data() {
@@ -182,7 +181,7 @@ if ( ! class_exists( 'ANONY_Input_Field' ) ) {
 
 				$this->field['id'] = $this->field['id'] . '-' . $index;
 			} else {
-				$this->input_name = !empty( $this->field['id'] ) ? $this->metabox_id . '[' . $this->field['id'] . ']' : '';
+				$this->input_name = ! empty( $this->field['id'] ) ? $this->metabox_id . '[' . $this->field['id'] . ']' : '';
 			}
 
 			$single = ( isset( $this->field['multiple'] ) && $this->field['multiple'] ) ? false : true;
@@ -201,11 +200,10 @@ if ( ! class_exists( 'ANONY_Input_Field' ) ) {
 					$metabox_options = get_post_meta( $this->object_id, $this->metabox_id, $single );
 				}
 
-				$meta = ( is_array( $metabox_options ) && !empty( $this->field['id'] ) && isset( $metabox_options[ $this->field['id'] ] ) ) ? $metabox_options[ $this->field['id'] ] : '';
+				$meta = ( is_array( $metabox_options ) && ! empty( $this->field['id'] ) && isset( $metabox_options[ $this->field['id'] ] ) ) ? $metabox_options[ $this->field['id'] ] : '';
 			}
 
 			$this->value = ( $meta != '' ) ? $meta : $this->default;
-
 		}
 
 		/**
@@ -289,8 +287,6 @@ if ( ! class_exists( 'ANONY_Input_Field' ) ) {
 				wp_register_style( 'anony-inputs-rtl', ANONY_INPUT_FIELDS_URI . 'assets/css/inputs-fields-rtl.css', array( 'anony-inputs' ), time(), 'all' );
 				wp_enqueue_style( 'anony-inputs-rtl' );
 			}
-
 		}
-
 	}
 }

@@ -150,7 +150,7 @@ a.anony-metabox-tab-item{
 	height: 100%;
 	padding: 5px;
 	border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
+	border-top-right-radius: 5px;
 }
 .anony-form-group-heading > i{
 	position: absolute;
@@ -189,10 +189,10 @@ fieldset .anony-form-heading{
 	color:#000
 }
 .anony-label{
-   font-weight: bold;
-   margin: 15px;
-   vertical-align:top;
-   margin: 0;
+	font-weight: bold;
+	margin: 15px;
+	vertical-align:top;
+	margin: 0;
 }
 .input-field-description{
 	padding: 20px;
@@ -386,7 +386,7 @@ input[type=tel]{
 	text-align: left;
 	width: 80px;
 	box-sizing: border-box;
-   /* -webkit-mask: url(../img/switch-mask.png) 0 0 no-repeat;
+	/* -webkit-mask: url(../img/switch-mask.png) 0 0 no-repeat;
 	mask: url(../img/switch-mask.png) 0 0 no-repeat;*/
 	-webkit-user-select: none;
 	-moz-user-select: none;
@@ -494,8 +494,8 @@ input[type=tel]{
 	-moz-box-shadow: 0px 0px 5px 3px rgba(0,0,0,0.19);
 	list-style-type: none;
 	background: #fff;
-    margin: 5px;
-    color: #c13838;
+	margin: 5px;
+	color: #c13838;
 }
 .fieldset-location div{
 	position: relative;
@@ -503,14 +503,14 @@ input[type=tel]{
 
 .fieldset-location svg{
 	padding: 3px;
-    background-color: #5757e1;
+	background-color: #5757e1;
 	border-radius: 50%;
 }
 
 .fetch-location-button{
 	display: inline-flex;
-    justify-content: center;
-    align-items: center;
+	justify-content: center;
+	align-items: center;
 	position: absolute;
 	top: 12.5px;
 	right: 12.5px;
@@ -643,11 +643,11 @@ button{
 
 .file-preview-wrapper{
 	display: inline-flex;
-    flex-direction: column;
-    max-width: 80px;
-    justify-content: center;
-    align-items: center;
-    margin: 10px;
+	flex-direction: column;
+	max-width: 80px;
+	justify-content: center;
+	align-items: center;
+	margin: 10px;
 }
 
 .file-preview-wrapper span{

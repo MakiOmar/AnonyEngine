@@ -8,12 +8,12 @@
  */
 
 class ANONY_Heading {
-	
+
 	/**
 	 * @var object
 	 */
 	private $parent;
-	
+
 	/**
 	 * Color field Constructor.
 	 *
@@ -28,7 +28,6 @@ class ANONY_Heading {
 		$this->parent = $parent;
 
 		$this->parent->value = '';
-
 	}
 
 	/**
@@ -55,6 +54,5 @@ class ANONY_Heading {
 		$html .= '</fieldset>';
 
 		return $html;
-
 	}
 }

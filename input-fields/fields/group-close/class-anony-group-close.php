@@ -8,12 +8,12 @@
  */
 
 class ANONY_Group_Close {
-	
+
 	/**
 	 * @var object
 	 */
 	private $parent;
-	
+
 	/**
 	 * Color field Constructor.
 	 *
@@ -28,7 +28,6 @@ class ANONY_Group_Close {
 		$this->parent = $parent;
 
 		$this->parent->value = '';
-
 	}
 
 	/**
@@ -37,6 +36,5 @@ class ANONY_Group_Close {
 	public function render() {
 
 		return '</div>';
-
 	}
 }

@@ -8,7 +8,7 @@
  */
 
 class ANONY_Tabs {
-		
+
 	/**
 	 * @var object
 	 */
@@ -91,7 +91,7 @@ class ANONY_Tabs {
 					$html .= '<textarea name="' . $this->parent->input_name . '[data-' . $i . '][content]" value="" >' . esc_textarea( $value['content'] ) . '</textarea></div>';
 					$html .= '<a href="" class="anony-btn-close anony-remove-tab"><em>delete</em></a>';
 					$html .= '</li>';
-					$i++;
+					++$i;
 
 				}
 			}
@@ -111,6 +111,4 @@ class ANONY_Tabs {
 	function enqueue() {
 		wp_enqueue_script( 'anony-opts-field-tabs-js', ANONY_FIELDS_URI . 'tabs/field_tabs.js', array( 'jquery' ), time(), true );
 	}
-
 }
-

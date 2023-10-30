@@ -1,21 +1,23 @@
 jQuery( document ).ready(
-	function($){
+	function ($) {
 		'use strict';
-		$.fn.metaboxLayout = function(element){
+		$.fn.metaboxLayout = function (element) {
 			$( element ).on(
 				'click',
-				function(e){
+				function (e) {
 					e.preventDefault();
-					$(element).not(this).each(function(){
-	
-						var clicked = $(this);
-						var target = clicked.data( 'id' );
-						clicked.removeClass( 'opened' );
-						$( '#form-group-' + target ).slideUp( 'slow' );
-					});
+					$( element ).not( this ).each(
+						function () {
+
+							var clicked = $( this );
+							var target  = clicked.data( 'id' );
+							clicked.removeClass( 'opened' );
+							$( '#form-group-' + target ).slideUp( 'slow' );
+						}
+					);
 					var clicked = $( this );
-					var target = clicked.data( 'id' );
-	
+					var target  = clicked.data( 'id' );
+
 					if (clicked.hasClass( 'opened' )) {
 						$( '#form-group-' + target ).slideUp( 'slow' );
 						clicked.removeClass( 'opened' ).addClass( 'closed' );
@@ -25,13 +27,13 @@ jQuery( document ).ready(
 					}
 				}
 			);
-	
+
 			$( element + ':first' ).click();
 		};
-		if( $(".anony-tabbed-metabox").length == 0 ){
-			$.fn.metaboxLayout('.anony-form-group-heading');
-		}else{
-			$.fn.metaboxLayout('.anony-metabox-tab-item');
+		if ( $( ".anony-tabbed-metabox" ).length == 0 ) {
+			$.fn.metaboxLayout( '.anony-form-group-heading' );
+		} else {
+			$.fn.metaboxLayout( '.anony-metabox-tab-item' );
 		}
 
 	}

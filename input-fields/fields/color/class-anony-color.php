@@ -12,12 +12,12 @@
  * This field uses the WP color picker.
  */
 class ANONY_Color {
-	
+
 	/**
 	 * @var object
 	 */
 	private $parent;
-	
+
 	/**
 	 * Color field Constructor.
 	 *
@@ -86,7 +86,8 @@ class ANONY_Color {
 	/**
 	 * Add needed scripts|styles to admin's footer
 	 */
-	public function footer_scripts(){?>
+	public function footer_scripts() {
+		?>
 		
 		<script type="text/javascript">
 			jQuery(document).ready(function($) {

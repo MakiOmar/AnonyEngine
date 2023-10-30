@@ -8,12 +8,12 @@
  */
 
 class ANONY_Multi_input {
-	
+
 	/**
 	 * @var object
 	 */
 	private $parent;
-	
+
 	/**
 	 * Color field Constructor.
 	 *
@@ -184,8 +184,5 @@ class ANONY_Multi_input {
 			time(),
 			true
 		);
-
 	}
-
 }
-

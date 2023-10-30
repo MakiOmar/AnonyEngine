@@ -8,7 +8,7 @@
  */
 
 class ANONY_Select2 {
-	
+
 	/**
 	 * @var object
 	 */
@@ -40,8 +40,7 @@ class ANONY_Select2 {
 
 		$autocomplete = ( isset( $this->parent->field['auto-complete'] ) && $this->parent->field['auto-complete'] == 'on' ) ? 'autocomplete="on"' : 'autocomplete="off"';
 
-		if ( isset( $this->parent->field['multiple'] ) && $this->parent->field['multiple'] ) 
-		{
+		if ( isset( $this->parent->field['multiple'] ) && $this->parent->field['multiple'] ) {
 			$multiple                 = ' multiple ';
 			$this->parent->input_name = $this->parent->input_name . '[]';
 
@@ -102,20 +101,19 @@ class ANONY_Select2 {
 					}
 				}
 
-				else :
-					if ( ANONY_ARRAY_HELP::is_assoc( $this->parent->field['options'] ) ) {
-						foreach ( $this->parent->field['options'] as $key => $label ) {
+				elseif ( ANONY_ARRAY_HELP::is_assoc( $this->parent->field['options'] ) ) :
+					foreach ( $this->parent->field['options'] as $key => $label ) {
 
-							$selected = is_array( $this->parent->value ) && in_array( $key, $this->parent->value ) && $key != '' ? ' selected' : '';
+						$selected = is_array( $this->parent->value ) && in_array( $key, $this->parent->value ) && $key != '' ? ' selected' : '';
 
-							$html .= sprintf(
-								'<option value="%1$s"%2$s>%3$s</option>',
-								$key,
-								$selected,
-								$label
-							);
-						}
-					} else {
+						$html .= sprintf(
+							'<option value="%1$s"%2$s>%3$s</option>',
+							$key,
+							$selected,
+							$label
+						);
+					}
+					else :
 						foreach ( $this->parent->field['options'] as $value ) {
 
 							$selected = is_array( $this->parent->value ) && in_array( $value, $this->parent->value ) && $value != '' ? ' selected' : '';
@@ -126,7 +124,6 @@ class ANONY_Select2 {
 								$selected
 							);
 						}
-					}
 
 				endif;
 		} else {
@@ -156,6 +153,4 @@ class ANONY_Select2 {
 				wp_enqueue_script( 'select2-ar', ANONY_FIELDS_URI . 'select2/js/i18n/ar.js', array( 'select2' ), time(), true );
 		}
 	}
-
 }
-

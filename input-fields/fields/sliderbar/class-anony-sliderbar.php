@@ -7,7 +7,7 @@
  * @link http://makiomar.com
  */
 class ANONY_Sliderbar {
-	
+
 	/**
 	 * @var object
 	 */
@@ -30,7 +30,6 @@ class ANONY_Sliderbar {
 
 		$this->parent = $parent;
 		$this->enqueue();
-
 	}
 
 	/**
@@ -106,8 +105,5 @@ class ANONY_Sliderbar {
 			time(),
 			true
 		);
-
 	}
-
 }
-

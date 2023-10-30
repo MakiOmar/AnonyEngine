@@ -388,7 +388,7 @@
 			/*
 			* Handle callback option after injecting timepicker
 			*/
-			_afterInject: function() {
+			_afterInject: function () {
 				var o = this.inst.settings;
 				if ($.isFunction( o.afterInject )) {
 					o.afterInject.call( this );
@@ -594,7 +594,8 @@
 						sliderAccessArgs.isRTL = rtl;
 
 						setTimeout(
-							function () { // fix for inline mode
+							function () {
+								// fix for inline mode
 								if ($tp.find( '.ui-slider-access' ).length === 0) {
 									$tp.find( '.ui-slider:visible' ).sliderAccess( sliderAccessArgs );
 
@@ -1308,7 +1309,11 @@
 								case 't':
 									return getPatternAmpm( o.amNames, o.pmNames );
 								default:    // literal escaped in quotes
-									return '(' + match.replace( /\'/g, "" ).replace( /(\.|\$|\^|\\|\/|\(|\)|\[|\]|\?|\+|\*)/g, function (m) { return "\\" + m; } ) + ')?';
+									return '(' + match.replace( /\'/g, "" ).replace(
+										/(\.|\$|\^|\\|\/|\(|\)|\[|\]|\?|\+|\*)/g,
+										function (m) {
+											return "\\" + m; }
+									) + ')?';
 							}
 						}
 					)
@@ -1334,7 +1339,14 @@
 						ampm         = '';
 						resTime.ampm = '';
 					} else {
-						ampm         = $.inArray( treg[order.t].toUpperCase(), $.map( o.amNames, function (x,i) { return x.toUpperCase(); } ) ) !== -1 ? 'AM' : 'PM';
+						ampm         = $.inArray(
+							treg[order.t].toUpperCase(),
+							$.map(
+								o.amNames,
+								function (x,i) {
+									return x.toUpperCase(); }
+							)
+						) !== -1 ? 'AM' : 'PM';
 						resTime.ampm = o[ampm === 'AM' ? 'amNames' : 'pmNames'][0];
 					}
 				}
@@ -2008,7 +2020,8 @@
 	*/
 	var detectSupport = function (timeFormat) {
 		var tf   = timeFormat.replace( /'.*?'/g, '' ).toLowerCase(), // removes literals
-			isIn = function (f, t) { // does the format contain the token?
+			isIn = function (f, t) {
+				// does the format contain the token?
 					return f.indexOf( t ) !== -1 ? true : false;
 			};
 		return {
@@ -2366,7 +2379,8 @@
 	*/
 	if ( ! Date.prototype.getMicroseconds) {
 		Date.prototype.microseconds    = 0;
-		Date.prototype.getMicroseconds = function () { return this.microseconds; };
+		Date.prototype.getMicroseconds = function () {
+			return this.microseconds; };
 		Date.prototype.setMicroseconds = function (m) {
 			this.setMilliseconds( this.getMilliseconds() + Math.floor( m / 1000 ) );
 			this.microseconds = m % 1000;

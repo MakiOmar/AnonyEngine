@@ -13,7 +13,7 @@ class ANONY_Font_select {
 	 * @var object
 	 */
 	private $parent;
-	
+
 	/**
 	 * Color field Constructor.
 	 *
@@ -75,6 +75,4 @@ class ANONY_Font_select {
 
 		return $html;
 	}
-
 }
-

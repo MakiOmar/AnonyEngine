@@ -8,12 +8,12 @@
  */
 class ANONY_Switch {
 
-	
+
 	/**
 	 * @var object
 	 */
 	private $parent;
-	
+
 	/**
 	 * Field Constructor.
 	 *
@@ -59,7 +59,6 @@ class ANONY_Switch {
 			$html .= '<input type="hidden" name="' . $this->parent->input_name . '" value="0" />';
 		}
 
-
 		if ( in_array( $this->parent->context, array( 'meta', 'form' ) ) && isset( $this->parent->field['title'] ) ) {
 			$html .= sprintf(
 				'<label class="anony-label" for="anony_%1$s">%2$s</label>',
@@ -68,10 +67,9 @@ class ANONY_Switch {
 			);
 		}
 
-		if ( !empty( $this->parent->field['note'] ) ) {
+		if ( ! empty( $this->parent->field['note'] ) ) {
 			$html .= '<p class=anony-warning>' . $this->parent->field['note'] . '<p>';
 		}
-
 
 		$html .= sprintf(
 			'<input type="checkbox" data-toggle="switch" id="%1$s" name="%2$s" %3$s value="1" %4$s />',
@@ -92,6 +90,4 @@ class ANONY_Switch {
 	public function enqueue() {
 		wp_enqueue_script( 'anony-opts-field-switch-js', ANONY_FIELDS_URI . 'switch/field_switch.js', array( 'jquery' ), time(), true );
 	}
-
 }
-

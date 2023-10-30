@@ -8,7 +8,7 @@
  */
 
 class ANONY_Select {
-	
+
 	/**
 	 * @var object
 	 */
@@ -26,7 +26,7 @@ class ANONY_Select {
 
 		$this->parent = $parent;
 
-		$this->numbered = isset( $this->parent->field['numbered'] )  && 'yes' === $this->parent->field['numbered'] ? true : false;
+		$this->numbered = isset( $this->parent->field['numbered'] ) && 'yes' === $this->parent->field['numbered'] ? true : false;
 	}
 
 	/**
@@ -76,12 +76,12 @@ class ANONY_Select {
 
 		if ( is_array( $this->parent->field['options'] ) && ! empty( $this->parent->field['options'] ) ) {
 
-			$html .= sprintf( 
-				'<option value="">%1$s</option>', 
+			$html .= sprintf(
+				'<option value="">%1$s</option>',
 				apply_filters(
-				    'anony-select-first-option-label', 
-				    esc_html__( 'Select', 'anonyengine' ) , 
-				    $this->parent->field['id']
+					'anony-select-first-option-label',
+					esc_html__( 'Select', 'anonyengine' ),
+					$this->parent->field['id']
 				)
 			);
 
@@ -95,7 +95,7 @@ class ANONY_Select {
 
 						$label = $this->numbered ? $option_number . '- ' . $label : $label;
 
-						$option_number++;
+						++$option_number;
 
 						$html .= sprintf(
 							'<option value="%1$s"%2$s>%3$s</option>',
@@ -115,23 +115,22 @@ class ANONY_Select {
 					}
 				}
 
-				else :
-					if ( ANONY_ARRAY_HELP::is_assoc( $this->parent->field['options'] ) ) {
-						foreach ( $this->parent->field['options'] as $key => $label ) {
+				elseif ( ANONY_ARRAY_HELP::is_assoc( $this->parent->field['options'] ) ) :
+					foreach ( $this->parent->field['options'] as $key => $label ) {
 
-							$label = $this->numbered ? $option_number . '- ' . $label : $label;
-							$option_number++;
+						$label = $this->numbered ? $option_number . '- ' . $label : $label;
+						++$option_number;
 
-							$selected = is_array( $this->parent->value ) && in_array( $key, $this->parent->value ) && $key != '' ? ' selected' : '';
+						$selected = is_array( $this->parent->value ) && in_array( $key, $this->parent->value ) && $key != '' ? ' selected' : '';
 
-							$html .= sprintf(
-								'<option value="%1$s"%2$s>%3$s</option>',
-								$key,
-								$selected,
-								$label
-							);
-						}
-					} else {
+						$html .= sprintf(
+							'<option value="%1$s"%2$s>%3$s</option>',
+							$key,
+							$selected,
+							$label
+						);
+					}
+					else :
 						foreach ( $this->parent->field['options'] as $value ) {
 
 							$selected = is_array( $this->parent->value ) && in_array( $value, $this->parent->value ) && $value != '' ? ' selected' : '';
@@ -142,7 +141,6 @@ class ANONY_Select {
 								$selected
 							);
 						}
-					}
 
 				endif;
 		} else {
@@ -160,5 +158,4 @@ class ANONY_Select {
 
 		return $html;
 	}
-
 }

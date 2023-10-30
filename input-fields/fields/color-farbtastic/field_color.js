@@ -1,15 +1,15 @@
 jQuery( document ).ready(
-	function() {
+	function () {
 
 		$colorpicker_inputs = jQuery( 'input.popup-colorpicker' );
 
 		$colorpicker_inputs.each(
-			function() {
+			function () {
 				var $input      = jQuery( this );
 				var sIdSelector = "#" + jQuery( this ).attr( 'id' ) + "picker";
 				var oFarb       = jQuery.farbtastic(
 					sIdSelector,
-					function(color) {
+					function (color) {
 
 						$input.css(
 							{
@@ -31,14 +31,14 @@ jQuery( document ).ready(
 		);
 
 		$colorpicker_inputs.each(
-			function(e) {
+			function (e) {
 				jQuery( this ).next( '.farb-popup' ).hide();
 			}
 		);
 
 		$colorpicker_inputs.live(
 			'focus',
-			function(e) {
+			function (e) {
 				jQuery( this ).next( '.farb-popup' ).show();
 				jQuery( this ).parents( 'li' ).css(
 					{
@@ -56,7 +56,7 @@ jQuery( document ).ready(
 
 		$colorpicker_inputs.live(
 			'blur',
-			function(e) {
+			function (e) {
 				jQuery( this ).next( '.farb-popup' ).hide();
 				jQuery( this ).parents( 'li' ).css(
 					{
@@ -68,14 +68,14 @@ jQuery( document ).ready(
 
 		// additional preview field
 		jQuery( 'input.popup-colorpicker' ).change(
-			function(){
+			function () {
 				var id = jQuery( this ).attr( 'id' )
 				jQuery( this ).siblings( '.prev-' + id ).css( 'background-color',jQuery( this ).val() );
 			}
 		);
 
 		jQuery( '.color-prev' ).click(
-			function(){
+			function () {
 				var id = jQuery( this ).attr( 'rel' )
 				jQuery( this ).siblings( '#' + id ).focus();
 			}

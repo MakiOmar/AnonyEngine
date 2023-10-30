@@ -55,7 +55,6 @@ class ANONY_Checkbox {
 
 			'disabled' => isset( $this->parent->field['disabled'] ) && ( $this->parent->field['disabled'] == true ) ? " disabled = 'disabled' " : '',
 		);
-
 	}
 
 	public function render() {
@@ -70,8 +69,4 @@ class ANONY_Checkbox {
 
 		return $html;
 	}
-
-
 }
-
-?>

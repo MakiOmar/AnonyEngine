@@ -7,12 +7,12 @@
  * @link http://makiomar.com
  */
 class ANONY_Info {
-	
+
 	/**
 	 * @var object
 	 */
 	private $parent;
-	
+
 
 	/**
 	 * Color field Constructor.
@@ -39,6 +39,4 @@ class ANONY_Info {
 			return '<p class="description" style="margin-left:-220px;">' . $this->parent->field['desc'] . '</p>';
 		}
 	}
-
 }
-

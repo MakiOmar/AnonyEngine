@@ -7,7 +7,7 @@
  * @link http://makiomar.com
  */
 class ANONY_Radio {
-	
+
 	/**
 	 * @var object
 	 */
@@ -22,16 +22,16 @@ class ANONY_Radio {
 	 * Field Constructor.
 	 *
 	 * Required - must call the parent constructor, then assign field and value to vars, and obviously call the render field function. Example <code>'options'  => array(
-	 *					'input-value1'  => array(
-	 *						'title' => esc_html__( 'input value1 title', 'textdomain' ),
-	 *						'class' => 'slider',
-	 *					),
-     *
-	 *					'input-value1' => array(
-	 *						'title' => esc_html__( 'input value1 title', 'textdomain' ),
-	 *						'class' => 'slider',
-	 *					),
-	 *				)</code>
+	 *                  'input-value1'  => array(
+	 *                      'title' => esc_html__( 'input value1 title', 'textdomain' ),
+	 *                      'class' => 'slider',
+	 *                  ),
+	 *
+	 *                  'input-value1' => array(
+	 *                      'title' => esc_html__( 'input value1 title', 'textdomain' ),
+	 *                      'class' => 'slider',
+	 *                  ),
+	 *              )</code>
 	 *
 	 * @param array  $this->parent->field Array of field's data
 	 * @param object $parent Field parent object
@@ -88,12 +88,12 @@ class ANONY_Radio {
 		// options sample
 		/*
 			$options = array(
-				'featured-cat'	=> array(
+				'featured-cat'  => array(
 					'title' => esc_html__('Featured category', ANONY_TEXTDOM),
 					'class' => 'slider'
 				),
 
-				'featured-post'	=> array(
+				'featured-post' => array(
 					'title' => esc_html__('Featured posts', ANONY_TEXTDOM),
 					'class' => 'slider'
 				),
@@ -135,13 +135,11 @@ class ANONY_Radio {
 
 				$html .= '</label>';
 
-				if ( 'yes' === $this->show_only_labels ) {
-					$html .= sprintf('<span class="radio-title anony-for-hidden-radio" data-id="%1$s_%3$s">%2$s</span>', $this->parent->field['id'], $v['title'], $search);
-				}else{
-					$html .= '<span class="radio-title">' . $v['title'] . '</span>';
-				}
-
-				
+			if ( 'yes' === $this->show_only_labels ) {
+				$html .= sprintf( '<span class="radio-title anony-for-hidden-radio" data-id="%1$s_%3$s">%2$s</span>', $this->parent->field['id'], $v['title'], $search );
+			} else {
+				$html .= '<span class="radio-title">' . $v['title'] . '</span>';
+			}
 
 			$html .= '</div>';
 		}
@@ -152,15 +150,12 @@ class ANONY_Radio {
 		$html .= '</fieldset>';
 
 		echo $html;
-
 	}
 
 	/**
 	 * Enqueue scripts.
 	 */
 	public function enqueue() {
-		wp_enqueue_script('anony-field-radio-js', ANONY_FIELDS_URI.'radio/field_radio.js', array('jquery'),time(),true);
+		wp_enqueue_script( 'anony-field-radio-js', ANONY_FIELDS_URI . 'radio/field_radio.js', array( 'jquery' ), time(), true );
 	}
-
 }
-

@@ -1,8 +1,8 @@
 jQuery( document ).ready(
-	function($){
+	function ($) {
 
 		$( '.sliderbar' ).each(
-			function(){
+			function () {
 
 				var field_id     = $( this ).attr( 'rel' );
 				var currentValue = $( this ).siblings( '#' + field_id ).attr( 'value' );
@@ -24,7 +24,7 @@ jQuery( document ).ready(
 						min:0,
 						max:1000,
 						values: siderValues,
-						slide: function(event, ui){
+						slide: function (event, ui) {
 							$( this ).siblings( '#' + field_id ).val( "$" + ui.values[ 0 ] + " - $" + ui.values[ 1 ] );
 						}
 					}

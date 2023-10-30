@@ -5,12 +5,12 @@
  * This color input depends on wp-color-picker
  */
 class ANONY_Color_gradient {
-	
+
 	/**
 	 * @var object
 	 */
 	private $parent;
-	
+
 	// Consructor
 	public function __construct( $parent = null ) {
 
@@ -82,7 +82,6 @@ class ANONY_Color_gradient {
 		$html .= '</fieldset>';
 
 		return $html;
-
 	}
 
 	/**
@@ -97,7 +96,8 @@ class ANONY_Color_gradient {
 	/**
 	 * Add needed scripts|styles to admin's footer
 	 */
-	public function footer_scripts(){?>
+	public function footer_scripts() {
+		?>
 		
 		<script type="text/javascript">
 			jQuery(document).ready(function($) {
@@ -108,6 +108,5 @@ class ANONY_Color_gradient {
 		</script>
 		
 	<?php }
-
 }
 ?>

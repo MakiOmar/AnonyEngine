@@ -15,7 +15,7 @@ class ANONY_Div {
 	 * @var object
 	 */
 	private $parent;
-	
+
 	/**
 	 * Color field Constructor.
 	 *
@@ -27,7 +27,6 @@ class ANONY_Div {
 		}
 
 		$this->parent = $parent;
-
 	}
 
 	/**
@@ -58,7 +57,7 @@ class ANONY_Div {
 
 		$div_content = '';
 
-		if( !empty( $this->parent->field['content'] ) ){
+		if ( ! empty( $this->parent->field['content'] ) ) {
 			$div_content = $this->parent->field['content'];
 		}
 
@@ -67,8 +66,5 @@ class ANONY_Div {
 		$html .= '</fieldset>';
 
 		return $html;
-
 	}
-
 }
-

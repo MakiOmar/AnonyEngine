@@ -17,7 +17,7 @@ class ANONY_Color_farbtastic {
 	 * @var object
 	 */
 	private $parent;
-	
+
 	/**
 	 * Color field Constructor.
 	 *
@@ -101,15 +101,11 @@ class ANONY_Color_farbtastic {
 	public function enqueue() {
 		wp_enqueue_style( 'farbtastic' );
 		wp_enqueue_script( 'anony-farbtastic-color-js', ANONY_FIELDS_URI . 'color-farbtastic/field_color.js', array( 'jquery', 'farbtastic' ), time(), true );
-
 	}
 
 	/**
 	 * Add needed scripts|styles to admin's footer
 	 */
 	public function footer_scripts() {
-
 	}
-
 }
-

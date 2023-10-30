@@ -8,7 +8,7 @@
  */
 
 class ANONY_Radio_img {
-		
+
 	/**
 	 * @var object
 	 */
@@ -105,7 +105,6 @@ class ANONY_Radio_img {
 		$html .= '</fieldset>';
 
 		return $html;
-
 	}
 
 	/**
@@ -114,6 +113,4 @@ class ANONY_Radio_img {
 	public function enqueue() {
 		wp_enqueue_script( 'anony-opts-field-radio_img-js', ANONY_FIELDS_URI . 'radio-img/field_radio_img.js', array( 'jquery' ), time(), true );
 	}
-
 }
-

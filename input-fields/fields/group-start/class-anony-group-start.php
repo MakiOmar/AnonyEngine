@@ -8,12 +8,12 @@
  */
 
 class ANONY_Group_start {
-	
+
 	/**
 	 * @var object
 	 */
 	private $parent;
-	
+
 	/**
 	 * Color field Constructor.
 	 *
@@ -30,22 +30,20 @@ class ANONY_Group_start {
 		$this->parent->value = '';
 
 		$this->enqueue();
-
 	}
 
 	/**
 	 * Render input field.
-	 * 
+	 *
 	 * Please note that if you want to show groups as tabs, you need to add the `layout = tabs` in the metabox definition.
 	 */
 	public function render() {
 		$tag = isset( $this->parent->field['tag'] ) && ! is_null( $this->parent->field['tag'] ) ? $this->parent->field['tag'] : 'h1';
 
-		$collapsible = isset( $this->parent->field['collapsible'] ) ? '<i class="fa fa-chevron-down" aria-hidden="true"></i>
+		$collapsible        = isset( $this->parent->field['collapsible'] ) ? '<i class="fa fa-chevron-down" aria-hidden="true"></i>
 ' : '';
 		$heading_link_style = 'style="display:flex;height:100%"';
 
-		
 		$html = sprintf(
 			'<%1$s class="anony-form-group-heading-tag"><a class="anony-form-group-heading" href="#" data-id="%2$s" %3$s>%4$s%5$s</a></%1$s>',
 			$tag,
@@ -53,7 +51,6 @@ class ANONY_Group_start {
 			$heading_link_style,
 			$this->parent->field['title'],
 			$collapsible
-			
 		);
 
 		$html .= sprintf(
@@ -63,7 +60,6 @@ class ANONY_Group_start {
 		);
 
 		return $html;
-
 	}
 
 	/**
@@ -78,6 +74,5 @@ class ANONY_Group_start {
 			time(),
 			true
 		);
-
 	}
 }

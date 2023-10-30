@@ -1,10 +1,10 @@
 jQuery( document ).ready(
-	function($){
+	function ($) {
 		'use strict';
 
 		$( '.multi-value-btn' ).on(
 			'click',
-			function(){
+			function () {
 				var thisBtn = $( this );
 
 				var targetId = thisBtn.attr( 'rel-id' );
@@ -25,7 +25,7 @@ jQuery( document ).ready(
 
 				var x = dafaultHtml.replace(
 					/(\w+)\[(\d+)\]/g,
-					function(a, b, c){
+					function (a, b, c) {
 						return b + '[' + targetCounter + ']';
 					}
 				);

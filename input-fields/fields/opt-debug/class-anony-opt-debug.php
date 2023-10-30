@@ -7,12 +7,12 @@
  * @link http://makiomar.com
  */
 class ANONY_Opt_debug {
-	
+
 	/**
 	 * @var object
 	 */
 	private $parent;
-	
+
 	/**
 	 * Color field Constructor.
 	 *
@@ -41,6 +41,4 @@ class ANONY_Opt_debug {
 			return;
 		}
 	}
-
 }
-

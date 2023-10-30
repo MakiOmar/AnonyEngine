@@ -12,7 +12,7 @@
  *	jquery.ui.mouse.js
  *	jquery.ui.widget.js
  */
-(function( $, undefined ) {
+(function ( $, undefined ) {
 
 	// number of pages in a slider
 	// (how many times can you page up/down to go through the whole range)
@@ -37,7 +37,7 @@
 				values: null
 			},
 
-			_create: function() {
+			_create: function () {
 				var self        = this,
 				o               = this.options,
 				existingHandles = this.element.find( ".ui-slider-handle" ).addClass( "ui-state-default ui-corner-all" ),
@@ -95,22 +95,22 @@
 
 				this.handles.add( this.range ).filter( "a" )
 				.click(
-					function( event ) {
+					function ( event ) {
 						event.preventDefault();
 					}
 				)
 				.hover(
-					function() {
+					function () {
 						if ( ! o.disabled ) {
 							$( this ).addClass( "ui-state-hover" );
 						}
 					},
-					function() {
+					function () {
 						$( this ).removeClass( "ui-state-hover" );
 					}
 				)
 				.focus(
-					function() {
+					function () {
 						if ( ! o.disabled ) {
 							$( ".ui-slider .ui-state-focus" ).removeClass( "ui-state-focus" );
 							$( this ).addClass( "ui-state-focus" );
@@ -120,20 +120,20 @@
 					}
 				)
 				.blur(
-					function() {
+					function () {
 						$( this ).removeClass( "ui-state-focus" );
 					}
 				);
 
 				this.handles.each(
-					function( i ) {
+					function ( i ) {
 						$( this ).data( "index.ui-slider-handle", i );
 					}
 				);
 
 				this.handles
 				.keydown(
-					function( event ) {
+					function ( event ) {
 						var index = $( this ).data( "index.ui-slider-handle" ),
 						allowed,
 						curVal,
@@ -205,7 +205,7 @@
 					}
 				)
 				.keyup(
-					function( event ) {
+					function ( event ) {
 						var index = $( this ).data( "index.ui-slider-handle" );
 
 						if ( self._keySliding ) {
@@ -223,7 +223,7 @@
 				this._animateOff = false;
 			},
 
-			destroy: function() {
+			destroy: function () {
 				this.handles.remove();
 				this.range.remove();
 
@@ -245,7 +245,7 @@
 				return this;
 			},
 
-			_mouseCapture: function( event ) {
+			_mouseCapture: function ( event ) {
 				var o = this.options,
 				position,
 				normValue,
@@ -272,7 +272,7 @@
 				distance  = this._valueMax() - this._valueMin() + 1;
 				self      = this;
 				this.handles.each(
-					function( i ) {
+					function ( i ) {
 						var thisDistance = Math.abs( normValue - self.values( i ) );
 						if ( distance > thisDistance ) {
 							distance      = thisDistance;
@@ -320,11 +320,11 @@
 				return true;
 			},
 
-			_mouseStart: function( event ) {
+			_mouseStart: function ( event ) {
 				return true;
 			},
 
-			_mouseDrag: function( event ) {
+			_mouseDrag: function ( event ) {
 				var position = { x: event.pageX, y: event.pageY },
 				normValue    = this._normValueFromMouse( position );
 
@@ -333,7 +333,7 @@
 				return false;
 			},
 
-			_mouseStop: function( event ) {
+			_mouseStop: function ( event ) {
 				this.handles.removeClass( "ui-state-active" );
 				this._mouseSliding = false;
 
@@ -347,11 +347,11 @@
 				return false;
 			},
 
-			_detectOrientation: function() {
+			_detectOrientation: function () {
 				this.orientation = ( this.options.orientation === "vertical" ) ? "vertical" : "horizontal";
 			},
 
-			_normValueFromMouse: function( position ) {
+			_normValueFromMouse: function ( position ) {
 				var pixelTotal,
 				pixelMouse,
 				percentMouse,
@@ -383,7 +383,7 @@
 				return this._trimAlignValue( valueMouse );
 			},
 
-			_start: function( event, index ) {
+			_start: function ( event, index ) {
 				var uiHash = {
 					handle: this.handles[ index ],
 					value: this.value()
@@ -395,7 +395,7 @@
 				return this._trigger( "start", event, uiHash );
 			},
 
-			_slide: function( event, index, newVal ) {
+			_slide: function ( event, index, newVal ) {
 				var otherVal,
 				newValues,
 				allowed;
@@ -445,7 +445,7 @@
 				}
 			},
 
-			_stop: function( event, index ) {
+			_stop: function ( event, index ) {
 				var uiHash = {
 					handle: this.handles[ index ],
 					value: this.value()
@@ -458,7 +458,7 @@
 				this._trigger( "stop", event, uiHash );
 			},
 
-			_change: function( event, index ) {
+			_change: function ( event, index ) {
 				if ( ! this._keySliding && ! this._mouseSliding ) {
 					var uiHash = {
 						handle: this.handles[ index ],
@@ -473,7 +473,7 @@
 				}
 			},
 
-			value: function( newValue ) {
+			value: function ( newValue ) {
 				if ( arguments.length ) {
 					this.options.value = this._trimAlignValue( newValue );
 					this._refreshValue();
@@ -484,7 +484,7 @@
 				return this._value();
 			},
 
-			values: function( index, newValue ) {
+			values: function ( index, newValue ) {
 				var vals,
 				newValues,
 				i;
@@ -517,7 +517,7 @@
 				}
 			},
 
-			_setOption: function( key, value ) {
+			_setOption: function ( key, value ) {
 				var i,
 				valsLength = 0;
 
@@ -565,7 +565,7 @@
 
 			// internal value getter
 			// _value() returns value trimmed by min and max, aligned by step
-			_value: function() {
+			_value: function () {
 				var val = this.options.value;
 				val     = this._trimAlignValue( val );
 
@@ -575,7 +575,7 @@
 			// internal values getter
 			// _values() returns array of values trimmed by min and max, aligned by step
 			// _values( index ) returns single value trimmed by min and max, aligned by step
-			_values: function( index ) {
+			_values: function ( index ) {
 				var val,
 				vals,
 				i;
@@ -598,7 +598,7 @@
 			},
 
 			// returns the step-aligned value that val is closest to, between (inclusive) min and max
-			_trimAlignValue: function( val ) {
+			_trimAlignValue: function ( val ) {
 				if ( val <= this._valueMin() ) {
 					return this._valueMin();
 				}
@@ -618,15 +618,15 @@
 				return parseFloat( alignValue.toFixed( 5 ) );
 			},
 
-			_valueMin: function() {
+			_valueMin: function () {
 				return this.options.min;
 			},
 
-			_valueMax: function() {
+			_valueMax: function () {
 				return this.options.max;
 			},
 
-			_refreshValue: function() {
+			_refreshValue: function () {
 				var oRange = this.options.range,
 				o          = this.options,
 				self       = this,
@@ -640,7 +640,7 @@
 
 				if ( this.options.values && this.options.values.length ) {
 					this.handles.each(
-						function( i, j ) {
+						function ( i, j ) {
 							valPercent = ( self.values( i ) - self._valueMin() ) / ( self._valueMax() - self._valueMin() ) * 100;
 							_set[ self.orientation === "horizontal" ? "left" : "bottom" ] = valPercent + "%";
 							$( this ).stop( 1, 1 )[ animate ? "animate" : "css" ]( _set, o.animate );

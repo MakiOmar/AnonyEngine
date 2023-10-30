@@ -1,10 +1,10 @@
 function AnonyUpload(){
-	(function($) {
+	(function ($) {
 
 		jQuery( "img[src='']" ).attr( "src", anony_gallery.url );
 
 		jQuery( ".anony-opts-gallery" ).click(
-			function( event ) {
+			function ( event ) {
 				event.preventDefault();
 
 				var activeFileUploadContext = jQuery( this ).parent();
@@ -28,7 +28,7 @@ function AnonyUpload(){
 
 				custom_file_frame.on(
 					"select",
-					function() {
+					function () {
 
 						var attachment_ids  = new Array();
 						var attachment_urls = new Array();
@@ -37,7 +37,7 @@ function AnonyUpload(){
 
 						i = 0;
 						attachments.each(
-							function(attachment) {
+							function (attachment) {
 								attachment_ids[i] = attachment['id'];
 								$( activeFileUploadContext ).find( '.anony-gallery-thumbs' ).append(
 									'<div class="gallery-item-container" style="display:inline-flex; flex-direction:column; align-items: center;margin-left:15px;"><a href="#" style="display:block; width:50px; height:50px;background-color: #d2d2d2;border-radius: 3px;padding:5px"><img src="' + attachment.attributes.url + '" alt="" style="width:100%;height:100%;display:block;"/></a><input type="hidden" name="' + anony_gallery.name + '[]" class="gallery-item" id="anony-gallery-thumb-' + attachment.id + '" value="' + attachment.id + '" /><a href="#" class="anony_remove_gallery_image" style="display:block">Remove</a></div>'
@@ -58,7 +58,7 @@ function AnonyUpload(){
 		jQuery( document.body ).on(
 			"click",
 			".anony_remove_gallery_image" ,
-			function( event ){
+			function ( event ) {
 				event.preventDefault();
 				if (confirm( 'Are you sure you want to remove this image?' )) {
 					$attachment_id = jQuery( this ). attr( 'rel-id' );
@@ -71,14 +71,14 @@ function AnonyUpload(){
 					activeFileUploadContext.fadeOut( 'slow' );
 					jQuery( this ).fadeOut( 'slow' );
 					setTimeout(
-						function(){
+						function () {
 							activeFileUploadContext.remove();
 						},
 						500
 					);
 
 					setTimeout(
-						function(){
+						function () {
 							if ( jQuery( '.gallery-item-container' ).length == 0 ) {
 								jQuery( '.anony-opts-clear-gallery' ).attr( 'style', 'display:none!important' );
 							}
@@ -92,7 +92,7 @@ function AnonyUpload(){
 		);
 
 		jQuery( ".anony-opts-clear-gallery" ).click(
-			function(event){
+			function (event) {
 				event.preventDefault();
 
 				if (confirm( 'Are you sure you want to remove all images?' )) {
@@ -102,7 +102,7 @@ function AnonyUpload(){
 					activeFileUploadContext.find( '.gallery-item' ).val( '' );
 					activeFileUploadContext.find( '.anony-gallery-thumbs div' ).fadeOut( 'slow' );
 					setTimeout(
-						function(){
+						function () {
 							activeFileUploadContext.find( '.anony-gallery-thumbs' ).empty();
 						},
 						500
@@ -119,7 +119,7 @@ function AnonyUpload(){
 }
 
 jQuery( document ).ready(
-	function($){
+	function ($) {
 		var anony_gallery = new AnonyUpload();
 	}
 );

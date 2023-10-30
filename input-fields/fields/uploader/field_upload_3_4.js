@@ -1,5 +1,5 @@
 function AnonyUpload(){
-	(function($) {
+	(function ($) {
 
 		var header_clicked = false;
 		var item_clicked   = '';
@@ -7,7 +7,7 @@ function AnonyUpload(){
 		jQuery( "img[src='']" ).attr( "src", anony_upload.url );
 
 		jQuery( '.anony-opts-upload' ).click(
-			function() {
+			function () {
 				item_clicked   = jQuery( this );
 				header_clicked = true;
 				formfield      = jQuery( this ).attr( 'rel-id' );
@@ -20,7 +20,7 @@ function AnonyUpload(){
 		// Store original function
 		window.original_send_to_editor = window.send_to_editor;
 
-		window.send_to_editor = function(html) {
+		window.send_to_editor = function (html) {
 			if (header_clicked) {
 				imgurl = jQuery( 'img',html ).attr( 'src' );
 				jQuery( item_clicked ).siblings( 'input' ).val( imgurl );
@@ -35,10 +35,14 @@ function AnonyUpload(){
 		}
 
 		jQuery( '.anony-opts-upload-remove' ).click(
-			function(){
+			function () {
 				jQuery( this ).siblings( 'input' ).val( '' );
 				jQuery( this ).prev().fadeIn( 'slow' );
-				jQuery( this ).prev().prev().fadeOut( 'slow', function(){jQuery( this ).attr( "src", anony_upload.url );} );
+				jQuery( this ).prev().prev().fadeOut(
+					'slow',
+					function () {
+						jQuery( this ).attr( "src", anony_upload.url );}
+				);
 				jQuery( this ).fadeOut( 'slow' );
 			}
 		);
@@ -47,7 +51,7 @@ function AnonyUpload(){
 }
 
 jQuery( document ).ready(
-	function($){
+	function ($) {
 		var anony_upload = new AnonyUpload();
 	}
 );

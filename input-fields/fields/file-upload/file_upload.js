@@ -1,8 +1,8 @@
 jQuery( document ).ready(
-	function($){
+	function ($) {
 		"use strict";
 		$( ".file-upload" ).click(
-			function( event ) {
+			function ( event ) {
 				event.preventDefault();
 
 				var activeFileUploadContext = $( this ).parent().parent();
@@ -15,8 +15,8 @@ jQuery( document ).ready(
 				 */
 				if ( undefined !== custom_file_frame ) {
 
-					  custom_file_frame.open();
-					  return;
+						custom_file_frame.open();
+						return;
 
 				}
 
@@ -38,7 +38,7 @@ jQuery( document ).ready(
 
 				custom_file_frame.on(
 					"select",
-					function() {
+					function () {
 
 						var attachment = custom_file_frame.state().get( "selection" ).first();
 						var url        = attachment.changed.url;

@@ -5,13 +5,13 @@
  */
 
 // wrap in UMD
-(function(factory) {
+(function (factory) {
 	if (typeof module === "object" && module.exports) {
 		module.exports = factory( require( "jquery" ) );
 	} else if (typeof define === "function" && define.amd) {
 		define(
 			[ "jquery" ],
-			function($) {
+			function ($) {
 				factory( $ );
 			}
 		);
@@ -19,7 +19,7 @@
 		factory( jQuery );
 	}
 })(
-	function($, undefined) {
+	function ($, undefined) {
 		"use strict";
 		// Array of country objects for the flag dropdown.
 		// Here is the criteria for the plugin to support a given country/territory
@@ -141,7 +141,7 @@
 		var forEachInstance = function forEachInstance(method) {
 			forEachProp(
 				window.intlTelInputGlobals.instances,
-				function(key) {
+				function (key) {
 					window.intlTelInputGlobals.instances[key][method]();
 				}
 			);
@@ -149,7 +149,7 @@
 		// this is our plugin class that we will create an instance of
 		// eslint-disable-next-line no-unused-vars
 		var Iti = /*#__PURE__*/
-		function() {
+		function () {
 			function Iti(input, options) {
 				var _this = this;
 				_classCallCheck( this, Iti );
@@ -163,7 +163,7 @@
 				this.options      = {};
 				forEachProp(
 					defaults,
-					function(key, value) {
+					function (key, value) {
 						_this.options[key] = customOptions.hasOwnProperty( key ) ? customOptions[key] : value;
 					}
 				);
@@ -204,13 +204,13 @@
 						// complete
 						if (typeof Promise !== "undefined") {
 							var autoCountryPromise = new Promise(
-								function(resolve, reject) {
+								function (resolve, reject) {
 									_this2.resolveAutoCountryPromise = resolve;
 									_this2.rejectAutoCountryPromise  = reject;
 								}
 							);
 							var utilsScriptPromise = new Promise(
-								function(resolve, reject) {
+								function (resolve, reject) {
 									_this2.resolveUtilsScriptPromise = resolve;
 									_this2.rejectUtilsScriptPromise  = reject;
 								}
@@ -218,8 +218,8 @@
 							this.promise           = Promise.all( [ autoCountryPromise, utilsScriptPromise ] );
 						} else {
 							// prevent errors when Promise doesn't exist
-							this.resolveAutoCountryPromise = this.rejectAutoCountryPromise = function() {};
-							this.resolveUtilsScriptPromise = this.rejectUtilsScriptPromise = function() {};
+							this.resolveAutoCountryPromise = this.rejectAutoCountryPromise = function () {};
+							this.resolveUtilsScriptPromise = this.rejectUtilsScriptPromise = function () {};
 						}
 						// in various situations there could be no country selected initially, but we need to be able
 						// to assume this variable exists
@@ -277,23 +277,23 @@
 					value: function _processAllCountries() {
 						if (this.options.onlyCountries.length) {
 							var lowerCaseOnlyCountries = this.options.onlyCountries.map(
-								function(country) {
+								function (country) {
 									return country.toLowerCase();
 								}
 							);
 							this.countries             = allCountries.filter(
-								function(country) {
+								function (country) {
 									return lowerCaseOnlyCountries.indexOf( country.iso2 ) > -1;
 								}
 							);
 						} else if (this.options.excludeCountries.length) {
 							var lowerCaseExcludeCountries = this.options.excludeCountries.map(
-								function(country) {
+								function (country) {
 									return country.toLowerCase();
 								}
 							);
 							this.countries                = allCountries.filter(
-								function(country) {
+								function (country) {
 									return lowerCaseExcludeCountries.indexOf( country.iso2 ) === -1;
 								}
 							);
@@ -376,7 +376,7 @@
 						if (attrs) {
 							forEachProp(
 								attrs,
-								function(key, value) {
+								function (key, value) {
 									return el.setAttribute( key, value );
 								}
 							);
@@ -602,7 +602,7 @@
 					key: "_initHiddenInputListener",
 					value: function _initHiddenInputListener() {
 						var _this3                    = this;
-						this._handleHiddenInputSubmit = function() {
+						this._handleHiddenInputSubmit = function () {
 							_this3.hiddenInput.value = _this3.getNumber();
 						};
 						if (this.telInput.form) {
@@ -625,7 +625,7 @@
 						// hack for input nested inside label (which is valid markup): clicking the selected-flag to
 						// open the dropdown would then automatically trigger a 2nd click on the input which would
 						// close it again
-						this._handleLabelClick = function(e) {
+						this._handleLabelClick = function (e) {
 							// if the dropdown is closed, then focus the input, else ignore the click
 							if (_this4.countryList.classList.contains( "iti__hide" )) {
 								_this4.telInput.focus(); } else {
@@ -637,7 +637,7 @@
 							label.addEventListener( "click", this._handleLabelClick );
 						}
 						// toggle country dropdown on click
-						this._handleClickSelectedFlag = function() {
+						this._handleClickSelectedFlag = function () {
 							// only intercept this event if we're opening the dropdown
 							// else let it bubble up to the top ("click-off-to-close" listener)
 							// we cannot just stopPropagation as it may be needed to close another instance
@@ -647,7 +647,7 @@
 						};
 						this.selectedFlag.addEventListener( "click", this._handleClickSelectedFlag );
 						// open dropdown list if currently focused
-						this._handleFlagsContainerKeydown = function(e) {
+						this._handleFlagsContainerKeydown = function (e) {
 							var isDropdownHidden = _this4.countryList.classList.contains( "iti__hide" );
 							if (isDropdownHidden && [ "ArrowUp", "Up", "ArrowDown", "Down", " ", "Enter" ].indexOf( e.key ) !== -1) {
 								// prevent form from being submitted if "ENTER" was pressed
@@ -676,7 +676,7 @@
 								// wait until the load event so we don't block any other requests e.g. the flags image
 								window.addEventListener(
 									"load",
-									function() {
+									function () {
 										window.intlTelInputGlobals.loadUtils( _this5.options.utilsScript );
 									}
 								);
@@ -703,7 +703,7 @@
 							window.intlTelInputGlobals.startedLoadingAutoCountry = true;
 							if (typeof this.options.geoIpLookup === "function") {
 								this.options.geoIpLookup(
-									function(countryCode) {
+									function (countryCode) {
 										window.intlTelInputGlobals.autoCountry = countryCode.toLowerCase();
 										// tell all instances the auto country is ready
 										// TODO: this should just be the current instances
@@ -712,12 +712,12 @@
 										// setTimeout means that the current thread of execution will finish before executing
 										// this, which allows the plugin to finish initialising.
 										setTimeout(
-											function() {
+											function () {
 												return forEachInstance( "handleAutoCountry" );
 											}
 										);
 									},
-									function() {
+									function () {
 										return forEachInstance( "rejectAutoCountryPromise" );
 									}
 								);
@@ -729,14 +729,14 @@
 					value: function _initKeyListeners() {
 						var _this6 = this;
 						// update flag on keyup
-						this._handleKeyupEvent = function() {
+						this._handleKeyupEvent = function () {
 							if (_this6._updateFlagFromNumber( _this6.telInput.value )) {
 								_this6._triggerCountryChange();
 							}
 						};
 						this.telInput.addEventListener( "keyup", this._handleKeyupEvent );
 						// update flag on cut/paste events (now supported in all major browsers)
-						this._handleClipboardEvent = function() {
+						this._handleClipboardEvent = function () {
 							// hack because "paste" event is fired before input is updated
 							setTimeout( _this6._handleKeyupEvent );
 						};
@@ -754,7 +754,7 @@
 					value: function _initBlurListeners() {
 						var _this7 = this;
 						// on blur or form submit: if just a dial code then remove it
-						this._handleSubmitOrBlurEvent = function() {
+						this._handleSubmitOrBlurEvent = function () {
 							_this7._removeEmptyDialCode();
 						};
 						if (this.telInput.form) {
@@ -840,7 +840,7 @@
 								this.dropdown.style.top  = "".concat( inputTop + extraTop, "px" );
 								this.dropdown.style.left = "".concat( pos.left + document.body.scrollLeft, "px" );
 								// close menu on window scroll
-								this._handleWindowScroll = function() {
+								this._handleWindowScroll = function () {
 									return _this8._closeDropdown();
 								};
 								window.addEventListener( "scroll", this._handleWindowScroll );
@@ -863,7 +863,7 @@
 						var _this9 = this;
 						// when mouse over a list item, just highlight that one
 						// we add the class "highlight", so if they hit "enter" we know which one to select
-						this._handleMouseoverCountryList = function(e) {
+						this._handleMouseoverCountryList = function (e) {
 							// handle event delegation, as we're listening for this event on the countryList
 							var listItem = _this9._getClosestListItem( e.target );
 							if (listItem) {
@@ -872,7 +872,7 @@
 						};
 						this.countryList.addEventListener( "mouseover", this._handleMouseoverCountryList );
 						// listen for country selection
-						this._handleClickCountryList = function(e) {
+						this._handleClickCountryList = function (e) {
 							var listItem = _this9._getClosestListItem( e.target );
 							if (listItem) {
 								_this9._selectListItem( listItem );
@@ -883,7 +883,7 @@
 						// (except when this initial opening click is bubbling up)
 						// we cannot just stopPropagation as it may be needed to close another instance
 						var isOpening               = true;
-						this._handleClickOffToClose = function() {
+						this._handleClickOffToClose = function () {
 							if ( ! isOpening) {
 								_this9._closeDropdown();
 							}
@@ -896,7 +896,7 @@
 						// listen on the document because that's where key events are triggered if no input has focus
 						var query                     = "";
 						var queryTimer                = null;
-						this._handleKeydownOnDropdown = function(e) {
+						this._handleKeydownOnDropdown = function (e) {
 							// prevent down key from scrolling the whole page,
 							// and enter key from submitting a form etc
 							e.preventDefault();
@@ -913,7 +913,7 @@
 													_this9._searchForCountry( query );
 													// if the timer hits 1 second, reset the query
 													queryTimer = setTimeout(
-														function() {
+														function () {
 																		query = "";
 														},
 														1e3
@@ -1470,20 +1470,20 @@
 		*  STATIC METHODS
 		********************/
 		// get the country data object
-		intlTelInputGlobals.getCountryData = function() {
+		intlTelInputGlobals.getCountryData = function () {
 			return allCountries;
 		};
 		// inject a <script> element to load utils.js
 		var injectScript = function injectScript(path, handleSuccess, handleFailure) {
 			// inject a new script element into the page
 			var script       = document.createElement( "script" );
-			script.onload    = function() {
+			script.onload    = function () {
 				forEachInstance( "handleUtils" );
 				if (handleSuccess) {
 					handleSuccess();
 				}
 			};
-			script.onerror   = function() {
+			script.onerror   = function () {
 				forEachInstance( "rejectUtilsScriptPromise" );
 				if (handleFailure) {
 					handleFailure();
@@ -1495,7 +1495,7 @@
 			document.body.appendChild( script );
 		};
 		// load the utils script
-		intlTelInputGlobals.loadUtils = function(path) {
+		intlTelInputGlobals.loadUtils = function (path) {
 			// 2 options:
 			// 1) not already started loading (start)
 			// 2) already started loading (do nothing - just wait for the onload callback to fire, which will
@@ -1506,7 +1506,7 @@
 				// if we have promises, then return a promise
 				if (typeof Promise !== "undefined") {
 					return new Promise(
-						function(resolve, reject) {
+						function (resolve, reject) {
 							return injectScript( path, resolve, reject );
 						}
 					);
@@ -1522,12 +1522,12 @@
 		var pluginName              = "intlTelInput";
 		// A really lightweight plugin wrapper around the constructor,
 		// preventing against multiple instantiations
-		$.fn[pluginName] = function(options) {
+		$.fn[pluginName] = function (options) {
 			var args = arguments;
 			// Is the first parameter an object (options), or was omitted, instantiate a new instance of the plugin.
 			if (options === undefined || typeof options === "object") {
 				return this.each(
-					function() {
+					function () {
 						if ( ! $.data( this, "plugin_" + pluginName )) {
 							var iti = new Iti( this, options );
 							iti._init();
@@ -1541,7 +1541,7 @@
 				// Cache the method call to make it possible to return a value
 				var returns;
 				this.each(
-					function() {
+					function () {
 						var instance = $.data( this, "plugin_" + pluginName );
 						// Tests that there's already a plugin-instance and checks that the requested public method exists
 						if (instance instanceof Iti && typeof instance[options] === "function") {

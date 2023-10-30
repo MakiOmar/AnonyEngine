@@ -23,17 +23,17 @@ if ( ! class_exists( 'ANONY_Tel' ) ) {
 	 * @link       https://makiomar.com
 	 */
 	class ANONY_Tel {
-	
+
 		/**
 		 * @var object
 		 */
 		private $parent;
-	
+
 		/**
 		 * @var string
 		 */
 		private $with_dial_codes;
-	
+
 		/**
 		 * @var string
 		 */
@@ -116,7 +116,7 @@ if ( ! class_exists( 'ANONY_Tel' ) ) {
 				$this->parent->value,
 				$this->parent->class_attr,
 				$this->parent->placeholder,
-				isset( $this->pattern ) ? 'pattern ="'. $this->pattern .'"' : ''
+				isset( $this->pattern ) ? 'pattern ="' . $this->pattern . '"' : ''
 			);
 
 			if ( isset( $this->parent->description ) ) {
@@ -126,7 +126,6 @@ if ( ! class_exists( 'ANONY_Tel' ) ) {
 			$html .= '</fieldset>';
 
 			return $html;
-
 		}
 
 		/**
@@ -185,7 +184,6 @@ if ( ! class_exists( 'ANONY_Tel' ) ) {
 			$html .= '</div>';
 
 			return $html;
-
 		}
 
 		/**
@@ -199,7 +197,6 @@ if ( ! class_exists( 'ANONY_Tel' ) ) {
 				// wp_enqueue_script('intlTelInput', ANONY_FIELDS_URI.'tel/js/intlTelInput-jquery.min.js', array('jquery' ), time(), true);
 				wp_enqueue_script( 'intlTelInput', ANONY_FIELDS_URI . 'tel/js/intlTelInput.min.js', array(), time(), true );
 			}
-
 		}
 
 
@@ -214,7 +211,7 @@ if ( ! class_exists( 'ANONY_Tel' ) ) {
 
 			add_action(
 				$hook,
-				function(){ ?>
+				function (){ ?>
 
 				<script type="text/javascript">
 					/*jQuery(document).ready(function(e) {
@@ -234,9 +231,5 @@ if ( ! class_exists( 'ANONY_Tel' ) ) {
 				}
 			);
 		}
-
-
-
-
 	}
 }

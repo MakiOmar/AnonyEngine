@@ -7,12 +7,12 @@
  * @link http://makiomar.com
  */
 class ANONY_Color_gradient_farbtastic {
-	
+
 	/**
 	 * @var object
 	 */
 	private $parent;
-	
+
 	/**
 	 * Field Constructor.
 	 *
@@ -134,7 +134,6 @@ class ANONY_Color_gradient_farbtastic {
 		$html .= '</div>';
 
 		return $html;
-
 	}//end render()
 
 
@@ -149,15 +148,11 @@ class ANONY_Color_gradient_farbtastic {
 
 		wp_enqueue_style( 'farbtastic' );
 		wp_enqueue_script( 'anony-farbtastic-color-js', ANONY_FIELDS_URI . 'color-farbtastic/field_color.js', array( 'jquery', 'farbtastic' ), time(), true );
-
 	}//end enqueue()
 
 	/**
 	 * Add needed scripts|styles to admin's footer
 	 */
 	public function footer_scripts() {
-
 	}//end footer_scripts()
-
 }//end class
-

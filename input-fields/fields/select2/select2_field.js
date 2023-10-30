@@ -1,9 +1,11 @@
 jQuery( document ).ready(
-	function($){
+	function ($) {
 		'use strict';
-		$( '.anony-select2' ).select2({
-			placeholder: 'Select an option',
-			width      : '200px'
-		});
+		$( '.anony-select2' ).select2(
+			{
+				placeholder: 'Select an option',
+				width      : '200px'
+			}
+		);
 	}
 );

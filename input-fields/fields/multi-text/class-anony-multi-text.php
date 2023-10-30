@@ -8,12 +8,12 @@
  */
 
 class ANONY_Multi_text {
-		
+
 	/**
 	 * @var object
 	 */
 	private $parent;
-	
+
 	/**
 	 * Color field Constructor.
 	 *
@@ -133,8 +133,5 @@ class ANONY_Multi_text {
 			time(),
 			true
 		);
-
 	}
-
 }
-

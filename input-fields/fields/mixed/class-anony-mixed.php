@@ -10,12 +10,12 @@
  */
 
 class ANONY_Mixed {
-	
+
 	/**
 	 * @var object
 	 */
 	private $parent;
-	
+
 	/**
 	 * Color field Constructor.
 	 *
@@ -57,7 +57,7 @@ class ANONY_Mixed {
 	public function render() {
 
 		$readonly = '';
-		if ( !empty($this->parent->field['readonly']) && $this->parent->field['readonly'] ) {
+		if ( ! empty( $this->parent->field['readonly'] ) && $this->parent->field['readonly'] ) {
 			$readonly = ' readonly';
 		}
 		$placeholder = ( isset( $this->parent->field['placeholder'] ) ) ? 'placeholder="' . $this->parent->field['placeholder'] . '"' : '';
@@ -128,7 +128,6 @@ class ANONY_Mixed {
 			$min,
 			$max,
 			$readonly
-
 		);
 
 		$html .= ( isset( $this->parent->field['desc'] ) && ! empty( $this->parent->field['desc'] ) ) ? ' <div class="description ' . $this->parent->class_attr . '">' . $this->parent->field['desc'] . '</div>' : '';
@@ -136,7 +135,6 @@ class ANONY_Mixed {
 		$html .= '</fieldset>';
 
 		return $html;
-
 	}
 
 
@@ -172,7 +170,5 @@ class ANONY_Mixed {
 		$html .= '</div>';
 
 		return $html;
-
 	}
-
 }

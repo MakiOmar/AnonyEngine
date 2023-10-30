@@ -14,7 +14,7 @@ class ANONY_Date_time {
 	 */
 	private $parent;
 
-	
+
 	/**
 	 * @var string
 	 */
@@ -28,8 +28,8 @@ class ANONY_Date_time {
 	/**
 	 * @var string
 	 */
-	private $get;	
-	
+	private $get;
+
 	/**
 	 * @var string
 	 */
@@ -134,7 +134,6 @@ class ANONY_Date_time {
 		$html .= '<div></fieldset>';
 
 		return $html;
-
 	}
 
 	/**
@@ -158,7 +157,8 @@ class ANONY_Date_time {
 	/**
 	 * Add date/time picker footer scripts
 	 */
-	public function footer_scripts(){?>
+	public function footer_scripts() {
+		?>
 
 		<script type="text/javascript">
 			jQuery(document).ready(function($){
@@ -170,7 +170,7 @@ class ANONY_Date_time {
 											// Options for datetime picker
 										foreach ( $this->picker_options as $key => $value ) {
 											echo $key . ':' . '"' . $value . '",';
-										};
+										}
 										?>
 										
 									};
@@ -201,6 +201,5 @@ class ANONY_Date_time {
 		</script>
 		<?php
 	}
-
 }
 ?>

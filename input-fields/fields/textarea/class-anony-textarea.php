@@ -13,7 +13,7 @@ class ANONY_Textarea {
 	 * @var object
 	 */
 	private $parent;
-	
+
 	/**
 	 * Color field Constructor.
 	 *
@@ -27,7 +27,6 @@ class ANONY_Textarea {
 		$this->parent = $parent;
 
 		$this->parent->value = esc_textarea( $this->parent->value );
-
 	}
 
 	/**
@@ -46,12 +45,11 @@ class ANONY_Textarea {
 
 		$rows       = isset( $this->parent->field['rows'] ) ? $this->parent->field['rows'] : 5;
 		$text_align = isset( $this->parent->field['text-align'] ) ? $this->parent->field['text-align'] : 'initial';
-		$direction = isset( $this->parent->field['direction'] ) ? $this->parent->field['direction'] : 'initial';
+		$direction  = isset( $this->parent->field['direction'] ) ? $this->parent->field['direction'] : 'initial';
 
 		$conditions = '';
-		if( !empty( $this->parent->field['conditions'] ) )
-		{
-			$conditions = json_encode($this->parent->field['conditions']);
+		if ( ! empty( $this->parent->field['conditions'] ) ) {
+			$conditions = json_encode( $this->parent->field['conditions'] );
 		}
 
 		if ( $this->parent->as_template ) {
@@ -104,21 +102,16 @@ class ANONY_Textarea {
 			$placeholder,
 			$conditions,
 			$this->parent->value
-			
 		);
 
 		$html .= '</div>';
-		
-		if( !empty( $this->parent->field['desc'] ) )
-		{
-			$html .= sprintf('<p class="input-field-description">%s</p>', $this->parent->field['desc']);
+
+		if ( ! empty( $this->parent->field['desc'] ) ) {
+			$html .= sprintf( '<p class="input-field-description">%s</p>', $this->parent->field['desc'] );
 		}
-		
+
 		$html .= '</fieldset>';
 
-
-
 		return $html;
-
 	}
 }

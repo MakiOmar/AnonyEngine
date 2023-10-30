@@ -13,7 +13,7 @@ class ANONY_File_upload {
 	 * @var object
 	 */
 	private $parent;
-	
+
 	/**
 	 * Field Constructor.
 	 *
@@ -69,32 +69,30 @@ class ANONY_File_upload {
 		$html = ob_get_clean();
 
 		return $html;
-
 	}
 
 	/**
 	 * Enqueue scripts.
 	 */
 	public function enqueue() {
-		if( is_user_logged_in() ){
+		if ( is_user_logged_in() ) {
 			$this->logged_in_scripts();
-		}else{
+		} else {
 			$this->not_logged_in_scripts();
 		}
 	}
 
 	protected function logged_in_scripts() {
 		wp_enqueue_media();
-		wp_enqueue_script( 
-			'file_upload', 
-			ANONY_FIELDS_URI . 'file-upload/file_upload.js', 
-			array( 'jquery' ), 
-			filemtime( ANONY_FIELDS_DIR . 'file-upload/file_upload.js' ), 
-			true 
+		wp_enqueue_script(
+			'file_upload',
+			ANONY_FIELDS_URI . 'file-upload/file_upload.js',
+			array( 'jquery' ),
+			filemtime( ANONY_FIELDS_DIR . 'file-upload/file_upload.js' ),
+			true
 		);
 	}
 
-	protected function not_logged_in_scripts(){
-		
+	protected function not_logged_in_scripts() {
 	}
 }

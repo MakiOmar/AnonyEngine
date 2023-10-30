@@ -22,6 +22,8 @@ defined( 'ABSPATH' ) || die(); // Exit if accessed direct.
 class ANONY_Uploader {
 
 	/**
+	 * Parent object.
+	 *
 	 * @var object
 	 */
 	private $parent_obj;
@@ -60,12 +62,24 @@ class ANONY_Uploader {
 		}
 	}
 
+	/**
+	 * Output field note.
+	 *
+	 * @param string $html The output.
+	 * @return void
+	 */
 	protected function note( &$html ) {
 		if ( isset( $this->parent_obj->field['note'] ) ) {
 			$html .= '<p class=anony-warning>' . $this->parent_obj->field['note'] . '<p>';
 		}
 	}
 
+	/**
+	 * Output fieldset open tag.
+	 *
+	 * @param string $html The output.
+	 * @return void
+	 */
 	protected function fieldset_open( &$html ) {
 		$html .= sprintf(
 			'<fieldset class="anony-row anony-row-inline" id="fieldset_%1$s">',
@@ -73,6 +87,12 @@ class ANONY_Uploader {
 		);
 	}
 
+	/**
+	 * Output the label.
+	 *
+	 * @param string $html The output.
+	 * @return void
+	 */
 	protected function label( &$html ) {
 		if ( ( 'meta' === $this->parent_obj->context || 'form' === $this->parent_obj->context ) && isset( $this->parent_obj->field['title'] ) ) {
 			$html .= sprintf(
@@ -83,6 +103,12 @@ class ANONY_Uploader {
 		}
 	}
 
+	/**
+	 * Output input for private users.
+	 *
+	 * @param string $html The output.
+	 * @return void
+	 */
 	protected function input_priv( &$html ) {
 		$html .= sprintf(
 			'<input id="%4$s" type="hidden" name="%1$s" value="%2$s" class="%3$s" />',
@@ -93,6 +119,12 @@ class ANONY_Uploader {
 		);
 	}
 
+	/**
+	 * Output input for nonprivate users.
+	 *
+	 * @param string $html The output.
+	 * @return void
+	 */
 	protected function input_nopriv( &$html ) {
 		$html .= sprintf(
 			'<input type="file" id="%1$s" class="anony-uploader" name="%1$s" style="display:none"/>',
@@ -101,6 +133,12 @@ class ANONY_Uploader {
 		);
 	}
 
+	/**
+	 * Output preview for private users.
+	 *
+	 * @param string $html The output.
+	 * @return void
+	 */
 	protected function uploads_preview_priv( &$html ) {
 		$html        .= '<div class="uploads-wrapper">';
 		$image_exts   = array( 'jpg', 'jpeg', 'jpe', 'gif', 'png', 'svg' );
@@ -122,6 +160,12 @@ class ANONY_Uploader {
 		}
 	}
 
+	/**
+	 * Output input for nonprivate users.
+	 *
+	 * @param string $html The output.
+	 * @return void
+	 */
 	protected function uploads_preview_nopriv( &$html ) {
 		$html        .= '<div class="uploads-wrapper">';
 		$image_exts   = array( 'jpg', 'jpeg', 'jpe', 'gif', 'png', 'svg' );
@@ -143,6 +187,12 @@ class ANONY_Uploader {
 		}
 	}
 
+	/**
+	 * Output button.
+	 *
+	 * @param string $html The output.
+	 * @return void
+	 */
 	protected function button( &$html ) {
 		if ( '' === $this->parent_obj->value ) {
 			$remove = ' style="display:none;"';
@@ -167,18 +217,41 @@ class ANONY_Uploader {
 		);
 	}
 
+	/**
+	 * Output close preview markup.
+	 *
+	 * @param string $html The output.
+	 * @return void
+	 */
 	protected function close_preview( &$html ) {
 		$html .= '<div>';
 	}
 
+	/**
+	 * Output Description.
+	 *
+	 * @param string $html The output.
+	 * @return void
+	 */
 	protected function description( &$html ) {
 		$html .= ( isset( $this->parent_obj->field['desc'] ) && ! empty( $this->parent_obj->field['desc'] ) ) ? '<div class="description">' . $this->parent_obj->field['desc'] . '</div>' : '';
 	}
 
+	/**
+	 * Output fieldset close.
+	 *
+	 * @param string $html The output.
+	 * @return void
+	 */
 	protected function close_fieldset( &$html ) {
 		$html .= '</fieldset>';
 	}
 
+	/**
+	 * Final output for nonprivate users.
+	 *
+	 * @return string The final output.
+	 */
 	protected function render_nopriv() {
 		$html = '';
 
@@ -194,6 +267,12 @@ class ANONY_Uploader {
 
 		return $html;
 	}
+
+	/**
+	 * Final output for private users.
+	 *
+	 * @return string The final output.
+	 */
 	protected function render_priv() {
 
 		$html = '';
@@ -240,6 +319,12 @@ class ANONY_Uploader {
 			$localized_uploader = true;
 		}
 	}
+
+	/**
+	 * Scripts for private input.
+	 *
+	 * @return void
+	 */
 	protected function user_can_upload_files_scripts() {
 		$wp_version = floatval( get_bloginfo( 'version' ) );
 		if ( $wp_version < '3.5' ) {
@@ -262,7 +347,11 @@ class ANONY_Uploader {
 			wp_enqueue_media();
 		}
 	}
-
+	/**
+	 * Scripts for nonprivate input.
+	 *
+	 * @return void
+	 */
 	protected function user_can_not_upload_files_scripts() {
 		wp_enqueue_script(
 			'anony-opts-field-upload-nopriv-js',

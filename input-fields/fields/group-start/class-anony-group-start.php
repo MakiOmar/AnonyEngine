@@ -12,22 +12,22 @@ class ANONY_Group_start {
 	/**
 	 * @var object
 	 */
-	private $parent;
+	private $parent_obj;
 
 	/**
 	 * Color field Constructor.
 	 *
-	 * @param object $parent Field parent object
+	 * @param object $parent_obj Field parent object
 	 */
-	public function __construct( $parent = null ) {
+	public function __construct( $parent_obj = null ) {
 
-		if ( ! is_object( $parent ) ) {
+		if ( ! is_object( $parent_obj ) ) {
 			return;
 		}
 
-		$this->parent = $parent;
+		$this->parent_obj = $parent_obj;
 
-		$this->parent->value = '';
+		$this->parent_obj->value = '';
 
 		$this->enqueue();
 	}
@@ -38,25 +38,25 @@ class ANONY_Group_start {
 	 * Please note that if you want to show groups as tabs, you need to add the `layout = tabs` in the metabox definition.
 	 */
 	public function render() {
-		$tag = isset( $this->parent->field['tag'] ) && ! is_null( $this->parent->field['tag'] ) ? $this->parent->field['tag'] : 'h1';
+		$tag = isset( $this->parent_obj->field['tag'] ) && ! is_null( $this->parent_obj->field['tag'] ) ? $this->parent_obj->field['tag'] : 'h1';
 
-		$collapsible        = isset( $this->parent->field['collapsible'] ) ? '<i class="fa fa-chevron-down" aria-hidden="true"></i>
+		$collapsible        = isset( $this->parent_obj->field['collapsible'] ) ? '<i class="fa fa-chevron-down" aria-hidden="true"></i>
 ' : '';
 		$heading_link_style = 'style="display:flex;height:100%"';
 
 		$html = sprintf(
 			'<%1$s class="anony-form-group-heading-tag"><a class="anony-form-group-heading" href="#" data-id="%2$s" %3$s>%4$s%5$s</a></%1$s>',
 			$tag,
-			$this->parent->field['id'],
+			$this->parent_obj->field['id'],
 			$heading_link_style,
-			$this->parent->field['title'],
+			$this->parent_obj->field['title'],
 			$collapsible
 		);
 
 		$html .= sprintf(
 			'<div class="anony-form-group-container%2$s" id="form-group-%1$s">',
-			$this->parent->field['id'],
-			isset( $this->parent->field['collapsible'] ) ? ' collapsible' : ''
+			$this->parent_obj->field['id'],
+			isset( $this->parent_obj->field['collapsible'] ) ? ' collapsible' : ''
 		);
 
 		return $html;

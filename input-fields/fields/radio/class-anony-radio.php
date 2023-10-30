@@ -11,7 +11,7 @@ class ANONY_Radio {
 	/**
 	 * @var object
 	 */
-	private $parent;
+	private $parent_obj;
 
 	/**
 	 * @var string
@@ -33,25 +33,25 @@ class ANONY_Radio {
 	 *                  ),
 	 *              )</code>
 	 *
-	 * @param array  $this->parent->field Array of field's data
-	 * @param object $parent Field parent object
+	 * @param array  $this->parent_obj->field Array of field's data
+	 * @param object $parent_obj Field parent object
 	 */
-	public function __construct( $parent = null ) {
+	public function __construct( $parent_obj = null ) {
 
-		if ( ! is_object( $parent ) ) {
+		if ( ! is_object( $parent_obj ) ) {
 			return;
 		}
 
-		$this->parent = $parent;
+		$this->parent_obj = $parent_obj;
 
 		$this->show_only_labels = 'no';
 
-		if ( isset( $this->parent->field['only-labels'] ) ) {
-			$this->show_only_labels = $this->parent->field['only-labels'];
+		if ( isset( $this->parent_obj->field['only-labels'] ) ) {
+			$this->show_only_labels = $this->parent_obj->field['only-labels'];
 		}
 
 		if ( 'yes' === $this->show_only_labels ) {
-			$this->parent->class_attr .= ' anony-hidden-radio';
+			$this->parent_obj->class_attr .= ' anony-hidden-radio';
 		}
 		$this->enqueue();
 	}
@@ -63,25 +63,25 @@ class ANONY_Radio {
 	 */
 	public function render() {
 
-		if ( isset( $this->parent->field['note'] ) ) {
-			echo '<p class=anony-warning>' . $this->parent->field['note'] . '<p>';
+		if ( isset( $this->parent_obj->field['note'] ) ) {
+			echo '<p class=anony-warning>' . $this->parent_obj->field['note'] . '<p>';
 		}
 
 		$html = sprintf(
 			'<fieldset class="anony-row%2$s" id="fieldset_%1$s">',
-			$this->parent->field['id'],
-			$this->parent->width
+			$this->parent_obj->field['id'],
+			$this->parent_obj->width
 		);
 
-		if ( in_array( $this->parent->context, array( 'meta', 'form' ) ) && isset( $this->parent->field['title'] ) ) {
+		if ( in_array( $this->parent_obj->context, array( 'meta', 'form' ) ) && isset( $this->parent_obj->field['title'] ) ) {
 
-			$label_prefix = isset( $this->parent->field['label_prefix'] ) ? $this->parent->field['label_prefix'] : '';
+			$label_prefix = isset( $this->parent_obj->field['label_prefix'] ) ? $this->parent_obj->field['label_prefix'] : '';
 
 			$html .= sprintf(
 				'<label class="anony-label" for="anony_%1$s">%2$s%3$s</label>',
-				$this->parent->field['id'],
+				$this->parent_obj->field['id'],
 				$label_prefix,
-				$this->parent->field['title']
+				$this->parent_obj->field['title']
 			);
 		}
 
@@ -100,17 +100,17 @@ class ANONY_Radio {
 			),
 		*/
 		$html .= '<div class="anony-radio-items">';
-		foreach ( $this->parent->field['options'] as $k => $v ) {
+		foreach ( $this->parent_obj->field['options'] as $k => $v ) {
 
-			$radioClass = isset( $v['class'] ) ? 'class="' . $v['class'] . ' ' . $this->parent->class_attr . '"' : '';
+			$radioClass = isset( $v['class'] ) ? 'class="' . $v['class'] . ' ' . $this->parent_obj->class_attr . '"' : '';
 
 			$html .= '<div class="anony-radio-item">';
 
-				$checked = checked( $this->parent->value, $k, false );
+				$checked = checked( $this->parent_obj->value, $k, false );
 
 				$search = array_search(
 					$k,
-					array_keys( $this->parent->field['options'] )
+					array_keys( $this->parent_obj->field['options'] )
 				);
 
 				$selected = ( $checked != '' ) ? ' anony-radio-selected' : '';
@@ -118,17 +118,17 @@ class ANONY_Radio {
 				$html .= sprintf(
 					'<label class="anony-radio%1$s anony-radio-%2$s" for="%2$s_%3$s">',
 					$selected,
-					$this->parent->field['id'],
+					$this->parent_obj->field['id'],
 					$search
 				);
 
 					$html .= sprintf(
 						'<input %1$s type="radio" id="%2$s_%3$s" name="%4$s" class="%5$s anony-radio-input" value="%6$s" %7$s />',
 						$radioClass,
-						$this->parent->field['id'],
+						$this->parent_obj->field['id'],
 						$search,
-						$this->parent->input_name,
-						$this->parent->class_attr,
+						$this->parent_obj->input_name,
+						$this->parent_obj->class_attr,
 						$k,
 						$checked
 					);
@@ -136,7 +136,7 @@ class ANONY_Radio {
 				$html .= '</label>';
 
 			if ( 'yes' === $this->show_only_labels ) {
-				$html .= sprintf( '<span class="radio-title anony-for-hidden-radio" data-id="%1$s_%3$s">%2$s</span>', $this->parent->field['id'], $v['title'], $search );
+				$html .= sprintf( '<span class="radio-title anony-for-hidden-radio" data-id="%1$s_%3$s">%2$s</span>', $this->parent_obj->field['id'], $v['title'], $search );
 			} else {
 				$html .= '<span class="radio-title">' . $v['title'] . '</span>';
 			}
@@ -145,7 +145,7 @@ class ANONY_Radio {
 		}
 		$html .= '</div>';
 
-		$html .= ( isset( $this->parent->field['desc'] ) && ! empty( $this->parent->field['desc'] ) ) ? '<br style="clear:both;"/><div class="description">' . $this->parent->field['desc'] . '</div>' : '';
+		$html .= ( isset( $this->parent_obj->field['desc'] ) && ! empty( $this->parent_obj->field['desc'] ) ) ? '<br style="clear:both;"/><div class="description">' . $this->parent_obj->field['desc'] . '</div>' : '';
 
 		$html .= '</fieldset>';
 

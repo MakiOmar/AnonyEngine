@@ -11,7 +11,7 @@ class ANONY_Color_gradient_farbtastic {
 	/**
 	 * @var object
 	 */
-	private $parent;
+	private $parent_obj;
 
 	/**
 	 * Field Constructor.
@@ -19,15 +19,15 @@ class ANONY_Color_gradient_farbtastic {
 	 * Required - must call the parent constructor, then assign field and value to vars, and obviously call the render field function
 	 *
 	 * @since Theme_Settings 1.0
-	 * @param object $parent Field parent object
+	 * @param object $parent_obj Field parent object
 	 */
-	public function __construct( $parent = null ) {
+	public function __construct( $parent_obj = null ) {
 
-		if ( ! is_object( $parent ) ) {
+		if ( ! is_object( $parent_obj ) ) {
 			return;
 		}
 
-		$this->parent = $parent;
+		$this->parent_obj = $parent_obj;
 
 		add_action( 'admin_print_footer_scripts', array( $this, 'footer_scripts' ) );
 
@@ -46,8 +46,8 @@ class ANONY_Color_gradient_farbtastic {
 		$from_style = '';
 		$from_value = '';
 
-		if ( isset( $this->parent->value['from'] ) ) {
-			$from_value = esc_attr( $this->parent->value['from'] );
+		if ( isset( $this->parent_obj->value['from'] ) ) {
+			$from_value = esc_attr( $this->parent_obj->value['from'] );
 
 			$from_style = 'style="background-color:' . $from_value . ';"';
 
@@ -56,78 +56,78 @@ class ANONY_Color_gradient_farbtastic {
 		$to_style = '';
 		$to_value = '';
 
-		if ( isset( $this->parent->value['to'] ) ) {
+		if ( isset( $this->parent_obj->value['to'] ) ) {
 
-			$to_value = esc_attr( $this->parent->value['to'] );
+			$to_value = esc_attr( $this->parent_obj->value['to'] );
 
 			$to_style = 'style="background-color:' . $to_value . ';"';
 
 		}
 
 		if ( isset( $field['note'] ) ) {
-			echo '<p class=anony-warning>' . $this->parent->field['note'] . '<p>';
+			echo '<p class=anony-warning>' . $this->parent_obj->field['note'] . '<p>';
 		}
 
-		$html = '<div class="farb-popup-wrapper" id="' . $this->parent->field['id'] . '">';
+		$html = '<div class="farb-popup-wrapper" id="' . $this->parent_obj->field['id'] . '">';
 
 		$html .= sprintf(
 			'<fieldset class="anony-row anony-row-inline" id="fieldset_%1$s">',
-			$this->parent->field['id']
+			$this->parent_obj->field['id']
 		);
 
 		// from field.
 		$html .= sprintf(
 			'<label for="%1$s-from" class="anony-input-lable">%2$s</label>',
-			$this->parent->field['id'],
+			$this->parent_obj->field['id'],
 			esc_html__( 'From', 'anonyengine' )
 		);
 
 		$html .= sprintf(
 			'<input type="text" id="%1$s-from" name="%2$s[from]" value="%3$s" class="%4$spopup-colorpicker"/>',
-			$this->parent->field['id'],
-			$this->parent->input_name,
+			$this->parent_obj->field['id'],
+			$this->parent_obj->input_name,
 			$from_value,
-			$this->parent->class_attr
+			$this->parent_obj->class_attr
 		);
 
 		$html .= sprintf(
 			'<div class="farb-popup"><div class="farb-popup-inside"><div id="%1$s-frompicker" class="color-picker"></div></div></div>',
-			$this->parent->field['id']
+			$this->parent_obj->field['id']
 		);
 
 		$html .= sprintf(
 			'<div class="color-prev prev-%1$s-from" %2$s rel="%1$s-from"></div>',
-			$this->parent->field['id'],
+			$this->parent_obj->field['id'],
 			$from_style
 		);
 
 		// to field.
 		$html .= sprintf(
 			'<label for="%1$s-to" class="anony-input-lable">%2$s</label>',
-			$this->parent->field['id'],
+			$this->parent_obj->field['id'],
 			esc_html__( 'To', 'anonyengine' )
 		);
 
 		$html .= sprintf(
 			'<input type="text" id="%1$s-to" name="%2$s[to]" value="%3$s" class="%4$spopup-colorpicker"/>',
-			$this->parent->field['id'],
-			$this->parent->input_name,
+			$this->parent_obj->field['id'],
+			$this->parent_obj->input_name,
 			$to_value,
-			$this->parent->class_attr
+			$this->parent_obj->class_attr
 		);
 
 		$html .= sprintf(
 			'<div class="farb-popup"><div class="farb-popup-inside"><div id="%1$s-topicker" class="color-picker"></div></div></div>',
-			$this->parent->field['id']
+			$this->parent_obj->field['id']
 		);
 
 		$html .= sprintf(
 			'<div class="color-prev prev-%1$s-to" %2$s rel="%1$s-to"></div>',
-			$this->parent->field['id'],
+			$this->parent_obj->field['id'],
 			$to_style
 		);
 
-		$html .= ( isset( $this->parent->field['desc'] ) && ! empty( $this->parent->field['desc'] ) ) ? ' <div class="description">' . $this->parent->field['desc'] . '</div>' : '';
+		$html .= ( isset( $this->parent_obj->field['desc'] ) && ! empty( $this->parent_obj->field['desc'] ) ) ? ' <div class="description">' . $this->parent_obj->field['desc'] . '</div>' : '';
 
 		$html .= '</fieldset>';
 

@@ -16,21 +16,21 @@ class ANONY_Color {
 	/**
 	 * @var object
 	 */
-	private $parent;
+	private $parent_obj;
 
 	/**
 	 * Color field Constructor.
 	 *
-	 * @param object $parent Field parent object
+	 * @param object $parent_obj Field parent object
 	 */
-	public function __construct( $parent = null ) {
-		if ( ! is_object( $parent ) ) {
+	public function __construct( $parent_obj = null ) {
+		if ( ! is_object( $parent_obj ) ) {
 			return;
 		}
 
-		$this->parent = $parent;
+		$this->parent_obj = $parent_obj;
 
-		$this->parent->value = esc_attr( $this->parent->value );
+		$this->parent_obj->value = esc_attr( $this->parent_obj->value );
 
 		add_action( 'admin_print_footer_scripts', array( $this, 'footer_scripts' ) );
 
@@ -46,27 +46,27 @@ class ANONY_Color {
 
 		$html = sprintf(
 			'<fieldset class="anony-row anony-row-inline" id="fieldset_%1$s">',
-			$this->parent->field['id']
+			$this->parent_obj->field['id']
 		);
 
-		if ( isset( $this->parent->field['note'] ) ) {
-			echo '<p class=anony-warning>' . $this->parent->field['note'] . '<p>';
+		if ( isset( $this->parent_obj->field['note'] ) ) {
+			echo '<p class=anony-warning>' . $this->parent_obj->field['note'] . '<p>';
 		}
 
-		if ( $this->parent->context == 'meta' && isset( $this->parent->field['title'] ) ) {
+		if ( $this->parent_obj->context == 'meta' && isset( $this->parent_obj->field['title'] ) ) {
 			$html .= sprintf(
 				'<label class="anony-label" for="%1$s">%2$s</label>',
-				$this->parent->field['id'],
-				$this->parent->field['title']
+				$this->parent_obj->field['id'],
+				$this->parent_obj->field['title']
 			);
 		}
 
 		$html .= sprintf(
 			'<input type="text" class="%1$s-text anony-color wp-color-picker-field" id="%2$s" name="%2$s" value="%3$s" data-default-color="%4$s" />',
-			$this->parent->class_attr,
-			$this->parent->input_name,
-			$this->parent->value,
-			$this->parent->default
+			$this->parent_obj->class_attr,
+			$this->parent_obj->input_name,
+			$this->parent_obj->value,
+			$this->parent_obj->default
 		);
 
 		$html .= '</fieldset>';

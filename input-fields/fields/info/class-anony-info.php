@@ -11,22 +11,22 @@ class ANONY_Info {
 	/**
 	 * @var object
 	 */
-	private $parent;
+	private $parent_obj;
 
 
 	/**
 	 * Color field Constructor.
 	 *
-	 * @param object $parent Field parent object
+	 * @param object $parent_obj Field parent object
 	 */
-	public function __construct( $parent = null ) {
-		if ( ! is_object( $parent ) ) {
+	public function __construct( $parent_obj = null ) {
+		if ( ! is_object( $parent_obj ) ) {
 			return;
 		}
 
-		$this->parent = $parent;
+		$this->parent_obj = $parent_obj;
 
-		$this->parent->value = esc_attr( $this->parent->value );
+		$this->parent_obj->value = esc_attr( $this->parent_obj->value );
 	}
 
 	/**
@@ -35,8 +35,8 @@ class ANONY_Info {
 	 * @return void
 	 */
 	public function render( $meta = false ) {
-		if ( key_exists( 'desc', $this->parent->field ) ) {
-			return '<p class="description" style="margin-left:-220px;">' . $this->parent->field['desc'] . '</p>';
+		if ( key_exists( 'desc', $this->parent_obj->field ) ) {
+			return '<p class="description" style="margin-left:-220px;">' . $this->parent_obj->field['desc'] . '</p>';
 		}
 	}
 }

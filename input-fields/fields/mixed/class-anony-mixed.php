@@ -14,35 +14,35 @@ class ANONY_Mixed {
 	/**
 	 * @var object
 	 */
-	private $parent;
+	private $parent_obj;
 
 	/**
 	 * Color field Constructor.
 	 *
-	 * @param object $parent Field parent object
+	 * @param object $parent_obj Field parent object
 	 */
-	public function __construct( $parent = null ) {
-		if ( ! is_object( $parent ) ) {
+	public function __construct( $parent_obj = null ) {
+		if ( ! is_object( $parent_obj ) ) {
 			return;
 		}
 
-		$this->parent = $parent;
+		$this->parent_obj = $parent_obj;
 
-		switch ( $this->parent->field['type'] ) {
+		switch ( $this->parent_obj->field['type'] ) {
 			case 'url':
-				$this->parent->value = esc_url( $this->parent->value );
+				$this->parent_obj->value = esc_url( $this->parent_obj->value );
 				break;
 
 			case 'email':
-				$this->parent->value = sanitize_email( $this->parent->value );
+				$this->parent_obj->value = sanitize_email( $this->parent_obj->value );
 				break;
 
 			case 'password':
-				$this->parent->value = '';// Passwords can't be visible
+				$this->parent_obj->value = '';// Passwords can't be visible
 				break;
 
 			default:
-				esc_attr( $this->parent->value );
+				esc_attr( $this->parent_obj->value );
 				break;
 		}
 	}
@@ -57,32 +57,32 @@ class ANONY_Mixed {
 	public function render() {
 
 		$readonly = '';
-		if ( ! empty( $this->parent->field['readonly'] ) && $this->parent->field['readonly'] ) {
+		if ( ! empty( $this->parent_obj->field['readonly'] ) && $this->parent_obj->field['readonly'] ) {
 			$readonly = ' readonly';
 		}
-		$placeholder = ( isset( $this->parent->field['placeholder'] ) ) ? 'placeholder="' . $this->parent->field['placeholder'] . '"' : '';
+		$placeholder = ( isset( $this->parent_obj->field['placeholder'] ) ) ? 'placeholder="' . $this->parent_obj->field['placeholder'] . '"' : '';
 
-		if ( $this->parent->field['type'] == 'number' ) {
+		if ( $this->parent_obj->field['type'] == 'number' ) {
 
-			$step = ( isset( $this->parent->field['step'] ) && ! empty( $this->parent->field['step'] ) ) ? 'step="' . $this->parent->field['step'] . '"' : '';
+			$step = ( isset( $this->parent_obj->field['step'] ) && ! empty( $this->parent_obj->field['step'] ) ) ? 'step="' . $this->parent_obj->field['step'] . '"' : '';
 
 			$lang = 'lang="en-EN"';
 
-			$lang = ( isset( $this->parent->field['lang'] ) && ! empty( $this->parent->field['lang'] ) ) ? $this->parent->field['lang'] : $lang;
+			$lang = ( isset( $this->parent_obj->field['lang'] ) && ! empty( $this->parent_obj->field['lang'] ) ) ? $this->parent_obj->field['lang'] : $lang;
 		}
 
-		if ( $this->parent->as_template ) {
+		if ( $this->parent_obj->as_template ) {
 			$html  = sprintf(
 				'<fieldset class="anony-row anony-row-inline"%2$s%3$s>',
-				$this->parent->field['id'],
-				$this->parent->field['type'] == 'hidden' ? ' style="display:none"' : '',
-				$this->parent->width
+				$this->parent_obj->field['id'],
+				$this->parent_obj->field['type'] == 'hidden' ? ' style="display:none"' : '',
+				$this->parent_obj->width
 			);
 			$html .= sprintf(
 				'<input  type="%1$s" name="%2$s" class="%3$s anony-row" %4$s %5$s %6$s %7$s/>',
-				$this->parent->field['type'],
-				$this->parent->input_name,
-				$this->parent->class_attr,
+				$this->parent_obj->field['type'],
+				$this->parent_obj->input_name,
+				$this->parent_obj->class_attr,
 				isset( $step ) ? ' ' . $step : '',
 				isset( $lang ) ? ' ' . $lang : '',
 				$placeholder,
@@ -95,33 +95,33 @@ class ANONY_Mixed {
 
 		$html = sprintf(
 			'<fieldset class="anony-row anony-row-inline%3$s" id="fieldset_%1$s"%2$s>',
-			$this->parent->field['id'],
-			$this->parent->field['type'] == 'hidden' ? ' style="display:none"' : '',
-			$this->parent->width
+			$this->parent_obj->field['id'],
+			$this->parent_obj->field['type'] == 'hidden' ? ' style="display:none"' : '',
+			$this->parent_obj->width
 		);
 
-		if ( isset( $this->parent->field['note'] ) ) {
-			$html .= '<p class=anony-warning>' . $this->parent->field['note'] . '<p>';
+		if ( isset( $this->parent_obj->field['note'] ) ) {
+			$html .= '<p class=anony-warning>' . $this->parent_obj->field['note'] . '<p>';
 		}
 
-		if ( in_array( $this->parent->context, array( 'meta', 'form' ) ) && isset( $this->parent->field['title'] ) ) {
+		if ( in_array( $this->parent_obj->context, array( 'meta', 'form' ) ) && isset( $this->parent_obj->field['title'] ) ) {
 			$html .= sprintf(
 				'<label class="anony-label" for="%1$s">%2$s</label>',
-				$this->parent->field['id'],
-				$this->parent->field['title']
+				$this->parent_obj->field['id'],
+				$this->parent_obj->field['title']
 			);
 		}
 
-		$min = isset( $this->parent->field['min'] ) ? ' min="' . $this->parent->field['min'] . '"' : '';
-		$max = isset( $this->parent->field['max'] ) ? ' max="' . $this->parent->field['max'] . '"' : '';
+		$min = isset( $this->parent_obj->field['min'] ) ? ' min="' . $this->parent_obj->field['min'] . '"' : '';
+		$max = isset( $this->parent_obj->field['max'] ) ? ' max="' . $this->parent_obj->field['max'] . '"' : '';
 
 		$html .= sprintf(
 			'<input id="%1$s" type="%2$s" name="%3$s" value="%4$s" class="%5$s" %6$s %7$s %8$s%9$s%10$s%11$s/>',
-			$this->parent->field['id'],
-			$this->parent->field['type'],
-			$this->parent->input_name,
-			$this->parent->value,
-			$this->parent->class_attr,
+			$this->parent_obj->field['id'],
+			$this->parent_obj->field['type'],
+			$this->parent_obj->input_name,
+			$this->parent_obj->value,
+			$this->parent_obj->class_attr,
 			isset( $step ) ? ' ' . $step : '',
 			isset( $lang ) ? ' ' . $lang : '',
 			$placeholder,
@@ -130,7 +130,7 @@ class ANONY_Mixed {
 			$readonly
 		);
 
-		$html .= ( isset( $this->parent->field['desc'] ) && ! empty( $this->parent->field['desc'] ) ) ? ' <div class="description ' . $this->parent->class_attr . '">' . $this->parent->field['desc'] . '</div>' : '';
+		$html .= ( isset( $this->parent_obj->field['desc'] ) && ! empty( $this->parent_obj->field['desc'] ) ) ? ' <div class="description ' . $this->parent_obj->class_attr . '">' . $this->parent_obj->field['desc'] . '</div>' : '';
 
 		$html .= '</fieldset>';
 
@@ -149,22 +149,22 @@ class ANONY_Mixed {
 
 		$html = sprintf(
 			'<div class="anony-row anony-row-inline" id="fieldset_%1$s">',
-			$this->parent->field['id']
+			$this->parent_obj->field['id']
 		);
 
-		if ( $this->parent->context == 'meta' && isset( $this->parent->field['title'] ) ) {
+		if ( $this->parent_obj->context == 'meta' && isset( $this->parent_obj->field['title'] ) ) {
 			$html .= sprintf(
 				'<label class="anony-label" for="%1$s">%2$s</label>',
-				$this->parent->field['id'],
-				$this->parent->field['title']
+				$this->parent_obj->field['id'],
+				$this->parent_obj->field['title']
 			);
 		}
 
 		$html .= sprintf(
 			'<span id="%1$s" class="%2$s">%3$s</span>',
-			$this->parent->field['id'],
-			$this->parent->class_attr,
-			$this->parent->value
+			$this->parent_obj->field['id'],
+			$this->parent_obj->class_attr,
+			$this->parent_obj->value
 		);
 
 		$html .= '</div>';

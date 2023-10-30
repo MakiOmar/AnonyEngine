@@ -12,7 +12,7 @@ class ANONY_Date_time {
 	/**
 	 * @var object
 	 */
-	private $parent;
+	private $parent_obj;
 
 
 	/**
@@ -41,24 +41,24 @@ class ANONY_Date_time {
 	 * Required - must call the parent constructor, then assign field and value to vars, and obviously call the render field function
 	 *
 	 * @param array  $field Array of field's data
-	 * @param object $parent Field parent object
+	 * @param object $parent_obj Field parent object
 	 */
-	public function __construct( $parent = null ) {
-		if ( ! is_object( $parent ) ) {
+	public function __construct( $parent_obj = null ) {
+		if ( ! is_object( $parent_obj ) ) {
 			return;
 		}
 
-		$this->parent = $parent;
+		$this->parent_obj = $parent_obj;
 
-		$this->parent->value = esc_attr( $this->parent->value );
+		$this->parent_obj->value = esc_attr( $this->parent_obj->value );
 
-		$this->date_format = isset( $this->parent->field['date-format'] ) ? $this->parent->field['date-format'] : 'dd-mm-yy';
+		$this->date_format = isset( $this->parent_obj->field['date-format'] ) ? $this->parent_obj->field['date-format'] : 'dd-mm-yy';
 
-		$this->time_format = isset( $this->parent->field['time-format'] ) ? $this->parent->field['time-format'] : 'hh:mm:s';
+		$this->time_format = isset( $this->parent_obj->field['time-format'] ) ? $this->parent_obj->field['time-format'] : 'hh:mm:s';
 
-		$this->get = isset( $this->parent->field['get'] ) ? $this->parent->field['get'] : 'datetime';
+		$this->get = isset( $this->parent_obj->field['get'] ) ? $this->parent_obj->field['get'] : 'datetime';
 
-		$this->picker_options = isset( $this->parent->field['picker-options'] ) ? $this->parent->field['picker-options'] :
+		$this->picker_options = isset( $this->parent_obj->field['picker-options'] ) ? $this->parent_obj->field['picker-options'] :
 
 			array(
 				'dateFormat' => $this->date_format,
@@ -67,7 +67,7 @@ class ANONY_Date_time {
 
 		add_action( 'admin_print_footer_scripts', array( &$this, 'footer_scripts' ) );
 
-		if ( isset( $this->parent->field['show_on_front'] ) && $this->parent->field['show_on_front'] == true ) {
+		if ( isset( $this->parent_obj->field['show_on_front'] ) && $this->parent_obj->field['show_on_front'] == true ) {
 			add_action( 'wp_print_footer_scripts', array( &$this, 'footer_scripts' ) );
 		}
 
@@ -81,18 +81,18 @@ class ANONY_Date_time {
 	 */
 	public function render( $meta = false ) {
 
-		$placeholder = isset( $this->parent->field['placeholder'] ) ? ' placeholder="' . $this->parent->field['placeholder'] . '"' : ' placeholder="' . $this->parent->field['title'] . '"';
+		$placeholder = isset( $this->parent_obj->field['placeholder'] ) ? ' placeholder="' . $this->parent_obj->field['placeholder'] . '"' : ' placeholder="' . $this->parent_obj->field['title'] . '"';
 
-		if ( $this->parent->as_template ) {
+		if ( $this->parent_obj->as_template ) {
 			$html  = sprintf(
 				'<fieldset class="anony-row anony-row-inline" id="fieldset_%1$s">',
-				$this->parent->field['id']
+				$this->parent_obj->field['id']
 			);
 			$html .= sprintf(
 				'<input type="text" name="%1$s" class="anony-%2$s %3$s"%4$s/>',
-				$this->parent->input_name,
-				$this->parent->field['id'],
-				$this->parent->class_attr,
+				$this->parent_obj->input_name,
+				$this->parent_obj->field['id'],
+				$this->parent_obj->class_attr,
 				$placeholder
 			);
 
@@ -103,33 +103,33 @@ class ANONY_Date_time {
 
 		$html = sprintf(
 			'<fieldset class="anony-row anony-row-inline" id="anony_fieldset_%1$s">',
-			$this->parent->field['id']
+			$this->parent_obj->field['id']
 		);
 
-		if ( $this->parent->context == 'meta' && isset( $this->parent->field['title'] ) ) {
+		if ( $this->parent_obj->context == 'meta' && isset( $this->parent_obj->field['title'] ) ) {
 			$html .= sprintf(
 				'<label class="anony-label" for="%1$s">%2$s</label>',
-				$this->parent->field['id'],
-				$this->parent->field['title']
+				$this->parent_obj->field['id'],
+				$this->parent_obj->field['title']
 			);
 		}
 
 		$html .= '<div class="anony-flex-column">';
 
 		if ( isset( $field['note'] ) ) {
-			echo '<p class=anony-warning>' . $this->parent->field['note'] . '<p>';
+			echo '<p class=anony-warning>' . $this->parent_obj->field['note'] . '<p>';
 		}
 
 		$html .= sprintf(
 			'<input type="text" name="%1$s" id="anony-%2$s" value="%3$s" class="anony-%2$s %4$s"%5$s/>',
-			$this->parent->input_name,
-			$this->parent->field['id'],
-			$this->parent->value,
-			$this->parent->class_attr,
+			$this->parent_obj->input_name,
+			$this->parent_obj->field['id'],
+			$this->parent_obj->value,
+			$this->parent_obj->class_attr,
 			$placeholder
 		);
 
-		$html .= ( isset( $this->parent->field['desc'] ) && ! empty( $this->parent->field['desc'] ) ) ? ' <div class="description ' . $this->parent->class_attr . '">' . $this->parent->field['desc'] . '</div>' : '';
+		$html .= ( isset( $this->parent_obj->field['desc'] ) && ! empty( $this->parent_obj->field['desc'] ) ) ? ' <div class="description ' . $this->parent_obj->class_attr . '">' . $this->parent_obj->field['desc'] . '</div>' : '';
 
 		$html .= '<div></fieldset>';
 
@@ -162,7 +162,7 @@ class ANONY_Date_time {
 
 		<script type="text/javascript">
 			jQuery(document).ready(function($){
-				var fieldClass = <?php echo '".anony-' . $this->parent->field['id'] . '"'; ?>;
+				var fieldClass = <?php echo '".anony-' . $this->parent_obj->field['id'] . '"'; ?>;
 				//console.log(fieldClass);
 
 				var DateTimeOptions = {
@@ -176,8 +176,8 @@ class ANONY_Date_time {
 									};
 				var getWhat = '<?php echo $this->get; ?>picker';
 
-				<?php if ( isset( $this->parent->field['nested-to'] ) ) { ?>
-					var nestedToId = <?php echo '".' . $this->parent->field['nested-to'] . '"'; ?>;
+				<?php if ( isset( $this->parent_obj->field['nested-to'] ) ) { ?>
+					var nestedToId = <?php echo '".' . $this->parent_obj->field['nested-to'] . '"'; ?>;
 					var nestedTo   = nestedToId + '-wrapper';
 				<?php } ?>
 				

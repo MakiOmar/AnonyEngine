@@ -12,22 +12,22 @@ class ANONY_Group_Close {
 	/**
 	 * @var object
 	 */
-	private $parent;
+	private $parent_obj;
 
 	/**
 	 * Color field Constructor.
 	 *
-	 * @param object $parent Field parent object
+	 * @param object $parent_obj Field parent object
 	 */
-	public function __construct( $parent = null ) {
+	public function __construct( $parent_obj = null ) {
 
-		if ( ! is_object( $parent ) ) {
+		if ( ! is_object( $parent_obj ) ) {
 			return;
 		}
 
-		$this->parent = $parent;
+		$this->parent_obj = $parent_obj;
 
-		$this->parent->value = '';
+		$this->parent_obj->value = '';
 	}
 
 	/**

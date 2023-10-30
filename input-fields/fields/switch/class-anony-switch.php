@@ -12,7 +12,7 @@ class ANONY_Switch {
 	/**
 	 * @var object
 	 */
-	private $parent;
+	private $parent_obj;
 
 	/**
 	 * Field Constructor.
@@ -20,17 +20,17 @@ class ANONY_Switch {
 	 * Required - must call the parent constructor, then assign field and value to vars, and obviously call the render field function
 	 *
 	 * @param array  $field Array of field's data
-	 * @param object $parent Field parent object
+	 * @param object $parent_obj Field parent object
 	 */
-	public function __construct( $parent = null ) {
+	public function __construct( $parent_obj = null ) {
 
-		if ( ! is_object( $parent ) ) {
+		if ( ! is_object( $parent_obj ) ) {
 			return;
 		}
 
-		$this->parent = $parent;
+		$this->parent_obj = $parent_obj;
 
-		$this->parent->value = esc_attr( $this->parent->value );
+		$this->parent_obj->value = esc_attr( $this->parent_obj->value );
 
 		$this->enqueue();
 	}
@@ -44,42 +44,42 @@ class ANONY_Switch {
 
 		$html = '';
 		// fix for value "off = 0".
-		if ( ! $this->parent->value ) {
-			$this->parent->value = 0;
+		if ( ! $this->parent_obj->value ) {
+			$this->parent_obj->value = 0;
 		}
 
 		$html .= sprintf(
 			'<fieldset class="anony-row%2$s" id="fieldset_%1$s">',
-			$this->parent->field['id'],
-			$this->parent->width
+			$this->parent_obj->field['id'],
+			$this->parent_obj->width
 		);
 
 		// fix for WordPress 3.6 meta options
-		if ( strpos( $this->parent->field['id'], '[]' ) === false ) {
-			$html .= '<input type="hidden" name="' . $this->parent->input_name . '" value="0" />';
+		if ( strpos( $this->parent_obj->field['id'], '[]' ) === false ) {
+			$html .= '<input type="hidden" name="' . $this->parent_obj->input_name . '" value="0" />';
 		}
 
-		if ( in_array( $this->parent->context, array( 'meta', 'form' ) ) && isset( $this->parent->field['title'] ) ) {
+		if ( in_array( $this->parent_obj->context, array( 'meta', 'form' ) ) && isset( $this->parent_obj->field['title'] ) ) {
 			$html .= sprintf(
 				'<label class="anony-label" for="anony_%1$s">%2$s</label>',
-				$this->parent->field['id'],
-				$this->parent->field['title']
+				$this->parent_obj->field['id'],
+				$this->parent_obj->field['title']
 			);
 		}
 
-		if ( ! empty( $this->parent->field['note'] ) ) {
-			$html .= '<p class=anony-warning>' . $this->parent->field['note'] . '<p>';
+		if ( ! empty( $this->parent_obj->field['note'] ) ) {
+			$html .= '<p class=anony-warning>' . $this->parent_obj->field['note'] . '<p>';
 		}
 
 		$html .= sprintf(
 			'<input type="checkbox" data-toggle="switch" id="%1$s" name="%2$s" %3$s value="1" %4$s />',
-			$this->parent->field['id'],
-			$this->parent->input_name,
-			$this->parent->class_attr,
-			checked( $this->parent->value, 1, false )
+			$this->parent_obj->field['id'],
+			$this->parent_obj->input_name,
+			$this->parent_obj->class_attr,
+			checked( $this->parent_obj->value, 1, false )
 		);
 
-		$html .= ( isset( $this->parent->field['desc'] ) && ! empty( $this->parent->field['desc'] ) ) ? '<div class="input-field-description">' . $this->parent->field['desc'] . '</div>' : '';
+		$html .= ( isset( $this->parent_obj->field['desc'] ) && ! empty( $this->parent_obj->field['desc'] ) ) ? '<div class="input-field-description">' . $this->parent_obj->field['desc'] . '</div>' : '';
 		$html .= '</fieldset>';
 		return $html;
 	}

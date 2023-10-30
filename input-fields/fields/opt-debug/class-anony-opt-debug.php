@@ -11,21 +11,21 @@ class ANONY_Opt_debug {
 	/**
 	 * @var object
 	 */
-	private $parent;
+	private $parent_obj;
 
 	/**
 	 * Color field Constructor.
 	 *
-	 * @param object $parent Field parent object
+	 * @param object $parent_obj Field parent object
 	 */
-	public function __construct( $parent = null ) {
-		if ( ! is_object( $parent ) ) {
+	public function __construct( $parent_obj = null ) {
+		if ( ! is_object( $parent_obj ) ) {
 			return;
 		}
 
-		$this->parent = $parent;
+		$this->parent_obj = $parent_obj;
 
-		$this->parent->value = esc_attr( $this->parent->value );
+		$this->parent_obj->value = esc_attr( $this->parent_obj->value );
 	}
 
 	/**
@@ -34,8 +34,8 @@ class ANONY_Opt_debug {
 	 * @return void
 	 */
 	public function render( $meta = false ) {
-		if ( key_exists( 'callback', $this->parent->field ) ) {
-			$debug = call_user_func( $this->parent->field['callback'] );
+		if ( key_exists( 'callback', $this->parent_obj->field ) ) {
+			$debug = call_user_func( $this->parent_obj->field['callback'] );
 
 			ANONY_HELP::neatVarDump( $debug );
 			return;

@@ -13,7 +13,7 @@ class ANONY_Checkbox {
 	/**
 	 * @var object
 	 */
-	private $parent;
+	private $parent_obj;
 
 	/**
 	 * @var array
@@ -23,37 +23,37 @@ class ANONY_Checkbox {
 	/**
 	 * Checkbox field Constructor.
 	 *
-	 * @param object $parent Field parent object
+	 * @param object $parent_obj Field parent object
 	 */
-	public function __construct( $parent = null ) {
+	public function __construct( $parent_obj = null ) {
 
-		if ( ! is_object( $parent ) ) {
+		if ( ! is_object( $parent_obj ) ) {
 			return;
 		}
 
-		$this->parent = $parent;
+		$this->parent_obj = $parent_obj;
 
 		$this->data = array(
 
-			'value'    => $this->parent->value ? $this->parent->value : 0, // 0 is fix for value "off = 0"
+			'value'    => $this->parent_obj->value ? $this->parent_obj->value : 0, // 0 is fix for value "off = 0"
 
-			'note'     => isset( $this->parent->field['note'] ) ? esc_html( $this->parent->field['note'] ) : false,
+			'note'     => isset( $this->parent_obj->field['note'] ) ? esc_html( $this->parent_obj->field['note'] ) : false,
 
-			'id'       => esc_attr( $this->parent->field['id'] ),
+			'id'       => esc_attr( $this->parent_obj->field['id'] ),
 
-			'context'  => $this->parent->context,
+			'context'  => $this->parent_obj->context,
 
-			'title'    => isset( $this->parent->field['title'] ) ? esc_html( $this->parent->field['title'] ) : false,
+			'title'    => isset( $this->parent_obj->field['title'] ) ? esc_html( $this->parent_obj->field['title'] ) : false,
 
-			'name'     => esc_attr( $this->parent->input_name ),
+			'name'     => esc_attr( $this->parent_obj->input_name ),
 
-			'options'  => isset( $this->parent->field['options'] ) ? $this->parent->field['options'] : false,
+			'options'  => isset( $this->parent_obj->field['options'] ) ? $this->parent_obj->field['options'] : false,
 
-			'class'    => esc_attr( $this->parent->class_attr ),
+			'class'    => esc_attr( $this->parent_obj->class_attr ),
 
-			'desc'     => isset( $this->parent->field['desc'] ) ? esc_html( $this->parent->field['desc'] ) : false,
+			'desc'     => isset( $this->parent_obj->field['desc'] ) ? esc_html( $this->parent_obj->field['desc'] ) : false,
 
-			'disabled' => isset( $this->parent->field['disabled'] ) && ( $this->parent->field['disabled'] == true ) ? " disabled = 'disabled' " : '',
+			'disabled' => isset( $this->parent_obj->field['disabled'] ) && ( $this->parent_obj->field['disabled'] == true ) ? " disabled = 'disabled' " : '',
 		);
 	}
 

@@ -12,22 +12,22 @@ class ANONY_Heading {
 	/**
 	 * @var object
 	 */
-	private $parent;
+	private $parent_obj;
 
 	/**
 	 * Color field Constructor.
 	 *
-	 * @param object $parent Field parent object
+	 * @param object $parent_obj Field parent object
 	 */
-	public function __construct( $parent = null ) {
+	public function __construct( $parent_obj = null ) {
 
-		if ( ! is_object( $parent ) ) {
+		if ( ! is_object( $parent_obj ) ) {
 			return;
 		}
 
-		$this->parent = $parent;
+		$this->parent_obj = $parent_obj;
 
-		$this->parent->value = '';
+		$this->parent_obj->value = '';
 	}
 
 	/**
@@ -35,20 +35,20 @@ class ANONY_Heading {
 	 */
 	public function render() {
 
-		$class = isset( $this->parent->field['class'] ) && ! is_null( $this->parent->field['class'] ) ? $this->parent->field['class'] : 'anony-meta-field';
+		$class = isset( $this->parent_obj->field['class'] ) && ! is_null( $this->parent_obj->field['class'] ) ? $this->parent_obj->field['class'] : 'anony-meta-field';
 
-		$tag = isset( $this->parent->field['tag'] ) && ! is_null( $this->parent->field['tag'] ) ? $this->parent->field['tag'] : 'h1';
+		$tag = isset( $this->parent_obj->field['tag'] ) && ! is_null( $this->parent_obj->field['tag'] ) ? $this->parent_obj->field['tag'] : 'h1';
 
 		$html = sprintf(
 			'<fieldset class="anony-row%2$s" id="fieldset_%1$s">',
-			$this->parent->field['id'],
-			$this->parent->width
+			$this->parent_obj->field['id'],
+			$this->parent_obj->width
 		);
 
 		$html .= sprintf(
 			'<%1$s class="anony-form-heading">%2$s</%1$s>',
 			$tag,
-			$this->parent->field['title']
+			$this->parent_obj->field['title']
 		);
 
 		$html .= '</fieldset>';

@@ -7241,11 +7241,11 @@
 
 				getLineHeight: function (elem) {
 					var $elem = $( elem ),
-					$parent   = $elem['offsetParent' in $.fn ? 'offsetParent' : 'parent']();
-					if ( ! $parent.length) {
-								$parent = $( 'body' );
+					$parent_obj   = $elem['offsetParent' in $.fn ? 'offsetParent' : 'parent']();
+					if ( ! $parent_obj.length) {
+								$parent_obj = $( 'body' );
 					}
-					return parseInt( $parent.css( 'fontSize' ), 10 ) || parseInt( $elem.css( 'fontSize' ), 10 ) || 16;
+					return parseInt( $parent_obj.css( 'fontSize' ), 10 ) || parseInt( $elem.css( 'fontSize' ), 10 ) || 16;
 				},
 
 				getPageHeight: function (elem) {

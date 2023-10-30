@@ -9,16 +9,16 @@ class ANONY_Color_gradient {
 	/**
 	 * @var object
 	 */
-	private $parent;
+	private $parent_obj;
 
 	// Consructor.
-	public function __construct( $parent = null ) {
+	public function __construct( $parent_obj = null ) {
 
-		if ( ! is_object( $parent ) ) {
+		if ( ! is_object( $parent_obj ) ) {
 			return;
 		}
 
-		$this->parent = $parent;
+		$this->parent_obj = $parent_obj;
 
 		add_action( 'admin_print_footer_scripts', array( $this, 'footer_scripts' ) );
 
@@ -27,21 +27,21 @@ class ANONY_Color_gradient {
 
 	public function render() {
 
-		$default = isset( $this->parent->default ) && ! is_null( $this->parent->default ) ? $this->parent->default : '#fff';
+		$default = isset( $this->parent_obj->default ) && ! is_null( $this->parent_obj->default ) ? $this->parent_obj->default : '#fff';
 
-		$from = isset( $this->parent->value['from'] ) ? esc_attr( $this->parent->value['from'] ) : $default;
+		$from = isset( $this->parent_obj->value['from'] ) ? esc_attr( $this->parent_obj->value['from'] ) : $default;
 
-		$to = isset( $this->parent->value['to'] ) ? esc_attr( $this->parent->value['to'] ) : $default;
+		$to = isset( $this->parent_obj->value['to'] ) ? esc_attr( $this->parent_obj->value['to'] ) : $default;
 
 		$html = sprintf(
 			'<fieldset class="anony-row anony-row-inline" id="fieldset_%1$s">',
-			$this->parent->field['id']
+			$this->parent_obj->field['id']
 		);
-		if ( $this->parent->context == 'meta' && isset( $this->parent->field['title'] ) ) {
+		if ( $this->parent_obj->context == 'meta' && isset( $this->parent_obj->field['title'] ) ) {
 			$html .= sprintf(
 				'<label class="anony-label" for="%1$s">%2$s</label>',
-				$this->parent->field['id'],
-				$this->parent->field['title']
+				$this->parent_obj->field['id'],
+				$this->parent_obj->field['title']
 			);
 		}
 
@@ -50,14 +50,14 @@ class ANONY_Color_gradient {
 
 			$html .= sprintf(
 				'<label class="anony-label-col" for="%1$s-from">%2$s</label>',
-				$this->parent->field['id'],
+				$this->parent_obj->field['id'],
 				esc_html__( 'From', 'anonyengine' )
 			);
 
 			$html .= sprintf(
 				'<input type="text" class="%1$s-text anony-color-from wp-color-picker-field" id="%2$s-from" name="%2$s[from]" value="%3$s" data-default-color="%4$s" />',
-				$this->parent->class_attr,
-				$this->parent->input_name,
+				$this->parent_obj->class_attr,
+				$this->parent_obj->input_name,
 				$from,
 				$default
 			);
@@ -65,14 +65,14 @@ class ANONY_Color_gradient {
 
 			$html .= sprintf(
 				'<label class="anony-label-col" for="%1$s-to">%2$s</label>',
-				$this->parent->field['id'],
+				$this->parent_obj->field['id'],
 				esc_html__( 'To', 'anonyengine' )
 			);
 
 			$html .= sprintf(
 				'<input type="text" class="%1$s-text anony-color-to wp-color-picker-field" id="%2$s-to" name="%2$s[to]" value="%3$s" data-default-color="%4$s" />',
-				$this->parent->class_attr,
-				$this->parent->input_name,
+				$this->parent_obj->class_attr,
+				$this->parent_obj->input_name,
 				$to,
 				$default
 			);

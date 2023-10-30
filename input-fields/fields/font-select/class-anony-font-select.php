@@ -12,21 +12,21 @@ class ANONY_Font_select {
 	/**
 	 * @var object
 	 */
-	private $parent;
+	private $parent_obj;
 
 	/**
 	 * Color field Constructor.
 	 *
-	 * @param object $parent Field parent object
+	 * @param object $parent_obj Field parent object
 	 */
-	public function __construct( $parent = null ) {
-		if ( ! is_object( $parent ) ) {
+	public function __construct( $parent_obj = null ) {
+		if ( ! is_object( $parent_obj ) ) {
 			return;
 		}
 
-		$this->parent = $parent;
+		$this->parent_obj = $parent_obj;
 
-		$this->parent->value = esc_attr( $this->parent->value );
+		$this->parent_obj->value = esc_attr( $this->parent_obj->value );
 	}
 
 	/**
@@ -48,28 +48,28 @@ class ANONY_Font_select {
 
 		$html = sprintf(
 			'<fieldset class="anony-row anony-row-inline" id="fieldset_%1$s">',
-			$this->parent->field['id']
+			$this->parent_obj->field['id']
 		);
 
 		if ( isset( $field['note'] ) ) {
-			echo '<p class=anony-warning>' . $this->parent->field['note'] . '<p>';
+			echo '<p class=anony-warning>' . $this->parent_obj->field['note'] . '<p>';
 		}
 
-		if ( $this->parent->context == 'meta' && isset( $this->parent->field['title'] ) ) {
+		if ( $this->parent_obj->context == 'meta' && isset( $this->parent_obj->field['title'] ) ) {
 			$html .= sprintf(
 				'<label class="anony-label" for="%1$s">%2$s</label>',
-				$this->parent->field['id'],
-				$this->parent->field['title']
+				$this->parent_obj->field['id'],
+				$this->parent_obj->field['title']
 			);
 		}
 
-		$html .= sprintf( '<select name="%1$s" class="%2$s-select %2$s" rows="6" >', $this->parent->input_name, $this->parent->class_attr );
+		$html .= sprintf( '<select name="%1$s" class="%2$s-select %2$s" rows="6" >', $this->parent_obj->input_name, $this->parent_obj->class_attr );
 
-		$html .= ANONY_Post_Help::renderHtmlOptsGroups( $fonts, $opts_groups, $this->parent->value );
+		$html .= ANONY_Post_Help::renderHtmlOptsGroups( $fonts, $opts_groups, $this->parent_obj->value );
 
 		$html .= '</select>';
 
-		$html .= ( isset( $this->parent->field['desc'] ) && ! empty( $this->parent->field['desc'] ) ) ? ' <div class="description">' . $this->parent->field['desc'] . '</div>' : '';
+		$html .= ( isset( $this->parent_obj->field['desc'] ) && ! empty( $this->parent_obj->field['desc'] ) ) ? ' <div class="description">' . $this->parent_obj->field['desc'] . '</div>' : '';
 
 		$html .= '</fieldset>';
 

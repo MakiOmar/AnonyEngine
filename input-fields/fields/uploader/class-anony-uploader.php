@@ -24,7 +24,7 @@ class ANONY_Uploader {
 	/**
 	 * @var object
 	 */
-	private $parent;
+	private $parent_obj;
 
 	/**
 	 * Field Constructor.
@@ -32,15 +32,15 @@ class ANONY_Uploader {
 	 * Required - must call the parent constructor, then assign field and value to vars,
 	 * and obviously call the render field function.
 	 *
-	 * @param object $parent Field parent object.
+	 * @param object $parent_obj Field parent object.
 	 */
-	public function __construct( $parent = null ) {
+	public function __construct( $parent_obj = null ) {
 
-		if ( ! is_object( $parent ) ) {
+		if ( ! is_object( $parent_obj ) ) {
 			return;
 		}
 
-		$this->parent = $parent;
+		$this->parent_obj = $parent_obj;
 		$this->enqueue();
 	}
 
@@ -61,24 +61,24 @@ class ANONY_Uploader {
 	}
 
 	protected function note( &$html ) {
-		if ( isset( $this->parent->field['note'] ) ) {
-			$html .= '<p class=anony-warning>' . $this->parent->field['note'] . '<p>';
+		if ( isset( $this->parent_obj->field['note'] ) ) {
+			$html .= '<p class=anony-warning>' . $this->parent_obj->field['note'] . '<p>';
 		}
 	}
 
 	protected function fieldset_open( &$html ) {
 		$html .= sprintf(
 			'<fieldset class="anony-row anony-row-inline" id="fieldset_%1$s">',
-			$this->parent->field['id']
+			$this->parent_obj->field['id']
 		);
 	}
 
 	protected function label( &$html ) {
-		if ( ( 'meta' === $this->parent->context || 'form' === $this->parent->context ) && isset( $this->parent->field['title'] ) ) {
+		if ( ( 'meta' === $this->parent_obj->context || 'form' === $this->parent_obj->context ) && isset( $this->parent_obj->field['title'] ) ) {
 			$html .= sprintf(
 				'<label class="anony-label" for="%1$s">%2$s</label>',
-				esc_attr( $this->parent->field['id'] ),
-				esc_html( $this->parent->field['title'] )
+				esc_attr( $this->parent_obj->field['id'] ),
+				esc_html( $this->parent_obj->field['title'] )
 			);
 		}
 	}
@@ -86,18 +86,18 @@ class ANONY_Uploader {
 	protected function input_priv( &$html ) {
 		$html .= sprintf(
 			'<input id="%4$s" type="hidden" name="%1$s" value="%2$s" class="%3$s" />',
-			$this->parent->input_name,
-			$this->parent->value,
-			$this->parent->class_attr,
-			esc_attr( $this->parent->field['id'] )
+			$this->parent_obj->input_name,
+			$this->parent_obj->value,
+			$this->parent_obj->class_attr,
+			esc_attr( $this->parent_obj->field['id'] )
 		);
 	}
 
 	protected function input_nopriv( &$html ) {
 		$html .= sprintf(
 			'<input type="file" id="%1$s" class="anony-uploader" name="%1$s" style="display:none"/>',
-			esc_attr( $this->parent->field['id'] ),
-			$this->parent->input_name,
+			esc_attr( $this->parent_obj->field['id'] ),
+			$this->parent_obj->input_name,
 		);
 	}
 
@@ -105,9 +105,9 @@ class ANONY_Uploader {
 		$html        .= '<div class="uploads-wrapper">';
 		$image_exts   = array( 'jpg', 'jpeg', 'jpe', 'gif', 'png', 'svg' );
 		$img_ext_preg = '!\.(' . join( '|', $image_exts ) . ')$!i';
-		$src          = wp_get_attachment_url( $this->parent->value );
-		if ( ! empty( $this->parent->value ) && wp_http_validate_url( $src ) ) {
-			if ( preg_match( $img_ext_preg, $this->parent->value ) ) {
+		$src          = wp_get_attachment_url( $this->parent_obj->value );
+		if ( ! empty( $this->parent_obj->value ) && wp_http_validate_url( $src ) ) {
+			if ( preg_match( $img_ext_preg, $this->parent_obj->value ) ) {
 				$html .= '<img class="anony-opts-screenshot" style="max-width:80px;" src="' . $src . '" />';
 			} else {
 				$file_basename = wp_basename( $src );
@@ -126,9 +126,9 @@ class ANONY_Uploader {
 		$html        .= '<div class="uploads-wrapper">';
 		$image_exts   = array( 'jpg', 'jpeg', 'jpe', 'gif', 'png', 'svg' );
 		$img_ext_preg = '!\.(' . join( '|', $image_exts ) . ')$!i';
-		$src          = wp_get_attachment_url( $this->parent->value );
-		if ( ! empty( $this->parent->value ) && wp_http_validate_url( $src ) ) {
-			if ( preg_match( $img_ext_preg, $this->parent->value ) ) {
+		$src          = wp_get_attachment_url( $this->parent_obj->value );
+		if ( ! empty( $this->parent_obj->value ) && wp_http_validate_url( $src ) ) {
+			if ( preg_match( $img_ext_preg, $this->parent_obj->value ) ) {
 				$html .= '<img class="anony-opts-screenshot" style="max-width:80px;" src="' . $src . '" />';
 			} else {
 				$file_basename = wp_basename( $src );
@@ -144,7 +144,7 @@ class ANONY_Uploader {
 	}
 
 	protected function button( &$html ) {
-		if ( '' === $this->parent->value ) {
+		if ( '' === $this->parent_obj->value ) {
 			$remove = ' style="display:none;"';
 			$upload = '';
 		} else {
@@ -156,14 +156,14 @@ class ANONY_Uploader {
 			' <a href="javascript:void(0);" data-id="%3$s" data-choose="Choose a File" data-update="Select File" class="anony-opts-upload uploader-trigger"%1$s><span></span>%2$s</a>',
 			$upload,
 			esc_html__( 'Browse', 'anonyengine' ),
-			esc_attr( $this->parent->field['id'] )
+			esc_attr( $this->parent_obj->field['id'] )
 		);
 
 		$html .= sprintf(
 			'<br><a href="javascript:void(0);" data-id="%3$s" class="anony-opts-upload-remove"%1$s>%2$s</a>',
 			$remove,
 			esc_html__( 'Remove Upload', 'anonyengine' ),
-			esc_attr( $this->parent->field['id'] )
+			esc_attr( $this->parent_obj->field['id'] )
 		);
 	}
 
@@ -172,7 +172,7 @@ class ANONY_Uploader {
 	}
 
 	protected function description( &$html ) {
-		$html .= ( isset( $this->parent->field['desc'] ) && ! empty( $this->parent->field['desc'] ) ) ? '<div class="description">' . $this->parent->field['desc'] . '</div>' : '';
+		$html .= ( isset( $this->parent_obj->field['desc'] ) && ! empty( $this->parent_obj->field['desc'] ) ) ? '<div class="description">' . $this->parent_obj->field['desc'] . '</div>' : '';
 	}
 
 	protected function close_fieldset( &$html ) {

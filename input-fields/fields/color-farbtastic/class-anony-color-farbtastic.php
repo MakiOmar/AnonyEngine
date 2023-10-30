@@ -35,7 +35,11 @@ class ANONY_Color_farbtastic {
 
 		add_action( 'admin_print_footer_scripts', array( $this, 'footer_scripts' ) );
 
-		$this->enqueue();
+		if ( is_admin() ) {
+			add_action( 'admin_enqueue_scripts', array( $this, 'enqueue' ) );
+		} else {
+			add_action( 'wp_enqueue_scripts', array( $this, 'enqueue' ) );
+		}
 	}
 
 	/**
@@ -94,7 +98,7 @@ class ANONY_Color_farbtastic {
 	/**
 	 * Enqueue scripts.
 	 */
-	function enqueue() {
+	public function enqueue() {
 		wp_enqueue_style( 'farbtastic' );
 		wp_enqueue_script( 'anony-farbtastic-color-js', ANONY_FIELDS_URI . 'color-farbtastic/field_color.js', array( 'jquery', 'farbtastic' ), time(), true );
 

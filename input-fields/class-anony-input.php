@@ -84,9 +84,7 @@ if ( ! class_exists( 'ANONY_Input' ) ) {
 		/**
 		 * Inpud field constructor That decides field context
 		 *
-		 * @param array    $field    An array of field's data
-		 * @param string   $context  The context of where the field is used (option | meta | form)
-		 * @param int|null $object_id  Should be an integer if the context is meta box
+		 * @param array    $args    Field arguments.
 		 */
 		function __construct( $args ) {
 

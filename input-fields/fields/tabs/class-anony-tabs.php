@@ -65,7 +65,7 @@ class ANONY_Tabs {
 
 		$html .= '<ul class="tabs-ul">';
 
-		// default tab to clone
+		// default tab to clone.
 				$html     .= '<li class="tabs-default">';
 					$html .= '<div class="anony-tab-item"><label class="anony-label">' . esc_html__( 'Title', 'anonyengine' ) . '</label>';
 					$html .= '<input type="text" name="' . $this->parent->input_name . '[data-' . ( $count ) . '][title]" value="" /></div>';

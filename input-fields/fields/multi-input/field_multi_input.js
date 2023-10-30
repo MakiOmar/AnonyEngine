@@ -9,16 +9,16 @@ jQuery( document ).ready(
 
 				var targetId = thisBtn.attr( 'rel-id' );
 
-				// Target element to be duplicated
+				// Target element to be duplicated.
 				var targetClass = thisBtn.attr( 'rel-class' );
 
-				// set new count
+				// set new count.
 				$( '#' + targetId + '-counter' ).val( parseInt( $( '#' + targetId + '-counter' ).val() ) + 1 );
 
-				// Counter for duplication
+				// Counter for duplication.
 				var targetCounter = $( '#' + targetId + '-counter' ).val();
 
-				// Template id
+				// Template id.
 				var defaultId = targetId + '-default';
 
 				var dafaultHtml = $( '#' + defaultId ).html();

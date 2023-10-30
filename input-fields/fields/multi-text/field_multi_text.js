@@ -1,13 +1,13 @@
 jQuery(document).ready(function(){
 	
-	// delete
+	// delete.
 	jQuery('.multi-text-remove').click(function(e){
 		e.preventDefault();
 		jQuery(this).prev('input[type="text"]').val('');
 		jQuery(this).parent().fadeOut(300, function(){jQuery(this).remove();});
 	});
 	
-	// add
+	// add.
 	jQuery('.multi-text-btn').click(function(){
 		var new_input = jQuery('#'+jQuery(this).attr('rel-id')+' li.multi-text-default').clone(true);
 		var new_input_val = jQuery(this).siblings('.multi-text-add').val();

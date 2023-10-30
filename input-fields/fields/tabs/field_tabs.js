@@ -1,6 +1,6 @@
 jQuery(document).ready(function($){
 
-	// sortable init
+	// sortable init.
 	$('.tabs-ul').hover(function(){
 		$('.tabs-ul').sortable({ 
 			cursor	: 'move',
@@ -9,10 +9,10 @@ jQuery(document).ready(function($){
 	});
 	
 	
-	// add
+	// add.
 	$('.anony-add-tab').click(function(){
 		if($('.tabs-default').length != 0){
-			// increase tabs counter
+			// increase tabs counter.
 			var tabs_counter = $(this).siblings('.anony-tabs-count');
 			tabs_counter.val(tabs_counter.val()*1 + 1);
 			console.log(tabs_counter);
@@ -34,11 +34,11 @@ jQuery(document).ready(function($){
 		
 	});
 	
-	// delete
+	// delete.
 	$('.anony-remove-tab').click(function(e){
 		e.preventDefault();
 		
-		// decrease tabs counter
+		// decrease tabs counter.
 		var tabs_counter = $(this).parents('td').children('.anony-tabs-count');
 		tabs_counter.val(tabs_counter.val()*1 - 1);
 		

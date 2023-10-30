@@ -19,7 +19,7 @@
 
 			if (file) {
 				if (file.type.startsWith( "image/" )) {
-					// Display image preview
+					// Display image preview.
 					var reader = new FileReader();
 
 					reader.onload = function (e) {
@@ -28,7 +28,7 @@
 					reader.readAsDataURL( file );
 
 				} else {
-					// Display file icon with file name
+					// Display file icon with file name.
 
 					previewContainer.attr( "src", anony_upload.url );
 					var fileName = $( "<span>" ).text( file.name );

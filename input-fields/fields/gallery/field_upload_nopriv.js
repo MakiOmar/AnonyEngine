@@ -28,7 +28,7 @@ function AnonyUpload(){
 					for (let i = 0; i < files.length; i++) {
 						var file = files[i];
 						if (file.type.startsWith( "image/" )) {
-							// Display image preview
+							// Display image preview.
 							var reader = new FileReader();
 
 							reader.onload = function (e) {
@@ -47,7 +47,7 @@ function AnonyUpload(){
 							reader.readAsDataURL( file );
 
 						} else {
-							// Display file icon with file name
+							// Display file icon with file name.
 							var fileName = $( "<span>" ).text( file.name );
 							var img      = $(
 								"<img />",

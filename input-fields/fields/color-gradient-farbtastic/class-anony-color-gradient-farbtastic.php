@@ -75,7 +75,7 @@ class ANONY_Color_gradient_farbtastic {
 			$this->parent->field['id']
 		);
 
-		// from field
+		// from field.
 		$html .= sprintf(
 			'<label for="%1$s-from" class="anony-input-lable">%2$s</label>',
 			$this->parent->field['id'],
@@ -101,7 +101,7 @@ class ANONY_Color_gradient_farbtastic {
 			$from_style
 		);
 
-		// to field
+		// to field.
 		$html .= sprintf(
 			'<label for="%1$s-to" class="anony-input-lable">%2$s</label>',
 			$this->parent->field['id'],

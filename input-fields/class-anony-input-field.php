@@ -188,7 +188,7 @@ if ( ! class_exists( 'ANONY_Input_Field' ) ) {
 			$single = ( isset( $this->field['multiple'] ) && $this->field['multiple'] ) ? false : true;
 
 			// This should be field value to be passed to input field object.
-			// Now within the multi value input field
+			// Now within the multi value input field.
 			if ( ! is_null( $this->field_value ) ) {
 
 				$meta = $this->field_value;
@@ -215,7 +215,7 @@ if ( ! class_exists( 'ANONY_Input_Field' ) ) {
 		 */
 		function select_field() {
 			if ( isset( $this->field['type'] ) ) {
-				// Static class name for inputs that have same HTML markup
+				// Static class name for inputs that have same HTML markup.
 				if ( in_array( $this->field['type'], $this->mixed_types ) ) {
 					$this->field_class = 'ANONY_Mixed';
 				} else {
@@ -237,13 +237,13 @@ if ( ! class_exists( 'ANONY_Input_Field' ) ) {
 
 				$field = new $field_class( $this );
 
-				// Options fields can't be on frontend
+				// Options fields can't be on frontend.
 				if ( $this->context == 'option' ) {
 					return $field->render();
 				}
 
 				if ( $this->context == 'meta' && ! is_admin() ) {
-					// If there is an insert Or edit front end action
+					// If there is an insert Or edit front end action.
 					if ( isset( $_GET['action'] ) && ! empty( $_GET['action'] ) && isset( $_GET['_wpnonce'] ) && ! empty( $_GET['_wpnonce'] ) ) {
 
 						switch ( $_GET['action'] ) {

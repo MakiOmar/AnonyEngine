@@ -11,7 +11,7 @@ class ANONY_Color_gradient {
 	 */
 	private $parent;
 
-	// Consructor
+	// Consructor.
 	public function __construct( $parent = null ) {
 
 		if ( ! is_object( $parent ) ) {
@@ -46,7 +46,7 @@ class ANONY_Color_gradient {
 		}
 
 			$html .= '<div class="anony-metabox-col">';
-			// From
+			// From.
 
 			$html .= sprintf(
 				'<label class="anony-label-col" for="%1$s-from">%2$s</label>',
@@ -61,7 +61,7 @@ class ANONY_Color_gradient {
 				$from,
 				$default
 			);
-			// To
+			// To.
 
 			$html .= sprintf(
 				'<label class="anony-label-col" for="%1$s-to">%2$s</label>',
@@ -101,7 +101,7 @@ class ANONY_Color_gradient {
 		
 		<script type="text/javascript">
 			jQuery(document).ready(function($) {
-				//color picker
+				//color picker.
 				$('.anony-color-from').wpColorPicker();
 				$('.anony-color-to').wpColorPicker();
 			});

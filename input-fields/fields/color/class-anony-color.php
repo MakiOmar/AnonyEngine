@@ -91,7 +91,7 @@ class ANONY_Color {
 		
 		<script type="text/javascript">
 			jQuery(document).ready(function($) {
-				//color picker
+				//color picker.
 				$('.anony-color').wpColorPicker();
 			});
 		</script>

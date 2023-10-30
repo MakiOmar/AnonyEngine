@@ -217,10 +217,10 @@ if ( ! class_exists( 'ANONY_Tel' ) ) {
 					/*jQuery(document).ready(function(e) {
 						e("#<?php echo $this->parent->field['id']; ?>").intlTelInput();
 					});*/
-					// Vanilla Javascript
+					// Vanilla Javascript.
 					var input = document.querySelector("#<?php echo $this->parent->field['id']; ?>");
 					window.intlTelInput(input,({
-						// specify the path to the libphonenumber script to enable validation/formatting
+						// specify the path to the libphonenumber script to enable validation/formatting.
 						utilsScript: '<?php echo ANONY_FIELDS_URI; ?>tel/js/utils.js',
 						autoHideDialCode: false,
 						nationalMode: false

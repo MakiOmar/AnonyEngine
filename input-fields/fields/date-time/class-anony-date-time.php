@@ -143,13 +143,13 @@ class ANONY_Date_time {
 
 		$wp_scripts = wp_scripts();
 
-		// Scripts
+		// Scripts.
 		wp_enqueue_script( 'jquery' );
 		wp_enqueue_script( 'jquery-ui-core' );
 		wp_enqueue_script( 'jquery-ui-datepicker' );
 		wp_enqueue_script( 'jquery-ui-timepicker-addon', ANONY_FIELDS_URI . 'date-time/jquery-ui-timepicker-addon.js', array( 'jquery', 'jquery-ui-datepicker', 'jquery-ui-core' ) );
 
-		// Styles
+		// Styles.
 		wp_enqueue_style( 'jquery-ui-css', ANONY_FIELDS_URI . 'date-time/jquery-ui.css' );
 		wp_enqueue_style( 'jquery-ui-timepicker-addon', ANONY_FIELDS_URI . 'date-time/jquery-ui-timepicker-addon.css', array( 'jquery-ui-css' ) );
 	}
@@ -167,7 +167,7 @@ class ANONY_Date_time {
 
 				var DateTimeOptions = {
 										<?php
-											// Options for datetime picker
+											// Options for datetime picker.
 										foreach ( $this->picker_options as $key => $value ) {
 											echo $key . ':' . '"' . $value . '",';
 										}

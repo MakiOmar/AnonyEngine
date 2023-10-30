@@ -85,7 +85,7 @@ class ANONY_Radio {
 			);
 		}
 
-		// options sample
+		// options sample.
 		/*
 			$options = array(
 				'featured-cat'  => array(

@@ -66,7 +66,7 @@ jQuery( document ).ready(
 			}
 		);
 
-		// additional preview field
+		// additional preview field.
 		jQuery( 'input.popup-colorpicker' ).change(
 			function () {
 				var id = jQuery( this ).attr( 'id' )

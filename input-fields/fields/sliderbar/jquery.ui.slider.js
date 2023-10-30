@@ -14,8 +14,8 @@
  */
 (function ( $, undefined ) {
 
-	// number of pages in a slider
-	// (how many times can you page up/down to go through the whole range)
+	// number of pages in a slider.
+	// (how many times can you page up/down to go through the whole range).
 	var numPages = 5;
 
 	$.widget(
@@ -78,8 +78,8 @@
 					.appendTo( this.element )
 					.addClass(
 						"ui-slider-range" +
-						// note: this isn't the most fittingly semantic framework class for this element,
-						// but worked best visually with a variety of themes
+						// note: this isn't the most fittingly semantic framework class for this element,.
+						// but worked best visually with a variety of themes.
 						" ui-widget-header" +
 						( ( o.range === "min" || o.range === "max" ) ? " ui-slider-range-" + o.range : "" )
 					);
@@ -282,9 +282,9 @@
 					}
 				);
 
-				// workaround for bug #3736 (if both handles of a range are at 0,
-				// the first is always used as the one with least distance,
-				// and moving it is obviously prevented by preventing negative ranges)
+				// workaround for bug #3736 (if both handles of a range are at 0,.
+				// the first is always used as the one with least distance,.
+				// and moving it is obviously prevented by preventing negative ranges).
 				if ( o.range === true && this.values( 1 ) === o.min ) {
 					index        += 1;
 					closestHandle = $( this.handles[index] );
@@ -412,7 +412,7 @@
 					if ( newVal !== this.values( index ) ) {
 						newValues          = this.values();
 						newValues[ index ] = newVal;
-						// A slide can be canceled by returning false from the slide callback
+						// A slide can be canceled by returning false from the slide callback.
 						allowed  = this._trigger(
 							"slide",
 							event,
@@ -429,7 +429,7 @@
 					}
 				} else {
 					if ( newVal !== this.value() ) {
-						// A slide can be canceled by returning false from the slide callback
+						// A slide can be canceled by returning false from the slide callback.
 						allowed = this._trigger(
 							"slide",
 							event,
@@ -563,8 +563,8 @@
 				}
 			},
 
-			// internal value getter
-			// _value() returns value trimmed by min and max, aligned by step
+			// internal value getter.
+			// _value() returns value trimmed by min and max, aligned by step.
 			_value: function () {
 				var val = this.options.value;
 				val     = this._trimAlignValue( val );
@@ -572,9 +572,9 @@
 				return val;
 			},
 
-			// internal values getter
-			// _values() returns array of values trimmed by min and max, aligned by step
-			// _values( index ) returns single value trimmed by min and max, aligned by step
+			// internal values getter.
+			// _values() returns array of values trimmed by min and max, aligned by step.
+			// _values( index ) returns single value trimmed by min and max, aligned by step.
 			_values: function ( index ) {
 				var val,
 				vals,
@@ -587,7 +587,7 @@
 					return val;
 				} else {
 					// .slice() creates a copy of the array
-					// this copy gets trimmed by min and max and then returned
+					// this copy gets trimmed by min and max and then returned.
 					vals = this.options.values.slice();
 					for ( i = 0; i < vals.length; i += 1) {
 						vals[ i ] = this._trimAlignValue( vals[ i ] );
@@ -597,7 +597,7 @@
 				}
 			},
 
-			// returns the step-aligned value that val is closest to, between (inclusive) min and max
+			// returns the step-aligned value that val is closest to, between (inclusive) min and max.
 			_trimAlignValue: function ( val ) {
 				if ( val <= this._valueMin() ) {
 					return this._valueMin();
@@ -613,8 +613,8 @@
 					alignValue += ( valModStep > 0 ) ? step : ( -step );
 				}
 
-				// Since JavaScript has problems with large floats, round
-				// the final value to 5 digits after the decimal point (see #4124)
+				// Since JavaScript has problems with large floats, round.
+				// the final value to 5 digits after the decimal point (see #4124).
 				return parseFloat( alignValue.toFixed( 5 ) );
 			},
 

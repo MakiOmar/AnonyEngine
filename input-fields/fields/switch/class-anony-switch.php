@@ -43,7 +43,7 @@ class ANONY_Switch {
 	public function render() {
 
 		$html = '';
-		// fix for value "off = 0"
+		// fix for value "off = 0".
 		if ( ! $this->parent->value ) {
 			$this->parent->value = 0;
 		}

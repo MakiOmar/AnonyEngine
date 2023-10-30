@@ -17,7 +17,7 @@ function AnonyUpload(){
 			}
 		);
 
-		// Store original function
+		// Store original function.
 		window.original_send_to_editor = window.send_to_editor;
 
 		window.send_to_editor = function (html) {

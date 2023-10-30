@@ -80,7 +80,7 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 		 * @var array
 		 */
 		public $form;
-		
+
 		/**
 		 * Form fields.
 		 *
@@ -124,7 +124,7 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 		 * @var object
 		 */
 		public $validated = array();
-		
+
 		/**
 		 * Holds form actions results.
 		 *
@@ -140,9 +140,9 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 		public function __construct( array $form ) {
 
 			$this->form = $form;
-			
-			$this->form_attributes = $this->form_attributes($form);
-			
+
+			$this->form_attributes = $this->form_attributes( $form );
+
 			// Set form Settings.
 			if ( isset( $settings ) && is_array( $settings ) ) {
 				$this->form_settings( $settings );
@@ -152,91 +152,88 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 				$this->action_list = $form['action_list'];
 			}
 
-			$this->id           = !empty( $form['id'] ) ? $form['id'] : '';
-			$this->fields       = !empty( $form['fields'] ) ? $form['fields'] : array();
-			
+			$this->id     = ! empty( $form['id'] ) ? $form['id'] : '';
+			$this->fields = ! empty( $form['fields'] ) ? $form['fields'] : array();
+
 			if (
 				count( array_intersect( $this->form_init, array_keys( $form ) ) ) !== count( $this->form_init )
 				||
 				'' === $this->id
 			) {
-				echo sprintf(__( 'Form must be of structure %s' ), var_export( $this->form_init, true ));
+				printf( __( 'Form must be of structure %s' ), var_export( $this->form_init, true ) );
 				return;
-			}else{
+			} else {
 
-				if( !empty( $form['fields_layout'] ) ){
+				if ( ! empty( $form['fields_layout'] ) ) {
 					$this->fields_layout = $form['fields_layout'];
 				}
 
 				$this->submit_label = isset( $form['submit_label'] ) && ! empty( $form['submit_label'] ) ? $form['submit_label'] : __( 'Submit', 'anonyengine' );
-				
+
 				add_shortcode( $this->id, array( $this, 'create_shortcode' ) );
-				
+
 				// Submitted form.
 				add_action( 'template_redirect', array( $this, 'form_submitted' ) );
-				
+
 				add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 			}
-			
-
 		}
 
-		protected function form_attributes( $form ){
+		protected function form_attributes( $form ) {
 			$attributes = '';
-			if( !empty( $form['form_attributes'] ) ){
-				foreach($form['form_attributes'] as $name => $value ){
-					$attributes .= ' ' . $name . '="' . esc_attr($value) . '"' ;
+			if ( ! empty( $form['form_attributes'] ) ) {
+				foreach ( $form['form_attributes'] as $name => $value ) {
+					$attributes .= ' ' . $name . '="' . esc_attr( $value ) . '"';
 				}
 			}
 
 			return $attributes;
 		}
 
-		protected function check_conditions( $form ){
+		protected function check_conditions( $form ) {
 			$errors = array();
-			if( empty( $form['conditions'] ) || !is_array( $form['conditions'] ) ){
+			if ( empty( $form['conditions'] ) || ! is_array( $form['conditions'] ) ) {
 				return $errors;
 			}
 			$conditions = $form['conditions'];
-			if( !empty( $conditions['logged_in'] ) && $conditions['logged_in'] == true && !is_user_logged_in() ){
+			if ( ! empty( $conditions['logged_in'] ) && $conditions['logged_in'] == true && ! is_user_logged_in() ) {
 				$errors[] = 'logged_in';
 			}
-			
-			if( !empty( $conditions['user_role'] ) && is_user_logged_in()){
+
+			if ( ! empty( $conditions['user_role'] ) && is_user_logged_in() ) {
 				$current_roles = ANONY_Wp_User_Help::get_current_user_roles();
 
-				$intersect = array_intersect($current_roles, $conditions['user_role']);
+				$intersect = array_intersect( $current_roles, $conditions['user_role'] );
 
-				if( empty( $intersect ) ){
+				if ( empty( $intersect ) ) {
 					$errors[] = 'user_role';
 				}
 			}
 
 			return $errors;
-			
 		}
 
-		protected function render_conditions_errors($errors){
+		protected function render_conditions_errors( $errors ) {
 			$html = '';
-			foreach( $errors as $code ){
+			foreach ( $errors as $code ) {
 
-				if( 'logged_in' === $code ){
-					echo '<p class="form-error">' . $this->get_error_message($code) . '</p>';
+				if ( 'logged_in' === $code ) {
+					echo '<p class="form-error">' . $this->get_error_message( $code ) . '</p>';
 					break;
-				}else{
-					$html .= '<li class="form-error">' . $this->get_error_message($code) . '</li>';
+				} else {
+					$html .= '<li class="form-error">' . $this->get_error_message( $code ) . '</li>';
 				}
-
 			}
 
-			if(!empty( $html )){ ?>
+			if ( ! empty( $html ) ) { ?>
 				<ul class="form-errors">
-					<?php echo $html ?>
+					<?php echo $html; ?>
 				</ul>
-			<?php }
+				<?php
+			}
 		}
 
-		public function render(){
+		public function render() {
 			$this->create( $this->fields );
 		}
 
@@ -250,7 +247,7 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 			$this->create( $this->fields );
 			return ob_get_clean();
 		}
-		protected function render_submit_errors(){
+		protected function render_submit_errors() {
 			$this->error_msgs = get_transient( 'anony_form_submit_errors_' . $this->id );
 
 			if ( false !== $this->error_msgs ) {
@@ -271,15 +268,15 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 		 * @param array $fields An array of fields.
 		 */
 		public function create( array $fields ) {
-			$condition_errors = $this->check_conditions($this->form);
-			if( !empty($condition_errors) ){
-				$this->render_conditions_errors($condition_errors);
+			$condition_errors = $this->check_conditions( $this->form );
+			if ( ! empty( $condition_errors ) ) {
+				$this->render_conditions_errors( $condition_errors );
 
 				return;
 			}
 
 			$this->render_submit_errors();
-			if( 'columns' === $this->fields_layout ){
+			if ( 'columns' === $this->fields_layout ) {
 				?>
 					<style>
 
@@ -291,7 +288,7 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 				<?php
 			}
 			?>
-			<form id="<?php echo esc_attr( $this->id ); ?>" class="anony-form"  <?php echo  $this->form_attributes ; ?>>
+			<form id="<?php echo esc_attr( $this->id ); ?>" class="anony-form"  <?php echo $this->form_attributes; ?>>
 
 				<?php
 				foreach ( $fields as $field ) :
@@ -302,11 +299,11 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 						'metabox_id' => $this->id,
 					);
 
-					if( class_exists( 'ANONY_Input' ) ){
+					if ( class_exists( 'ANONY_Input' ) ) {
 
 						$render_field = new ANONY_Input( $args );
 
-					}else{
+					} else {
 						// Deprecated ANONY_Input_Field.
 						$render_field = new ANONY_Input_Field( $field, $this->id, 'form' );
 					}
@@ -326,7 +323,6 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 			<?php
 
 			do_action( 'anony_form_after', $fields );
-
 		}
 
 		/**
@@ -339,7 +335,6 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 			$this->settings['inline_lable'] = true;
 
 			$this->settings = ANONY_ARRAY_HELP::defaults_mapping( $this->settings, $form_settings );
-
 		}
 
 		/**
@@ -366,7 +361,6 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 				}
 				$this->validate( $field );
 			endforeach;
-
 		}
 
 		/**
@@ -421,21 +415,19 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 		public function form_submitted() {
 
 			$not_validated = wp_unslash( $_REQUEST );
-			
+
 			if ( ! isset( $not_validated[ 'submit-' . $this->id ] ) ) {
 				return;
 			}
-
-			
 
 			// Verify nonce.
 			if ( ! isset( $not_validated[ 'anony_form_submit_nonce_' . $this->id ] ) || ! wp_verify_nonce( $not_validated[ 'anony_form_submit_nonce_' . $this->id ], 'anony_form_submit_' . $this->id ) ) {
 				return;
 			}
-			
+
 			// Validation.
 			$this->validate_form_fields( $this->fields ); // Validation problem because fields' ids looks like field[key].
-			
+
 			if ( isset( $this->error_msgs ) ) {
 				set_transient( 'anony_form_submit_errors_' . $this->id, $this->error_msgs );
 
@@ -447,38 +439,36 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 				foreach ( $this->action_list as $action => $action_data ) {
 					$class_name = "ANONY_{$action}";
 					if ( class_exists( $class_name ) ) :
-						
+
 						$obj = new $class_name( $this->validated, $action_data, $this );
 
-						if( isset( $obj->result ) && $obj->result ){
-							$this->results[$action] = $obj->result;
+						if ( isset( $obj->result ) && $obj->result ) {
+							$this->results[ $action ] = $obj->result;
 						}
 
 					endif;
 				}
 			}
 
-			if( !empty($this->results) ){
-				//error_log(print_r($this->results, true));
+			if ( ! empty( $this->results ) ) {
+				// error_log(print_r($this->results, true));
 			}
 
 			do_action( 'anony_form_submitted', $this->validated, $this->id );
-
 		}
 
 
-		protected function get_error_message( $code ){
+		protected function get_error_message( $code ) {
 
-			switch( $code ){
+			switch ( $code ) {
 				case 'logged_in':
-						return esc_html__('You must be logged in.', 'anonyengine') . ' ' .'<a href=" ' . esc_url( wp_login_url( get_permalink() ) ) .'" alt="' . esc_attr__( 'Login Now', 'anonyengine' ).'">' . esc_html__( 'Login Now', 'anonyengine' ) .'</a>';
+					return esc_html__( 'You must be logged in.', 'anonyengine' ) . ' ' . '<a href=" ' . esc_url( wp_login_url( get_permalink() ) ) . '" alt="' . esc_attr__( 'Login Now', 'anonyengine' ) . '">' . esc_html__( 'Login Now', 'anonyengine' ) . '</a>';
 					break;
-				
+
 				case 'user_role':
-						return esc_html__('You are not allowed to do this.', 'anonyengine');
+					return esc_html__( 'You are not allowed to do this.', 'anonyengine' );
 					break;
 			}
-
 		}
 
 		public function enqueue_scripts() {

@@ -365,12 +365,14 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 				if ( $this->select_field( $field ) ) {
 					$class = $this->select_field( $field );
 
+					$style = ! empty( $field['style'] ) ? $field['style'] : false;
+
 					if ( class_exists( $class ) && method_exists( $class, 'enqueue' ) ) {
 
 						if ( is_admin() ) {
-							add_action( 'admin_enqueue_scripts', array( new $class(), 'enqueue' ) );
+							add_action( 'admin_enqueue_scripts', array( new $class( null, $style ), 'enqueue' ) );
 						} else {
-							add_action( 'wp_enqueue_scripts', array( new $class(), 'enqueue' ) );
+							add_action( 'wp_enqueue_scripts', array( new $class( null, $style ), 'enqueue' ) );
 						}
 					}
 				}

@@ -630,6 +630,43 @@ button{
 .tabs-ul li label{
 	min-width: auto;
 }
+.anony-upload-plus{
+    height: 25px;
+    width: 25px;
+	background-color: rgb(255,255,255);
+}
+.uploads-wrapper.style-one{
+	height: 100px;
+    width: 100px;
+	position: relative;
+}
+.uploads-wrapper.style-one::before{
+	content: '';
+	display: flex;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: #fff;
+	opacity: 0.5;
+}
+.uploads-wrapper.style-one, .anony-upload-plus{
+	display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px dashed #000;
+    border-radius: 3px;
+}
+.uploader-trigger.style-one{
+	position: absolute;
+    height: 100%;
+    width: 100%;
+    z-index: 10;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 .anony-tabs div{
 	width: 100%;
 }

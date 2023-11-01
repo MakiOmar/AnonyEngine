@@ -142,6 +142,9 @@ if ( ! class_exists( 'ANONY_Theme_Settings' ) ) {
 			// Options page sections.
 			$this->sections = $sections;
 
+			// Enqueue fields scripts.
+			new ANONY_Fields_Scripts( $this->get_fields() );
+
 			// Options related widgets.
 			$this->widgets = $widgets;
 

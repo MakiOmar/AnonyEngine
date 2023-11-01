@@ -211,7 +211,7 @@ if ( ! class_exists( 'ANONY_Meta_Box' ) ) {
 					}
 					?>
 
-					<li><a onclick="event.preventDefault();" class="anony-metabox-tab-item" data-id="<?php echo $field['id']; ?>" href="#"><?php echo $field['title']; ?></a></li>
+					<li><a onclick="event.preventDefault();" class="anony-metabox-tab-item" data-id="<?php echo esc_attr( $field['id'] ); ?>" href="#"><?php echo esc_html( $field['title'] ); ?></a></li>
 
 					<?php
 				}
@@ -220,7 +220,10 @@ if ( ! class_exists( 'ANONY_Meta_Box' ) ) {
 				<?php
 				$tabs = ob_get_clean();
 			}
+			// phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
 			echo $tabs;
+			// phpcs:enable.
+
 			// Loop through inputs to render.
 			foreach ( $this->fields as $field ) {
 				if ( ! is_admin() && ( ! isset( $field['show_on_front'] ) || ! $field['show_on_front'] ) ) {

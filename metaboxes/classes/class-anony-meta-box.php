@@ -143,6 +143,9 @@ if ( ! class_exists( 'ANONY_Meta_Box' ) ) {
 			// Set metabox's data.
 			$this->set_metabox_data( $this->metabox );
 
+			// Enqueue fields scripts.
+			new ANONY_Fields_Scripts( $this->fields );
+
 			new ANONY_Mb_Admin( $this, $this->metabox );
 
 			new ANONY_Mb_Shortcode( $this, $this->metabox );

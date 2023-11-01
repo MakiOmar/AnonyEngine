@@ -65,20 +65,21 @@ if ( ! class_exists( 'ANONY_Fields_Scripts' ) ) {
 		 * @return void
 		 */
 		protected function enqueue_fields_scripts( $fields ) {
+			$added = array();
 			foreach ( $fields as $field ) {
-				if ( $this->select_field( $field ) ) {
-					$class = $this->select_field( $field );
+				if ( ! in_array( $field['type'], $added, true ) ) {
+					if ( $this->select_field( $field ) ) {
+						$class = $this->select_field( $field );
 
-					$style = ! empty( $field['style'] ) ? $field['style'] : false;
+						$style = ! empty( $field['style'] ) ? $field['style'] : false;
 
-					if ( class_exists( $class ) && method_exists( $class, 'enqueue' ) ) {
-
-						if ( is_admin() ) {
-							add_action( 'admin_enqueue_scripts', array( new $class( null, $style ), 'enqueue' ) );
-						} else {
-							add_action( 'wp_enqueue_scripts', array( new $class( null, $style ), 'enqueue' ) );
+						if ( class_exists( $class ) && method_exists( $class, 'enqueue' ) ) {
+							$obj = new $class( null, $style );
+							$obj->enqueue();
 						}
 					}
+
+					$added[] = $field['type'];
 				}
 			}
 		}

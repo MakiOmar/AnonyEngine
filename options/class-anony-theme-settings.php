@@ -142,9 +142,6 @@ if ( ! class_exists( 'ANONY_Theme_Settings' ) ) {
 			// Options page sections.
 			$this->sections = $sections;
 
-			// Enqueue fields scripts.
-			new ANONY_Fields_Scripts( $this->get_fields() );
-
 			// Options related widgets.
 			$this->widgets = $widgets;
 
@@ -602,6 +599,9 @@ if ( ! class_exists( 'ANONY_Theme_Settings' ) ) {
 				return;
 			}
 			// phpcs:enable.
+
+			// Enqueue fields scripts.
+			new ANONY_Fields_Scripts( $this->get_fields() );
 
 			wp_enqueue_style( 'select_2', ANONY_FIELDS_URI . 'select2/css/select2.min.css', array(), time(), 'all' );
 

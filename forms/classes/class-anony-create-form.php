@@ -177,9 +177,6 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 
 				$this->submit_label = isset( $form['submit_label'] ) && ! empty( $form['submit_label'] ) ? $form['submit_label'] : __( 'Submit', 'anonyengine' );
 
-				// Enqueue fields scripts.
-				new ANONY_Fields_Scripts( $this->fields );
-
 				add_shortcode( $this->id, array( $this, 'create_shortcode' ) );
 
 				// Submitted form.
@@ -483,6 +480,8 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 
 		public function enqueue_scripts() {
 			anony_enqueue_styles();
+			// Enqueue fields scripts.
+			new ANONY_Fields_Scripts( $this->fields );
 		}
 	}
 }

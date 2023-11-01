@@ -214,6 +214,26 @@ if ( ! class_exists( 'ANONY_Theme_Settings' ) ) {
 		}
 
 		/**
+		 * Get page fields
+		 *
+		 * @return array An array of fields;
+		 */
+		public function get_fields() {
+			$fields = array();
+			foreach ( $this->sections as $section ) {
+
+				if ( isset( $section['fields'] ) ) {
+
+					foreach ( $section['fields'] as $field ) {
+						$fields[] = $field;
+					}
+				}
+			}
+
+			return $fields;
+		}
+
+		/**
 		 * Get default options into an array suitable for the settings API
 		 */
 		public function default_values() {

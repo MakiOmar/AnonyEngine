@@ -7,11 +7,16 @@
  * @link http://makiomar.com
  */
 
-
 /**
+ * Color field class.
+ *
  * This field uses the Farbtastic color picker.
+ *
+ * @package Anonymous theme
+ * @author Makiomar
+ * @link http://makiomar.com
  */
-class ANONY_Color_farbtastic {
+class ANONY_Color_Farbtastic {
 
 	/**
 	 * Parent object
@@ -23,8 +28,7 @@ class ANONY_Color_farbtastic {
 	/**
 	 * Color field Constructor.
 	 *
-	 * @param array  $field Array of field's data
-	 * @param object $parent_obj Field parent object
+	 * @param object $parent_obj Field parent object.
 	 */
 	public function __construct( $parent_obj = null ) {
 		if ( ! is_object( $parent_obj ) ) {
@@ -58,7 +62,7 @@ class ANONY_Color_farbtastic {
 		}
 
 		if ( isset( $this->parent_obj->field['note'] ) ) {
-			echo '<p class=anony-warning>' . $field['note'] . '<p>';
+			echo '<p class=anony-warning>' . esc_html( $this->parent_obj->field['note'] ) . '<p>';
 		}
 
 		$html .= '<div class="farb-popup-wrapper">';

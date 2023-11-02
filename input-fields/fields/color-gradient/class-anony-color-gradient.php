@@ -1,10 +1,20 @@
 <?php
 /**
+ * Color gradient input class.
+ *
+ * This color input depends on wp-color-picker.
+ *
+ * @package Anonymous theme
+ * @author Makiomar
+ * @link http://makiomar.com
+ */
+
+/**
  * Color gradient input render class.
  *
  * This color input depends on wp-color-picker
  */
-class ANONY_Color_gradient {
+class ANONY_Color_Gradient {
 
 	/**
 	 * Parent object
@@ -13,7 +23,11 @@ class ANONY_Color_gradient {
 	 */
 	private $parent_obj;
 
-	// Consructor.
+	/**
+	 * Consructor
+	 *
+	 * @param object $parent_obj Parent object.
+	 */
 	public function __construct( $parent_obj = null ) {
 
 		if ( ! is_object( $parent_obj ) ) {
@@ -24,7 +38,11 @@ class ANONY_Color_gradient {
 
 		add_action( 'admin_print_footer_scripts', array( $this, 'footer_scripts' ) );
 	}
-
+	/**
+	 * Render method.
+	 *
+	 * @return string Field output.
+	 */
 	public function render() {
 
 		$default = isset( $this->parent_obj->default ) && ! is_null( $this->parent_obj->default ) ? $this->parent_obj->default : '#fff';

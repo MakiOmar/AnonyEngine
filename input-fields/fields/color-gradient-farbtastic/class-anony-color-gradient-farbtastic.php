@@ -6,7 +6,15 @@
  * @author Makiomar
  * @link http://makiomar.com
  */
-class ANONY_Color_gradient_farbtastic {
+
+/**
+ * Color field render class
+ *
+ * @package Anonymous theme
+ * @author Makiomar
+ * @link http://makiomar.com
+ */
+class ANONY_Color_Gradient_Farbtastic {
 
 	/**
 	 * Parent object
@@ -21,7 +29,7 @@ class ANONY_Color_gradient_farbtastic {
 	 * Required - must call the parent constructor, then assign field and value to vars, and obviously call the render field function
 	 *
 	 * @since Theme_Settings 1.0
-	 * @param object $parent_obj Field parent object
+	 * @param object $parent_obj Field parent object.
 	 */
 	public function __construct( $parent_obj = null ) {
 

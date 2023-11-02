@@ -1,6 +1,6 @@
 <?php
 /**
- * Multi-input types render class.
+ * Multi-input types class.
  *
  * Handles rendring these type ['text','number','email', 'password','url'].
  *
@@ -9,6 +9,15 @@
  * @link http://makiomar.com
  */
 
+/**
+ * Multi-input types render class.
+ *
+ * Handles rendring these type ['text','number','email', 'password','url'].
+ *
+ * @package Anonymous theme
+ * @author Makiomar
+ * @link http://makiomar.com
+ */
 class ANONY_Div {
 
 	/**
@@ -21,7 +30,7 @@ class ANONY_Div {
 	/**
 	 * Color field Constructor.
 	 *
-	 * @param object $parent_obj Field parent object
+	 * @param object $parent_obj Field parent object.
 	 */
 	public function __construct( $parent_obj = null ) {
 		if ( ! is_object( $parent_obj ) ) {

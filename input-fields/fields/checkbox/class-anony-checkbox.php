@@ -7,6 +7,13 @@
  * @link http://makiomar.com
  */
 
+/**
+ * Checkbox field render class
+ *
+ * @package Anonymous theme
+ * @author Makiomar
+ * @link http://makiomar.com
+ */
 class ANONY_Checkbox {
 
 
@@ -18,6 +25,8 @@ class ANONY_Checkbox {
 	private $parent_obj;
 
 	/**
+	 * Checkbox data
+	 *
 	 * @var array
 	 */
 	private $data;
@@ -25,7 +34,7 @@ class ANONY_Checkbox {
 	/**
 	 * Checkbox field Constructor.
 	 *
-	 * @param object $parent_obj Field parent object
+	 * @param object $parent_obj Field parent object.
 	 */
 	public function __construct( $parent_obj = null ) {
 
@@ -58,7 +67,11 @@ class ANONY_Checkbox {
 			'disabled' => isset( $this->parent_obj->field['disabled'] ) && ( true === $this->parent_obj->field['disabled'] ) ? " disabled = 'disabled' " : '',
 		);
 	}
-
+	/**
+	 * Checkbox render.
+	 *
+	 * @return string Field output.
+	 */
 	public function render() {
 
 		ob_start();

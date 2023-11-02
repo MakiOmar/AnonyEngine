@@ -7,7 +7,14 @@
  * @link http://makiomar.com
  */
 
-class ANONY_Font_select {
+/**
+ * Font select render class
+ *
+ * @package Anonymous theme
+ * @author Makiomar
+ * @link http://makiomar.com
+ */
+class ANONY_Font_Select {
 
 	/**
 	 * Parent object
@@ -19,7 +26,7 @@ class ANONY_Font_select {
 	/**
 	 * Color field Constructor.
 	 *
-	 * @param object $parent_obj Field parent object
+	 * @param object $parent_obj Field parent object.
 	 */
 	public function __construct( $parent_obj = null ) {
 		if ( ! is_object( $parent_obj ) ) {

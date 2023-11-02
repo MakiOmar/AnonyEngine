@@ -7,7 +7,14 @@
  * @link http://makiomar.com
  */
 
-class ANONY_File_upload {
+/**
+ * Upload field render class
+ *
+ * @package Anonymous theme
+ * @author Makiomar
+ * @link http://makiomar.com
+ */
+class ANONY_File_Upload {
 
 	/**
 	 * Parent object
@@ -21,8 +28,7 @@ class ANONY_File_upload {
 	 *
 	 * Required - must call the parent constructor, then assign field and value to vars, and obviously call the render field function
 	 *
-	 * @param array  $this->parent_obj->field Array of field's data
-	 * @param object $parent_obj Field parent object
+	 * @param object $parent_obj Field parent object.
 	 */
 	public function __construct( $parent_obj = null ) {
 
@@ -55,7 +61,7 @@ class ANONY_File_upload {
 		$class_attr = $this->parent_obj->class_attr;
 		$value      = $this->parent_obj->value;
 		$file_url   = false;
-		if ( $value !== '' ) {
+		if ( '' !== $value ) {
 			$file_url = wp_get_attachment_url( intval( $value ) ) ? esc_url( wp_get_attachment_url( intval( $value ) ) ) : false;
 			$basename = basename( $file_url );
 		}
@@ -75,14 +81,19 @@ class ANONY_File_upload {
 	 * Enqueue scripts.
 	 */
 	public function enqueue() {
-		if ( is_user_logged_in() ) {
-			$this->logged_in_scripts();
+		if ( current_user_can( 'upload_files' ) ) {
+			$this->user_can_upload_files_scripts();
 		} else {
-			$this->not_logged_in_scripts();
+			$this->user_can_not_upload_files_scripts();
 		}
 	}
 
-	protected function logged_in_scripts() {
+	/**
+	 * Scripts for private input.
+	 *
+	 * @return void
+	 */
+	protected function user_can_upload_files_scripts() {
 		wp_enqueue_media();
 		wp_enqueue_script(
 			'file_upload',
@@ -92,7 +103,11 @@ class ANONY_File_upload {
 			true
 		);
 	}
-
-	protected function not_logged_in_scripts() {
+	/**
+	 * Scripts for nonprivate input.
+	 *
+	 * @return void
+	 */
+	protected function user_can_not_upload_files_scripts() {
 	}
 }

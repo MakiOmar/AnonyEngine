@@ -6,6 +6,14 @@
  * @author Makiomar
  * @link http://makiomar.com
  */
+
+/**
+ * Callback field class.
+ *
+ * @package Anonymous theme
+ * @author Makiomar
+ * @link http://makiomar.com
+ */
 class ANONY_Callback {
 	/**
 	 * Parent object.

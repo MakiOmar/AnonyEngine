@@ -7,9 +7,14 @@
  * @link http://makiomar.com
  */
 
-
 /**
+ * Color field class
+ *
  * This field uses the WP color picker.
+ *
+ * @package Anonymous theme
+ * @author Makiomar
+ * @link http://makiomar.com
  */
 class ANONY_Color {
 
@@ -23,7 +28,7 @@ class ANONY_Color {
 	/**
 	 * Color field Constructor.
 	 *
-	 * @param object $parent_obj Field parent object
+	 * @param object $parent_obj Field parent object.
 	 */
 	public function __construct( $parent_obj = null ) {
 		if ( ! is_object( $parent_obj ) ) {
@@ -77,7 +82,7 @@ class ANONY_Color {
 	/**
 	 * Enqueue scripts.
 	 */
-	function enqueue() {
+	public function enqueue() {
 		wp_enqueue_style( 'wp-color-picker' );
 		wp_enqueue_script( 'wp-color-picker' );
 		wp_enqueue_script( 'jquery' );

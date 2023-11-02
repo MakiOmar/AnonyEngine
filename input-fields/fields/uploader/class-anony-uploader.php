@@ -82,7 +82,7 @@ class ANONY_Uploader {
 	 */
 	protected function note( &$html ) {
 		if ( isset( $this->parent_obj->field['note'] ) ) {
-			$html .= '<p class=anony-warning>' . $this->parent_obj->field['note'] . '<p>';
+			$html .= '<p class=anony-warning>' . esc_html( $this->parent_obj->field['note'] ) . '<p>';
 		}
 	}
 

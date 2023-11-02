@@ -7,9 +7,18 @@
  * @link http://makiomar.com
  */
 
+/**
+ * Upload field render class
+ *
+ * @package Anonymous theme
+ * @author Makiomar
+ * @link http://makiomar.com
+ */
 class ANONY_Gallery {
 
 	/**
+	 * Parent object
+	 *
 	 * @var object
 	 */
 	private $parent_obj;
@@ -19,8 +28,7 @@ class ANONY_Gallery {
 	 *
 	 * Required - must call the parent constructor, then assign field and value to vars, and obviously call the render field function
 	 *
-	 * @param array  $this->parent_obj->field Array of field's data
-	 * @param object $parent_obj Field parent object
+	 * @param object $parent_obj Field parent object.
 	 */
 	public function __construct( $parent_obj = null ) {
 
@@ -30,12 +38,25 @@ class ANONY_Gallery {
 
 		$this->parent_obj = $parent_obj;
 	}
+
+	/**
+	 * Output field note.
+	 *
+	 * @param string $html The output.
+	 * @return void
+	 */
 	protected function note( &$html ) {
 		if ( isset( $this->parent_obj->field['note'] ) ) {
-			$html .= '<p class=anony-warning>' . $this->parent_obj->field['note'] . '<p>';
+			$html .= '<p class=anony-warning>' . esc_html( $this->parent_obj->field['note'] ) . '<p>';
 		}
 	}
 
+	/**
+	 * Output fieldset open tag.
+	 *
+	 * @param string $html The output.
+	 * @return void
+	 */
 	protected function fieldset_open( &$html ) {
 		$html .= sprintf(
 			'<fieldset class="anony-row anony-row-inline" id="fieldset_%1$s">',
@@ -43,8 +64,14 @@ class ANONY_Gallery {
 		);
 	}
 
+	/**
+	 * Output the label.
+	 *
+	 * @param string $html The output.
+	 * @return void
+	 */
 	protected function label( &$html ) {
-		if ( $this->parent_obj->context != 'option' && isset( $this->parent_obj->field['title'] ) ) {
+		if ( 'option' !== $this->parent_obj->context && isset( $this->parent_obj->field['title'] ) ) {
 			$html .= sprintf(
 				'<label class="anony-label" for="%1$s">%2$s</label>',
 				$this->parent_obj->field['id'],
@@ -52,6 +79,13 @@ class ANONY_Gallery {
 			);
 		}
 	}
+
+	/**
+	 * Output input for private users.
+	 *
+	 * @param string $html The output.
+	 * @return void
+	 */
 	protected function input_priv( &$html ) {
 		$html .= sprintf(
 			'<input type="hidden" name="%1$s" value="" class="%2$s" />',
@@ -60,6 +94,12 @@ class ANONY_Gallery {
 		);
 	}
 
+	/**
+	 * Output input for nonprivate users.
+	 *
+	 * @param string $html The output.
+	 * @return void
+	 */
 	protected function input_nopriv( &$html ) {
 		$html .= sprintf(
 			'<input type="file" name="%1$s[]" class="%2$s anony_gallery" multiple="multiple"/>',
@@ -68,6 +108,12 @@ class ANONY_Gallery {
 		);
 	}
 
+	/**
+	 * Output preview for private users.
+	 *
+	 * @param string $html The output.
+	 * @return void
+	 */
 	protected function uploads_preview_priv( &$html ) {
 		$html .= '<div class="anony-gallery-thumbs-wrap" id="anony-gallery-thumbs-' . $this->parent_obj->field['id'] . '">';
 		$style = 'display:none;';
@@ -85,6 +131,12 @@ class ANONY_Gallery {
 		}
 	}
 
+	/**
+	 * Output input for nonprivate users.
+	 *
+	 * @param string $html The output.
+	 * @return void
+	 */
 	protected function uploads_preview_nopriv( &$html ) {
 		$html .= '<div class="anony-gallery-thumbs-wrap" id="anony-gallery-thumbs-' . $this->parent_obj->field['id'] . '">';
 
@@ -102,6 +154,12 @@ class ANONY_Gallery {
 		}
 	}
 
+	/**
+	 * Output button.
+	 *
+	 * @param string $html The output.
+	 * @return void
+	 */
 	protected function button( &$html ) {
 		$style = 'display:none;';
 		$html .= sprintf(
@@ -115,29 +173,54 @@ class ANONY_Gallery {
 		);
 	}
 
+	/**
+	 * Output close preview markup.
+	 *
+	 * @param string $html The output.
+	 * @return void
+	 */
 	protected function close_preview( &$html ) {
 		$html .= '<div>';
 	}
 
+	/**
+	 * Output Description.
+	 *
+	 * @param string $html The output.
+	 * @return void
+	 */
 	protected function description( &$html ) {
 		$html .= ( isset( $this->parent_obj->field['desc'] ) && ! empty( $this->parent_obj->field['desc'] ) ) ? '<div class="description">' . $this->parent_obj->field['desc'] . '</div>' : '';
 	}
 
+	/**
+	 * Output fieldset close.
+	 *
+	 * @param string $html The output.
+	 * @return void
+	 */
 	protected function close_fieldset( &$html ) {
 		$html .= '</fieldset>';
 	}
+
 	/**
 	 * Upload field render Function.
 	 *
-	 * @return void
+	 * @return string Field output.
 	 */
-	function render( $meta = false ) {
+	public function render() {
 		if ( current_user_can( 'upload_files' ) ) {
 			return $this->render_priv();
 		} else {
 			return $this->render_nopriv();
 		}
 	}
+
+	/**
+	 * Final output for nonprivate users.
+	 *
+	 * @return string The final output.
+	 */
 	protected function render_nopriv() {
 		$html = '';
 
@@ -153,6 +236,12 @@ class ANONY_Gallery {
 
 		return $html;
 	}
+
+	/**
+	 * Final output for private users.
+	 *
+	 * @return string The final output.
+	 */
 	protected function render_priv() {
 		$html = '';
 
@@ -168,10 +257,11 @@ class ANONY_Gallery {
 
 		return $html;
 	}
+
 	/**
 	 * Enqueue scripts.
 	 */
-	function enqueue() {
+	public function enqueue() {
 		if ( current_user_can( 'upload_files' ) ) {
 			$this->user_can_upload_files_scripts();
 			$handle = 'anony-opts-field-gallery-js';
@@ -194,6 +284,11 @@ class ANONY_Gallery {
 		}
 	}
 
+	/**
+	 * Scripts for private input.
+	 *
+	 * @return void
+	 */
 	protected function user_can_upload_files_scripts() {
 		$wp_version = floatval( get_bloginfo( 'version' ) );
 		if ( $wp_version < '3.5' ) {
@@ -217,6 +312,11 @@ class ANONY_Gallery {
 		}
 	}
 
+	/**
+	 * Scripts for nonprivate input.
+	 *
+	 * @return void
+	 */
 	protected function user_can_not_upload_files_scripts() {
 		wp_enqueue_script(
 			'anony-opts-field-gallery-nopriv-js',

@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * Input fields index.
+ *
+ * @package Input fields.
+ */
 
 /**
  * Holds a path to Custom fields classes folder

@@ -7,9 +7,18 @@
  * @link http://makiomar.com
  */
 
-class ANONY_Multi_input {
+/**
+ * Multi input render class
+ *
+ * @package Anonymous theme
+ * @author Makiomar
+ * @link http://makiomar.com
+ */
+class ANONY_Multi_Input {
 
 	/**
+	 * Parent object
+	 *
 	 * @var object
 	 */
 	private $parent_obj;
@@ -17,7 +26,7 @@ class ANONY_Multi_input {
 	/**
 	 * Color field Constructor.
 	 *
-	 * @param object $parent_obj Field parent object
+	 * @param object $parent_obj Field parent object.
 	 */
 	public function __construct( $parent_obj = null ) {
 		if ( ! is_object( $parent_obj ) ) {
@@ -35,11 +44,11 @@ class ANONY_Multi_input {
 	/**
 	 * Multi text field render Function.
 	 *
-	 * @return void
+	 * @return string Field output.
 	 */
-	function render() {
+	public function render() {
 
-		$buttonText = ( isset( $this->parent_obj->field['button-text'] ) ) ? ' ' . $this->parent_obj->field['button-text'] : esc_html__( 'Add', 'anonyengine' );
+		$button_text = ( isset( $this->parent_obj->field['button-text'] ) ) ? ' ' . $this->parent_obj->field['button-text'] : esc_html__( 'Add', 'anonyengine' );
 
 		$html = sprintf(
 			'<fieldset class="anony-row anony-row-inline anony-multi-value-wrapper" id="fieldset_%1$s">',
@@ -47,9 +56,9 @@ class ANONY_Multi_input {
 		);
 
 		if ( isset( $this->parent_obj->field['note'] ) ) {
-			$html .= '<p class=anony-warning>' . $this->parent_obj->field['note'] . '<p>';
+			$html .= '<p class=anony-warning>' . esc_html( $this->parent_obj->field['note'] ) . '<p>';
 		}
-		if ( $this->parent_obj->context == 'meta' && isset( $this->parent_obj->field['title'] ) ) {
+		if ( 'meta' === $this->parent_obj->context && isset( $this->parent_obj->field['title'] ) ) {
 			$html .= sprintf(
 				'<label class="anony-label" for="%1$s">%2$s</label>',
 				$this->parent_obj->field['id'],
@@ -75,7 +84,7 @@ class ANONY_Multi_input {
 
 					foreach ( $this->parent_obj->field['fields'] as $nested_field ) {
 
-						if ( $nested_field['id'] == $field_id ) {
+						if ( $nested_field['id'] === $field_id ) {
 							$render_field = new ANONY_Input_Field( $nested_field, $this->parent_obj->metabox_id, 'meta', $this->parent_obj->post_id, false, $field_value, $index );
 
 							$html .= $render_field->field_init();
@@ -105,20 +114,20 @@ class ANONY_Multi_input {
 
 		return $html;
 	}
-
+	//phpcs:disable WordPress.NamingConventions.ValidFunctionName.MethodNameInvalid
 	/**
 	 * Multi text field render for display only.
 	 *
-	 * @return void
+	 * @return string Field output.
 	 */
-	function renderDisplay() {
-
+	public function renderDisplay() {
+		//phpcs:enable.
 		$html = sprintf(
 			'<fieldset class="anony-row anony-row-inline anony-multi-value-wrapper" id="fieldset_%1$s">',
 			$this->parent_obj->field['id']
 		);
 
-		if ( $this->parent_obj->context == 'meta' && isset( $this->parent_obj->field['title'] ) ) {
+		if ( 'meta' === $this->parent_obj->context && isset( $this->parent_obj->field['title'] ) ) {
 			$html .= sprintf(
 				'<label class="anony-label" for="%1$s">%2$s</label>',
 				$this->parent_obj->field['id'],
@@ -138,7 +147,7 @@ class ANONY_Multi_input {
 
 					foreach ( $this->parent_obj->field['fields'] as $nested_field ) {
 
-						if ( $nested_field['id'] == $field_id ) {
+						if ( $nested_field['id'] === $field_id ) {
 							$html .= "<div class='anony-flex-column-center'>";
 							$html .= sprintf(
 								'<label class="anony-label" for="%1$s">%2$s</label>',

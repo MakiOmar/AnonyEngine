@@ -1,15 +1,18 @@
 <?php
 /**
- * Textarea render class.
+ * Textarea render class
  *
- * @package Anonymous theme
- * @author Makiomar
- * @link http://makiomar.com
+ * @package Input fields.
  */
 
+/**
+ * Textarea render class
+ */
 class ANONY_Textarea {
 
 	/**
+	 * Parent object
+	 *
 	 * @var object
 	 */
 	private $parent_obj;
@@ -17,7 +20,7 @@ class ANONY_Textarea {
 	/**
 	 * Color field Constructor.
 	 *
-	 * @param object $parent_obj Field parent object
+	 * @param object $parent_obj Field parent object.
 	 */
 	public function __construct( $parent_obj = null ) {
 		if ( ! is_object( $parent_obj ) ) {
@@ -37,9 +40,9 @@ class ANONY_Textarea {
 
 		$class = isset( $this->parent_obj->field['class'] ) && ! is_null( $this->parent_obj->field['class'] ) ? $this->parent_obj->field['class'] : 'anony-meta-field';
 
-		$readonly = isset( $this->parent_obj->field['readonly'] ) && ( $this->parent_obj->field['readonly'] == true ) ? ' readonly' : '';
+		$readonly = isset( $this->parent_obj->field['readonly'] ) && ( true === $this->parent_obj->field['readonly'] ) ? ' readonly' : '';
 
-		$disabled = isset( $this->parent_obj->field['disabled'] ) && ( $this->parent_obj->field['disabled'] == true ) ? ' disabled' : '';
+		$disabled = isset( $this->parent_obj->field['disabled'] ) && ( true === $this->parent_obj->field['disabled'] ) ? ' disabled' : '';
 
 		$cols = isset( $this->parent_obj->field['columns'] ) ? $this->parent_obj->field['columns'] : 24;
 
@@ -49,7 +52,7 @@ class ANONY_Textarea {
 
 		$conditions = '';
 		if ( ! empty( $this->parent_obj->field['conditions'] ) ) {
-			$conditions = json_encode( $this->parent_obj->field['conditions'] );
+			$conditions = wp_json_encode( $this->parent_obj->field['conditions'] );
 		}
 
 		if ( $this->parent_obj->as_template ) {
@@ -79,7 +82,7 @@ class ANONY_Textarea {
 		);
 
 		$html .= '<div>';
-		if ( in_array( $this->parent_obj->context, array( 'meta', 'form' ) ) && isset( $this->parent_obj->field['title'] ) ) {
+		if ( in_array( $this->parent_obj->context, array( 'meta', 'form' ), true ) && isset( $this->parent_obj->field['title'] ) ) {
 			$html .= sprintf(
 				'<label class="anony-label" for="anony_%1$s">%2$s</label>',
 				$this->parent_obj->field['id'],
@@ -88,7 +91,7 @@ class ANONY_Textarea {
 		}
 
 		if ( isset( $this->parent_obj->field['note'] ) ) {
-			$html .= '<p class=anony-warning>' . $this->parent_obj->field['note'] . '<p>';
+			$html .= '<p class=anony-warning>' . esc_html( $this->parent_obj->field['note'] ) . '<p>';
 		}
 
 		$html .= sprintf(

@@ -6,10 +6,21 @@
  * @author Makiomar
  * @link http://makiomar.com
  */
+
+/**
+ * Switch render class.
+ *
+ * @package    Fields inputs
+ * @author     Makiomar <info@makiomar.com>
+ * @license    https://makiomar.com AnonyEngine Licence
+ * @link       https://makiomar.com
+ */
 class ANONY_Switch {
 
 
 	/**
+	 * Parent object
+	 *
 	 * @var object
 	 */
 	private $parent_obj;
@@ -19,8 +30,7 @@ class ANONY_Switch {
 	 *
 	 * Required - must call the parent constructor, then assign field and value to vars, and obviously call the render field function
 	 *
-	 * @param array  $field Array of field's data
-	 * @param object $parent_obj Field parent object
+	 * @param object $parent_obj Field parent object.
 	 */
 	public function __construct( $parent_obj = null ) {
 
@@ -36,7 +46,7 @@ class ANONY_Switch {
 	/**
 	 * Switch field render Function.
 	 *
-	 * @return void
+	 * @return string Field output.
 	 */
 	public function render() {
 
@@ -52,12 +62,12 @@ class ANONY_Switch {
 			$this->parent_obj->width
 		);
 
-		// fix for WordPress 3.6 meta options
+		// fix for WordPress 3.6 meta options.
 		if ( strpos( $this->parent_obj->field['id'], '[]' ) === false ) {
 			$html .= '<input type="hidden" name="' . $this->parent_obj->input_name . '" value="0" />';
 		}
 
-		if ( in_array( $this->parent_obj->context, array( 'meta', 'form' ) ) && isset( $this->parent_obj->field['title'] ) ) {
+		if ( in_array( $this->parent_obj->context, array( 'meta', 'form' ), true ) && isset( $this->parent_obj->field['title'] ) ) {
 			$html .= sprintf(
 				'<label class="anony-label" for="anony_%1$s">%2$s</label>',
 				$this->parent_obj->field['id'],
@@ -66,7 +76,7 @@ class ANONY_Switch {
 		}
 
 		if ( ! empty( $this->parent_obj->field['note'] ) ) {
-			$html .= '<p class=anony-warning>' . $this->parent_obj->field['note'] . '<p>';
+			$html .= '<p class=anony-warning>' . esc_html( $this->parent_obj->field['note'] ) . '<p>';
 		}
 
 		$html .= sprintf(

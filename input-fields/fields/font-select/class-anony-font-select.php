@@ -10,6 +10,8 @@
 class ANONY_Font_select {
 
 	/**
+	 * Parent object
+	 *
 	 * @var object
 	 */
 	private $parent_obj;
@@ -32,7 +34,7 @@ class ANONY_Font_select {
 	/**
 	 * Font select field render Function.
 	 *
-	 * @return void
+	 * @return string Field output.
 	 */
 	public function render() {
 
@@ -52,10 +54,10 @@ class ANONY_Font_select {
 		);
 
 		if ( isset( $field['note'] ) ) {
-			echo '<p class=anony-warning>' . $this->parent_obj->field['note'] . '<p>';
+			echo '<p class=anony-warning>' . esc_html( $this->parent_obj->field['note'] ) . '<p>';
 		}
 
-		if ( $this->parent_obj->context == 'meta' && isset( $this->parent_obj->field['title'] ) ) {
+		if ( 'meta' === $this->parent_obj->context && isset( $this->parent_obj->field['title'] ) ) {
 			$html .= sprintf(
 				'<label class="anony-label" for="%1$s">%2$s</label>',
 				$this->parent_obj->field['id'],

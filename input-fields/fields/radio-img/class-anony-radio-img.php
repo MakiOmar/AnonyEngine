@@ -7,9 +7,18 @@
  * @link http://makiomar.com
  */
 
-class ANONY_Radio_img {
+/**
+ * Radio img render class
+ *
+ * @package Anonymous theme
+ * @author Makiomar
+ * @link http://makiomar.com
+ */
+class ANONY_Radio_Img {
 
 	/**
+	 * Parent object
+	 *
 	 * @var object
 	 */
 	private $parent_obj;
@@ -19,8 +28,7 @@ class ANONY_Radio_img {
 	 *
 	 * Required - must call the parent constructor, then assign field and value to vars, and obviously call the render field function
 	 *
-	 * @param array  $this->parent_obj->field Array of field's data
-	 * @param object $parent_obj Field parent object
+	 * @param object $parent_obj Field parent object.
 	 */
 	public function __construct( $parent_obj = null ) {
 
@@ -34,20 +42,20 @@ class ANONY_Radio_img {
 	/**
 	 * Radioo img field render Function.
 	 *
-	 * @return void
+	 * @return string Field output.
 	 */
-	public function render( $meta = false ) {
+	public function render() {
 
 		$html = '';
 		if ( isset( $this->parent_obj->field['note'] ) ) {
-			$html .= '<p class=anony-warning>' . $this->parent_obj->field['note'] . '<p>';
+			$html .= '<p class=anony-warning>' . esc_html( $this->parent_obj->field['note'] ) . '<p>';
 		}
 
 		$html .= sprintf(
 			'<fieldset class="anony-row anony-row-inline" id="fieldset_%1$s">',
 			$this->parent_obj->field['id']
 		);
-		if ( $this->parent_obj->context == 'meta' && isset( $this->parent_obj->field['title'] ) ) {
+		if ( 'meta' === $this->parent_obj->context && isset( $this->parent_obj->field['title'] ) ) {
 			$html .= sprintf(
 				'<label class="anony-label" for="%1$s">%2$s</label>',
 				$this->parent_obj->field['id'],
@@ -60,11 +68,12 @@ class ANONY_Radio_img {
 
 				$checked = checked( $this->parent_obj->value, $k, false );
 
-				$selected = ( $checked != '' ) ? ' anony-radio-img-selected' : '';
+				$selected = ( '' !== $checked ) ? ' anony-radio-img-selected' : '';
 
 				$search = array_search(
 					$k,
-					array_keys( $this->parent_obj->field['options'] )
+					array_keys( $this->parent_obj->field['options'] ),
+					true
 				);
 
 				$html .= sprintf(

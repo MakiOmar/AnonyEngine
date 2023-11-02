@@ -6,9 +6,20 @@
  * @author Makiomar
  * @link http://makiomar.com
  */
+
+/**
+ * Sliderbar render class.
+ *
+ * @package    Fields inputs
+ * @author     Makiomar <info@makiomar.com>
+ * @license    https://makiomar.com AnonyEngine Licence
+ * @link       https://makiomar.com
+ */
 class ANONY_Sliderbar {
 
 	/**
+	 * Parent object
+	 *
 	 * @var object
 	 */
 	private $parent_obj;
@@ -19,8 +30,7 @@ class ANONY_Sliderbar {
 	 *
 	 * Required - must call the parent constructor, then assign field and value to vars, and obviously call the render field function
 	 *
-	 * @param array  $this->parent_obj->field Array of field's data
-	 * @param object $parent_obj Field parent object
+	 * @param object $parent_obj Field parent object.
 	 */
 	public function __construct( $parent_obj = null ) {
 
@@ -34,7 +44,7 @@ class ANONY_Sliderbar {
 	/**
 	 * Slidebar field render Function.
 	 *
-	 * @return void
+	 * @return string Field output.
 	 */
 	public function render() {
 
@@ -47,7 +57,7 @@ class ANONY_Sliderbar {
 			'<fieldset class="anony-row anony-row-inline anony-tabs" id="fieldset_%1$s">',
 			$this->parent_obj->field['id']
 		);
-		if ( $this->parent_obj->context == 'meta' && isset( $this->parent_obj->field['title'] ) ) {
+		if ( 'meta' === $this->parent_obj->context && isset( $this->parent_obj->field['title'] ) ) {
 			$html .= sprintf(
 				'<label class="anony-label" for="%1$s">%2$s</label>',
 				$this->parent_obj->field['id'],

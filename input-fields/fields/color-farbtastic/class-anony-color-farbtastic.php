@@ -14,6 +14,8 @@
 class ANONY_Color_farbtastic {
 
 	/**
+	 * Parent object
+	 *
 	 * @var object
 	 */
 	private $parent_obj;
@@ -39,7 +41,7 @@ class ANONY_Color_farbtastic {
 	/**
 	 * Color field render Function.
 	 *
-	 * @return void
+	 * @return string Field output.
 	 */
 	public function render() {
 
@@ -47,7 +49,7 @@ class ANONY_Color_farbtastic {
 			'<fieldset class="anony-row anony-row-inline" id="fieldset_%1$s">',
 			$this->parent_obj->field['id']
 		);
-		if ( $this->parent_obj->context == 'meta' && isset( $this->parent_obj->field['title'] ) ) {
+		if ( 'meta' === $this->parent_obj->context && isset( $this->parent_obj->field['title'] ) ) {
 			$html .= sprintf(
 				'<label class="anony-label" for="%1$s">%2$s</label>',
 				$this->parent_obj->field['id'],

@@ -1,15 +1,24 @@
 <?php
 /**
- * Heading render class.
+ * Heading field class.
  *
  * @package Anonymous theme
  * @author Makiomar
  * @link http://makiomar.com
  */
 
+/**
+ * Heading render class.
+ *
+ * @package Anonymous theme
+ * @author Makiomar
+ * @link http://makiomar.com
+ */
 class ANONY_Heading {
 
 	/**
+	 * Parent object
+	 *
 	 * @var object
 	 */
 	private $parent_obj;
@@ -17,7 +26,7 @@ class ANONY_Heading {
 	/**
 	 * Color field Constructor.
 	 *
-	 * @param object $parent_obj Field parent object
+	 * @param object $parent_obj Field parent object.
 	 */
 	public function __construct( $parent_obj = null ) {
 

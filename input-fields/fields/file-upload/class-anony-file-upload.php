@@ -10,6 +10,8 @@
 class ANONY_File_upload {
 
 	/**
+	 * Parent object
+	 *
 	 * @var object
 	 */
 	private $parent_obj;
@@ -35,9 +37,9 @@ class ANONY_File_upload {
 	/**
 	 * Upload field render Function.
 	 *
-	 * @return void
+	 * @return string Field output.
 	 */
-	function render( $meta = false ) {
+	public function render() {
 
 		$select_text   = esc_html__( 'Select your file', 'anonyengine' );
 		$no_file_text  = esc_html__( 'No selected file', 'anonyengine' );
@@ -46,7 +48,7 @@ class ANONY_File_upload {
 
 		$note       = isset( $this->parent_obj->field['note'] ) ? $this->parent_obj->field['note'] : '';
 		$id         = $this->parent_obj->field['id'];
-		$is_meta    = ( $this->parent_obj->context == 'meta' ) ? true : false;
+		$is_meta    = ( 'meta' === $this->parent_obj->context ) ? true : false;
 		$has_title  = ( isset( $this->parent_obj->field['title'] ) ) ? true : false;
 		$title      = $has_title ? $this->parent_obj->field['title'] : '';
 		$name       = $this->parent_obj->input_name;

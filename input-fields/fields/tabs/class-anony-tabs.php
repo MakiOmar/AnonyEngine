@@ -7,9 +7,19 @@
  * @link http://makiomar.com
  */
 
+/**
+ * Tabs render class.
+ *
+ * @package    Fields inputs
+ * @author     Makiomar <info@makiomar.com>
+ * @license    https://makiomar.com AnonyEngine Licence
+ * @link       https://makiomar.com
+ */
 class ANONY_Tabs {
 
 	/**
+	 * Parent object
+	 *
 	 * @var object
 	 */
 	private $parent_obj;
@@ -19,8 +29,7 @@ class ANONY_Tabs {
 	 *
 	 * Required - must call the parent constructor, then assign field and value to vars, and obviously call the render field function
 	 *
-	 * @param array  $this->parent_obj->field Array of field's data
-	 * @param object $parent_obj Field parent object
+	 * @param object $parent_obj Field parent object.
 	 */
 	public function __construct( $parent_obj = null ) {
 
@@ -34,21 +43,21 @@ class ANONY_Tabs {
 	/**
 	 * Tabs field render Function.
 	 *
-	 * @return void
+	 * @return string Field output.
 	 */
-	function render() {
+	public function render() {
 
 		$count = isset( $this->parent_obj->value['count'] ) ? $this->parent_obj->value['count'] + 1 : 1;
 		$html  = '';
 		if ( isset( $this->parent_obj->field['note'] ) ) {
-			$html .= '<p class=anony-warning>' . $this->parent_obj->field['note'] . '<p>';
+			$html .= '<p class=anony-warning>' . esc_html( $this->parent_obj->field['note'] ) . '<p>';
 		}
 
 		$html .= sprintf(
 			'<fieldset class="anony-row anony-row-inline anony-tabs" id="fieldset_%1$s">',
 			$this->parent_obj->field['id']
 		);
-		if ( $this->parent_obj->context == 'meta' && isset( $this->parent_obj->field['title'] ) ) {
+		if ( 'meta' === $this->parent_obj->context && isset( $this->parent_obj->field['title'] ) ) {
 			$html .= sprintf(
 				'<label class="anony-label" for="%1$s">%2$s</label>',
 				$this->parent_obj->field['id'],
@@ -107,7 +116,7 @@ class ANONY_Tabs {
 	/**
 	 * Enqueue scripts.
 	 */
-	function enqueue() {
+	public function enqueue() {
 		wp_enqueue_script( 'anony-opts-field-tabs-js', ANONY_FIELDS_URI . 'tabs/field_tabs.js', array( 'jquery' ), time(), true );
 	}
 }

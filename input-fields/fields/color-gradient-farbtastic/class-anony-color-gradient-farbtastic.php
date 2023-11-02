@@ -9,6 +9,8 @@
 class ANONY_Color_gradient_farbtastic {
 
 	/**
+	 * Parent object
+	 *
 	 * @var object
 	 */
 	private $parent_obj;
@@ -37,7 +39,7 @@ class ANONY_Color_gradient_farbtastic {
 	/**
 	 * Color gradient field render Function.
 	 *
-	 * @return void
+	 * @return string Field output.
 	 */
 	public function render() {
 
@@ -63,7 +65,7 @@ class ANONY_Color_gradient_farbtastic {
 		}
 
 		if ( isset( $field['note'] ) ) {
-			echo '<p class=anony-warning>' . $this->parent_obj->field['note'] . '<p>';
+			echo '<p class=anony-warning>' . esc_html( $this->parent_obj->field['note'] ) . '<p>';
 		}
 
 		$html = '<div class="farb-popup-wrapper" id="' . $this->parent_obj->field['id'] . '">';

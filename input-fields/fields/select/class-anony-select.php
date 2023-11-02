@@ -7,17 +7,34 @@
  * @link http://makiomar.com
  */
 
+/**
+ * Select render class.
+ *
+ * @package    Fields inputs
+ * @author     Makiomar <info@makiomar.com>
+ * @license    https://makiomar.com AnonyEngine Licence
+ * @link       https://makiomar.com
+ */
 class ANONY_Select {
 
 	/**
+	 * Parent object
+	 *
 	 * @var object
 	 */
 	private $parent_obj;
 
 	/**
+	 * Option number
+	 *
+	 * @var object
+	 */
+	private $numbered;
+
+	/**
 	 * Color field Constructor.
 	 *
-	 * @param object $parent_obj Field parent object
+	 * @param object $parent_obj Field parent object.
 	 */
 	public function __construct( $parent_obj = null ) {
 		if ( ! is_object( $parent_obj ) ) {
@@ -32,13 +49,13 @@ class ANONY_Select {
 	/**
 	 * Select field render Function.
 	 *
-	 * @return void
+	 * @return string Field output.
 	 */
-	public function render( $meta = false ) {
+	public function render() {
 
-		$disabled = isset( $this->parent_obj->field['disabled'] ) && ( $this->parent_obj->field['disabled'] == true ) ? ' disabled' : '';
+		$disabled = isset( $this->parent_obj->field['disabled'] ) && ( true === $this->parent_obj->field['disabled'] ) ? ' disabled' : '';
 
-		$autocomplete = ( isset( $this->parent_obj->field['auto-complete'] ) && $this->parent_obj->field['auto-complete'] == 'on' ) ? 'autocomplete="on"' : 'autocomplete="off"';
+		$autocomplete = ( isset( $this->parent_obj->field['auto-complete'] ) && 'on' === $this->parent_obj->field['auto-complete'] ) ? 'autocomplete="on"' : 'autocomplete="off"';
 
 		if ( isset( $this->parent_obj->field['multiple'] ) && $this->parent_obj->field['multiple'] ) {
 			$multiple                     = ' multiple ';
@@ -54,10 +71,10 @@ class ANONY_Select {
 		);
 
 		if ( isset( $this->parent_obj->field['note'] ) ) {
-			echo '<p class=anony-warning>' . $this->parent_obj->field['note'] . '<p>';
+			echo '<p class=anony-warning>' . esc_html( $this->parent_obj->field['note'] ) . '<p>';
 		}
 
-		if ( in_array( $this->parent_obj->context, array( 'meta', 'form' ) ) && isset( $this->parent_obj->field['title'] ) ) {
+		if ( in_array( $this->parent_obj->context, array( 'meta', 'form' ), true ) && isset( $this->parent_obj->field['title'] ) ) {
 			$html .= sprintf(
 				'<label class="anony-label" for="%1$s">%2$s</label>',
 				$this->parent_obj->field['id'],
@@ -79,7 +96,7 @@ class ANONY_Select {
 			$html .= sprintf(
 				'<option value="">%1$s</option>',
 				apply_filters(
-					'anony-select-first-option-label',
+					'anony_select_first_option_label',
 					esc_html__( 'Select', 'anonyengine' ),
 					$this->parent_obj->field['id']
 				)
@@ -121,7 +138,7 @@ class ANONY_Select {
 						$label = $this->numbered ? $option_number . '- ' . $label : $label;
 						++$option_number;
 
-						$selected = is_array( $this->parent_obj->value ) && in_array( $key, $this->parent_obj->value ) && $key != '' ? ' selected' : '';
+						$selected = is_array( $this->parent_obj->value ) && in_array( $key, $this->parent_obj->value, true ) && '' !== $key ? ' selected' : '';
 
 						$html .= sprintf(
 							'<option value="%1$s"%2$s>%3$s</option>',
@@ -133,7 +150,7 @@ class ANONY_Select {
 					else :
 						foreach ( $this->parent_obj->field['options'] as $value ) {
 
-							$selected = is_array( $this->parent_obj->value ) && in_array( $value, $this->parent_obj->value ) && $value != '' ? ' selected' : '';
+							$selected = is_array( $this->parent_obj->value ) && in_array( $value, $this->parent_obj->value, true ) && '' !== $value ? ' selected' : '';
 
 							$html .= sprintf(
 								'<option value="%1$s"%2$s>%1$s</option>',

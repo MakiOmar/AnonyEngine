@@ -7,9 +7,18 @@
  * @link http://makiomar.com
  */
 
-class ANONY_Multi_text {
+/**
+ * Multi text render class
+ *
+ * @package Anonymous theme
+ * @author Makiomar
+ * @link http://makiomar.com
+ */
+class ANONY_Multi_Text {
 
 	/**
+	 * Parent object
+	 *
 	 * @var object
 	 */
 	private $parent_obj;
@@ -17,7 +26,7 @@ class ANONY_Multi_text {
 	/**
 	 * Color field Constructor.
 	 *
-	 * @param object $parent_obj Field parent object
+	 * @param object $parent_obj Field parent object.
 	 */
 	public function __construct( $parent_obj = null ) {
 		if ( ! is_object( $parent_obj ) ) {
@@ -33,11 +42,11 @@ class ANONY_Multi_text {
 	/**
 	 * Multi text field render Function.
 	 *
-	 * @return void
+	 * @return string Field output.
 	 */
-	function render() {
+	public function render() {
 
-		$buttonText = ( isset( $this->parent_obj->field['button-text'] ) ) ? ' placeholder="' . $this->parent_obj->field['button-text'] . '"' : esc_html__( 'Add', 'anonyengine' );
+		$button_text = ( isset( $this->parent_obj->field['button-text'] ) ) ? ' placeholder="' . $this->parent_obj->field['button-text'] . '"' : esc_html__( 'Add', 'anonyengine' );
 
 		$placeholder = ( isset( $this->parent_obj->field['placeholder'] ) ) ? 'placeholder="' . $this->parent_obj->field['placeholder'] . '"' : '';
 
@@ -47,9 +56,9 @@ class ANONY_Multi_text {
 		);
 
 		if ( isset( $this->parent_obj->field['note'] ) ) {
-			echo '<p class=anony-warning>' . $this->parent_obj->field['note'] . '<p>';
+			echo '<p class=anony-warning>' . esc_html( $this->parent_obj->field['note'] ) . '<p>';
 		}
-		if ( $this->parent_obj->context == 'meta' && isset( $this->parent_obj->field['title'] ) ) {
+		if ( 'meta' === $this->parent_obj->context && isset( $this->parent_obj->field['title'] ) ) {
 			$html .= sprintf(
 				'<label class="anony-label" for="%1$s">%2$s</label>',
 				$this->parent_obj->field['id'],
@@ -67,7 +76,7 @@ class ANONY_Multi_text {
 			'<a href="javascript:void(0);" class="multi-text-btn btn-blue" rel-id="%1$s-ul" rel-name="%2$s[]">%3$s</a></div>',
 			$this->parent_obj->field['id'],
 			$this->parent_obj->input_name,
-			$buttonText
+			$button_text
 		);
 
 		$html .= sprintf(
@@ -79,7 +88,7 @@ class ANONY_Multi_text {
 
 			foreach ( $this->parent_obj->value as $k => $value ) {
 
-				if ( $value != '' ) {
+				if ( '' !== $value ) {
 
 					$value = esc_attr( $value );
 

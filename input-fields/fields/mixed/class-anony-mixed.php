@@ -1,6 +1,6 @@
 <?php
 /**
- * Multi-input types render class.
+ * Multi-input types class.
  *
  * Handles rendring these type ['text','number','email', 'password','url', 'hidden'].
  *
@@ -9,9 +9,20 @@
  * @link http://makiomar.com
  */
 
+/**
+ * Multi-input types render class.
+ *
+ * Handles rendring these type ['text','number','email', 'password','url', 'hidden'].
+ *
+ * @package Anonymous plugin
+ * @author Makiomar
+ * @link http://makiomar.com
+ */
 class ANONY_Mixed {
 
 	/**
+	 * Parent object
+	 *
 	 * @var object
 	 */
 	private $parent_obj;
@@ -19,7 +30,7 @@ class ANONY_Mixed {
 	/**
 	 * Color field Constructor.
 	 *
-	 * @param object $parent_obj Field parent object
+	 * @param object $parent_obj Field parent object.
 	 */
 	public function __construct( $parent_obj = null ) {
 		if ( ! is_object( $parent_obj ) ) {
@@ -38,7 +49,7 @@ class ANONY_Mixed {
 				break;
 
 			case 'password':
-				$this->parent_obj->value = '';// Passwords can't be visible
+				$this->parent_obj->value = ''; // Passwords can't be visible.
 				break;
 
 			default:
@@ -52,7 +63,7 @@ class ANONY_Mixed {
 	 *
 	 * Suitable if editing/submitting is enabled
 	 *
-	 * @return void
+	 * @return string Field output.
 	 */
 	public function render() {
 
@@ -62,7 +73,7 @@ class ANONY_Mixed {
 		}
 		$placeholder = ( isset( $this->parent_obj->field['placeholder'] ) ) ? 'placeholder="' . $this->parent_obj->field['placeholder'] . '"' : '';
 
-		if ( $this->parent_obj->field['type'] == 'number' ) {
+		if ( 'number' === $this->parent_obj->field['type'] ) {
 
 			$step = ( isset( $this->parent_obj->field['step'] ) && ! empty( $this->parent_obj->field['step'] ) ) ? 'step="' . $this->parent_obj->field['step'] . '"' : '';
 
@@ -75,7 +86,7 @@ class ANONY_Mixed {
 			$html  = sprintf(
 				'<fieldset class="anony-row anony-row-inline"%2$s%3$s>',
 				$this->parent_obj->field['id'],
-				$this->parent_obj->field['type'] == 'hidden' ? ' style="display:none"' : '',
+				'hidden' === $this->parent_obj->field['type'] ? ' style="display:none"' : '',
 				$this->parent_obj->width
 			);
 			$html .= sprintf(
@@ -96,15 +107,15 @@ class ANONY_Mixed {
 		$html = sprintf(
 			'<fieldset class="anony-row anony-row-inline%3$s" id="fieldset_%1$s"%2$s>',
 			$this->parent_obj->field['id'],
-			$this->parent_obj->field['type'] == 'hidden' ? ' style="display:none"' : '',
+			'hidden' === $this->parent_obj->field['type'] ? ' style="display:none"' : '',
 			$this->parent_obj->width
 		);
 
 		if ( isset( $this->parent_obj->field['note'] ) ) {
-			$html .= '<p class=anony-warning>' . $this->parent_obj->field['note'] . '<p>';
+			$html .= '<p class=anony-warning>' . esc_html( $this->parent_obj->field['note'] ) . '<p>';
 		}
 
-		if ( in_array( $this->parent_obj->context, array( 'meta', 'form' ) ) && isset( $this->parent_obj->field['title'] ) ) {
+		if ( in_array( $this->parent_obj->context, array( 'meta', 'form' ), true ) && isset( $this->parent_obj->field['title'] ) ) {
 			$html .= sprintf(
 				'<label class="anony-label" for="%1$s">%2$s</label>',
 				$this->parent_obj->field['id'],
@@ -137,22 +148,22 @@ class ANONY_Mixed {
 		return $html;
 	}
 
-
+	//phpcs:disable WordPress.NamingConventions.ValidFunctionName.MethodNameInvalid
 	/**
 	 * Text field render Function.
 	 *
 	 * Suitable if editing/submitting is enabled
 	 *
-	 * @return void
+	 * @return string Field output.
 	 */
 	public function renderDisplay() {
-
+		//phpcs:enable.
 		$html = sprintf(
 			'<div class="anony-row anony-row-inline" id="fieldset_%1$s">',
 			$this->parent_obj->field['id']
 		);
 
-		if ( $this->parent_obj->context == 'meta' && isset( $this->parent_obj->field['title'] ) ) {
+		if ( 'meta' === $this->parent_obj->context && isset( $this->parent_obj->field['title'] ) ) {
 			$html .= sprintf(
 				'<label class="anony-label" for="%1$s">%2$s</label>',
 				$this->parent_obj->field['id'],

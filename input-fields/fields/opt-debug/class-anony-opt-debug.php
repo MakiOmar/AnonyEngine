@@ -1,14 +1,24 @@
 <?php
 /**
- * Info field class
+ * Debug field class
  *
  * @package Anonymous theme
  * @author Makiomar
  * @link http://makiomar.com
  */
-class ANONY_Opt_debug {
+
+/**
+ * Debug render class
+ *
+ * @package Anonymous theme
+ * @author Makiomar
+ * @link http://makiomar.com
+ */
+class ANONY_Opt_Debug {
 
 	/**
+	 * Parent object
+	 *
 	 * @var object
 	 */
 	private $parent_obj;
@@ -16,7 +26,7 @@ class ANONY_Opt_debug {
 	/**
 	 * Color field Constructor.
 	 *
-	 * @param object $parent_obj Field parent object
+	 * @param object $parent_obj Field parent object.
 	 */
 	public function __construct( $parent_obj = null ) {
 		if ( ! is_object( $parent_obj ) ) {
@@ -31,13 +41,13 @@ class ANONY_Opt_debug {
 	/**
 	 * Info field render Function.
 	 *
-	 * @return void
+	 * @return string Field output.
 	 */
-	public function render( $meta = false ) {
+	public function render() {
 		if ( key_exists( 'callback', $this->parent_obj->field ) ) {
 			$debug = call_user_func( $this->parent_obj->field['callback'] );
 
-			ANONY_HELP::neatVarDump( $debug );
+			ANONY_HELP::neat_var_dump( $debug );
 			return;
 		}
 	}

@@ -25,16 +25,22 @@ if ( ! class_exists( 'ANONY_Tel' ) ) {
 	class ANONY_Tel {
 
 		/**
+		 * Parent object
+		 *
 		 * @var object
 		 */
 		private $parent_obj;
 
 		/**
+		 * Show/hide dial codes
+		 *
 		 * @var string
 		 */
 		private $with_dial_codes;
 
 		/**
+		 * Input pattern
+		 *
 		 * @var string
 		 */
 		private $pattern;
@@ -42,7 +48,7 @@ if ( ! class_exists( 'ANONY_Tel' ) ) {
 		/**
 		 * Tel field Constructor.
 		 *
-		 * @param object $parent_obj Field parent object
+		 * @param object $parent_obj Field parent object.
 		 */
 		public function __construct( $parent_obj = null ) {
 
@@ -78,7 +84,7 @@ if ( ! class_exists( 'ANONY_Tel' ) ) {
 		/**
 		 * Text field render Function.
 		 *
-		 * @return void
+		 * @return string Field output.
 		 */
 		public function render() {
 
@@ -95,10 +101,10 @@ if ( ! class_exists( 'ANONY_Tel' ) ) {
 			);
 
 			if ( isset( $this->parent_obj->field['note'] ) ) {
-				$html .= '<p class=anony-warning>' . $this->parent_obj->field['note'] . '<p>';
+				$html .= '<p class=anony-warning>' . esc_html( $this->parent_obj->field['note'] ) . '<p>';
 			}
 
-			if ( in_array( $this->parent_obj->context, array( 'meta', 'form' ) ) && isset( $this->parent_obj->field['title'] ) ) {
+			if ( in_array( $this->parent_obj->context, array( 'meta', 'form' ), true ) && isset( $this->parent_obj->field['title'] ) ) {
 				$html .= sprintf(
 					'<label class="anony-label" for="%1$s">%2$s</label>',
 					$this->parent_obj->field['id'],
@@ -150,6 +156,7 @@ if ( ! class_exists( 'ANONY_Tel' ) ) {
 
 			return $html;
 		}
+		//phpcs:disable WordPress.NamingConventions.ValidFunctionName.MethodNameInvalid
 		/**
 		 * Text field render Function.
 		 *
@@ -158,13 +165,14 @@ if ( ! class_exists( 'ANONY_Tel' ) ) {
 		 * @return string Field's output.
 		 */
 		public function renderDisplay() {
+			//phpcs:enable.
 
 			$html = sprintf(
 				'<div class="anony-row anony-row-inline" id="fieldset_%1$s">',
 				$this->parent_obj->field['id']
 			);
 
-			if ( $this->parent_obj->context == 'meta' && isset( $this->parent_obj->field['title'] ) ) {
+			if ( 'meta' === $this->parent_obj->context && isset( $this->parent_obj->field['title'] ) ) {
 				$html .= sprintf(
 					'<label class="anony-label" for="%1$s">%2$s</label>',
 					$this->parent_obj->field['id'],
@@ -191,8 +199,7 @@ if ( ! class_exists( 'ANONY_Tel' ) ) {
 		 */
 		public function enqueue() {
 			if ( 'yes' === $this->with_dial_codes ) {
-				wp_enqueue_style( 'intlTelInput', ANONY_FIELDS_URI . 'tel/css/intlTelInput.css' );
-				// wp_enqueue_script('intlTelInput', ANONY_FIELDS_URI.'tel/js/intlTelInput-jquery.min.js', array('jquery' ), time(), true);
+				wp_enqueue_style( 'intlTelInput', ANONY_FIELDS_URI . 'tel/css/intlTelInput.css', array(), '1.0' );
 				wp_enqueue_script( 'intlTelInput', ANONY_FIELDS_URI . 'tel/js/intlTelInput.min.js', array(), time(), true );
 			}
 		}
@@ -212,14 +219,11 @@ if ( ! class_exists( 'ANONY_Tel' ) ) {
 				function (){ ?>
 
 				<script type="text/javascript">
-					/*jQuery(document).ready(function(e) {
-						e("#<?php echo $this->parent_obj->field['id']; ?>").intlTelInput();
-					});*/
 					// Vanilla Javascript.
-					var input = document.querySelector("#<?php echo $this->parent_obj->field['id']; ?>");
+					var input = document.querySelector("#<?php echo esc_attr( $this->parent_obj->field['id'] ); ?>");
 					window.intlTelInput(input,({
 						// specify the path to the libphonenumber script to enable validation/formatting.
-						utilsScript: '<?php echo ANONY_FIELDS_URI; ?>tel/js/utils.js',
+						utilsScript: '<?php echo esc_url( ANONY_FIELDS_URI ); ?>tel/js/utils.js',
 						autoHideDialCode: false,
 						nationalMode: false
 					}));

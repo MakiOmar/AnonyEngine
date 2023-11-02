@@ -10,6 +10,8 @@
 class ANONY_Date_time {
 
 	/**
+	 * Parent object
+	 *
 	 * @var object
 	 */
 	private $parent_obj;
@@ -75,9 +77,9 @@ class ANONY_Date_time {
 	/**
 	 * Date field render Function.
 	 *
-	 * @return void
+	 * @return string Field output.
 	 */
-	public function render( $meta = false ) {
+	public function render() {
 
 		$placeholder = isset( $this->parent_obj->field['placeholder'] ) ? ' placeholder="' . $this->parent_obj->field['placeholder'] . '"' : ' placeholder="' . $this->parent_obj->field['title'] . '"';
 
@@ -104,7 +106,7 @@ class ANONY_Date_time {
 			$this->parent_obj->field['id']
 		);
 
-		if ( $this->parent_obj->context == 'meta' && isset( $this->parent_obj->field['title'] ) ) {
+		if ( 'meta' === $this->parent_obj->context && isset( $this->parent_obj->field['title'] ) ) {
 			$html .= sprintf(
 				'<label class="anony-label" for="%1$s">%2$s</label>',
 				$this->parent_obj->field['id'],
@@ -115,7 +117,7 @@ class ANONY_Date_time {
 		$html .= '<div class="anony-flex-column">';
 
 		if ( isset( $field['note'] ) ) {
-			echo '<p class=anony-warning>' . $this->parent_obj->field['note'] . '<p>';
+			echo '<p class=anony-warning>' . esc_html( $this->parent_obj->field['note'] ) . '<p>';
 		}
 
 		$html .= sprintf(

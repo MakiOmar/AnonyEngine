@@ -11,6 +11,8 @@ class ANONY_Checkbox {
 
 
 	/**
+	 * Parent object
+	 *
 	 * @var object
 	 */
 	private $parent_obj;
@@ -53,7 +55,7 @@ class ANONY_Checkbox {
 
 			'desc'     => isset( $this->parent_obj->field['desc'] ) ? esc_html( $this->parent_obj->field['desc'] ) : false,
 
-			'disabled' => isset( $this->parent_obj->field['disabled'] ) && ( $this->parent_obj->field['disabled'] == true ) ? " disabled = 'disabled' " : '',
+			'disabled' => isset( $this->parent_obj->field['disabled'] ) && ( true === $this->parent_obj->field['disabled'] ) ? " disabled = 'disabled' " : '',
 		);
 	}
 

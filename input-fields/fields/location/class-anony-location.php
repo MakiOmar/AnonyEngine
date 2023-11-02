@@ -1,15 +1,24 @@
 <?php
 /**
- * Location render class.
+ * Location class.
  *
  * @package Anonymous plugin
  * @author Makiomar
  * @link http://makiomar.com
  */
 
+/**
+ * Location render class.
+ *
+ * @package Anonymous plugin
+ * @author Makiomar
+ * @link http://makiomar.com
+ */
 class ANONY_Location {
 
 	/**
+	 * Parent object
+	 *
 	 * @var object
 	 */
 	private $parent_obj;
@@ -17,7 +26,7 @@ class ANONY_Location {
 	/**
 	 * Color field Constructor.
 	 *
-	 * @param object $parent_obj Field parent object
+	 * @param object $parent_obj Field parent object.
 	 */
 	public function __construct( $parent_obj = null ) {
 		if ( ! is_object( $parent_obj ) ) {
@@ -32,7 +41,7 @@ class ANONY_Location {
 	 *
 	 * Suitable if editing/submitting is enabled
 	 *
-	 * @return void
+	 * @return string Field output.
 	 */
 	public function render() {
 
@@ -41,15 +50,15 @@ class ANONY_Location {
 		$html = sprintf(
 			'<fieldset class="anony-row anony-row-inline%3$s fieldset-location" id="fieldset_%1$s"%2$s>',
 			$this->parent_obj->field['id'],
-			$this->parent_obj->field['type'] == 'hidden' ? ' style="display:none"' : '',
+			'hidden' === $this->parent_obj->field['type'] ? ' style="display:none"' : '',
 			$this->parent_obj->width
 		);
 
 		if ( isset( $this->parent_obj->field['note'] ) ) {
-			$html .= '<p class=anony-warning>' . $this->parent_obj->field['note'] . '<p>';
+			$html .= '<p class=anony-warning>' . esc_html( $this->parent_obj->field['note'] ) . '<p>';
 		}
 
-		if ( in_array( $this->parent_obj->context, array( 'meta', 'form' ) ) && isset( $this->parent_obj->field['title'] ) ) {
+		if ( in_array( $this->parent_obj->context, array( 'meta', 'form' ), true ) && isset( $this->parent_obj->field['title'] ) ) {
 			$html .= sprintf(
 				'<label class="anony-label" for="%1$s">%2$s</label>',
 				$this->parent_obj->field['id'],

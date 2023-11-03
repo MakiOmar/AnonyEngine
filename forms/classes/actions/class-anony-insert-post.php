@@ -30,8 +30,25 @@ if ( ! class_exists( 'ANONY_Insert_Post' ) ) {
 		 */
 		const REQUIRED_ARGUMENTS = array( 'post_type', 'post_status', 'post_title' );
 
+		/**
+		 * Form object
+		 *
+		 * @var object
+		 */
 		protected $form;
+
+		/**
+		 * Submited data request
+		 *
+		 * @var array
+		 */
 		protected $request;
+
+		/**
+		 * Result
+		 *
+		 * @var mixed
+		 */
 		public $result = false;
 
 		/**

@@ -76,7 +76,7 @@ class ANONY_Checkbox {
 
 		ob_start();
 
-		include 'checkbox.view.php';
+		include 'checkbox-view.php';
 
 		$html = ob_get_contents();
 

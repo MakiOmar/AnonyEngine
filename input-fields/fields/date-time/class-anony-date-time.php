@@ -7,7 +7,14 @@
  * @link http://makiomar.com
  */
 
-class ANONY_Date_time {
+/**
+ * Date and Time field render class
+ *
+ * @package Anonymous theme
+ * @author Makiomar
+ * @link http://makiomar.com
+ */
+class ANONY_Date_Time {
 
 	/**
 	 * Parent object
@@ -18,22 +25,30 @@ class ANONY_Date_time {
 
 
 	/**
+	 * Dtae format.
+	 *
 	 * @var string
 	 */
 	private $date_format;
 
 	/**
+	 * Time format.
+	 *
 	 * @var string
 	 */
 	private $time_format;
 
 	/**
+	 * Get date only. time only or both.
+	 *
 	 * @var string
 	 */
 	private $get;
 
 	/**
-	 * @var string
+	 * DateTime picker options.
+	 *
+	 * @var array
 	 */
 	private $picker_options;
 
@@ -42,8 +57,7 @@ class ANONY_Date_time {
 	 *
 	 * Required - must call the parent constructor, then assign field and value to vars, and obviously call the render field function
 	 *
-	 * @param array  $field Array of field's data
-	 * @param object $parent_obj Field parent object
+	 * @param object $parent_obj Field parent object.
 	 */
 	public function __construct( $parent_obj = null ) {
 		if ( ! is_object( $parent_obj ) ) {
@@ -69,7 +83,7 @@ class ANONY_Date_time {
 
 		add_action( 'admin_print_footer_scripts', array( &$this, 'footer_scripts' ) );
 
-		if ( isset( $this->parent_obj->field['show_on_front'] ) && $this->parent_obj->field['show_on_front'] == true ) {
+		if ( isset( $this->parent_obj->field['show_on_front'] ) && true === $this->parent_obj->field['show_on_front'] ) {
 			add_action( 'wp_print_footer_scripts', array( &$this, 'footer_scripts' ) );
 		}
 	}
@@ -147,37 +161,35 @@ class ANONY_Date_time {
 		wp_enqueue_script( 'jquery' );
 		wp_enqueue_script( 'jquery-ui-core' );
 		wp_enqueue_script( 'jquery-ui-datepicker' );
-		wp_enqueue_script( 'jquery-ui-timepicker-addon', ANONY_FIELDS_URI . 'date-time/jquery-ui-timepicker-addon.js', array( 'jquery', 'jquery-ui-datepicker', 'jquery-ui-core' ) );
+		wp_enqueue_script( 'jquery-ui-timepicker-addon', ANONY_FIELDS_URI . 'date-time/jquery-ui-timepicker-addon.js', array( 'jquery', 'jquery-ui-datepicker', 'jquery-ui-core' ), time(), array( 'in_footer' => true ) );
 
 		// Styles.
-		wp_enqueue_style( 'jquery-ui-css', ANONY_FIELDS_URI . 'date-time/jquery-ui.css' );
-		wp_enqueue_style( 'jquery-ui-timepicker-addon', ANONY_FIELDS_URI . 'date-time/jquery-ui-timepicker-addon.css', array( 'jquery-ui-css' ) );
+		wp_enqueue_style( 'jquery-ui-css', ANONY_FIELDS_URI . 'date-time/jquery-ui.css', array(), time() );
+		wp_enqueue_style( 'jquery-ui-timepicker-addon', ANONY_FIELDS_URI . 'date-time/jquery-ui-timepicker-addon.css', array( 'jquery-ui-css' ), time() );
 	}
 
 	/**
 	 * Add date/time picker footer scripts
 	 */
 	public function footer_scripts() {
+		$options = '';
+		// Options for datetime picker.
+		foreach ( $this->picker_options as $key => $value ) {
+			$options .= $key . ':"' . $value . '",';
+		}
 		?>
 
 		<script type="text/javascript">
 			jQuery(document).ready(function($){
-				var fieldClass = <?php echo '".anony-' . $this->parent_obj->field['id'] . '"'; ?>;
+
+				var fieldClass = <?php echo '".anony-' . esc_js( $this->parent_obj->field['id'] ) . '"'; ?>;
 				//console.log(fieldClass);
 
-				var DateTimeOptions = {
-										<?php
-											// Options for datetime picker.
-										foreach ( $this->picker_options as $key => $value ) {
-											echo $key . ':' . '"' . $value . '",';
-										}
-										?>
-										
-									};
-				var getWhat = '<?php echo $this->get; ?>picker';
+				var DateTimeOptions = {<?php echo esc_js( $options ); ?>};
+				var getWhat = '<?php echo esc_js( $this->get ); ?>picker';
 
 				<?php if ( isset( $this->parent_obj->field['nested-to'] ) ) { ?>
-					var nestedToId = <?php echo '".' . $this->parent_obj->field['nested-to'] . '"'; ?>;
+					var nestedToId = <?php echo '".' . esc_js( $this->parent_obj->field['nested-to'] ) . '"'; ?>;
 					var nestedTo   = nestedToId + '-wrapper';
 				<?php } ?>
 				

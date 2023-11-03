@@ -47,16 +47,16 @@ class ANONY_File_Upload {
 	 */
 	public function render() {
 
-		$select_text   = esc_html__( 'Select your file', 'anonyengine' );
-		$no_file_text  = esc_html__( 'No selected file', 'anonyengine' );
-		$current_text  = esc_html__( 'Current file:', 'anonyengine' );
-		$download_text = esc_html__( 'Download', 'anonyengine' );
+		$select_text   = __( 'Select your file', 'anonyengine' );
+		$no_file_text  = __( 'No selected file', 'anonyengine' );
+		$current_text  = __( 'Current file:', 'anonyengine' );
+		$download_text = __( 'Download', 'anonyengine' );
 
 		$note       = isset( $this->parent_obj->field['note'] ) ? $this->parent_obj->field['note'] : '';
 		$id         = $this->parent_obj->field['id'];
 		$is_meta    = ( 'meta' === $this->parent_obj->context ) ? true : false;
 		$has_title  = ( isset( $this->parent_obj->field['title'] ) ) ? true : false;
-		$title      = $has_title ? $this->parent_obj->field['title'] : '';
+		$label      = $has_title ? $this->parent_obj->field['title'] : '';
 		$name       = $this->parent_obj->input_name;
 		$class_attr = $this->parent_obj->class_attr;
 		$value      = $this->parent_obj->value;
@@ -70,7 +70,7 @@ class ANONY_File_Upload {
 
 		ob_start();
 
-		include 'file-upload.view.php';
+		include 'file-upload-view.php';
 
 		$html = ob_get_clean();
 

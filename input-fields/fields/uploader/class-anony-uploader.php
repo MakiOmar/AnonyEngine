@@ -41,12 +41,12 @@ class ANONY_Uploader {
 	 * Required - must call the parent constructor, then assign field and value to vars,
 	 * and obviously call the render field function.
 	 *
-	 * @param object     $parent_obj Field parent object.
-	 * @param boo|string $style Field style.
+	 * @param object      $parent_obj Field parent object.
+	 * @param bool|string $field Field arguments.
 	 */
-	public function __construct( $parent_obj = null, $style = false ) {
-		if ( $style ) {
-			$this->style = $style;
+	public function __construct( $parent_obj = null, $field = false ) {
+		if ( $field ) {
+			$this->style = ! empty( $field['style'] ) ? $field['style'] : false;
 		} else {
 			$this->style = ! empty( $parent_obj->field['style'] ) ? $parent_obj->field['style'] : 'default';
 		}

@@ -71,10 +71,8 @@ if ( ! class_exists( 'ANONY_Fields_Scripts' ) ) {
 					if ( $this->select_field( $field ) ) {
 						$class = $this->select_field( $field );
 
-						$style = ! empty( $field['style'] ) ? $field['style'] : false;
-
 						if ( class_exists( $class ) && method_exists( $class, 'enqueue' ) ) {
-							$obj = new $class( null, $style );
+							$obj = new $class( null, $field );
 							$obj->enqueue();
 						}
 					}

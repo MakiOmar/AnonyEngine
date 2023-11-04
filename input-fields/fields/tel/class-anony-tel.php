@@ -36,7 +36,7 @@ if ( ! class_exists( 'ANONY_Tel' ) ) {
 		 *
 		 * @var string
 		 */
-		private $with_dial_codes;
+		private $with_dial_codes = 'no';
 
 		/**
 		 * Input pattern
@@ -48,9 +48,17 @@ if ( ! class_exists( 'ANONY_Tel' ) ) {
 		/**
 		 * Tel field Constructor.
 		 *
-		 * @param object $parent_obj Field parent object.
+		 * @param object      $parent_obj Field parent object.
+		 * @param bool|string $field Field arguments.
 		 */
-		public function __construct( $parent_obj = null ) {
+		public function __construct( $parent_obj = null, $field = false ) {
+
+			if ( $field && isset( $field['with-dial-codes'] ) ) {
+
+				$this->with_dial_codes = $field['with-dial-codes'];
+				$this->dial_init( $field['id'] );
+
+			}
 
 			if ( ! is_object( $parent_obj ) ) {
 				return;
@@ -67,13 +75,11 @@ if ( ! class_exists( 'ANONY_Tel' ) ) {
 				$this->parent_obj->description = $this->parent_obj->field['desc'];
 			}
 
-			$this->with_dial_codes = 'no';
-
 			if ( isset( $this->parent_obj->field['with-dial-codes'] ) ) {
 				$this->with_dial_codes = $this->parent_obj->field['with-dial-codes'];
 			}
 			if ( 'yes' === $this->with_dial_codes ) {
-				$this->dial_init();
+				$this->dial_init( $this->parent_obj->field['id'] );
 			}
 
 			if ( isset( $this->parent_obj->field['pattern'] ) ) {
@@ -208,19 +214,20 @@ if ( ! class_exists( 'ANONY_Tel' ) ) {
 		/**
 		 * Initialize dial code.
 		 *
+		 * @param string $target_id Target field id.
 		 * @return void
 		 */
-		public function dial_init() {
+		public function dial_init( $target_id ) {
 
 			$hook = is_admin() ? 'admin_print_footer_scripts' : 'wp_print_footer_scripts';
 
 			add_action(
 				$hook,
-				function (){ ?>
+				function () use ( $target_id ) { ?>
 
 				<script type="text/javascript">
 					// Vanilla Javascript.
-					var input = document.querySelector("#<?php echo esc_attr( $this->parent_obj->field['id'] ); ?>");
+					var input = document.querySelector("#<?php echo esc_attr( $target_id ); ?>");
 					window.intlTelInput(input,({
 						// specify the path to the libphonenumber script to enable validation/formatting.
 						utilsScript: '<?php echo esc_url( ANONY_FIELDS_URI ); ?>tel/js/utils.js',

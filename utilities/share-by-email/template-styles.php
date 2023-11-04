@@ -1,96 +1,105 @@
+<?php
+/**
+ * Share by email styles
+ *
+ * @package AnonyEngine
+ */
+
+defined( 'ABSPATH' ) || die();
+?>
+
 <style>
 /* arabic */
 @font-face {
-    font-family: 'Tajawal';
-    font-style: normal;
-    font-weight: 500;
-    font-display: swap;
-    src: local('Tajawal Medium'), local('Tajawal-Medium'), url(https://fonts.gstatic.com/s/tajawal/v3/Iurf6YBj_oCad4k1l8KiHrRpiYlJ.woff2) format('woff2');
-    unicode-range: U+0600-06FF, U+200C-200E, U+2010-2011, U+204F, U+2E41, U+FB50-FDFF, U+FE80-FEFC;
+	font-family: 'Tajawal';
+	font-style: normal;
+	font-weight: 500;
+	font-display: swap;
+	src: local('Tajawal Medium'), local('Tajawal-Medium'), url(https://fonts.gstatic.com/s/tajawal/v3/Iurf6YBj_oCad4k1l8KiHrRpiYlJ.woff2) format('woff2');
+	unicode-range: U+0600-06FF, U+200C-200E, U+2010-2011, U+204F, U+2E41, U+FB50-FDFF, U+FE80-FEFC;
 }
 /* latin */
 @font-face {
-    font-family: 'Tajawal';
-    font-style: normal;
-    font-weight: 500;
-    font-display: swap;
-    src: local('Tajawal Medium'), local('Tajawal-Medium'), url(https://fonts.gstatic.com/s/tajawal/v3/Iurf6YBj_oCad4k1l8KiHrFpiQ.woff2) format('woff2');
-    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+	font-family: 'Tajawal';
+	font-style: normal;
+	font-weight: 500;
+	font-display: swap;
+	src: local('Tajawal Medium'), local('Tajawal-Medium'), url(https://fonts.gstatic.com/s/tajawal/v3/Iurf6YBj_oCad4k1l8KiHrFpiQ.woff2) format('woff2');
+	unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 html,
 body {
-    margin: 0 auto !important;
-    padding: 0 !important;
-    height: 100% !important;
-    width: 100% !important;
-    background: #f1f1f1;
-	direction: <= $dir ?>
+	margin: 0 auto !important;
+	padding: 0 !important;
+	height: 100% !important;
+	width: 100% !important;
+	background: #f1f1f1;
+	direction: <?php echo esc_html( $dir ); ?>
 }
 
 /* What it does: Stops email clients resizing small text. */
 * {
-    -ms-text-size-adjust: 100%;
-    -webkit-text-size-adjust: 100%;
+	-ms-text-size-adjust: 100%;
+	-webkit-text-size-adjust: 100%;
 }
 
 /* What it does: Centers email on Android 4.4 */
 div[style*="margin: 16px 0"] {
-    margin: 0 !important;
+	margin: 0 !important;
 }
-
 /* What it does: Stops Outlook from adding extra spacing to tables. */
-table,
-td {
-    mso-table-lspace: 0pt !important;
-    mso-table-rspace: 0pt !important;
+table, td {
+	
+	mso-table-lspace: 0pt !important;
+	mso-table-rspace: 0pt !important;
+	
 }
-
 /* What it does: Fixes webkit padding issue. */
 table {
-    border-spacing: 0 !important;
-    border-collapse: collapse !important;
-    table-layout: fixed !important;
-    margin: 0 auto !important;
+	border-spacing: 0 !important;
+	border-collapse: collapse !important;
+	table-layout: fixed !important;
+	margin: 0 auto !important;
 }
 
 /* What it does: Uses a better rendering method when resizing images in IE. */
 img {
-    -ms-interpolation-mode:bicubic;
+	-ms-interpolation-mode:bicubic;
 }
 
 /* What it does: Prevents Windows 10 Mail from underlining links despite inline CSS. Styles for underlined links should be inline. */
 a {
-    text-decoration: none;
+	text-decoration: none;
 }
 
 /* What it does: A work-around for email clients meddling in triggered links. */
 *[x-apple-data-detectors],  /* iOS */
 .unstyle-auto-detected-links *,
 .aBn {
-    border-bottom: 0 !important;
-    cursor: default !important;
-    color: inherit !important;
-    text-decoration: none !important;
-    font-size: inherit !important;
-    font-family: inherit !important;
-    font-weight: inherit !important;
-    line-height: inherit !important;
+	border-bottom: 0 !important;
+	cursor: default !important;
+	color: inherit !important;
+	text-decoration: none !important;
+	font-size: inherit !important;
+	font-family: inherit !important;
+	font-weight: inherit !important;
+	line-height: inherit !important;
 }
 
 /* What it does: Prevents Gmail from displaying a download button on large, non-linked images. */
 .a6S {
-    display: none !important;
-    opacity: 0.01 !important;
+	display: none !important;
+	opacity: 0.01 !important;
 }
 
 /* What it does: Prevents Gmail from changing the text color in conversation threads. */
 .im {
-    color: inherit !important;
+	color: inherit !important;
 }
 
 /* If the above doesn't work, add a .g-img class to any image in question. */
 img.g-img + div {
-    display: none !important;
+	display: none !important;
 }
 
 /* What it does: Removes right gutter in Gmail iOS app: https://github.com/TedGoas/Cerberus/issues/89  */
@@ -98,28 +107,28 @@ img.g-img + div {
 
 /* iPhone 4, 4S, 5, 5S, 5C, and 5SE */
 @media only screen and (min-device-width: 320px) and (max-device-width: 374px) {
-    u ~ div .email-container {
-        min-width: 320px !important;
-    }
+	u ~ div .email-container {
+		min-width: 320px !important;
+	}
 }
 /* iPhone 6, 6S, 7, 8, and X */
 @media only screen and (min-device-width: 375px) and (max-device-width: 413px) {
-    u ~ div .email-container {
-        min-width: 375px !important;
-    }
+	u ~ div .email-container {
+		min-width: 375px !important;
+	}
 }
 /* iPhone 6+, 7+, and 8+ */
 @media only screen and (min-device-width: 414px) {
-    u ~ div .email-container {
-        min-width: 414px !important;
-    }
+	u ~ div .email-container {
+		min-width: 414px !important;
+	}
 }
 
 </style>
 
-    <!-- CSS Reset : END -->
+	<!-- CSS Reset : END -->
 
-    <!-- Progressive Enhancements : BEGIN -->
+	<!-- Progressive Enhancements : BEGIN -->
 <style>
 
 .primary{
@@ -171,9 +180,6 @@ body{
 a{
 	color: #f3a333;
 }
-
-table{
-}
 /*LOGO*/
 
 .logo h1{
@@ -191,9 +197,6 @@ table{
 .hero{
 	position: relative;
 }
-.hero img{
-
-}
 .hero .text{
 	color: rgba(255,255,255,.8);
 }
@@ -205,8 +208,6 @@ table{
 
 
 /*HEADING SECTION*/
-.heading-section{
-}
 .heading-section h2{
 	color: #000000;
 	font-size: 28px;
@@ -259,9 +260,6 @@ table{
 .icon{
 	text-align: center;
 }
-.icon img{
-}
-
 
 /*SERVICES*/
 .text-services{

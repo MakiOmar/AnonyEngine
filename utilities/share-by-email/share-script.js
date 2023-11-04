@@ -74,6 +74,7 @@ jQuery( document ).ready(
 							anony_share_description : paramObj.anony_share_description,
 							anony_share_url   : paramObj.anony_share_url,
 							anony_share_img   : paramObj.anony_share_img,
+							nonce             : shareByEmail.nonce,
 						},
 						url : anonyAjaxUrl,
 						success:function (response) {

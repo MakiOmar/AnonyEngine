@@ -7,10 +7,13 @@
  * @link http://makiomar.com
  */
 
-/*
----------------------------------------------------------------
+defined( 'ABSPATH' ) || die();
+
+/**
+ * ---------------------------------------------------------------
  * Options configurations
- *-------------------------------------------------------------*/
+ * -------------------------------------------------------------
+ */
 
 /**
  * Holds directory separator
@@ -33,10 +36,11 @@ define( 'ANONY_OPTIONS', 'Anony_Options' );
  */
 define( 'ANONY_OPTIONS_URI', ANOE_URI . 'options/' );
 
-/*
-----------------------------------------------------------------------
-* Options Autoloading
-*---------------------------------------------------------------------*/
+/**
+ * ----------------------------------------------------------------------
+ * Options Autoloading
+ * ----------------------------------------------------------------------
+ */
 
 
 /**
@@ -60,20 +64,20 @@ define( 'ANONY_OPTIONS_FIELDS', wp_normalize_path( ANOE_DIR . 'options/fields/' 
  */
 define( 'ANONY_OPTIONS_WIDGETS', wp_normalize_path( ANOE_DIR . 'options/widgets/' ) );
 
-
-/*
-----------------------------------------------------------------------------------
-*Options functions
-*---------------------------------------------------------------------------------*/
+/**
+ * ----------------------------------------------------------------------
+ * Options functions
+ * ----------------------------------------------------------------------
+ */
 
 /**
  * Theme Fonts list - system & Google Fonts.
  *
- * @param mixed $type type of font ['system', 'default', 'popular', 'all']
- * @return array Array of fonts names
+ * @param mixed $type type of font ['system', 'default', 'popular', 'all'].
+ * @return array Array of fonts names.
  */
 function anony_fonts( $type = false ) {
-	$fonts = unserialize( ANOE_FONTS );
+	$fonts = json_decode( ANOE_FONTS );
 
 	if ( $type ) {
 		return $fonts[ $type ];

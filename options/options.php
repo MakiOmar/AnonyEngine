@@ -7,4 +7,6 @@
  * @link http://makiomar.com
  */
 
+defined( 'ABSPATH' ) || die();
+
 require_once 'opts.php';

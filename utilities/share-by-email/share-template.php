@@ -1,3 +1,12 @@
+<?php
+/**
+ * Share email template
+ *
+ * @package AnonyEngine
+ */
+
+defined( 'ABSPATH' ) || die();
+?>
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
 <head>
@@ -7,12 +16,17 @@
 	<meta name="x-apple-disable-message-reformatting">  <!-- Disable auto-scale in iOS 10 Mail entirely -->
 	<title></title> <!-- The title tag shows in email notifications, like Android 4.4. -->
 
+	<?php
+		add_action(
+			'wp_enqueue_scripts',
+			function () {
+				wp_enqueue_style( 'email-google-font', 'https://fonts.googleapis.com/css?family=Playfair+Display:400,400i,700,700i', array(), time() );
+			}
+		);
 
-	<link href="https://fonts.googleapis.com/css?family=Playfair+Display:400,400i,700,700i" rel="stylesheet">
-
-	<!-- CSS Reset : BEGIN -->
-
-	<?php require 'template-styles.php'; ?>
+		require 'template-styles.php';
+		wp_head();
+		?>
 
 
 </head>
@@ -32,13 +46,13 @@
 
 					<td class="bg_white logo" style="padding: 1em 2.5em; text-align: center">
 
-					<h1><a href="#"><?php echo $anony_share_title; ?></a></h1>
+					<h1><a href="#"><?php echo esc_html( $posted['anony_share_title'] ); ?></a></h1>
 					</td>
 				</tr>
 				
 				<!-- Header -->
 				<tr>
-					<td valign="middle" class="hero" style="background-image: url('<?php echo $anony_share_img; ?>'); background-size: cover; height: 400px;">
+					<td valign="middle" class="hero" style="background-image: url('<?php echo esc_url( $posted['anony_share_img'] ); ?>'); background-size: cover; height: 400px;">
 					<table style="margin:auto">
 						<tr>
 							<td>

@@ -7,41 +7,54 @@
  * @link http://makiomar.com
  */
 
-
-/**
- * Group many options of our themes into 1
- * Create an option group in wp_options using the name provided when construct the object, e.g.:
- *      $anony_option = new ANONY_Options_Model("anony_option");
- * Get & Set new option in this group using assignments & save() function, e.g.:
- *      $anony_option->logo = {url};
- *      $anony_option->save();
- *      echo $anony_option->logo;
- * Options in this group will be stored as an array, however to get an option, use -> instead of [], since this class use __get & __set methods.
- * This class keeps the old ways of retrieving options, so you can also use $anony_option->get_option() & update_options(), add_options()
- */
+defined( 'ABSPATH' ) || die();
 
 if ( ! class_exists( 'ANONY_Options_Model' ) ) {
+	/**
+	 * Group many options of our themes into 1
+	 * Create an option group in wp_options using the name provided when construct the object, e.g.:
+	 *      $anony_option = new ANONY_Options_Model("anony_option");
+	 * Get & Set new option in this group using assignments & save() function, e.g.:
+	 *      $anony_option->logo = {url};
+	 *      $anony_option->save();
+	 *      echo $anony_option->logo;
+	 * Options in this group will be stored as an array, however to get an option, use -> instead of [], since this class use __get & __set methods.
+	 * This class keeps the old ways of retrieving options, so you can also use $anony_option->get_option() & update_options(), add_options()
+	 */
 	class ANONY_Options_Model {
 
+		/**
+		 * Option group
+		 *
+		 * @var string
+		 */
 		protected $option_group;
-		// equivalent 'option_name' of wp_options table. 'option_value' contains all options of the theme
+
+		/**
+		 * Options array
+		 *
+		 * @var array
+		 */
 		protected $options_arr = array();
-		// array contains the option_value of the option_name
 
 		/**
 		 * This will not instantiate new object if option_name is not changed
+		 *
+		 * @var object
 		 */
-		static $instance = null;
+		public static $instance = null;
 
 		/**
 		 * This will help instantiate new object if option_name is changed
+		 *
+		 * @var string
 		 */
-		static $object_changed_to = null;
+		public static $object_changed_to = null;
 
 		public static function get_instance( $option_name = ANONY_OPTIONS ) {
 			if ( self::$instance == null ) {
 				self::$instance = new ANONY_Options_Model( $option_name );
-			} elseif ( self::$instance != null && self::$object_changed_to !== $option_name ) {
+			} elseif ( self::$instance !== null && self::$object_changed_to !== $option_name ) {
 
 				self::$object_changed_to = $option_name;
 				self::$instance          = new ANONY_Options_Model( $option_name );

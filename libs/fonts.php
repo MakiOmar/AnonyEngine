@@ -772,4 +772,4 @@ $fonts['all'] = array(
 	'Zeyada',
 );
 
-define( 'ANOE_FONTS', serialize( $fonts ) );
+define( 'ANOE_FONTS', wp_json_encode( $fonts ) );

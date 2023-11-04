@@ -126,7 +126,7 @@ if ( ! class_exists( 'ANONY_Wpml_Help' ) ) {
 
 			if ( self::is_active() ) {
 
-				$wpml_active_lang = self::gat_active_lang();
+				$wpml_active_lang = self::get_active_lang();
 
 				if ( $wpml_active_lang ) {
 
@@ -143,7 +143,7 @@ if ( ! class_exists( 'ANONY_Wpml_Help' ) ) {
 		 *
 		 * @return string.
 		 */
-		public static function gat_active_lang() {
+		public static function get_active_lang() {
 			if ( ! self::is_active() ) {
 				return false;
 			}
@@ -169,7 +169,7 @@ if ( ! class_exists( 'ANONY_Wpml_Help' ) ) {
 			if ( self::is_active() ) {
 				global $sitepress;
 
-				if ( self::gat_active_lang() === $lang ) {
+				if ( self::get_active_lang() === $lang ) {
 					return 'active-lang';
 				}
 
@@ -191,7 +191,7 @@ if ( ! class_exists( 'ANONY_Wpml_Help' ) ) {
 
 			global $wpdb;
 
-			$lang = self::gat_active_lang();
+			$lang = self::get_active_lang();
 
 			$cache_key = "wpml_query_post_type_{$post_type}";
 

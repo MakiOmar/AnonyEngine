@@ -148,9 +148,6 @@ if ( ! class_exists( 'ANONY_Theme_Settings' ) ) {
 			// set default values.
 			$this->default_values();
 
-			// register widgets.
-			$this->register_widgets();
-
 			$this->hooks();
 		}
 
@@ -211,6 +208,8 @@ if ( ! class_exists( 'ANONY_Theme_Settings' ) ) {
 
 			// Show admin notices.
 			add_action( 'admin_notices', array( &$this, 'admin_notices' ) );
+
+			add_action( 'widgets_init', array( &$this, 'register_widgets' ), 999 );
 		}
 
 		/**
@@ -282,7 +281,7 @@ if ( ! class_exists( 'ANONY_Theme_Settings' ) ) {
 		public function options_page() {
 			$screen = get_current_screen();
 
-			if ( ! current_user_can( 'administrator' ) ) {
+			if ( ! current_user_can( 'manage_options' ) ) {
 				return;
 			}
 
@@ -652,17 +651,8 @@ if ( ! class_exists( 'ANONY_Theme_Settings' ) ) {
 		 * Registers option related widgets
 		 */
 		public function register_widgets() {
-
 			foreach ( $this->widgets as $widget ) {
-
-				add_action(
-					'widgets_init',
-					function () use ( $widget ) {
-
-						register_widget( $widget );
-					}
-				);
-
+				register_widget( $widget );
 			}
 		}
 
@@ -687,7 +677,7 @@ if ( ! class_exists( 'ANONY_Theme_Settings' ) ) {
 		public function admin_styles() {
 			if ( get_current_screen()->id === 'appearance_page_' . $this->args['opt_name'] ) {
 				?>
-				<style type="text/css">
+				<style>
 					#setting-error-<?php echo esc_html( $this->args['opt_name'] ); ?>{
 						background-color: #d_1354b;
 						color: #fff;

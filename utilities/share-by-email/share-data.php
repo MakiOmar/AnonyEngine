@@ -1,4 +1,11 @@
 <?php
+/**
+ * Share data
+ *
+ * @package AnonyEngine
+ */
+
+defined( 'ABSPATH' ) || die();
 
 $share_by_email = false;
 
@@ -16,7 +23,15 @@ add_action(
 
 		wp_enqueue_style( 'anony-sharebyemail', $uri . 'share-form-style.css', false, filemtime( $path . 'share-form-style.css' ) );
 
-		wp_register_script( 'anony-sharebyemail', $uri . 'share-script.js', array( 'jquery' ), filemtime( $path . 'share-script.js' ) );
+		wp_register_script( 'anony-sharebyemail', $uri . 'share-script.js', array( 'jquery' ), filemtime( $path . 'share-script.js' ), array( 'in_footer' => true ) );
+		wp_localize_script(
+			'anony-sharebyemail',
+			'shareByEmail',
+			array(
+				'url'   => ANONY_Wpml_Help::get_ajax_url(),
+				'nonce' => wp_create_nonce( 'anony_share_by_email_nonce' ),
+			)
+		);
 	}
 );
 

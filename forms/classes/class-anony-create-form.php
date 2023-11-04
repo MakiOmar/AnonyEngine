@@ -147,35 +147,39 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 		public function __construct( array $form ) {
 
 			$this->form = $form;
+			$this->id     = ! empty( $this->form['id'] ) ? $this->form['id'] : '';
+			$this->fields = ! empty( $this->form['fields'] ) ? $this->form['fields'] : array();
+			$this->default_values();
 
-			$this->form_attributes = $this->form_attributes( $form );
+			$this->form_attributes = $this->form_attributes( $this->form );
 
 			// Set form Settings.
 			if ( isset( $settings ) && is_array( $settings ) ) {
 				$this->form_settings( $settings );
 			}
 
-			if ( isset( $form['action_list'] ) && is_array( $form['action_list'] ) ) {
-				$this->action_list = $form['action_list'];
+			if ( isset( $this->form['action_list'] ) && is_array( $this->form['action_list'] ) ) {
+				$this->action_list = $this->form['action_list'];
 			}
 
-			$this->id     = ! empty( $form['id'] ) ? $form['id'] : '';
-			$this->fields = ! empty( $form['fields'] ) ? $form['fields'] : array();
+			
 
 			if (
-				count( array_intersect( $this->form_init, array_keys( $form ) ) ) !== count( $this->form_init )
+				count( array_intersect( $this->form_init, array_keys( $this->form ) ) ) !== count( $this->form_init )
 				||
 				'' === $this->id
 			) {
-				printf( __( 'Form must be of structure %s' ), var_export( $this->form_init, true ) );
+				//phpcs:disable
+				error_log( printf( 'Form must be of structure %s', var_export( $this->form_init, true ) ) );
+				//phpcs:enable.
 				return;
 			} else {
 
-				if ( ! empty( $form['fields_layout'] ) ) {
-					$this->fields_layout = $form['fields_layout'];
+				if ( ! empty( $this->form['fields_layout'] ) ) {
+					$this->fields_layout = $this->form['fields_layout'];
 				}
 
-				$this->submit_label = isset( $form['submit_label'] ) && ! empty( $form['submit_label'] ) ? $form['submit_label'] : __( 'Submit', 'anonyengine' );
+				$this->submit_label = isset( $this->form['submit_label'] ) && ! empty( $this->form['submit_label'] ) ? $this->form['submit_label'] : __( 'Submit', 'anonyengine' );
 
 				add_shortcode( $this->id, array( $this, 'create_shortcode' ) );
 
@@ -184,6 +188,72 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 
 				add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 			}
+		}
+
+		/**
+		 * Set default values
+		 *
+		 * @return void
+		 */
+		protected function default_values() {
+			$fields = array();
+			if ( ! empty( $this->form['action_list'] ) ) {
+				foreach ( $this->form['action_list'] as $action => $configs ) {
+					if ( 'Profile' === $action ) {
+						$profile_id = get_user_meta( get_current_user_id(), 'anony_user_profile', true );
+
+						if ( $profile_id && ! empty( $profile_id ) ) {
+							foreach ( $configs as $config => $mappings ) {
+								if ( 'post_data' === $config ) {
+									foreach ( $mappings as $post_field => $value ) {
+										$field = $this->get_field( $value );
+										if ( $field ) {
+											$field['default'] = get_post_field( $post_field, absint( $profile_id ) );
+											$fields[]         = $field;
+										}
+									}
+								}
+
+								if ( 'meta' === $config ) {
+									foreach ( $mappings as $meta_key => $value ) {
+										$field = $this->get_field( $value );
+										if ( $field ) {
+											$field['default'] = get_post_meta( absint( $profile_id ), $meta_key, true );
+											$fields[]         = $field;
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+
+			if ( ! empty( $fields ) ) {
+				$this->form['fields'] = $fields;
+				$this->fields         = $fields;
+			}
+		}
+
+		/**
+		 * Get field name
+		 *
+		 * @param string $value Value mapped to the field.
+		 * @return mixed Field's name if it is mapped field otherwise false.
+		 */
+		protected function get_field( $value ) {
+			if ( is_string( $value ) && strpos( $value, '#' ) !== false ) {
+
+				$input_field = str_replace( '#', '', $value );
+
+				foreach ( $this->fields as $field ) {
+					if ( $field['id'] === $input_field ) {
+						return $field;
+					}
+				}
+			}
+
+			return false;
 		}
 
 		protected function form_attributes( $form ) {

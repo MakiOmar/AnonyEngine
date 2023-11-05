@@ -151,6 +151,8 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 			$this->fields = ! empty( $this->form['fields'] ) ? $this->form['fields'] : array();
 			$this->default_values();
 
+			//ANONY_Wp_Debug_Help::neat_print_r( $this->fields );.
+
 			$this->form_attributes = $this->form_attributes( $this->form );
 
 			// Set form Settings.
@@ -207,6 +209,127 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 				}
 			}
 		}
+
+		/**
+		 * Get query variable value
+		 *
+		 * @param string $query_variable Query string.
+		 * @return mixed Query variable value if has value otherwise false.
+		 */
+		protected function query_variable_value( $query_variable ) {
+			//phpcs:disable
+			if ( ! empty( $_GET[ $query_variable ] ) ) {
+				return sanitize_text_field( wp_unslash( $_GET[ $query_variable ] ) );
+			}
+			//phpcs:enable.
+			return false;
+		}
+
+		/**
+		 * Get object id for default values
+		 *
+		 * @param string $object_type Object type.
+		 * @param string $object_id_from Where to get id from.
+		 * @return int Object ID.
+		 */
+		protected function get_object_id( $object_type, $object_id_from ) {
+			$object_id = 0;
+			switch ( $object_type ) {
+				case 'post':
+					switch ( $object_id_from ) {
+						case 'current_post':
+							global $post;
+							$object_id = $post->ID;
+							break;
+						case 'query_variable':
+							if ( ! empty( $this->form['defaults']['query_variable'] ) ) {
+								$object_id = intval( $this->query_variable_value( $this->form['defaults']['query_variable'] ) );
+							}
+							break;
+					}
+					break;
+				case 'term':
+					switch ( $object_id_from ) {
+						case 'current_term':
+							$object_id = get_queried_object_id();
+							break;
+						case 'query_variable':
+							if ( ! empty( $this->form['defaults']['query_variable'] ) ) {
+								$object_id = intval( $this->query_variable_value( $this->form['defaults']['query_variable'] ) );
+							}
+							break;
+					}
+					break;
+				case 'user':
+					switch ( $object_id_from ) {
+						case 'current_user':
+							$object_id = get_current_user_id();
+							break;
+						case 'query_variable':
+							if ( ! empty( $this->form['defaults']['query_variable'] ) ) {
+								$object_id = intval( $this->query_variable_value( $this->form['defaults']['query_variable'] ) );
+							}
+							break;
+					}
+					break;
+			}
+
+			return $object_id;
+		}
+
+		/**
+		 * Set default value
+		 *
+		 * @param array $fields All fields.
+		 * @param array $configs Action configurations.
+		 * @param mixed $post_id Post's ID.
+		 * @return void
+		 */
+		protected function set_post_default_values( &$fields, $configs, $post_id ) {
+			foreach ( $configs as $config => $mappings ) {
+				if ( 'post_data' === $config ) {
+					foreach ( $mappings as $post_field => $value ) {
+
+						$field = $this->get_field( $value );
+
+						$this->set_default_value( $fields, $field, get_post_field( $post_field, absint( $post_id ) ) );
+					}
+				}
+
+				if ( 'meta' === $config ) {
+					foreach ( $mappings as $meta_key => $value ) {
+
+						$field = $this->get_field( $value );
+
+						$this->set_default_value( $fields, $field, get_post_meta( absint( $post_id ), $meta_key, true ) );
+					}
+				}
+			}
+		}
+
+		/**
+		 * Set term default value
+		 *
+		 * @param array $fields All fields.
+		 * @param array $configs Action configurations.
+		 * @param mixed $post_id Post's ID.
+		 * @return bool
+		 */
+		protected function set_term_default_values( &$fields, $configs, $post_id ) {
+			return false;
+		}
+
+		/**
+		 * Set user default value
+		 *
+		 * @param array $fields All fields.
+		 * @param array $configs Action configurations.
+		 * @param mixed $post_id Post's ID.
+		 * @return bool
+		 */
+		protected function set_user_default_values( &$fields, $configs, $post_id ) {
+			return false;
+		}
 		/**
 		 * Set default values
 		 *
@@ -220,24 +343,24 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 						$profile_id = get_user_meta( get_current_user_id(), 'anony_user_profile', true );
 
 						if ( $profile_id && ! empty( $profile_id ) ) {
-							foreach ( $configs as $config => $mappings ) {
-								if ( 'post_data' === $config ) {
-									foreach ( $mappings as $post_field => $value ) {
+							$this->set_post_default_values( $fields, $configs, $profile_id );
+						}
+					} elseif ( ! empty( $this->form['defaults'] ) && ! empty( $this->form['defaults']['object_type'] ) && ! empty( $this->form['defaults']['object_id_from'] ) ) {
+						$object_type    = $this->form['defaults']['object_type'];
+						$object_id_from = $this->form['defaults']['object_id_from'];
+						$object_id      = $this->get_object_id( $object_type, $object_id_from );
 
-										$field = $this->get_field( $value );
-
-										$this->set_default_value( $fields, $field, get_post_field( $post_field, absint( $profile_id ) ) );
-									}
-								}
-
-								if ( 'meta' === $config ) {
-									foreach ( $mappings as $meta_key => $value ) {
-
-										$field = $this->get_field( $value );
-
-										$this->set_default_value( $fields, $field, get_post_meta( absint( $profile_id ), $meta_key, true ) );
-									}
-								}
+						if ( $object_id && $object_id > 0 ) {
+							switch ( $object_type ) {
+								case 'post':
+									$this->set_post_default_values( $fields, $configs, $object_id );
+									break;
+								case 'term':
+									$this->set_term_default_values( $fields, $configs, $object_id );
+									break;
+								case 'user':
+									$this->set_user_default_values( $fields, $configs, $object_id );
+									break;
 							}
 						}
 					}

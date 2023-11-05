@@ -20,9 +20,6 @@
 #options-nav {
 	box-shadow: -10px 5px 6px #dbd1d1;
 }
-[id*='fieldset_anony']  > h1{
-
-}
 
 [id*='fieldset_anony'] .multi-text-ul li a.multi-text-remove{
 	right: auto;
@@ -36,4 +33,15 @@
 
 .anony-tab-item{
 	float: right;
+}
+
+body.rtl .fetch-location-button, body.rtl .anony-field-icon{
+	top: 12.5px;
+	left: 12.5px;
+	right: auto;
+}
+
+body.rtl .iti--allow-dropdown .iti__flag-container, body.rtl .iti--separate-dial-code .iti__flag-container {
+    right: 0;
+    left: auto;
 }

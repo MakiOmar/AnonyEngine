@@ -36,11 +36,12 @@
 input[type="search"], input[type="tel"], input[type="text"], input[type="email"], input[type="password"], input[type="url"],select, textarea {
 	outline: none;
 	padding: 10px;
-	margin: 5px;
+	margin: 5px!important;
 	border: none;
 	color: #222222;
 	border-radius: 6px;
 	border: 1px solid #d7d7d7;
+	width: calc(100% - 10px);
 }
 select{
 	background-color: #fff;
@@ -74,10 +75,6 @@ select{
 fieldset{
 	border:none;
 	position:relative;
-}
-
-fieldset input[type=tel]{
-	width: 100%;
 }
 
 fieldset .iti {
@@ -507,13 +504,16 @@ input[type=tel]{
 	border-radius: 50%;
 }
 
-.fetch-location-button{
+.fetch-location-button, .anony-field-icon{
 	display: inline-flex;
 	justify-content: center;
 	align-items: center;
 	position: absolute;
 	top: 12.5px;
 	right: 12.5px;
+}
+fieldset .iti input, fieldset .iti input[type=text], fieldset .iti input[type=tel] {
+    margin: 5px!important;
 }
 .slider_show, .home_slider{
 	display: table-row;

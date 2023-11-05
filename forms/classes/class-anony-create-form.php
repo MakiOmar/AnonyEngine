@@ -189,6 +189,25 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 		}
 
 		/**
+		 * Set default value
+		 *
+		 * @param array $fields All fields.
+		 * @param array $field Field arguments.
+		 * @param mixed $default_value Field's value.
+		 * @return void
+		 */
+		protected function set_default_value( &$fields, $field, $default_value ) {
+			if ( $field ) {
+				$field['default'] = $default_value;
+
+				foreach ( $this->fields as $index => $field_args ) {
+					if ( $field['id'] === $field_args['id'] ) {
+						$fields[ $index ] = $field;
+					}
+				}
+			}
+		}
+		/**
 		 * Set default values
 		 *
 		 * @return void
@@ -204,21 +223,19 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 							foreach ( $configs as $config => $mappings ) {
 								if ( 'post_data' === $config ) {
 									foreach ( $mappings as $post_field => $value ) {
+
 										$field = $this->get_field( $value );
-										if ( $field ) {
-											$field['default'] = get_post_field( $post_field, absint( $profile_id ) );
-											$fields[]         = $field;
-										}
+
+										$this->set_default_value( $fields, $field, get_post_field( $post_field, absint( $profile_id ) ) );
 									}
 								}
 
 								if ( 'meta' === $config ) {
 									foreach ( $mappings as $meta_key => $value ) {
+
 										$field = $this->get_field( $value );
-										if ( $field ) {
-											$field['default'] = get_post_meta( absint( $profile_id ), $meta_key, true );
-											$fields[]         = $field;
-										}
+
+										$this->set_default_value( $fields, $field, get_post_meta( absint( $profile_id ), $meta_key, true ) );
 									}
 								}
 							}
@@ -226,6 +243,7 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 					}
 				}
 			}
+			ksort( $fields );
 
 			if ( ! empty( $fields ) ) {
 				$this->form['fields'] = $fields;

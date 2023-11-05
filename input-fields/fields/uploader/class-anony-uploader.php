@@ -158,8 +158,8 @@ class ANONY_Uploader {
 				break;
 			default:
 				$html        .= '<div class="uploads-wrapper">';
-				$image_exts   = array( 'jpg', 'jpeg', 'jpe', 'gif', 'png', 'svg' );
-				$img_ext_preg = '!\.(' . join( '|', $image_exts ) . ')$!i';
+				$image_exts   = array( 'jpg', 'jpeg', 'jpe', 'gif', 'png', 'svg', 'webp' );
+				$img_ext_preg = '/\.(' . join( '|', $image_exts ) . ')$/i';
 				$src          = wp_get_attachment_url( $this->parent_obj->value );
 				if ( ! empty( $this->parent_obj->value ) && wp_http_validate_url( $src ) ) {
 					if ( preg_match( $img_ext_preg, $this->parent_obj->value ) ) {
@@ -185,21 +185,21 @@ class ANONY_Uploader {
 	 * @return void
 	 */
 	protected function uploads_preview_nopriv( &$html ) {
-		$image_exts   = array( 'jpg', 'jpeg', 'jpe', 'gif', 'png', 'svg' );
-		$img_ext_preg = '!\.(' . join( '|', $image_exts ) . ')$!i';
+		$image_exts   = array( 'jpg', 'jpeg', 'jpe', 'gif', 'png', 'svg', 'webp' );
+		$img_ext_preg = '/\.(' . join( '|', $image_exts ) . ')$/i';
 		$src          = wp_get_attachment_url( $this->parent_obj->value );
 		$src_exists   = ! empty( $this->parent_obj->value ) && wp_http_validate_url( $src );
-		$is_image     = preg_match( $img_ext_preg, $this->parent_obj->value );
+		$is_image     = preg_match( $img_ext_preg, $src );
 		switch ( $this->style ) {
 			case 'one':
 				if ( $src_exists ) {
 					if ( $is_image ) {
-						$style = ' style="background-image:url("' . $src . '")"';
+						$style = ' style="background-image:url(' . $src . ')"';
 					} else {
-						$style = ' style="background-image:url("' . ANOE_URI . 'assets/images/placeholders/file.png")"';
+						$style = ' style="background-image:url(' . ANOE_URI . 'assets/images/placeholders/file.png)"';
 					}
 				} else {
-					$style = ' style="background-image:url("' . ANOE_URI . 'assets/images/placeholders/browse.png")"';
+					$style = ' style="background-image:url(' . ANOE_URI . 'assets/images/placeholders/browse.png)"';
 				}
 				$html .= '<div class="uploads-wrapper style-one"' . $style . '>';
 				break;

@@ -146,7 +146,7 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 		 */
 		public function __construct( array $form ) {
 
-			$this->form = $form;
+			$this->form   = $form;
 			$this->id     = ! empty( $this->form['id'] ) ? $this->form['id'] : '';
 			$this->fields = ! empty( $this->form['fields'] ) ? $this->form['fields'] : array();
 			$this->default_values();
@@ -161,8 +161,6 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 			if ( isset( $this->form['action_list'] ) && is_array( $this->form['action_list'] ) ) {
 				$this->action_list = $this->form['action_list'];
 			}
-
-			
 
 			if (
 				count( array_intersect( $this->form_init, array_keys( $this->form ) ) ) !== count( $this->form_init )

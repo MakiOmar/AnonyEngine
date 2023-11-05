@@ -639,6 +639,8 @@ button{
 	height: 100px;
     width: 100px;
 	position: relative;
+	background-position: center;
+    background-size: cover;
 }
 .uploads-wrapper.style-one::before{
 	content: '';

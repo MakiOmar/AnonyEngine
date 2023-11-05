@@ -82,6 +82,8 @@ class ANONY_Mixed {
 			$lang = ( isset( $this->parent_obj->field['lang'] ) && ! empty( $this->parent_obj->field['lang'] ) ) ? $this->parent_obj->field['lang'] : $lang;
 		}
 
+		$icon = apply_filters( "anony_{$this->parent_obj->field['type']}_icon", '' );
+
 		if ( $this->parent_obj->as_template ) {
 			$html  = sprintf(
 				'<fieldset class="anony-row anony-row-inline"%2$s%3$s>',
@@ -90,7 +92,7 @@ class ANONY_Mixed {
 				$this->parent_obj->width
 			);
 			$html .= sprintf(
-				'<input  type="%1$s" name="%2$s" class="%3$s anony-row" %4$s %5$s %6$s %7$s/>',
+				'<div style="position:relative"><input  type="%1$s" name="%2$s" class="%3$s anony-row" %4$s %5$s %6$s %7$s/>',
 				$this->parent_obj->field['type'],
 				$this->parent_obj->input_name,
 				$this->parent_obj->class_attr,
@@ -99,6 +101,12 @@ class ANONY_Mixed {
 				$placeholder,
 				$readonly
 			);
+			if ( ! empty( $icon ) ) {
+				$html .= '<span class="anony-field-icon">' . $icon . '</span></div>';
+			} else {
+				$html .= '</div>';
+			}
+
 			$html .= '</fieldset>';
 
 			return $html;
@@ -127,7 +135,7 @@ class ANONY_Mixed {
 		$max = isset( $this->parent_obj->field['max'] ) ? ' max="' . $this->parent_obj->field['max'] . '"' : '';
 
 		$html .= sprintf(
-			'<input id="%1$s" type="%2$s" name="%3$s" value="%4$s" class="%5$s" %6$s %7$s %8$s%9$s%10$s%11$s/>',
+			'<div style="position:relative"><input id="%1$s" type="%2$s" name="%3$s" value="%4$s" class="%5$s" %6$s %7$s %8$s%9$s%10$s%11$s/>',
 			$this->parent_obj->field['id'],
 			$this->parent_obj->field['type'],
 			$this->parent_obj->input_name,
@@ -140,6 +148,11 @@ class ANONY_Mixed {
 			$max,
 			$readonly
 		);
+		if ( ! empty( $icon ) ) {
+			$html .= '<span class="anony-field-icon">' . $icon . '</span></div>';
+		} else {
+			$html .= '</div>';
+		}
 
 		$html .= ( isset( $this->parent_obj->field['desc'] ) && ! empty( $this->parent_obj->field['desc'] ) ) ? ' <div class="description ' . $this->parent_obj->class_attr . '">' . $this->parent_obj->field['desc'] . '</div>' : '';
 

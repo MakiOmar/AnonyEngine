@@ -53,6 +53,22 @@ if ( ! class_exists( 'ANONY_Wp_Debug_Help' ) ) {
 		}
 
 		/**
+		 * For debugging. used when page direction is rtl.
+		 *
+		 * @param mixed $data Debug data.
+		 * @return void
+		 */
+		public static function neat_print_r( $data ) {
+			if ( defined( 'WP_DEBUG' ) && true === WP_DEBUG ) {
+				echo '<pre dir="ltr" styel="direction:ltr;text-align:left">';
+					// phpcs:disable WordPress.PHP.DevelopmentFunctions
+					print_r( $data );
+					// phpcs:enable
+				echo '</pre>';
+			}
+		}
+
+		/**
 		 * Write to error_log.
 		 *
 		 * @param array $data Debug data.

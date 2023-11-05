@@ -76,7 +76,7 @@ if ( ! class_exists( 'ANONY_Profile' ) ) {
 
 			$post_data = $action_data['post_data'];
 			// Argumnets sent from the form.
-			$diff = array_diff( array_keys( $post_data ), self::REQUIRED_ARGUMENTS );
+			$diff = array_diff( self::REQUIRED_ARGUMENTS, array_keys( $post_data ) );
 
 			if ( ! empty( $diff ) ) {
 				//phpcs:disable WordPress.PHP.DevelopmentFunctions.error_log_error_log
@@ -93,6 +93,15 @@ if ( ! class_exists( 'ANONY_Profile' ) ) {
 					'post_status' => $this->get_field_value( $post_data['post_status'], $this->get_field( $post_data['post_status'] ) ),
 					'post_author' => get_current_user_id(),
 				);
+
+				// Argumnets sent from the form.
+				$optional_post_data = array_diff( array_keys( $post_data ), self::REQUIRED_ARGUMENTS );
+
+				if ( ! empty( $optional_post_data ) ) {
+					foreach ( $optional_post_data as $optional_post_field ) {
+						$args[ $optional_post_field ] = $this->get_field_value( $post_data[ $optional_post_field ], $this->get_field( $post_data[ $optional_post_field ] ) );
+					}
+				}
 
 				$profile_id = $this->get_user_profile();
 

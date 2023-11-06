@@ -304,6 +304,32 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 						$this->set_default_value( $fields, $field, get_post_meta( absint( $post_id ), $meta_key, true ) );
 					}
 				}
+
+				if ( 'tax_query' === $config ) {
+					foreach ( $mappings as $taxonomy => $value ) {
+
+						$field = $this->get_field( $value );
+
+						$terms = get_the_terms( absint( $post_id ), $taxonomy );
+
+						if ( $terms && ! is_wp_error( $terms ) ) {
+							if ( empty( $field['multiple'] ) ) {
+								$term = $terms[0];
+
+								$this->set_default_value( $fields, $field, $term->term_id );
+							} else {
+								$term_ids = array_map(
+									function ( $term ) {
+										return $term->term_id;
+									},
+									$terms
+								);
+
+								$this->set_default_value( $fields, $field, $term_ids );
+							}
+						}
+					}
+				}
 			}
 		}
 

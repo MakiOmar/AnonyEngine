@@ -94,22 +94,6 @@ if ( ! class_exists( 'ANONY_ARRAY_HELP' ) ) {
 		}
 
 		/**
-		 * Same as print_r but usefull for rtl pages.
-		 *
-		 * @param array $array To be printed array.
-		 * @return void
-		 */
-		public static function neat_print_r( $array ) {
-			if ( defined( 'WP_BEBUG' ) && true === WP_BEBUG ) {
-				echo '<pre dir="ltr" style="diretction:ltr;text-align:center">';
-					// phpcs:disable WordPress.PHP.DevelopmentFunctions
-					print_r( $array );
-					// phpcs: enable.
-				echo '</pre>';
-			}
-		}
-
-		/**
 		 * Insert a key/value before another in an associative array.
 		 *
 		 * @param array  $original_array The Array.

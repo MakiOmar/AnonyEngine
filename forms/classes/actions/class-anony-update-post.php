@@ -128,21 +128,16 @@ if ( ! class_exists( 'ANONY_Update_Post' ) ) {
 
 					wp_update_post( $args );
 
-					if ( $action_data['tax_query'] && ! empty( $action_data['tax_query'] ) ) {
+					if ( $action_data['tax_query'] && ! empty( $action_data['tax_query'] ) ) {			
 						foreach ( $action_data['tax_query'] as $taxonomy => $value ) {
-								$_value = $this->get_field_value( $value, $this->get_field( $value ) );
-							if ( ! empty( $_value ) ) {
-								if ( is_array( $_value ) ) {
-									$_value = array_map(
-										function ( $v ) {
-											return absint( $v );
-										},
-										$_value
-									);
-								} else {
-									$_value = absint( $_value );
+							if ( is_array( $value ) ) {
+								$_value = array();
+								foreach ( $value as $v ) {
+									$_value[] = absint( $this->get_field_value( $v, $this->get_field( $v ) ) );
 								}
 								wp_set_object_terms( $id, $_value, $taxonomy );
+							} else {
+								$this->set_object_terms( $id, $value, $taxonomy );
 							}
 						}
 					}
@@ -150,6 +145,31 @@ if ( ! class_exists( 'ANONY_Update_Post' ) ) {
 					$this->result = $id;
 
 				}
+			}
+		}
+
+		/**
+		 * Set object terms
+		 *
+		 * @param array $id Object ID.
+		 * @param array $value Value.
+		 * @param array $taxonomy Taxonomy.
+		 * @return void
+		 */
+		protected function set_object_terms( $id, $value, $taxonomy ) {
+			$_value = $this->get_field_value( $value, $this->get_field( $value ) );
+			if ( ! empty( $_value ) ) {
+				if ( is_array( $_value ) ) {
+					$_value = array_map(
+						function ( $v ) {
+							return absint( $v );
+						},
+						$_value
+					);
+				} else {
+					$_value = absint( $_value );
+				}
+				wp_set_object_terms( $id, $_value, $taxonomy );
 			}
 		}
 

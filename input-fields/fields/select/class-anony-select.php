@@ -32,6 +32,13 @@ class ANONY_Select {
 	private $numbered;
 
 	/**
+	 * First option label
+	 *
+	 * @var object
+	 */
+	private $first_option;
+
+	/**
 	 * Color field Constructor.
 	 *
 	 * @param object $parent_obj Field parent object.
@@ -44,6 +51,60 @@ class ANONY_Select {
 		$this->parent_obj = $parent_obj;
 
 		$this->numbered = isset( $this->parent_obj->field['numbered'] ) && 'yes' === $this->parent_obj->field['numbered'] ? true : false;
+
+		$this->first_option = ! empty( $this->parent_obj->field['first_option'] ) ? $this->parent_obj->field['first_option'] : esc_html__( 'Select', 'anonyengine' );
+
+		add_action(
+			'wp_print_footer_scripts',
+			function () {
+				if ( ! empty( $this->parent_obj->field['on_change'] ) ) :
+					$data = array(
+						'action' => esc_js( $this->parent_obj->field['on_change']['action'] ),
+						'target' => esc_js( $this->parent_obj->field['on_change']['target'] ),
+						'nonce'  => wp_create_nonce( 'term-children' ),
+					);
+
+					if ( ! empty( $this->parent_obj->field['on_change']['data'] ) ) {
+						foreach ( $this->parent_obj->field['on_change']['data'] as $k => $v ) {
+							$data[ $k ] = esc_js( $v );
+						}
+					}
+					?>
+					<script>
+						jQuery( document ).ready( function($) {
+							var dataObject = <?php echo wp_json_encode( $data ); ?>;
+
+							$( 'body' ).on( 'change', '#<?php echo esc_js( $this->parent_obj->field['id'] ); ?>', function() {
+								var selectedId = $( this ).val();
+								dataObject.term_id = selectedId;
+
+								$.ajax({
+									type : "POST",
+									data: dataObject,
+									url : '<?php echo esc_url( ANONY_Wpml_Help::get_ajax_url() ); ?>',
+									beforeSend: function( jqXHR, settings ) {
+										$( '#<?php echo esc_js( $this->parent_obj->field['on_change']['target'] ); ?>' ).prop( 'disabled', true );
+									},
+									success: function( response ) {
+										var firstOption = '<option value="">' + response.firstOption + '</option>';
+										$( '#<?php echo esc_js( $this->parent_obj->field['on_change']['target'] ); ?>' ).html( firstOption + response.html );
+									},
+
+									complete: function( jqXHR, textStatus ) {
+										$( '#<?php echo esc_js( $this->parent_obj->field['on_change']['target'] ); ?>' ).prop( 'disabled', false );
+									},
+
+									error: function( jqXHR, textStatus, errorThrown ) {
+										
+									}
+								} );
+							} );
+						} );
+					</script>
+					<?php
+				endif;
+			}
+		);
 	}
 
 	/**
@@ -54,8 +115,6 @@ class ANONY_Select {
 	public function render() {
 
 		$disabled = isset( $this->parent_obj->field['disabled'] ) && ( true === $this->parent_obj->field['disabled'] ) ? ' disabled' : '';
-
-		$first_option = ! empty( $this->parent_obj->field['first_option'] ) ? $this->parent_obj->field['first_option'] : esc_html__( 'Select', 'anonyengine' );
 
 		$autocomplete = ( isset( $this->parent_obj->field['auto-complete'] ) && 'on' === $this->parent_obj->field['auto-complete'] ) ? 'autocomplete="on"' : 'autocomplete="off"';
 
@@ -99,7 +158,7 @@ class ANONY_Select {
 				'<option value="">%1$s</option>',
 				apply_filters(
 					'anony_select_first_option_label',
-					$first_option,
+					$this->first_option,
 					$this->parent_obj->field['id']
 				)
 			);
@@ -163,9 +222,10 @@ class ANONY_Select {
 
 				endif;
 		} else {
+
 			$html .= sprintf(
 				'<option value="">%1$s</option>',
-				esc_html__( 'No options', 'anonyengine' )
+				$this->first_option
 			);
 		}
 

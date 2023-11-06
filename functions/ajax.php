@@ -33,7 +33,7 @@ function anony_get_term_children_options() {
 					'parent'     => absint( wp_strip_all_tags( $data['term_id'] ) ),
 				)
 			);
-			if ( is_array( $terms ) && ! empty( $terms )) {
+			if ( is_array( $terms ) && ! empty( $terms ) ) {
 				ob_start();
 				foreach ( $terms as $id => $name ) {
 					?>
@@ -50,7 +50,7 @@ function anony_get_term_children_options() {
 	wp_send_json(
 		array(
 			'html'        => $html,
-			'firstOption' => apply_filters( $data['target'] . '_first_option', esc_html__( 'Select option', 'anonyengine' ) )
+			'firstOption' => apply_filters( $data['target'] . '_first_option', esc_html__( 'Select option', 'anonyengine' ) ),
 		)
 	);
 	// Don't forget to stop execution afterward.

@@ -166,6 +166,45 @@ if ( ! class_exists( 'ANONY_TERM_HELP' ) ) {
 
 			return '';
 		}
+		
+		/**
+		 * Get terms using WP_Term_Query class.
+		 *
+		 * Use instead of get_terms for admin purpuses.
+		 *
+		 * @param  string $tax    Taxonomy to get terms from.
+		 * @param  string $fields Fields to fetch.
+		 * @return array          An array of terms (id, name, slug).
+		 */
+		public static function wp_top_level_term_query( $tax, $fields ) {
+			/**
+			 * 'fields' to return Accepts:
+			 * 'all' (returns an array of complete term objects),
+			 * 'all_with_object_id' (returns an array of term objects with the 'object_id' param; works only when
+			 * the $object_ids parameter is populated),
+			 * 'ids' (returns an array of ids),
+			 * 'tt_ids' (returns an array of term taxonomy ids),
+			 * 'id=>parent' (returns an associative array with ids as keys, parent term IDs as values),
+			 * 'names' (returns an array of term names),
+			 * 'count' (returns the number of matching terms),
+			 * 'id=>name' (returns an associative array with ids as keys, term names as values), or
+			 * 'id=>slug' (returns an associative array with ids as keys, term slugs as values)
+			 */
+			$terms_object = new WP_Term_Query(
+				array(
+					'taxonomy'   => $tax,
+					'fields'     => $fields,
+					'hide_empty' => false,
+					'parent'     => 0,
+				)
+			);
+
+			if ( ! empty( $terms_object->terms ) ) {
+				return $terms_object->terms;
+			}
+
+			return '';
+		}
 		/**
 		 * Gets post terms from child up to first parent
 		 *

@@ -42,7 +42,7 @@ if ( ! class_exists( 'ANONY_TERM_HELP' ) ) {
 		 */
 		public static function query_terms_in_admin( $taxonomy ) {
 
-			$terms = ANONY_ARRAY_HELP::ObjToAssoc(
+			$terms = ANONY_ARRAY_HELP::object_to_associative_array(
 				self::query_terms_by_taxonomy( $taxonomy ),
 				'',
 				'slug'
@@ -154,8 +154,9 @@ if ( ! class_exists( 'ANONY_TERM_HELP' ) ) {
 			 */
 			$terms_object = new WP_Term_Query(
 				array(
-					'taxonomy' => $tax,
-					'fields'   => $fields,
+					'taxonomy'   => $tax,
+					'fields'     => $fields,
+					'hide_empty' => false,
 				)
 			);
 
@@ -230,8 +231,9 @@ if ( ! class_exists( 'ANONY_TERM_HELP' ) ) {
 		public static function get_term_by( $term_id, $taxonomy ) {
 
 			if ( ANONY_Wpml_Help::is_active() ) {
+				$active_lang = apply_filters( 'wpml_current_language', null );
 
-				return ANONY_Wpml_Help::get_translated_term( $term_id, $taxonomy );
+				return ANONY_Wpml_Help::get_translated_term( $term_id, $taxonomy, $active_lang );
 			}
 
 			return get_term_by( 'id', $term_id, $taxonomy );
@@ -383,12 +385,13 @@ if ( ! class_exists( 'ANONY_TERM_HELP' ) ) {
 		 *
 		 * @param  array $args       Arguments required for get_terms.
 		 * @param  array $attributes Select input attributes.
+		 * @param  array $selected Selected term id.
 		 *
 		 * @return void
 		 */
-		public static function top_level_terms_option_groups( $args, $attributes ) {
+		public static function top_level_terms_option_groups( $args, $attributes, $selected = false ) {
 
-			$groups = self::top_level_terms_children( $args );
+			$grouped = self::top_level_terms_children( $args );
 
 			$name  = trim( $attributes['name'] );
 			$class = trim( 'terms-options-group ' . $attributes['class'] );
@@ -401,7 +404,7 @@ if ( ! class_exists( 'ANONY_TERM_HELP' ) ) {
 					$select .= '<optgroup label="' . get_term( $parent )->name . '">';
 
 					foreach ( $children as $child_id ) {
-						$select .= "<option value='" . get_term( $child_id )->term_id . "'" . selected( intval( $requested_cat ), get_term( $child_id )->term_id, false ) . '>' . get_term( $child_id )->name . '</option>';
+						$select .= "<option value='" . get_term( $child_id )->term_id . "'" . selected( intval( $selected ), get_term( $child_id )->term_id, false ) . '>' . get_term( $child_id )->name . '</option>';
 					}
 
 					$select .= '</optgroup>';

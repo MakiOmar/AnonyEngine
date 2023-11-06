@@ -132,6 +132,15 @@ if ( ! class_exists( 'ANONY_Profile' ) ) {
 
 					wp_update_post( $args );
 
+					if ( $action_data['tax_query'] && ! empty( $action_data['tax_query'] ) ) {
+						foreach ( $action_data['tax_query'] as $taxonomy => $value ) {
+								$_value = $this->get_field_value( $value, $this->get_field( $value ) );
+							if ( ! empty( $_value ) ) {
+								wp_set_object_terms( $id, $_value, $taxonomy );
+							}
+						}
+					}
+
 					$this->result = $id;
 
 				}

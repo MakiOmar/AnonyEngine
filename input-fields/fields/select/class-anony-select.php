@@ -55,6 +55,8 @@ class ANONY_Select {
 
 		$disabled = isset( $this->parent_obj->field['disabled'] ) && ( true === $this->parent_obj->field['disabled'] ) ? ' disabled' : '';
 
+		$first_option = ! empty( $this->parent_obj->field['first_option'] ) ? $this->parent_obj->field['first_option'] : esc_html__( 'Select', 'anonyengine' );
+
 		$autocomplete = ( isset( $this->parent_obj->field['auto-complete'] ) && 'on' === $this->parent_obj->field['auto-complete'] ) ? 'autocomplete="on"' : 'autocomplete="off"';
 
 		if ( isset( $this->parent_obj->field['multiple'] ) && $this->parent_obj->field['multiple'] ) {
@@ -97,7 +99,7 @@ class ANONY_Select {
 				'<option value="">%1$s</option>',
 				apply_filters(
 					'anony_select_first_option_label',
-					esc_html__( 'Select', 'anonyengine' ),
+					$first_option,
 					$this->parent_obj->field['id']
 				)
 			);

@@ -26,7 +26,7 @@ class ANONY_Uploader {
 	 *
 	 * @var object
 	 */
-	private $parent_obj;
+	public $parent_obj;
 
 	/**
 	 * Output style.
@@ -34,6 +34,13 @@ class ANONY_Uploader {
 	 * @var string
 	 */
 	private $style;
+
+	/**
+	 * Output style class.
+	 *
+	 * @var string
+	 */
+	private $style_class;
 
 	/**
 	 * Field Constructor.
@@ -56,6 +63,10 @@ class ANONY_Uploader {
 		}
 
 		$this->parent_obj = $parent_obj;
+
+		$this->style_class = 'ANONY_Uploader_Style_' . ucfirst( $this->style );
+
+		require_once ANONY_FIELDS_DIR . 'uploader/class-anony-uploader-style-' . $this->style . '.php';
 	}
 
 
@@ -144,6 +155,20 @@ class ANONY_Uploader {
 			$this->parent_obj->input_name,
 		);
 	}
+	/**
+	 * Load style method
+	 *
+	 * @param string $html Html output.
+	 * @param string $method Corresponding method.
+	 * @return void
+	 */
+	protected function load_style_html_method( &$html, $method ) {
+		if ( class_exists( $this->style_class ) && method_exists( $this->style_class, $method ) ) {
+			$class_name = $this->style_class;
+			$style      = new $class_name( $this );
+			$html      .= $style->$method();
+		}
+	}
 
 	/**
 	 * Output preview for private users.
@@ -152,30 +177,8 @@ class ANONY_Uploader {
 	 * @return void
 	 */
 	protected function uploads_preview_priv( &$html ) {
-		switch ( $this->style ) {
-			case 'one':
-					$html .= '<div class="uploads-wrapper">';
-				break;
-			default:
-				$html        .= '<div class="uploads-wrapper">';
-				$image_exts   = array( 'jpg', 'jpeg', 'jpe', 'gif', 'png', 'svg', 'webp' );
-				$img_ext_preg = '/\.(' . join( '|', $image_exts ) . ')$/i';
-				$src          = wp_get_attachment_url( $this->parent_obj->value );
-				if ( ! empty( $this->parent_obj->value ) && wp_http_validate_url( $src ) ) {
-					if ( preg_match( $img_ext_preg, $this->parent_obj->value ) ) {
-						$html .= '<img class="anony-opts-screenshot" style="max-width:80px;" src="' . $src . '" />';
-					} else {
-						$file_basename = wp_basename( $src );
-						$html         .= '<a href="' . $src . '">';
-						$html         .= '<img class="anony-opts-screenshot" style="max-width:80px;" src="' . ANOE_URI . 'assets/images/placeholders/file.png"/><br>';
-						$html         .= '<span class="uploaded-file-name">' . $file_basename . '</span>';
-						$html         .= '</a>';
-					}
-				} else {
-					$html .= '<img class="anony-opts-screenshot" style="max-width:80px;" src="' . ANOE_URI . 'assets/images/placeholders/browse.png"/>';
-					$html .= '<span class="uploaded-file-name"></span>';
-				}
-		}
+
+		$this->load_style_html_method( $html, 'uploads_preview_priv' );
 	}
 
 	/**
@@ -185,41 +188,8 @@ class ANONY_Uploader {
 	 * @return void
 	 */
 	protected function uploads_preview_nopriv( &$html ) {
-		$image_exts   = array( 'jpg', 'jpeg', 'jpe', 'gif', 'png', 'svg', 'webp' );
-		$img_ext_preg = '/\.(' . join( '|', $image_exts ) . ')$/i';
-		$src          = wp_get_attachment_url( $this->parent_obj->value );
-		$src_exists   = ! empty( $this->parent_obj->value ) && wp_http_validate_url( $src );
-		$is_image     = preg_match( $img_ext_preg, $src );
-		switch ( $this->style ) {
-			case 'one':
-				if ( $src_exists ) {
-					if ( $is_image ) {
-						$style = ' style="background-image:url(' . $src . ')"';
-					} else {
-						$style = ' style="background-image:url(' . ANOE_URI . 'assets/images/placeholders/file.png)"';
-					}
-				} else {
-					$style = ' style="background-image:url(' . ANOE_URI . 'assets/images/placeholders/browse.png)"';
-				}
-				$html .= '<div class="uploads-wrapper style-one"' . $style . '>';
-				break;
-			default:
-				$html .= '<div class="uploads-wrapper">';
-				if ( $src_exists ) {
-					if ( $is_image ) {
-						$html .= '<img class="anony-opts-screenshot" style="max-width:80px;" src="' . $src . '" />';
-					} else {
-						$file_basename = wp_basename( $src );
-						$html         .= '<a href="' . $src . '">';
-						$html         .= '<img class="anony-opts-screenshot" style="max-width:80px;" src="' . ANOE_URI . 'assets/images/placeholders/file.png"/><br>';
-						$html         .= '<span class="uploaded-file-name">' . $file_basename . '</span>';
-						$html         .= '</a>';
-					}
-				} else {
-					$html .= '<img class="anony-opts-screenshot" style="max-width:80px;" src="' . ANOE_URI . 'assets/images/placeholders/browse.png"/>';
-					$html .= '<span class="uploaded-file-name"></span>';
-				}
-		}
+
+		$this->load_style_html_method( $html, 'uploads_preview_nopriv' );
 	}
 
 	/**
@@ -230,37 +200,7 @@ class ANONY_Uploader {
 	 */
 	protected function button( &$html ) {
 
-		switch ( $this->style ) {
-			case 'one':
-				$html .= sprintf(
-					'<a href="javascript:void(0);" data-id="%1$s" data-choose="Choose a File" data-update="Select File" class="anony-opts-upload uploader-trigger style-one"><span class="anony-upload-plus">+</span></a>',
-					esc_attr( $this->parent_obj->field['id'] )
-				);
-				break;
-			default:
-				if ( '' === $this->parent_obj->value ) {
-					$remove = ' style="display:none;"';
-					$upload = '';
-				} else {
-					$remove = '';
-					$upload = ' style="display:none;"';
-				}
-
-				$html .= sprintf(
-					' <a href="javascript:void(0);" data-id="%3$s" data-choose="Choose a File" data-update="Select File" class="anony-opts-upload uploader-trigger"%1$s><span></span>%2$s</a>',
-					$upload,
-					esc_html__( 'Browse', 'anonyengine' ),
-					esc_attr( $this->parent_obj->field['id'] )
-				);
-
-				$html .= sprintf(
-					'<br><a href="javascript:void(0);" data-id="%3$s" class="anony-opts-upload-remove"%1$s>%2$s</a>',
-					$remove,
-					esc_html__( 'Remove Upload', 'anonyengine' ),
-					esc_attr( $this->parent_obj->field['id'] )
-				);
-
-		}
+		$this->load_style_html_method( $html, 'button' );
 	}
 
 	/**
@@ -367,31 +307,27 @@ class ANONY_Uploader {
 	}
 
 	/**
+	 * Load style scripts method
+	 *
+	 * @param string $method Corresponding method.
+	 * @return void
+	 */
+	protected function load_style_scripts_method( $method ) {
+		require_once ANONY_FIELDS_DIR . 'uploader/class-anony-uploader-style-' . $this->style . '.php';
+		$class_name = 'ANONY_Uploader_Style_' . ucfirst( $this->style );
+		if ( class_exists( $class_name ) && method_exists( $class_name, $method ) ) {
+			$style = new $class_name( $this );
+			$style->$method();
+		}
+	}
+
+	/**
 	 * Scripts for private input.
 	 *
 	 * @return void
 	 */
 	public function user_can_upload_files_scripts() {
-		$wp_version = floatval( get_bloginfo( 'version' ) );
-		if ( $wp_version < '3.5' ) {
-			wp_enqueue_script(
-				'anony-opts-field-upload-js',
-				ANONY_FIELDS_URI . 'uploader/js/' . $this->style . '/field_upload_3_4.js',
-				array( 'jquery', 'thickbox', 'media-upload' ),
-				time(),
-				true
-			);
-			wp_enqueue_style( 'thickbox' );
-		} else {
-			wp_enqueue_script(
-				'anony-opts-field-upload-js',
-				ANONY_FIELDS_URI . 'uploader/js/' . $this->style . '/field_upload.js',
-				array( 'jquery' ),
-				time(),
-				true
-			);
-			wp_enqueue_media();
-		}
+		$this->load_style_scripts_method( 'user_can_upload_files_scripts' );
 	}
 	/**
 	 * Scripts for nonprivate input.
@@ -399,12 +335,6 @@ class ANONY_Uploader {
 	 * @return void
 	 */
 	public function user_can_not_upload_files_scripts() {
-		wp_enqueue_script(
-			'anony-opts-field-upload-nopriv-js',
-			ANONY_FIELDS_URI . 'uploader/js/' . $this->style . '/field_upload_nopriv.js',
-			array( 'jquery' ),
-			time(),
-			true
-		);
+		$this->load_style_scripts_method( 'user_can_not_upload_files_scripts' );
 	}
 }

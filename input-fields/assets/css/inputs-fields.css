@@ -82,6 +82,7 @@ fieldset .iti {
 	color: #222;
 	direction: ltr;
 	padding: 0;
+	display: flex;
 }
 fieldset .iti div.iti__arrow{
 	padding: 0;
@@ -641,6 +642,70 @@ button{
 	position: relative;
 	background-position: center;
     background-size: cover;
+}
+.uploads-wrapper.style-two::before{
+	content: '';
+    display: flex;
+    position: absolute;
+    bottom: 0px;
+    left: 0;
+    z-index: -1;
+    right: 0;
+    margin: auto;
+    width: 40px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: transparent;
+    box-shadow: 0px 0px 20px 10px rgb(104 104 104);
+    -webkit-box-shadow: 0px 0px 20px 10px rgb(104 104 104);
+    -moz-box-shadow: 0px 0px 20px 10px rgb(104 104 104);
+}
+.uploads-wrapper.style-two{
+	background-color: #6A9DD2;
+    height: 80px;
+    width: 120px;
+    border-radius: 10px;
+	margin: auto;
+	position: relative;
+}
+.uploads-wrapper.style-two span.anony-uploaded-preview{
+	display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
+    height: 80px;
+    width: 80px;
+    background-color: #dadada;
+    border-radius: 10px;
+	position: relative;
+    top: -20px;
+}
+.uploads-wrapper.style-two span.anony-uploaded-preview svg{
+	z-index: 2;
+}
+.uploads-wrapper.style-two span.anony-uploaded-preview::after{
+	content: '';
+    display: flex;
+    position: absolute;
+    top: 0px;
+    left: 0;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+	background-color: #000;
+	background: rgb(0,0,0);
+	background: -moz-linear-gradient(360deg, rgba(0,0,0,1) 0%, rgba(255,255,255,0.5) 100%);
+	background: -webkit-linear-gradient(360deg, rgba(0,0,0,1) 0%, rgba(255,255,255,0.5) 100%);
+	background: linear-gradient(360deg, rgba(0,0,0,1) 0%, rgba(255,255,255,0.5) 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#000000",endColorstr="#ffffff",GradientType=0.5);
+	opacity: 0.75;
+}
+
+.uploads-wrapper.style-two a.style-two{
+	display: flex;
+    justify-content: center;
+	position: relative;
 }
 .uploads-wrapper.style-one::before{
 	content: '';

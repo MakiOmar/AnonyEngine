@@ -38,8 +38,10 @@
     max-width: 98%;
     margin: 20px auto;
 }
-fieldset > div{
-	margin: 15px 0;
+fieldset > div {
+    margin: 5px 0;
+    display: block;
+    width: 100%;
 }
 .anony-metabox-col{
 	display: flex;

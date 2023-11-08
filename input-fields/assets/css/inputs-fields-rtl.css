@@ -45,3 +45,14 @@ body.rtl .iti--allow-dropdown .iti__flag-container, body.rtl .iti--separate-dial
     right: 0;
     left: auto;
 }
+
+body.rtl .iti--allow-dropdown input, body.rtl .iti--allow-dropdown input[type=text], body.rtl .iti--allow-dropdown input[type=tel], body.rtl .iti--separate-dial-code input, body.rtl .iti--separate-dial-code input[type=text], body.rtl .iti--separate-dial-code input[type=tel] {
+	text-align:left
+}
+body.rtl .iti__selected-flag {
+    padding: 0 20px 0 8px;
+}
+
+.iti {
+    width: 100%;
+}

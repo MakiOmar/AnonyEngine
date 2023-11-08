@@ -88,7 +88,7 @@ class ANONY_Uploader_Style_One {
 	 */
 	public function user_can_not_upload_files_scripts() {
 		wp_enqueue_script(
-			'anony-opts-field-upload-nopriv-js',
+			'anony-opts-field-upload-one-nopriv-js',
 			ANONY_FIELDS_URI . 'uploader/js/one/field_upload_nopriv.js',
 			array( 'jquery' ),
 			time(),

@@ -286,15 +286,13 @@ class ANONY_Uploader {
 	public function enqueue() {
 		if ( current_user_can( 'upload_files' ) ) {
 			$this->user_can_upload_files_scripts();
-			$handle = 'anony-opts-field-upload-js';
 		} else {
 			$this->user_can_not_upload_files_scripts();
-			$handle = 'anony-opts-field-upload-nopriv-js';
 		}
 		global $localized_uploader;
 		if ( ! isset( $localized_uploader ) ) {
 			wp_localize_script(
-				$handle,
+				'jquery',
 				'anony_upload',
 				array(
 					'url'        => ANOE_URI . 'assets/images/placeholders/file.png',

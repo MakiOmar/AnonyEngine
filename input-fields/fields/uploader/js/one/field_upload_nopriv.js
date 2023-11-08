@@ -2,10 +2,11 @@
 	"use strict";
 	$( "body" ).on(
 		'click',
-		'.uploader-trigger',
+		'.uploader-trigger.style-one',
 		function () {
+			var parent = $( this ).closest( 'fieldset' );
 			var target = $( this ).data( 'id' );
-			$( '#' + target ).trigger( 'click' );
+			parent.find( '#' + target ).trigger( 'click' );
 		}
 	);
 

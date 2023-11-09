@@ -96,7 +96,7 @@ function anony_common_scripts() {
 /**
  * AnonyEngine common scripts.
  */
-// add_action( 'wp_enqueue_scripts', 'anony_common_scripts' );
+add_action( 'wp_enqueue_scripts', 'anony_common_scripts' );
 add_action( 'admin_enqueue_scripts', 'anony_common_scripts' );
 
 

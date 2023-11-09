@@ -128,7 +128,7 @@ if ( ! class_exists( 'ANONY_Update_Post' ) ) {
 
 					wp_update_post( $args );
 
-					if ( $action_data['tax_query'] && ! empty( $action_data['tax_query'] ) ) {			
+					if ( $action_data['tax_query'] && ! empty( $action_data['tax_query'] ) ) {
 						foreach ( $action_data['tax_query'] as $taxonomy => $value ) {
 							if ( is_array( $value ) ) {
 								$_value = array();

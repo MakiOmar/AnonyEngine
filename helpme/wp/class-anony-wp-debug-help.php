@@ -87,22 +87,27 @@ if ( ! class_exists( 'ANONY_Wp_Debug_Help' ) ) {
 		 * Track deprecated functions.
 		 * **Description: ** Should be hooked to deprecated_argument_run | doing_it_wrong_run |deprecated_function_run
 		 *
-		 * @param string $function The function that was called.
+		 * @param string $function_name The function that was called.
 		 * @param string $message  A message regarding the change.
 		 * @param string $version  The version of WordPress that deprecated the argument used.
 		 * @return void
 		 */
-		public static function deprecated_argument_run( $function, $message, $version ) {
+		public static function deprecated_argument_run( $function_name, $message, $version ) {
 			// phpcs:disable WordPress.PHP.DevelopmentFunctions
-			error_log( 'Deprecated Argument Detected' );
+			self::error_log( 'Deprecated Argument Detected' );
 
 			$trace = debug_backtrace();
 			foreach ( $trace as $frame ) {
-				error_log( var_export( $frame, true ) );
+				self::error_log( var_export( $frame, true ) );
 			}
 			// phpcs:enable
 		}
 
+		/**
+		 * Suppress deprecated
+		 *
+		 * @return void
+		 */
 		public static function suppress_deprecated_notices() {
 			add_filter( 'deprecated_function_trigger_error', '__return_false' );
 			add_filter( 'deprecated_argument_trigger_error', '__return_false' );

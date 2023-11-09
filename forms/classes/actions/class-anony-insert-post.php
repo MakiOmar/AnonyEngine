@@ -90,6 +90,15 @@ if ( ! class_exists( 'ANONY_Insert_Post' ) ) {
 					'post_author' => get_current_user_id(),
 				);
 
+				// Argumnets sent from the form.
+				$optional_post_data = array_diff( array_keys( $post_data ), self::REQUIRED_ARGUMENTS );
+
+				if ( ! empty( $optional_post_data ) ) {
+					foreach ( $optional_post_data as $optional_post_field ) {
+						$args[ $optional_post_field ] = $this->get_field_value( $post_data[ $optional_post_field ], $this->get_field( $post_data[ $optional_post_field ] ) );
+					}
+				}
+
 				$id = wp_insert_post( $args );
 
 				if ( $id && ! is_wp_error( $id ) ) {

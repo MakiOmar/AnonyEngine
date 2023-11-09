@@ -723,30 +723,46 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 			}
 
 			if ( ! empty( $this->results ) ) {
-				// error_log(print_r($this->results, true));
+				ANONY_Wp_Debug_Help::error_log( $this->results, true );
 			}
 
 			do_action( 'anony_form_submitted', $this->validated, $this->id );
 		}
 
-
+		/**
+		 * Get error message
+		 *
+		 * @param string $code message code.
+		 * @return string Message of the code.
+		 */
 		protected function get_error_message( $code ) {
-
+			$msg = '';
 			switch ( $code ) {
 				case 'logged_in':
-					return esc_html__( 'You must be logged in.', 'anonyengine' ) . ' ' . '<a href=" ' . esc_url( wp_login_url( get_permalink() ) ) . '" alt="' . esc_attr__( 'Login Now', 'anonyengine' ) . '">' . esc_html__( 'Login Now', 'anonyengine' ) . '</a>';
+					$msg = esc_html__( 'You must be logged in.', 'anonyengine' ) . ' <a href=" ' . esc_url( wp_login_url( get_permalink() ) ) . '" alt="' . esc_attr__( 'Login Now', 'anonyengine' ) . '">' . esc_html__( 'Login Now', 'anonyengine' ) . '</a>';
 					break;
 
 				case 'user_role':
-					return esc_html__( 'You are not allowed to do this.', 'anonyengine' );
+					$msg = esc_html__( 'You are not allowed to do this.', 'anonyengine' );
 					break;
 			}
+
+			return $msg;
 		}
 
+		/**
+		 * Enqueue form scripts
+		 *
+		 * @return void
+		 */
 		public function enqueue_scripts() {
-			anony_enqueue_styles();
-			// Enqueue fields scripts.
-			new ANONY_Fields_Scripts( $this->fields );
+			global $post;
+
+			if ( ANONY_Post_Help::has_shortcode( $post, '[' . $this->id . ']' ) ) {
+				anony_enqueue_styles();
+				// Enqueue fields scripts.
+				new ANONY_Fields_Scripts( $this->fields );
+			}
 		}
 	}
 }

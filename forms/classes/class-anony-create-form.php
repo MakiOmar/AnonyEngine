@@ -151,8 +151,6 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 			$this->fields = ! empty( $this->form['fields'] ) ? $this->form['fields'] : array();
 			$this->default_values();
 
-			//ANONY_Wp_Debug_Help::neat_print_r( $this->fields );.
-
 			$this->form_attributes = $this->form_attributes( $this->form );
 
 			// Set form Settings.
@@ -350,11 +348,36 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 		 *
 		 * @param array $fields All fields.
 		 * @param array $configs Action configurations.
-		 * @param mixed $post_id Post's ID.
-		 * @return bool
+		 * @param mixed $user_id Users's ID.
+		 * @return void
 		 */
-		protected function set_user_default_values( &$fields, $configs, $post_id ) {
-			return false;
+		protected function set_user_default_values( &$fields, $configs, $user_id ) {
+			$user = get_user_by( 'id', $user_id );
+			if ( ! $user || is_wp_error( $user ) ) {
+				return;
+			}
+			foreach ( $configs as $config => $mappings ) {
+
+				if ( 'user_data' === $config ) {
+					foreach ( $mappings as $user_field => $value ) {
+
+						$field = $this->get_field( $value );
+
+						if ( isset( $user->$user_field ) && 'user_pass' !== $user_field && 'ID' !== $user_field ) {
+							$this->set_default_value( $fields, $field, $user->$user_field );
+						}
+					}
+				}
+
+				if ( 'meta' === $config ) {
+					foreach ( $mappings as $meta_key => $value ) {
+
+						$field = $this->get_field( $value );
+
+						$this->set_default_value( $fields, $field, get_user_meta( absint( $user_id ), $meta_key, true ) );
+					}
+				}
+			}
 		}
 		/**
 		 * Set default values
@@ -386,6 +409,7 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 									break;
 								case 'user':
 									$this->set_user_default_values( $fields, $configs, $object_id );
+
 									break;
 							}
 						}
@@ -421,6 +445,12 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 			return false;
 		}
 
+		/**
+		 * Get form attributes
+		 *
+		 * @param array $form Form arguments.
+		 * @return string Form attributes.
+		 */
 		protected function form_attributes( $form ) {
 			$attributes = '';
 			if ( ! empty( $form['form_attributes'] ) ) {
@@ -438,7 +468,7 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 				return $errors;
 			}
 			$conditions = $form['conditions'];
-			if ( ! empty( $conditions['logged_in'] ) && $conditions['logged_in'] == true && ! is_user_logged_in() ) {
+			if ( ! empty( $conditions['logged_in'] ) && $conditions['logged_in'] === true && ! is_user_logged_in() ) {
 				$errors[] = 'logged_in';
 			}
 

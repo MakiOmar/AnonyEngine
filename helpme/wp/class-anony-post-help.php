@@ -71,15 +71,8 @@ if ( ! class_exists( 'ANONY_Post_Help' ) ) {
 		 * @return array An array of meta keys..
 		 */
 		public static function getPostMetaKeys( $post_id ) {
-			$clause = array(
-				'select'   => 'meta_key',
-				'from'     => 'postmeta',
-				'where'    => 'post_id',
-				'operator' => '=',
-				'value'    => $post_id,
-			);
 
-			return ANONY_Wp_Db_Help::direct_select( $clause );
+			return array();
 		}
 
 		/**

@@ -256,12 +256,15 @@ if ( ! class_exists( 'ANONY_Tel' ) ) {
 				<script type="text/javascript">
 					// Vanilla Javascript.
 					var input = document.querySelector("#<?php echo esc_attr( $target_id ); ?>");
-					window.intlTelInput(input,({
-						// specify the path to the libphonenumber script to enable validation/formatting.
-						utilsScript: '<?php echo esc_url( ANONY_FIELDS_URI ); ?>tel/js/utils.js',
-						autoHideDialCode: false,
-						nationalMode: false
-					}));
+					if ( input ) {
+						window.intlTelInput(input,({
+							// specify the path to the libphonenumber script to enable validation/formatting.
+							utilsScript: '<?php echo esc_url( ANONY_FIELDS_URI ); ?>tel/js/utils.js',
+							autoHideDialCode: false,
+							nationalMode: false
+						}));
+					}
+					
 				</script>
 
 					<?php

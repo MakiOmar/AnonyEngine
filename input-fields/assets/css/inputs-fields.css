@@ -667,6 +667,7 @@ button{
     border-radius: 10px;
 	margin: auto;
 	position: relative;
+	margin-top: 20px;
 }
 .uploads-wrapper.style-two span.anony-uploaded-preview{
 	display: inline-flex;
@@ -679,6 +680,7 @@ button{
     border-radius: 10px;
 	position: relative;
     top: -20px;
+	padding: 20px;
 }
 .uploads-wrapper.style-two span.anony-uploaded-preview svg{
 	z-index: 2;

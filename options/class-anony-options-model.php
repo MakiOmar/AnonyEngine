@@ -51,55 +51,59 @@ if ( ! class_exists( 'ANONY_Options_Model' ) ) {
 		 */
 		public static $object_changed_to = null;
 
+		/**
+		 * Get option object instance
+		 *
+		 * @param string $option_name Option name.
+		 * @return object Option object instance.
+		 */
 		public static function get_instance( $option_name = ANONY_OPTIONS ) {
-			if ( self::$instance == null ) {
+			if ( null === self::$instance ) {
 				self::$instance = new ANONY_Options_Model( $option_name );
-			} elseif ( self::$instance !== null && self::$object_changed_to !== $option_name ) {
+			} elseif ( null !== self::$instance && self::$object_changed_to !== $option_name ) {
 
 				self::$object_changed_to = $option_name;
 				self::$instance          = new ANONY_Options_Model( $option_name );
 			}
-			// if($option_name == ANONY_OPTIONS ) debug_print_backtrace();
 			return self::$instance;
 		}
 
 		/**
-		 * construct the option using the provided option_name,
+		 * Construct the option using the provided option_name,
 		 *
-		 * @param string $option_name
+		 * @param string $option_name Option name.
 		 */
 		public function __construct( $option_name = ANONY_OPTIONS . ' ' ) {
 			$this->option_group      = trim( $option_name );
 			self::$object_changed_to = trim( $option_name );
-			// get the current value of this option
+			// get the current value of this option.
 			$existed = get_option( $this->option_group );
 
-			// if there is an existed value, assign it to the array
+			// if there is an existed value, assign it to the array.
 			if ( $existed ) {
 				$this->options_arr = $existed;
 			}
 		}
 
 		/**
-		 * create or update an option name if not existed in this option group
+		 * Create or update an option name if not existed in this option group
 		 * this function is run when trying to write to an inaccessible property
 		 *
-		 * @param $option_name
-		 * @param $option_value
-		 * @return return empty string if setting new value or return old value if overwriting
+		 * @param string $option_name Option name.
+		 * @param string $option_value Option value.
+		 * @return void
 		 */
 		public function __set( $option_name, $option_value ) {
-			return $this->options_arr[ $option_name ] = ( $option_value );
-
-			// $this->save ();
+			$this->options_arr[ $option_name ] = $option_value;
+			$this->save();
 		}
 
 		/**
-		 * read an option in this option group
+		 * Read an option in this option group
 		 * this function is run when trying to read an inaccessible property
 		 *
-		 * @param $option_name
-		 * @return object value of option
+		 * @param string $option_name Option name.
+		 * @return mixed Value of an option.
 		 */
 		public function __get( $option_name ) {
 
@@ -112,36 +116,36 @@ if ( ! class_exists( 'ANONY_Options_Model' ) ) {
 		}
 
 		/**
-		 * check if an option is existed or not
+		 * Check if an option is existed or not
 		 * this function is run when trying to isset() or empty() an inaccessible property.
 		 *
-		 * @param $option_name
-		 * @return bool true if isset and false if is not set
+		 * @param string $option_name Option name.
+		 * @return bool true if isset and false if is not set.
 		 */
 		public function __isset( $option_name ) {
 			return isset( $this->options_arr[ $option_name ] );
 		}
 
 		/**
-		 * unset an option if existed
+		 * Unset an option if existed
 		 * this function is run when trying to unset() an inaccessible property
 		 *
-		 * @param $option_name
+		 * @param string $option_name Option name.
 		 */
 		public function __unset( $option_name ) {
 			unset( $this->options_arr[ $option_name ] );
 		}
 
 		/**
-		 * save the current option values into database
+		 * Save the current option values into database
 		 */
 		public function save() {
 			return update_option( $this->option_group, $this->options_arr );
 		}
 		/**
-		 * save the current option values into database
+		 * Save the current option values into database
 		 *
-		 * @param array $option_arr
+		 * @param array $option_arr Options array.
 		 * @return bool result of update option function
 		 * @since 1.0
 		 * @package Appengine
@@ -154,36 +158,32 @@ if ( ! class_exists( 'ANONY_Options_Model' ) ) {
 		}
 
 		/**
-		 * use 'echo' to print all options of the theme
+		 * Print all options of the theme
 		 */
 		public function __toString() {
-			return '<pre>' . print_r( $this->options_arr, true ) . '</pre>';
+			return ANONY_Wp_Debug_Help::neat_print_r( $this->options_arr );
 		}
 
 		/**
-		 * return option with option name corresponding
+		 * Get an option.
 		 *
-		 * @param option_name
-		 * @param $default
-		 * @return value of option (string or array)
+		 * @param string $option_name Option name.
+		 * @param mixed  $default_value Default value.
+		 * @return mixed Value of option.
 		 */
-		public function get_option( $option_name, $default = false ) {
+		public function get_option( $option_name, $default_value = false ) {
 			if ( ! isset( $this->options_arr[ $option_name ] ) ) {
-				return $default;
+				return $default_value;
 			}
 			return $this->options_arr[ $option_name ];
 		}
 
 		/**
-		 * update option value
+		 * Update option value
 		 *
-		 * @author dakachi
-		 *
-		 * if options containing null, return false.
-		 * if successful return true
-		 * @param string    $option_name
-		 * @param $new_value
-		 * @return bool return false if update unsuccessful
+		 * @param string $option_name Option name.
+		 * @param mixed  $new_value Option new value.
+		 * @return bool
 		 */
 		public function update_option( $option_name, $new_value ) {
 			if ( current_user_can( 'manage_options' ) ) {
@@ -195,14 +195,10 @@ if ( ! class_exists( 'ANONY_Options_Model' ) ) {
 		}
 
 		/**
-		 * add new option
+		 * Add new option
 		 *
-		 * @author dakachi
-		 *
-		 * if options containing null, return false.
-		 * if successful return true
-		 * @param string $option_name
-		 * @param $value
+		 * @param string $option_name Option name.
+		 * @param mixed  $value Option value.
 		 * @return bool
 		 */
 		public function add_option( $option_name, $value ) {
@@ -214,14 +210,9 @@ if ( ! class_exists( 'ANONY_Options_Model' ) ) {
 		}
 
 		/**
-		 * add new option
+		 * Delete option
 		 *
-		 * @author dakachi
-		 *
-		 * if options containing null, return false.
-		 * if successful return true
-		 * @param string $option_name
-		 * @param $value
+		 * @param string $option_name Option name.
 		 * @return bool
 		 */
 		public function delete_option( $option_name ) {
@@ -234,29 +225,32 @@ if ( ! class_exists( 'ANONY_Options_Model' ) ) {
 		}
 
 		/**
-		 *  return current option values of this object
+		 *  Get all current option values of this object
+		 *
+		 * @return array
 		 */
 		public function get_all_current_options() {
 			return $this->options_arr;
 		}
 
 		/**
-		 * return option values of this object in database
+		 * Get all option values of this object in database
+		 *
+		 * @return array
 		 */
 		public function get_all_options_in_database() {
 			return get_option( $this->option_group );
 		}
 
 		/**
-		 * validate option
+		 * Validate option
 		 *
-		 * @param $type data type
-		 * @param $value will be validate
+		 * @param string $type data type.
+		 * @param mixed  $value value to be validated.
 		 * @return bool
 		 */
 		protected static function validate( $type, $value ) {
-			$validate = new anony_Validator();
-			return $validate->validate( $type, $value );
+			return $value;
 		}
 	}
 }

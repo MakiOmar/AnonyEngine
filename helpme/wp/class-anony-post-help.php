@@ -85,11 +85,11 @@ if ( ! class_exists( 'ANONY_Post_Help' ) ) {
 		/**
 		 * Checks if a shortcode exists in page/post
 		 *
-		 * @param  obj    $post Post object.
+		 * @param  object $post Post object.
 		 * @param  string $shortcode_tag Shortcode tag to search for.
 		 * @return bool True if shortcode exist, otherwise false.
 		 */
-		public static function isPageHasShortcode( $post, $shortcode_tag ) {
+		public static function has_shortcode( $post, $shortcode_tag ) {
 			if ( $post instanceof WP_Post ) {
 				setup_postdata( $post );
 				$content = get_the_content();

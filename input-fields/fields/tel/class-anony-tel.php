@@ -234,7 +234,7 @@ if ( ! class_exists( 'ANONY_Tel' ) ) {
 		public function enqueue() {
 			if ( 'yes' === $this->with_dial_codes ) {
 				wp_enqueue_style( 'intlTelInput', ANONY_FIELDS_URI . 'tel/css/intlTelInput.css', array(), '1.0' );
-				wp_enqueue_script( 'intlTelInput', ANONY_FIELDS_URI . 'tel/js/intlTelInput.min.js', array(), time(), true );
+				wp_enqueue_script( 'intlTelInput', ANONY_FIELDS_URI . 'tel/js/intlTelInput.js', array(), time(), true );
 			}
 		}
 

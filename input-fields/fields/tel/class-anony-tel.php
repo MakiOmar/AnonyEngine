@@ -44,7 +44,7 @@ if ( ! class_exists( 'ANONY_Tel' ) ) {
 		 * @var string
 		 */
 		private $pattern;
-		
+
 		/**
 		 * Input icon
 		 *
@@ -101,6 +101,8 @@ if ( ! class_exists( 'ANONY_Tel' ) ) {
 				<path d="M9.0002 18.1C9.85624 18.1 10.5502 17.406 10.5502 16.55C10.5502 15.694 9.85624 15 9.0002 15C8.14415 15 7.4502 15.694 7.4502 16.55C7.4502 17.406 8.14415 18.1 9.0002 18.1Z" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
 				</svg>'
 			);
+
+			$this->icon = apply_filters( "anony_{$this->parent_obj->field['id']}_icon", $this->icon );
 		}
 
 		/**

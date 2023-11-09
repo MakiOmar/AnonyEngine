@@ -172,4 +172,6 @@ add_action(
 	}
 );
 
+add_action( 'wp_head', 'anony_head_scripts' );
+
 do_action( 'anonyengine_loaded' );

@@ -177,7 +177,7 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 					$this->fields_layout = $this->form['fields_layout'];
 				}
 
-				$this->submit_label = isset( $this->form['submit_label'] ) && ! empty( $this->form['submit_label'] ) ? $this->form['submit_label'] : __( 'Submit', 'anonyengine' );
+				$this->submit_label = ! empty( $this->form['submit_label'] ) ? $this->form['submit_label'] : __( 'Submit', 'anonyengine' );
 
 				add_shortcode( $this->id, array( $this, 'create_shortcode' ) );
 
@@ -462,13 +462,19 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 			return $attributes;
 		}
 
+		/**
+		 * Check against form conditions
+		 *
+		 * @param array $form Form arguments.
+		 * @return array An array of errors. Empty if no errors.
+		 */
 		protected function check_conditions( $form ) {
 			$errors = array();
 			if ( empty( $form['conditions'] ) || ! is_array( $form['conditions'] ) ) {
 				return $errors;
 			}
 			$conditions = $form['conditions'];
-			if ( ! empty( $conditions['logged_in'] ) && $conditions['logged_in'] === true && ! is_user_logged_in() ) {
+			if ( ! empty( $conditions['logged_in'] ) && true === $conditions['logged_in'] && ! is_user_logged_in() ) {
 				$errors[] = 'logged_in';
 			}
 
@@ -485,12 +491,18 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 			return $errors;
 		}
 
+		/**
+		 * Render conditions errors
+		 *
+		 * @param array $errors Errors array.
+		 * @return void
+		 */
 		protected function render_conditions_errors( $errors ) {
 			$html = '';
 			foreach ( $errors as $code ) {
 
 				if ( 'logged_in' === $code ) {
-					echo '<p class="form-error">' . $this->get_error_message( $code ) . '</p>';
+					echo '<p class="form-error">' . esc_html( $this->get_error_message( $code ) ) . '</p>';
 					break;
 				} else {
 					$html .= '<li class="form-error">' . $this->get_error_message( $code ) . '</li>';
@@ -499,12 +511,21 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 
 			if ( ! empty( $html ) ) { ?>
 				<ul class="form-errors">
-					<?php echo $html; ?>
+					<?php
+					//phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
+					echo $html;
+					//phpcs:enable.
+					?>
 				</ul>
 				<?php
 			}
 		}
 
+		/**
+		 * Render form fields
+		 *
+		 * @return void
+		 */
 		public function render() {
 			$this->create( $this->fields );
 		}
@@ -519,6 +540,12 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 			$this->create( $this->fields );
 			return ob_get_clean();
 		}
+
+		/**
+		 * Render submit errors
+		 *
+		 * @return void
+		 */
 		protected function render_submit_errors() {
 			$this->error_msgs = get_transient( 'anony_form_submit_errors_' . $this->id );
 
@@ -559,10 +586,12 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 					</style>
 				<?php
 			}
+			//phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
 			?>
 			<form id="<?php echo esc_attr( $this->id ); ?>" class="anony-form"  <?php echo $this->form_attributes; ?>>
 
 				<?php
+				//phpcs:enable.
 				foreach ( $fields as $field ) :
 
 					$args = array(
@@ -758,7 +787,7 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 		public function enqueue_scripts() {
 			global $post;
 
-			if ( ANONY_Post_Help::has_shortcode( $post, '[' . $this->id . ']' ) ) {
+			if ( ANONY_Post_Help::has_shortcode( $post, $this->id ) ) {
 				anony_enqueue_styles();
 				// Enqueue fields scripts.
 				new ANONY_Fields_Scripts( $this->fields );

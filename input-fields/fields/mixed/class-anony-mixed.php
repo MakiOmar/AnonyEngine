@@ -28,6 +28,14 @@ class ANONY_Mixed {
 	private $parent_obj;
 
 	/**
+	 * Input icon
+	 *
+	 * @var string
+	 */
+	private $icon;
+
+
+	/**
 	 * Color field Constructor.
 	 *
 	 * @param object $parent_obj Field parent object.
@@ -56,6 +64,8 @@ class ANONY_Mixed {
 				esc_attr( $this->parent_obj->value );
 				break;
 		}
+
+		$this->icon = apply_filters( "anony_{$this->parent_obj->field['id']}_icon", '' );
 	}
 
 	/**
@@ -82,8 +92,6 @@ class ANONY_Mixed {
 			$lang = ( isset( $this->parent_obj->field['lang'] ) && ! empty( $this->parent_obj->field['lang'] ) ) ? $this->parent_obj->field['lang'] : $lang;
 		}
 
-		$icon = apply_filters( "anony_{$this->parent_obj->field['type']}_icon", '' );
-
 		if ( $this->parent_obj->as_template ) {
 			$html  = sprintf(
 				'<fieldset class="anony-row anony-row-inline"%2$s%3$s>',
@@ -101,8 +109,9 @@ class ANONY_Mixed {
 				$placeholder,
 				$readonly
 			);
-			if ( ! empty( $icon ) ) {
-				$html .= '<span class="anony-field-icon">' . $icon . '</span></div>';
+
+			if ( ! empty( $this->icon ) ) {
+				$html .= '<span class="anony-field-icon">' . $this->icon . '</span></div>';
 			} else {
 				$html .= '</div>';
 			}
@@ -148,8 +157,8 @@ class ANONY_Mixed {
 			$max,
 			$readonly
 		);
-		if ( ! empty( $icon ) ) {
-			$html .= '<span class="anony-field-icon">' . $icon . '</span></div>';
+		if ( ! empty( $this->icon ) ) {
+			$html .= '<span class="anony-field-icon">' . $this->icon . '</span></div>';
 		} else {
 			$html .= '</div>';
 		}

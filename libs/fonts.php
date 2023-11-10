@@ -9,7 +9,7 @@
 
 $fonts = array();
 
-// system fonts won`t be downloaded from Google Fonts
+// system fonts won`t be downloaded from Google Fonts.
 $fonts['system'] = array(
 	'Arial',
 	'Georgia',

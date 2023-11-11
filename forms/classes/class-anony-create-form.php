@@ -502,7 +502,9 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 			foreach ( $errors as $code ) {
 
 				if ( 'logged_in' === $code ) {
-					echo '<p class="form-error">' . esc_html( $this->get_error_message( $code ) ) . '</p>';
+					//phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
+					echo '<p class="form-error">' . $this->get_error_message( $code ) . '</p>';
+					//phpcs:enable.
 					break;
 				} else {
 					$html .= '<li class="form-error">' . $this->get_error_message( $code ) . '</li>';

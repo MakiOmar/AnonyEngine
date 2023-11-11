@@ -64,10 +64,24 @@ function AnonyUpload(){
 
 						}
 					}
+
+					$('.anony-opts-clear-gallery').show();
+				} else {
+					$('.anony-opts-clear-gallery').hide();
 				}
 			}
 		);
-
+		jQuery( document.body ).on(
+			'click',
+			'.anony-opts-clear-gallery',
+			function(){
+				var thumbsWrapper = $( '.anony-gallery-thumbs' );
+				thumbsWrapper.html('');
+				var parent   = $( this ).closest( 'fieldset' );
+				parent.find( '.anony_gallery' ).val( null );
+				$(this).hide();
+			}
+		)
 		jQuery( document.body ).on(
 			"click",
 			".anony_remove_gallery_image" ,

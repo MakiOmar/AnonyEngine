@@ -24,6 +24,13 @@ class ANONY_Gallery {
 	private $parent_obj;
 
 	/**
+	 * Button text
+	 *
+	 * @var object
+	 */
+	private $button_text;
+
+	/**
 	 * Field Constructor.
 	 *
 	 * Required - must call the parent constructor, then assign field and value to vars, and obviously call the render field function
@@ -37,6 +44,8 @@ class ANONY_Gallery {
 		}
 
 		$this->parent_obj = $parent_obj;
+
+		$this->button_text = ! empty( $this->parent_obj->field['button_text'] ) ? $this->parent_obj->field['button_text'] : esc_html__( 'Browse', 'anonyengine' );
 	}
 
 	/**
@@ -164,7 +173,7 @@ class ANONY_Gallery {
 		$style = 'display:none;';
 		$html .= sprintf(
 			'<a href="javascript:void(0);" data-choose="Choose a File" data-update="Select File" class="anony-opts-gallery button button-primary button-large"><span></span>%1$s</a>',
-			esc_html__( 'Browse', 'anonyengine' )
+			$this->button_text
 		);
 
 		$html .= sprintf(

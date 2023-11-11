@@ -171,6 +171,7 @@ class ANONY_Gallery {
 	 */
 	protected function button( &$html ) {
 		$style = 'display:none;';
+		$html .= '<div class="anony-gallery-buttons">';
 		$html .= sprintf(
 			'<a href="javascript:void(0);" data-choose="Choose a File" data-update="Select File" class="anony-opts-gallery button button-primary button-large"><span></span>%1$s</a>',
 			$this->button_text
@@ -180,6 +181,7 @@ class ANONY_Gallery {
 			' <a href="javascript:void(0);" class="anony-opts-clear-gallery button button-primary button-large" style="' . $style . '"><span></span>%1$s</a>',
 			esc_html__( 'Remove all', 'anonyengine' )
 		);
+		$html .= '</div>';
 	}
 
 	/**

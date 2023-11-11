@@ -24,28 +24,34 @@
 					var reader = new FileReader();
 
 					reader.onload = function (e) {
-						previewContainer.find('.anony-uploaded-preview').css( { 
-							'background-image' : 'url("' + e.target.result + '")',
-							'background-position' : 'center',
-							'background-size' : 'cover',
-						} );
+						previewContainer.find( '.anony-uploaded-preview' ).css(
+							{
+								'background-image' : 'url("' + e.target.result + '")',
+								'background-position' : 'center',
+								'background-size' : 'cover',
+							}
+						);
 					};
 					reader.readAsDataURL( file );
 
 				} else {
 					// Display file icon with file name.
-					previewContainer.find('.anony-uploaded-preview').css( { 
-						'background-image' : 'url("' + anony_upload.url + '")',
-						'background-position' : 'center',
-						'background-size' : 'cover',
-					} );
+					previewContainer.find( '.anony-uploaded-preview' ).css(
+						{
+							'background-image' : 'url("' + anony_upload.url + '")',
+							'background-position' : 'center',
+							'background-size' : 'cover',
+						}
+					);
 					var fileName = $( "<span>" ).text( file.name );
 					parent.find( '.uploaded-file-name' ).append( fileName );
 				}
 			} else {
-				previewContainer.find('.anony-uploaded-preview').css( { 
-					'background-image' : 'none',
-				} );
+				previewContainer.find( '.anony-uploaded-preview' ).css(
+					{
+						'background-image' : 'none',
+					}
+				);
 				parent.find( '.uploaded-file-name' ).empty();
 			}
 		}

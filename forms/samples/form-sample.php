@@ -1,6 +1,4 @@
-<?php
-
-
+<?php //phpcs:disable
 $form = array(
 	'id'              => 'my_first_form',
 	'fields_layout'   => 'columns',

@@ -1,5 +1,4 @@
-<?php
-//phpcs:disable
+<?php //phpcs:disable
 $form = array(
 	'id'              => 'user_profile',
 	'fields_layout'   => 'columns',

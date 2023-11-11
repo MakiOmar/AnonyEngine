@@ -102,7 +102,7 @@ class ANONY_Gallery {
 	 */
 	protected function input_nopriv( &$html ) {
 		$html .= sprintf(
-			'<input type="file" name="%1$s[]" class="%2$s anony_gallery" multiple="multiple"/>',
+			'<input type="file" name="%1$s[]" class="%2$s anony_gallery" style="display:none" multiple="multiple"/>',
 			$this->parent_obj->input_name,
 			$this->parent_obj->class_attr
 		);

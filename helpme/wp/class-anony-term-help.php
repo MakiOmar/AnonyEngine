@@ -166,7 +166,7 @@ if ( ! class_exists( 'ANONY_TERM_HELP' ) ) {
 
 			return '';
 		}
-		
+
 		/**
 		 * Get terms using WP_Term_Query class.
 		 *

@@ -5,7 +5,7 @@ function AnonyUpload(){
 
 		$( "body" ).on(
 			'click',
-			'.anony-opts-gallery',
+			'.anony-opts-gallery, .anony-gallery-thumbs',
 			function ( event ) {
 				event.preventDefault();
 				item_clicked = $( this );

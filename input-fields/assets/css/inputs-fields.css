@@ -776,10 +776,22 @@ button{
 	position: relative;
 	text-align: center;
 }
+div.anony-gallery-thumbs img{
+	height: 70px;
+    width: calc(33.33% - 10px)!important;
+    margin: 5px;
+    border: 3px solid #e8e8e8;
+}
+.anony-gallery-thumbs{
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: start;
+}
 .anony-opts-gallery, .anony-opts-clear-gallery{
 	margin: 10px;
-	max-width: 100px;
+	min-width: 100px;
 	text-align: center;
+	display: block;
 }
 .uploads-wrapper{
 	display: flex;

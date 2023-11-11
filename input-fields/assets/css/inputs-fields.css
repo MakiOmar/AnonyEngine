@@ -514,7 +514,7 @@ input[type=tel]{
 	right: 12.5px;
 }
 fieldset .iti input, fieldset .iti input[type=text], fieldset .iti input[type=tel] {
-    margin: 5px!important;
+	margin: 5px!important;
 }
 .slider_show, .home_slider{
 	display: table-row;
@@ -632,54 +632,54 @@ button{
 	min-width: auto;
 }
 .anony-upload-plus{
-    height: 25px;
-    width: 25px;
+	height: 25px;
+	width: 25px;
 	background-color: rgb(255,255,255);
 }
 .uploads-wrapper.style-one{
 	height: 100px;
-    width: 100px;
+	width: 100px;
 	position: relative;
 	background-position: center;
-    background-size: cover;
+	background-size: cover;
 }
 .uploads-wrapper.style-two::before{
 	content: '';
-    display: flex;
-    position: absolute;
-    bottom: 0px;
-    left: 0;
-    z-index: -1;
-    right: 0;
-    margin: auto;
-    width: 40px;
-    height: 30px;
-    border-radius: 50%;
-    background-color: transparent;
-    box-shadow: 0px 0px 20px 10px rgb(104 104 104);
-    -webkit-box-shadow: 0px 0px 20px 10px rgb(104 104 104);
-    -moz-box-shadow: 0px 0px 20px 10px rgb(104 104 104);
+	display: flex;
+	position: absolute;
+	bottom: 0px;
+	left: 0;
+	z-index: -1;
+	right: 0;
+	margin: auto;
+	width: 40px;
+	height: 30px;
+	border-radius: 50%;
+	background-color: transparent;
+	box-shadow: 0px 0px 20px 10px rgb(104 104 104);
+	-webkit-box-shadow: 0px 0px 20px 10px rgb(104 104 104);
+	-moz-box-shadow: 0px 0px 20px 10px rgb(104 104 104);
 }
 .uploads-wrapper.style-two{
 	background-color: #6A9DD2;
-    height: 80px;
-    width: 120px;
-    border-radius: 10px;
+	height: 80px;
+	width: 120px;
+	border-radius: 10px;
 	margin: auto;
 	position: relative;
 	margin-top: 20px;
 }
 .uploads-wrapper.style-two span.anony-uploaded-preview{
 	display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    border: none;
-    height: 80px;
-    width: 80px;
-    background-color: #dadada;
-    border-radius: 10px;
+	justify-content: center;
+	align-items: center;
+	border: none;
+	height: 80px;
+	width: 80px;
+	background-color: #dadada;
+	border-radius: 10px;
 	position: relative;
-    top: -20px;
+	top: -20px;
 	padding: 20px;
 }
 .uploads-wrapper.style-two span.anony-uploaded-preview svg{
@@ -687,14 +687,14 @@ button{
 }
 .uploads-wrapper.style-two span.anony-uploaded-preview::after{
 	content: '';
-    display: flex;
-    position: absolute;
-    top: 0px;
-    left: 0;
-    z-index: 1;
-    width: 100%;
-    height: 100%;
-    border-radius: 10px;
+	display: flex;
+	position: absolute;
+	top: 0px;
+	left: 0;
+	z-index: 1;
+	width: 100%;
+	height: 100%;
+	border-radius: 10px;
 	background-color: #000;
 	background: rgb(0,0,0);
 	background: -moz-linear-gradient(360deg, rgba(0,0,0,1) 0%, rgba(255,255,255,0.5) 100%);
@@ -706,7 +706,7 @@ button{
 
 .uploads-wrapper.style-two a.style-two{
 	display: flex;
-    justify-content: center;
+	justify-content: center;
 	position: relative;
 }
 .uploads-wrapper.style-one::before{
@@ -722,19 +722,19 @@ button{
 }
 .uploads-wrapper.style-one, .anony-upload-plus{
 	display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    border: 1px dashed #000;
-    border-radius: 3px;
+	justify-content: center;
+	align-items: center;
+	border: 1px dashed #000;
+	border-radius: 3px;
 }
 .uploader-trigger.style-one{
 	position: absolute;
-    height: 100%;
-    width: 100%;
-    z-index: 10;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+	height: 100%;
+	width: 100%;
+	z-index: 10;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 .anony-tabs div{
 	width: 100%;
@@ -759,6 +759,14 @@ button{
 .file-preview-wrapper span{
 	word-break: break-all;
 }
+.anony-gallery-thumbs-wrap{
+	display: flex;
+	flex-direction: column;
+}
+
+.anony-form .anony-gallery-thumbs-wrap .button-primary.anony-opts-gallery{
+	margin: 0;
+}
 
 .anony-term-meta-wrap fieldset .anony-gallery-thumbs-wrap{
 	background-color: #fff;
@@ -769,7 +777,7 @@ button{
 	text-align: center;
 }
 .anony-opts-gallery, .anony-opts-clear-gallery{
-	margin: 10px!important;
+	margin: 10px;
 	max-width: 100px;
 	text-align: center;
 }

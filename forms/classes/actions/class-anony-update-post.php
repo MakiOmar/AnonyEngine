@@ -263,13 +263,12 @@ if ( ! class_exists( 'ANONY_Update_Post' ) ) {
 							break;
 
 						case ( 'gallery' ):
-								$ids = ANONY_Wp_File_Help::gallery_upload( $input_field );
-
+							$ids = ANONY_Wp_File_Help::gallery_upload( $input_field );
 							if ( $ids && is_array( $ids ) ) {
 								$return = implode( ',', $ids );
+							} else {
+								$return = '';
 							}
-
-							$return = '';
 
 							break;
 

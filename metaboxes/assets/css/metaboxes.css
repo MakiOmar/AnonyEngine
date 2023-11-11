@@ -213,7 +213,7 @@ fieldset > div {
 }
 @media screen and (max-width:960px){
 	fieldset div a,fieldset span,fieldset p,button{
-		font-size: 14px!important;
+		font-size: 14px;
 	}
 }
 @media screen and (min-width:850px){

@@ -784,8 +784,39 @@ div.anony-gallery-thumbs img{
 }
 .anony-gallery-thumbs{
 	display: flex;
-	flex-wrap: wrap;
-	justify-content: start;
+    flex-wrap: wrap;
+    width: 100%;
+    justify-content: flex-start;
+    min-height: 100px;
+    border: 1px dashed #a2a2a2;
+    border-radius: 5px;
+    margin: 10px 0;
+    background-color: #f0f0f0;
+	position: relative;
+}
+.anony-gallery-buttons{
+	display: flex;
+	align-items: center;
+}
+.anony-gallery-buttons a{
+	font-size: 12px;
+}
+.anony-gallery-thumbs::before{
+	content: '+';
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	margin: auto;
+	height: 25px;
+	width: 25px;
+	border: 1px dashed #a2a2a2;
+    border-radius: 5px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
 }
 .anony-opts-gallery, .anony-opts-clear-gallery{
 	margin: 10px;

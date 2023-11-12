@@ -801,6 +801,25 @@ div.anony-gallery-thumbs > img{
 .anony-gallery-buttons a{
 	font-size: 12px;
 }
+div.gallery-item-container{
+	display:inline-flex;
+	flex-direction:column;
+	align-items: center;
+	margin-left:15px;
+}
+a.anony-gallery-item{
+	display:block;
+	width:50px;
+	height:50px;
+	background-color: #d2d2d2;
+	border-radius: 3px;
+	padding:5px
+}
+a.anony-gallery-item > img {
+	width:100%;
+	height:100%;
+	display:block;
+}
 .anony-gallery-thumbs::before{
 	content: '+';
 	position: absolute;

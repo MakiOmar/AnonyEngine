@@ -1,4 +1,14 @@
 <?php
+/**
+ * AnonyEngine input field render class.
+ *
+ * PHP version 7.3 Or Later.
+ *
+ * @package  AnonyEngine
+ * @author   Makiomar <info@makiomar.com>
+ * @license  https://makiomar.com AnonyEngine Licence
+ * @link     https://makiomar.com/anonyengine
+ */
 
 if ( ! class_exists( 'ANONY_Input' ) ) {
 	/**
@@ -7,77 +17,117 @@ if ( ! class_exists( 'ANONY_Input' ) ) {
 	class ANONY_Input {
 
 		/**
-		 * @var array An array of inputs that have same HTML markup
+		 * An array of inputs that have same HTML markup
+		 *
+		 * @var array
 		 */
 		public $mixed_types = array( 'text', 'number', 'email', 'password', 'url', 'hidden' );
 
 		/**
-		 * @var string Field php class name
+		 * Field php class name
+		 *
+		 * @var string
 		 */
 		public $field_class;
 
 		/**
-		 * @var string input field name attribute value
+		 * Field object id.
+		 * The ID of which field value comes from.
+		 *
+		 * @var int
+		 */
+		public $object_id;
+
+
+		/**
+		 * Field object type.
+		 * The type of which field value comes from. Accepts post, term or user.
+		 *
+		 * @var int
+		 */
+		public $object_type;
+
+		/**
+		 * Input field name attribute value
+		 *
+		 * @var string
 		 */
 		public $input_name;
 
 		/**
-		 * @var array An array of field's data
+		 * An array of field's data
+		 *
+		 * @var array
 		 */
 		public $field;
 
 		/**
-		 * @var int Post id for field that should be shown inside a post
-		 */
-		public $object_id;
-
-		/**
-		 * @var string The context of where the field is used
+		 * The context of where the field is used
+		 *
+		 * @var string
 		 */
 		public $context;
 
 		/**
-		 * @var object an object from the options class
+		 * An object from the options class
+		 *
+		 * @var object
 		 */
 		public $options;
 
 		/**
-		 * @var mixed Field value
+		 * Field value
+		 *
+		 * @var mixed
 		 */
 		public $value;
 
 		/**
-		 * @var mixed Default field value
+		 * Default field value
+		 *
+		 * @var mixed
 		 */
 		public $default;
 
 		/**
-		 * @var string HTML class attibute value
+		 * HTML class attibute value
+		 *
+		 * @var string
 		 */
 		public $class_attr;
 
 		/**
-		 * @var bool Wheather field will be used as template or real input
+		 * Wheather field will be used as template or real input
+		 *
+		 * @var bool
 		 */
 		public $as_template;
 
 		/**
-		 * @var mixed input field value
+		 * Input field value
+		 *
+		 * @var mixed
 		 */
 		public $field_value;
 
 		/**
-		 * @var int index of multi value fields in multi value array
+		 * Index of multi value fields in multi value array
+		 *
+		 * @var int
 		 */
 		public $index;
 
 		/**
-		 * @var string Metabox's ID
+		 * Metabox's ID
+		 *
+		 * @var string
 		 */
 		public $metabox_id;
 
 		/**
-		 * @var string field width . Default is 12 columns
+		 * Field width . Default is 12 columns
+		 *
+		 * @var string
 		 */
 		public $width = ' anony-grid-col-12';
 
@@ -86,9 +136,9 @@ if ( ! class_exists( 'ANONY_Input' ) ) {
 		 *
 		 * @param array $args    Field arguments.
 		 */
-		function __construct( $args ) {
+		public function __construct( $args ) {
 
-			if ( ! isset( $args['field'] ) || empty( $args['field'] ) ) {
+			if ( empty( $args['field'] ) ) {
 				return;
 			}
 
@@ -159,11 +209,16 @@ if ( ! class_exists( 'ANONY_Input' ) ) {
 
 			$this->input_name = $this->field['option_name'] . '[' . $input_name . ']';
 
-			$fieldID = $this->field['id'];
+			$field_id = $this->field['id'];
 
-			$this->value = ( isset( $this->options->$fieldID ) && ! empty( $this->options->$fieldID ) ) ? $this->options->$fieldID : $this->default;
+			$this->value = ( isset( $this->options->$field_id ) && ! empty( $this->options->$field_id ) ) ? $this->options->$field_id : $this->default;
 		}
 
+		/**
+		 * Set form field data
+		 *
+		 * @return void
+		 */
 		public function form_field_data() {
 			$this->input_name = isset( $this->field['name'] ) ? $this->field['name'] : $this->field['id'];
 			$this->value      = $this->default;
@@ -178,7 +233,7 @@ if ( ! class_exists( 'ANONY_Input' ) ) {
 			if ( isset( $this->field['nested-to'] ) && ! empty( $this->field['nested-to'] ) ) {
 				$index = ( is_integer( $this->index ) ) ? $this->index : 0;
 
-				$this->input_name = $this->metabox_id . '[' . $this->field['nested-to'] . ']' . '[' . $index . ']' . '[' . $this->field['id'] . ']';
+				$this->input_name = $this->metabox_id . '[' . $this->field['nested-to'] . '][' . $index . '][' . $this->field['id'] . ']';
 
 				$this->field['id'] = $this->field['id'] . '-' . $index;
 			} else {
@@ -195,7 +250,7 @@ if ( ! class_exists( 'ANONY_Input' ) ) {
 
 			} else {
 
-				if ( $this->context == 'term' ) {
+				if ( 'term' === $this->context ) {
 					$metabox_options = get_term_meta( $this->object_id, $this->metabox_id, true );
 				} else {
 					$metabox_options = get_post_meta( $this->object_id, $this->metabox_id, $single );
@@ -204,7 +259,7 @@ if ( ! class_exists( 'ANONY_Input' ) ) {
 				$meta = ( is_array( $metabox_options ) && ! empty( $this->field['id'] ) && isset( $metabox_options[ $this->field['id'] ] ) ) ? $metabox_options[ $this->field['id'] ] : '';
 			}
 
-			$this->value = ( $meta != '' ) ? $meta : $this->default;
+			$this->value = ( '' !== $meta ) ? $meta : $this->default;
 		}
 
 		/**
@@ -212,10 +267,10 @@ if ( ! class_exists( 'ANONY_Input' ) ) {
 		 *
 		 * @return string Input field class name
 		 */
-		function select_field() {
+		protected function select_field() {
 			if ( isset( $this->field['type'] ) ) {
 				// Static class name for inputs that have same HTML markup.
-				if ( in_array( $this->field['type'], $this->mixed_types ) ) {
+				if ( in_array( $this->field['type'], $this->mixed_types, true ) ) {
 					$this->field_class = 'ANONY_Mixed';
 				} else {
 					$this->field_class = str_replace( '-', '_', 'ANONY_' . ucfirst( $this->field['type'] ) );
@@ -228,7 +283,7 @@ if ( ! class_exists( 'ANONY_Input' ) ) {
 		/**
 		 * Initialize options field
 		 */
-		function field_init() {
+		public function field_init() {
 
 			if ( ! is_null( $this->field_class ) && class_exists( $this->field_class ) ) {
 
@@ -237,23 +292,23 @@ if ( ! class_exists( 'ANONY_Input' ) ) {
 				$field = new $field_class( $this );
 
 				// Options fields can't be on frontend.
-				if ( $this->context == 'option' ) {
+				if ( 'option' === $this->context ) {
 					return $field->render();
 				}
-
-				if ( $this->context == 'meta' && ! is_admin() ) {
+				$request = wp_unslash( $_GET );
+				if ( 'meta' === $this->context && ! is_admin() ) {
 					// If there is an insert Or edit front end action.
-					if ( isset( $_GET['action'] ) && ! empty( $_GET['action'] ) && isset( $_GET['_wpnonce'] ) && ! empty( $_GET['_wpnonce'] ) ) {
+					if ( isset( $request['action'] ) && ! empty( $request['action'] ) && isset( $request['_wpnonce'] ) && ! empty( $request['_wpnonce'] ) ) {
 
-						switch ( $_GET['action'] ) {
+						switch ( $request['action'] ) {
 							case 'insert':
-								if ( wp_verify_nonce( $_GET['_wpnonce'], 'anonyinsert' ) ) {
+								if ( wp_verify_nonce( $request['_wpnonce'], 'anonyinsert' ) ) {
 									return $field->render();
 								}
 								break;
 
 							case 'edit':
-								if ( wp_verify_nonce( $_GET['_wpnonce'], 'anonyinsert_' . $this->object_id ) ) {
+								if ( wp_verify_nonce( $request['_wpnonce'], 'anonyinsert_' . $this->object_id ) ) {
 									return $field->render();
 								}
 								break;
@@ -274,12 +329,16 @@ if ( ! class_exists( 'ANONY_Input' ) ) {
 					return $field->render();
 				}
 			} else {
-				return sprintf( esc_html__( '%s class doesn\'t exist' ), $this->field_class );
+				return $this->field_class . esc_html__( ' class doesn\'t exist' );
 			}
 		}
 
-
-		function enqueue_scripts() {
+		/**
+		 * Enqueu scripts
+		 *
+		 * @return void
+		 */
+		public function enqueue_scripts() {
 			wp_register_style( 'anony-inputs', ANONY_INPUT_FIELDS_URI . 'assets/css/inputs-fields.css', array( 'farbtastic' ), time(), 'all' );
 
 			wp_enqueue_style( 'anony-inputs' );

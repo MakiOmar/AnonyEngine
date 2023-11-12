@@ -454,11 +454,19 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 		protected function form_attributes( $form ) {
 			$attributes = '';
 			if ( ! empty( $form['form_attributes'] ) ) {
+				if (
+					! empty( $form['defaults'] ) &&
+					! empty( $form['defaults']['object_type'] ) &&
+					! empty( $form['defaults']['object_id_from'] )
+					) {
+					$form['form_attributes']['data-object-type']    = $form['defaults']['object_type'];
+					$form['form_attributes']['data-object-id-from'] = $form['defaults']['object_id_from'];
+					$form['form_attributes']['data-object-id']      = $this->get_object_id( $form['defaults']['object_type'], $form['defaults']['object_id_from'] );
+				}
 				foreach ( $form['form_attributes'] as $name => $value ) {
 					$attributes .= ' ' . $name . '="' . esc_attr( $value ) . '"';
 				}
 			}
-
 			return $attributes;
 		}
 

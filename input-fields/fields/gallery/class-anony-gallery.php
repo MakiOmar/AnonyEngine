@@ -127,14 +127,25 @@ class ANONY_Gallery {
 		$ids   = array();
 		$html .= '<div class="anony-gallery-thumbs-wrap" id="anony-gallery-thumbs-' . $this->parent_obj->field['id'] . '">';
 		$html .= '<div class="anony-gallery-thumbs">';
-		if ( is_array( $this->parent_obj->value ) && ! empty( $this->parent_obj->value ) ) {
-			$ids = $this->parent_obj->value;
-		} elseif ( is_string( $this->parent_obj->value ) ) {
-			$ids = explode( ',', $this->parent_obj->value );
-		}
-		foreach ( $ids as $attachment_id ) {
-
-			$html .= '<div class="gallery-item-container" style="display:inline-flex; flex-direction:column; align-items: center;margin-left:15px;"><a href="#" style="display:block; width:50px; height:50px;background-color: #d2d2d2;border-radius: 3px;padding:5px"><img src="' . wp_get_attachment_image_url( intval( $attachment_id ), 'full' ) . '" alt="" style="width:100%;height:100%;display:block;"/></a><input class="gallery-item" type="hidden" name="' . $this->parent_obj->input_name . '[]" id="anony-gallery-thumb-' . $attachment_id . '" value="' . $attachment_id . '" /><a href="#" class="anony_remove_gallery_image" style="display:block" rel-id="' . $attachment_id . '">Remove</a></div>';
+		if ( ! empty( $this->parent_obj->value ) ) {
+			if ( is_array( $this->parent_obj->value ) ) {
+				$ids = $this->parent_obj->value;
+			} elseif ( is_string( $this->parent_obj->value ) ) {
+				$ids = explode( ',', $this->parent_obj->value );
+			}
+			foreach ( $ids as $attachment_id ) {
+				$html .= '<div class="gallery-item-container">';
+				$html .= '<a class="anony-gallery-item" href="#">';
+				$html .= sprintf( '<img src="%s"/>', wp_get_attachment_image_url( intval( $attachment_id ), 'full' ) );
+				$html .= '</a>';
+				$html .= sprintf(
+					'<input class="gallery-item" type="hidden" name="%1$s[]" id="anony-gallery-thumb-%2$s" value="%2$s" />',
+					$this->parent_obj->input_name,
+					$attachment_id
+				);
+				$html .= '<a href="#" class="anony_remove_gallery_image" style="display:block" rel-id="' . $attachment_id . '">Remove</a>';
+				$html .= '</div>';
+			}
 		}
 		$html .= '</div>';
 	}
@@ -149,14 +160,25 @@ class ANONY_Gallery {
 		$ids   = array();
 		$html .= '<div class="anony-gallery-thumbs-wrap" id="anony-gallery-thumbs-' . $this->parent_obj->field['id'] . '">';
 		$html .= '<div class="anony-gallery-thumbs">';
-		if ( is_array( $this->parent_obj->value ) && ! empty( $this->parent_obj->value ) ) {
-			$ids = $this->parent_obj->value;
-		} elseif ( is_string( $this->parent_obj->value ) ) {
-			$ids = explode( ',', $this->parent_obj->value );
-		}
-		foreach ( $ids as $attachment_id ) {
-
-			$html .= '<div class="gallery-item-container" style="display:inline-flex; flex-direction:column; align-items: center;margin-left:15px;"><a href="#" style="display:block; width:50px; height:50px;background-color: #d2d2d2;border-radius: 3px;padding:5px"><img src="' . wp_get_attachment_image_url( intval( $attachment_id ), 'full' ) . '" alt="" style="width:100%;height:100%;display:block;"/></a><input class="gallery-item" type="hidden" name="' . $this->parent_obj->input_name . '[]" id="anony-gallery-thumb-' . $attachment_id . '" value="' . $attachment_id . '" /><a href="#" class="anony_remove_gallery_image" style="display:block" rel-id="' . $attachment_id . '">Remove</a></div>';
+		if ( ! empty( $this->parent_obj->value ) ) {
+			if ( is_array( $this->parent_obj->value ) ) {
+				$ids = $this->parent_obj->value;
+			} elseif ( is_string( $this->parent_obj->value ) ) {
+				$ids = explode( ',', $this->parent_obj->value );
+			}
+			foreach ( $ids as $attachment_id ) {
+				$html .= '<div class="gallery-item-container">';
+				$html .= '<a class="anony-gallery-item" href="#">';
+				$html .= sprintf( '<img src="%s"/>', wp_get_attachment_image_url( intval( $attachment_id ), 'full' ) );
+				$html .= '</a>';
+				$html .= sprintf(
+					'<input class="gallery-item" type="hidden" name="%1$s[]" id="anony-gallery-thumb-%2$s" value="%2$s" />',
+					$this->parent_obj->input_name,
+					$attachment_id
+				);
+				$html .= '<a href="#" class="anony_remove_gallery_image" style="display:block" rel-id="' . $attachment_id . '">Remove</a>';
+				$html .= '</div>';
+			}
 		}
 		$html .= '</div>';
 	}

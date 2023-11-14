@@ -793,6 +793,7 @@ div.anony-gallery-thumbs > img{
     margin: 10px 0;
     background-color: #f0f0f0;
 	position: relative;
+	padding: 10px;
 }
 .anony-gallery-buttons{
 	display: flex;

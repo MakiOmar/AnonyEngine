@@ -605,6 +605,7 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 				foreach ( $fields as $field ) :
 
 					$args = array(
+						'form'       => $this->form,
 						'field'      => $field,
 						'context'    => 'form',
 						'metabox_id' => $this->id,
@@ -622,7 +623,11 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 					//phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
 					echo $render_field->field_init();
 					//phpcs:enable.
+					$mappings_data[ $field['id'] ] = $this->get_field_mapping_data( $field );
 				endforeach;
+				if ( ! empty( $mappings_data ) ) {
+					echo '<input id="data-' . esc_attr( $this->id ) . '" type="hidden" data-value="' . esc_attr( rawurlencode( wp_json_encode( $mappings_data ) ) ) . '"/>';
+				}
 				wp_nonce_field( 'anony_form_submit_' . $this->id, 'anony_form_submit_nonce_' . $this->id );
 				do_action( 'anony_form_fields', $fields );
 				?>
@@ -720,6 +725,31 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 			}
 		}
 
+		/**
+		 * Get field mapping data
+		 *
+		 * @param array $field Field arguments.
+		 * @return array
+		 */
+		protected function get_field_mapping_data( $field ) {
+			$mapping_data = array();
+			if ( ! empty( $this->form['action_list'] ) ) {
+				foreach ( $this->form['action_list'] as $action => $configs ) {
+					foreach ( $configs as $config => $mappings ) {
+						foreach ( $mappings as $mapped_to_field => $value ) {
+							$mapped_form_field = $this->get_field( $value );
+							if ( $mapped_form_field && $mapped_form_field['id'] === $field['id'] ) {
+								$mapping_data['mapped-to-type']  = $config;
+								$mapping_data['mapped-to-field'] = $mapped_to_field;
+								break;
+							}
+						}
+					}
+				}
+			}
+
+			return $mapping_data;
+		}
 		/**
 		 * Form submition proccessing.
 		 */

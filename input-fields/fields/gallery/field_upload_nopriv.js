@@ -88,31 +88,68 @@ function AnonyUpload(){
 			function ( event ) {
 				event.preventDefault();
 				if (confirm( 'Are you sure you want to remove this image?' )) {
-					$attachment_id = jQuery( this ). attr( 'rel-id' );
+					var attachmentID = jQuery( this ). attr( 'rel-id' );
+					var fieldID      = $(this).data('field-id');
+					
+					var parentForm = $(this).closest('.anony-form');
+					var objectType = parentForm.data('object-type');
+					var objectID   = parentForm.data('object-id');
+					var formID     = parentForm.attr('id');
+					var nonce      = $( '#anony_form_submit_nonce_' + formID ).val();
+					var formData   = JSON.parse( decodeURIComponent( $('#data-' + formID ).data('value') ) );
 
-					var activeFileUploadContext = jQuery( this ).parent();
+					if ( parentForm.data('object-type') !== undefined && parentForm.data('object-id') !== undefined ) {
+						$.ajax({
+							type : "POST",
+							data: {
+								object_type   : objectType,
+								object_id     : objectID,
+								form_id       : formID,
+								attachment_id : attachmentID,
+								action        : 'remove_gallery_item',
+								field_config  : formData[fieldID],
+								nonce         : nonce,
+							},
+							url : AnonyLoc.ajaxUrl,
+							beforeSend: function( jqXHR, settings ) {
+								
+							},
+							success: function( response ) {
+								if ( true === response.status ) {
+									var activeFileUploadContext = jQuery( this ).parent();
 
-					activeFileUploadContext.find( '#anony-gallery-thumb-' + $attachment_id ).val( '' );
+									activeFileUploadContext.find( '#anony-gallery-thumb-' + attachmentID ).val( '' );
+				
+									jQuery( this ).prev().fadeIn( 'slow' );
+									activeFileUploadContext.fadeOut( 'slow' );
+									jQuery( this ).fadeOut( 'slow' );
+									setTimeout(
+										function () {
+											activeFileUploadContext.remove();
+										},
+										500
+									);
+				
+									setTimeout(
+										function () {
+											if ( jQuery( '.gallery-item-container' ).length == 0 ) {
+												jQuery( '.anony-opts-clear-gallery' ).attr( 'style', 'display:none!important' );
+											}
+										},
+										502
+									);
+								}
+							},
 
-					jQuery( this ).prev().fadeIn( 'slow' );
-					activeFileUploadContext.fadeOut( 'slow' );
-					jQuery( this ).fadeOut( 'slow' );
-					setTimeout(
-						function () {
-							activeFileUploadContext.remove();
-						},
-						500
-					);
+							complete: function( jqXHR, textStatus ) {
+								
+							},
 
-					setTimeout(
-						function () {
-							if ( jQuery( '.gallery-item-container' ).length == 0 ) {
-								jQuery( '.anony-opts-clear-gallery' ).attr( 'style', 'display:none!important' );
+							error: function( jqXHR, textStatus, errorThrown ) {
+								
 							}
-						},
-						502
-					);
-
+						} );
+					}
 				}
 
 			}

@@ -176,7 +176,7 @@ class ANONY_Gallery {
 					$this->parent_obj->input_name,
 					$attachment_id
 				);
-				$html .= '<a href="#" class="anony_remove_gallery_image" style="display:block" rel-id="' . $attachment_id . '">Remove</a>';
+				$html .= '<a href="#" class="anony_remove_gallery_image" data-field-id="' . $this->parent_obj->field['id'] . '" style="display:block" rel-id="' . $attachment_id . '">Remove</a>';
 				$html .= '</div>';
 			}
 		}

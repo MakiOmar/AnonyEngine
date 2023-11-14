@@ -27,12 +27,13 @@ if ( ! class_exists( 'ANONY_Wp_Json_Help' ) ) {
 
 		/**
 		 * WP JSON helpers class.
+		 * To call in JS you need to <code>decodeURIComponent</code> then <code>JSON.parse</code>.
 		 *
 		 * @param array $array To be converted array.
 		 * @return string JSON formated string.
 		 */
 		public static function to_js_json( array $array ) {
-			return wp_json_encode( $arr, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES );
+			return rawurlencode( wp_json_encode( $arr, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES ) );
 		}
 	}
 }

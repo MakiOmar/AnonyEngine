@@ -56,3 +56,70 @@ function anony_get_term_children_options() {
 	// Don't forget to stop execution afterward.
 	die();
 }
+
+add_action( 'wp_ajax_remove_gallery_item', 'anony_remove_gallery_item' );
+
+/**
+ * Remove gallery item
+ *
+ * @return void
+ */
+function anony_remove_gallery_item() {
+	if ( ! empty( $_POST ) ) {
+		//phpcs:disable WordPress.Security.NonceVerification.Missing
+		$data = $_POST;
+		//phpcs:enable.
+		if ( ! isset( $data['nonce'] ) || ! wp_verify_nonce( $data['nonce'], 'anony_form_submit_' . $data['form_id'] ) ) {
+			die();
+		}
+		if ( ! ANONY_HELP::empty( $data['object_type'], $data['object_id'], $data['field_config'], $data['attachment_id'] ) ) {
+
+			switch ( $data['object_type'] ) {
+				case 'post':
+					if ( 'meta' === $data['field_config']['mapped-to-type'] ) {
+
+						$meta_value = get_post_meta(
+							absint( $data['object_id'] ),
+							$data['field_config']['mapped-to-field'],
+							true
+						);
+
+						anony_unset_gallery_item( $meta_value, $data['attachment_id'] );
+
+						$updated = update_post_meta( absint( $data['object_id'] ), $data['field_config']['mapped-to-field'], $meta_value );
+					}
+					break;
+				case 'term':
+					if ( 'meta' === $data['field_config']['mapped-to-type'] ) {
+						$meta_value = get_term_meta(
+							absint( $data['object_id'] ),
+							$data['field_config']['mapped-to-field'],
+							true
+						);
+
+						anony_unset_gallery_item( $meta_value, $data['attachment_id'] );
+
+						$updated = update_term_meta( absint( $data['object_id'] ), $data['field_config']['mapped-to-field'], $meta_value );
+					}
+					break;
+				case 'user':
+					if ( 'meta' === $data['field_config']['mapped-to-type'] ) {
+						$meta_value = get_user_meta(
+							absint( $data['object_id'] ),
+							$data['field_config']['mapped-to-field'],
+							true
+						);
+
+						anony_unset_gallery_item( $meta_value, $data['attachment_id'] );
+
+						$updated = update_user_meta( absint( $data['object_id'] ), $data['field_config']['mapped-to-field'], $meta_value );
+					}
+					break;
+			}
+		}
+	}
+	// Make your array as json.
+	wp_send_json( array( 'status' => $updated ) );
+	// Don't forget to stop execution afterward.
+	die();
+}

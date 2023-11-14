@@ -31,6 +31,13 @@ if ( ! class_exists( 'ANONY_Input' ) ) {
 		public $field_class;
 
 		/**
+		 * Form arguments
+		 *
+		 * @var array
+		 */
+		public $form;
+
+		/**
 		 * Field object id.
 		 * The ID of which field value comes from.
 		 *
@@ -143,6 +150,8 @@ if ( ! class_exists( 'ANONY_Input' ) ) {
 			}
 
 			$this->field = $args['field'];
+
+			$this->form = $args['form'];
 
 			$this->as_template = ! empty( $args['as_template'] ) ? $args['as_template'] : false;
 

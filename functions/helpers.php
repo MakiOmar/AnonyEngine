@@ -54,3 +54,26 @@ function anony_init_map_cb() {
 function anony_head_scripts() {
 	anony_init_map_cb();
 }
+
+/**
+ * Unset gallery item
+ *
+ * @param string $gallery_items Comma separated attachments' IDs.
+ * @param mixed  $attachment_id To be un set attachment ID. int or string.
+ * @return void
+ */
+function anony_unset_gallery_item( &$gallery_items, $attachment_id ) {
+	$attachment_id = absint( $attachment_id );
+	if ( $gallery_items && ! empty( $gallery_items ) ) {
+		$attachments_ids = array_map( 'absint', array_filter( explode( ',', $gallery_items ) ) );
+		if ( in_array( $attachment_id, $attachments_ids, true ) ) {
+			$index = array_search( $attachment_id, $attachments_ids, true );
+
+			if ( false !== $index ) {
+				unset( $attachments_ids[ $index ] );
+			}
+		}
+
+		$gallery_items = implode( ',', $attachments_ids );
+	}
+}

@@ -792,6 +792,7 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 			}
 
 			if ( ! empty( $this->results ) ) {
+				ANONY_Wp_Debug_Help::error_log( 'class-anony-create-form.php', true );
 				ANONY_Wp_Debug_Help::error_log( $this->results, true );
 			}
 

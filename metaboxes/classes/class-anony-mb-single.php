@@ -49,7 +49,7 @@ if ( ! class_exists( 'ANONY_Mb_Single' ) ) {
 
 			add_action( 'wp_head', array( $this, 'head_styles' ) );
 
-			add_action( 'wp_enqueue_scripts', array( $this, 'wp_enque_scripts' ) );
+			add_action( 'wp_footer', array( $this, 'wp_enque_scripts' ) );
 
 			add_filter( 'the_content', array( $this, 'show_on_frontend' ) );
 

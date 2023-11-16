@@ -102,7 +102,7 @@ if ( ! class_exists( 'ANONY_Update_Post' ) ) {
 
 				if ( $id && ! is_wp_error( $id ) ) {
 					$args = array( 'ID' => $id );
-					if ( $action_data['meta'] && ! empty( $action_data['meta'] ) ) {
+					if ( ! empty( $action_data['meta'] && is_array( $action_data['meta'] ) ) ) {
 						foreach ( $action_data['meta'] as $key => $value ) {
 								$_value = $this->get_field_value( $value, $this->get_field( $value ) );
 							if ( ! empty( $_value ) ) {
@@ -113,7 +113,7 @@ if ( ! class_exists( 'ANONY_Update_Post' ) ) {
 
 					wp_update_post( $args );
 
-					if ( $action_data['tax_query'] && ! empty( $action_data['tax_query'] ) ) {
+					if ( ! empty( $action_data['tax_query'] && is_array( $action_data['tax_query'] ) ) ) {
 						foreach ( $action_data['tax_query'] as $taxonomy => $value ) {
 							if ( is_array( $value ) ) {
 								$_value = array();

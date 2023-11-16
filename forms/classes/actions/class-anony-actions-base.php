@@ -13,7 +13,7 @@
 defined( 'ABSPATH' ) || die(); // Exit if accessed directly.
 
 if ( ! class_exists( 'ANONY_Actions_Base' ) ) {
-    /**
+	/**
 	 * AnonyEngine actions base class.
 	 *
 	 * @package AnonyEngine
@@ -22,7 +22,7 @@ if ( ! class_exists( 'ANONY_Actions_Base' ) ) {
 	 * @link    https:// makiomar.com
 	 */
 	class ANONY_Actions_Base {
-        /**
+		/**
 		 * Form object
 		 *
 		 * @var object
@@ -43,7 +43,7 @@ if ( ! class_exists( 'ANONY_Actions_Base' ) ) {
 		 */
 		public $result = false;
 
-        /**
+		/**
 		 * Constructor.
 		 *
 		 * @param array  $validated_data $_POST after validation.
@@ -51,9 +51,9 @@ if ( ! class_exists( 'ANONY_Actions_Base' ) ) {
 		 * @param object $form           Form object.
 		 */
 		public function __construct( $validated_data, $form ) {
-            $this->form    = $form;
+			$this->form    = $form;
 			$this->request = $validated_data;
-        }
+		}
 
 		/**
 		 * Get field name
@@ -158,5 +158,5 @@ if ( ! class_exists( 'ANONY_Actions_Base' ) ) {
 
 			return wp_strip_all_tags( $value );
 		}
-    }
+	}
 }

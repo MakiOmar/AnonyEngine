@@ -22,7 +22,7 @@ if ( ! class_exists( 'ANONY_Update_Post' ) ) {
 	 * @license https:// makiomar.com AnonyEngine Licence.
 	 * @link    https:// makiomar.com
 	 */
-	class ANONY_Update_Post extends ANONY_Actions_Base {
+	class ANONY_Update_Post extends ANONY_Post_Action_Base {
 
 
 		/**
@@ -45,117 +45,8 @@ if ( ! class_exists( 'ANONY_Update_Post' ) ) {
 		 * @param object $form           Form object.
 		 */
 		public function __construct( $validated_data, $action_data, $form ) {
-			parent::__construct( $validated_data, $form );
-
-			if ( ! is_user_logged_in() ) {
-				$url = add_query_arg( array( 'status' => 'not-allowed' ), home_url( wp_get_referer() ) );
-				wp_safe_redirect( $url );
-				exit();
-			}
-			if ( ! isset( $action_data['post_data'] ) ) {
-				//phpcs:disable WordPress.PHP.DevelopmentFunctions.error_log_error_log
-				error_log( 'Class ANONY_Update_Post : Missing post_data parameter' );
-				//phpcs:enable
-				return;
-			}
-
-			$post_data = $action_data['post_data'];
-			// Argumnets sent from the form.
-			$diff = array_diff( self::REQUIRED_ARGUMENTS, array_keys( $post_data ) );
-
-			if ( ! empty( $diff ) ) {
-				//phpcs:disable WordPress.PHP.DevelopmentFunctions.error_log_error_log
-				error_log( 'Class ANONY_Update_Post : post_data parameter missing required keys' );
-				//phpcs:enable
-				return;
-			}
-
-			if ( ! ANONY_HELP::empty( $post_data['post_type'], $post_data['post_status'], $post_data['post_title'] ) ) {
-
-				$args = array(
-					'post_title'  => $this->get_field_value( $post_data['post_title'], $this->get_field( $post_data['post_title'] ) ),
-					'post_type'   => $this->get_field_value( $post_data['post_type'], $this->get_field( $post_data['post_type'] ) ),
-					'post_status' => $this->get_field_value( $post_data['post_status'], $this->get_field( $post_data['post_status'] ) ),
-					'post_author' => get_current_user_id(),
-				);
-
-				// Argumnets sent from the form.
-				$optional_post_data = array_diff( array_keys( $post_data ), self::REQUIRED_ARGUMENTS );
-
-				if ( ! empty( $optional_post_data ) ) {
-					foreach ( $optional_post_data as $optional_post_field ) {
-						$args[ $optional_post_field ] = $this->get_field_value( $post_data[ $optional_post_field ], $this->get_field( $post_data[ $optional_post_field ] ) );
-					}
-				}
-
-				$post_id = $this->get_post_id();
-
-				if ( ! $post_id ) {
-					$id = wp_insert_post( $args );
-				} else {
-					$args['ID'] = absint( $post_id );
-
-					wp_update_post( $args );
-
-					$id = absint( $post_id );
-				}
-
-				if ( $id && ! is_wp_error( $id ) ) {
-					$args = array( 'ID' => $id );
-					if ( ! empty( $action_data['meta'] && is_array( $action_data['meta'] ) ) ) {
-						foreach ( $action_data['meta'] as $key => $value ) {
-								$_value = $this->get_field_value( $value, $this->get_field( $value ) );
-							if ( ! empty( $_value ) ) {
-								$args['meta_input'][ $key ] = $_value;
-							}
-						}
-					}
-
-					wp_update_post( $args );
-
-					if ( ! empty( $action_data['tax_query'] && is_array( $action_data['tax_query'] ) ) ) {
-						foreach ( $action_data['tax_query'] as $taxonomy => $value ) {
-							if ( is_array( $value ) ) {
-								$_value = array();
-								foreach ( $value as $v ) {
-									$_value[] = absint( $this->get_field_value( $v, $this->get_field( $v ) ) );
-								}
-								wp_set_object_terms( $id, $_value, $taxonomy );
-							} else {
-								$this->set_object_terms( $id, $value, $taxonomy );
-							}
-						}
-					}
-
-					$this->result = $id;
-
-				}
-			}
-		}
-
-		/**
-		 * Set object terms
-		 *
-		 * @param array $id Object ID.
-		 * @param array $value Value.
-		 * @param array $taxonomy Taxonomy.
-		 * @return void
-		 */
-		protected function set_object_terms( $id, $value, $taxonomy ) {
-			$_value = $this->get_field_value( $value, $this->get_field( $value ) );
-			if ( ! empty( $_value ) ) {
-				if ( is_array( $_value ) ) {
-					$_value = array_map(
-						function ( $v ) {
-							return absint( $v );
-						},
-						$_value
-					);
-				} else {
-					$_value = absint( $_value );
-				}
-				wp_set_object_terms( $id, $_value, $taxonomy );
-			}
+			parent::__construct( $validated_data, $action_data, $form );
+			$this->result = $this->post_id;
 		}
 
 		/**
@@ -171,6 +62,15 @@ if ( ! class_exists( 'ANONY_Update_Post' ) ) {
 			//phpcs:enable.
 
 			return false;
+		}
+
+		/**
+		 * Get Object ID
+		 *
+		 * @return int|bool
+		 */
+		protected function get_object_id() {
+			return $this->get_post_id();
 		}
 	}
 

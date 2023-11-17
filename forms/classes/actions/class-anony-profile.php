@@ -22,13 +22,7 @@ if ( ! class_exists( 'ANONY_Profile' ) ) {
 	 * @license https:// makiomar.com AnonyEngine Licence.
 	 * @link    https:// makiomar.com
 	 */
-	class ANONY_Profile extends ANONY_Actions_Base {
-
-
-		/**
-		 * Required arguments for post insertion.
-		 */
-		const REQUIRED_ARGUMENTS = array( 'post_type', 'post_status', 'post_title' );
+	class ANONY_Profile extends ANONY_Post_Action_Base {
 
 		/**
 		 * Result
@@ -45,91 +39,9 @@ if ( ! class_exists( 'ANONY_Profile' ) ) {
 		 * @param object $form           Form object.
 		 */
 		public function __construct( $validated_data, $action_data, $form ) {
-			parent::__construct( $validated_data, $form );
+			parent::__construct( $validated_data, $action_data, $form );
 
-			if ( ! is_user_logged_in() ) {
-				$url = add_query_arg( array( 'status' => 'not-allowed' ), home_url( wp_get_referer() ) );
-				wp_safe_redirect( $url );
-				exit();
-			}
-			if ( ! isset( $action_data['post_data'] ) ) {
-				//phpcs:disable WordPress.PHP.DevelopmentFunctions.error_log_error_log
-				error_log( 'Class ANONY_Profile : Missing post_data parameter' );
-				//phpcs:enable
-				return;
-			}
-
-			$post_data = $action_data['post_data'];
-			// Argumnets sent from the form.
-			$diff = array_diff( self::REQUIRED_ARGUMENTS, array_keys( $post_data ) );
-
-			if ( ! empty( $diff ) ) {
-				//phpcs:disable WordPress.PHP.DevelopmentFunctions.error_log_error_log
-				error_log( 'Class ANONY_Profile : post_data parameter missing required keys' );
-				//phpcs:enable
-				return;
-			}
-
-			if ( ! ANONY_HELP::empty( $post_data['post_type'], $post_data['post_status'], $post_data['post_title'] ) ) {
-
-				$args = array(
-					'post_title'  => $this->get_field_value( $post_data['post_title'], $this->get_field( $post_data['post_title'] ) ),
-					'post_type'   => $this->get_field_value( $post_data['post_type'], $this->get_field( $post_data['post_type'] ) ),
-					'post_status' => $this->get_field_value( $post_data['post_status'], $this->get_field( $post_data['post_status'] ) ),
-					'post_author' => get_current_user_id(),
-				);
-
-				// Argumnets sent from the form.
-				$optional_post_data = array_diff( array_keys( $post_data ), self::REQUIRED_ARGUMENTS );
-
-				if ( ! empty( $optional_post_data ) ) {
-					foreach ( $optional_post_data as $optional_post_field ) {
-						$args[ $optional_post_field ] = $this->get_field_value( $post_data[ $optional_post_field ], $this->get_field( $post_data[ $optional_post_field ] ) );
-					}
-				}
-
-				$profile_id = $this->get_user_profile();
-
-				if ( ! $profile_id ) {
-					$id = wp_insert_post( $args );
-
-					if ( $id ) {
-						add_user_meta( get_current_user_id(), 'anony_user_profile', $id );
-					}
-				} else {
-					$args['ID'] = absint( $profile_id );
-
-					wp_update_post( $args );
-
-					$id = absint( $profile_id );
-				}
-
-				if ( $id && ! is_wp_error( $id ) ) {
-					$args = array( 'ID' => $id );
-					if ( ! empty( $action_data['meta'] && is_array( $action_data['meta'] ) ) ) {
-						foreach ( $action_data['meta'] as $key => $value ) {
-								$_value = $this->get_field_value( $value, $this->get_field( $value ) );
-							if ( ! empty( $_value ) ) {
-								$args['meta_input'][ $key ] = $_value;
-							}
-						}
-					}
-
-					wp_update_post( $args );
-
-					if ( ! empty( $action_data['tax_query'] && is_array( $action_data['tax_query'] ) ) ) {
-						foreach ( $action_data['tax_query'] as $taxonomy => $value ) {
-								$_value = $this->get_field_value( $value, $this->get_field( $value ) );
-							if ( ! empty( $_value ) ) {
-								wp_set_object_terms( $id, $_value, $taxonomy );
-							}
-						}
-					}
-
-					$this->result = $id;
-
-				}
-			}
+			$this->result = $this->post_id;
 		}
 
 		/**
@@ -145,6 +57,27 @@ if ( ! class_exists( 'ANONY_Profile' ) ) {
 			}
 
 			return false;
+		}
+
+		/**
+		 * Get Object ID
+		 *
+		 * @return int|bool
+		 */
+		protected function get_object_id() {
+			return $this->get_user_profile();
+		}
+
+		/**
+		 * After success post action
+		 *
+		 * @param ANONY_Post_Action_Base $post_action Post action object.
+		 * @return mixed
+		 */
+		protected function after_post_action( ANONY_Post_Action_Base $post_action ) {
+			if ( ! $post_action->object_id && $post_action->post_id ) {
+				add_user_meta( get_current_user_id(), 'anony_user_profile', $post_action->post_id );
+			}
 		}
 	}
 

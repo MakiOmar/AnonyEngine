@@ -47,7 +47,6 @@ if ( ! class_exists( 'ANONY_Actions_Base' ) ) {
 		 * Constructor.
 		 *
 		 * @param array  $validated_data $_POST after validation.
-		 * @param array  $action_data    Fields mapping.
 		 * @param object $form           Form object.
 		 */
 		public function __construct( $validated_data, $form ) {

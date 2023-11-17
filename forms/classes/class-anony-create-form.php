@@ -276,6 +276,22 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 		}
 
 		/**
+		 * Check if current user can edit the post
+		 *
+		 * @param integer $post_id Post's ID.
+		 * @return boolean
+		 */
+		protected function can_edit( $post_id ) {
+			$post_author = get_post_field( 'post_author', $post_id );
+
+			if ( empty( $post_author ) || ! is_numeric( $post_author ) || absint( $post_author ) !== get_current_user_id() ) {
+				return false;
+			}
+
+			return true;
+		}
+
+		/**
 		 * Set default value
 		 *
 		 * @param array $fields All fields.
@@ -284,6 +300,11 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 		 * @return void
 		 */
 		protected function set_post_default_values( &$fields, $configs, $post_id ) {
+
+			if ( ! $this->can_edit( $post_id ) ) {
+				return;
+			}
+
 			foreach ( $configs as $config => $mappings ) {
 				if ( 'post_data' === $config ) {
 					foreach ( $mappings as $post_field => $value ) {
@@ -478,6 +499,19 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 		 */
 		protected function check_conditions( $form ) {
 			$errors = array();
+			if (
+				! empty( $this->form['defaults'] ) &&
+				! empty( $this->form['defaults']['object_type'] ) && !
+				empty( $this->form['defaults']['object_id_from'] )
+				) {
+				$object_type    = $this->form['defaults']['object_type'];
+				$object_id_from = $this->form['defaults']['object_id_from'];
+				$object_id      = $this->get_object_id( $object_type, $object_id_from );
+			}
+			if ( ! $this->can_edit( $object_id ) ) {
+				$errors[] = 'post_author';
+			}
+
 			if ( empty( $form['conditions'] ) || ! is_array( $form['conditions'] ) ) {
 				return $errors;
 			}
@@ -814,6 +848,10 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 
 				case 'user_role':
 					$msg = esc_html__( 'You are not allowed to do this.', 'anonyengine' );
+					break;
+
+				case 'post_author':
+					$msg = esc_html__( 'You are not allowed to edit this.', 'anonyengine' );
 					break;
 			}
 

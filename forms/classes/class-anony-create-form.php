@@ -231,7 +231,7 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 		 * @return int Object ID.
 		 */
 		protected function get_object_id( $object_type, $object_id_from ) {
-			$object_id = 0;
+			$object_id = false;
 			switch ( $object_type ) {
 				case 'post':
 					switch ( $object_id_from ) {
@@ -508,7 +508,7 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 				$object_id_from = $this->form['defaults']['object_id_from'];
 				$object_id      = $this->get_object_id( $object_type, $object_id_from );
 			}
-			if ( ! $this->can_edit( $object_id ) ) {
+			if ( $object_id && ! $this->can_edit( $object_id ) ) {
 				$errors[] = 'post_author';
 			}
 

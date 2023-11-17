@@ -109,6 +109,9 @@ if ( ! class_exists( 'ANONY_Post_Action_Base' ) ) {
 					$this->post_id = wp_insert_post( $args );
 
 				} else {
+					if ( ! $this->can_edit() ) {
+						return;
+					}
 					$args['ID'] = absint( $this->object_id );
 
 					wp_update_post( $args );
@@ -125,6 +128,21 @@ if ( ! class_exists( 'ANONY_Post_Action_Base' ) ) {
 			}
 
 			$this->after_post_action( $this );
+		}
+
+		/**
+		 * Check if current user can edit the post
+		 *
+		 * @return boolean
+		 */
+		protected function can_edit() {
+			$post_author = get_post_field( 'post_author', $this->object_id );
+
+			if ( empty( $post_author ) || ! is_numeric( $post_author ) || absint( $post_author ) !== get_current_user_id() ) {
+				return false;
+			}
+
+			return true;
 		}
 
 		/**

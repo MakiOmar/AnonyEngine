@@ -7,7 +7,9 @@ function AnonyUpload(){
 			function ( event ) {
 				event.preventDefault();
 
-				var activeFileUploadContext = jQuery( this ).parent();
+				var activeFileUploadContext = jQuery( this ).closest('fieldset');
+				var targetID                = $(this).data( 'id' );
+				var targetFieldName         = $(this).data( 'name' );
 				custom_file_frame           = null;
 
 				item_clicked = jQuery( this );
@@ -36,16 +38,19 @@ function AnonyUpload(){
 						var attachments = custom_file_frame.state().get( "selection" );
 
 						i = 0;
+						var attachment_ids_string = '';
 						attachments.each(
 							function (attachment) {
+								attachment_ids_string += attachment['id'] + ',';
 								attachment_ids[i] = attachment['id'];
 								$( activeFileUploadContext ).find( '.anony-gallery-thumbs' ).append(
-									'<div class="gallery-item-container" style="display:inline-flex; flex-direction:column; align-items: center;margin-left:15px;"><a href="#" style="display:block; width:50px; height:50px;background-color: #d2d2d2;border-radius: 3px;padding:5px"><img src="' + attachment.attributes.url + '" alt="" style="width:100%;height:100%;display:block;"/></a><input type="hidden" name="' + anony_gallery.name + '[]" class="gallery-item" id="anony-gallery-thumb-' + attachment.id + '" value="' + attachment.id + '" /><a href="#" class="anony_remove_gallery_image" style="display:block">Remove</a></div>'
+									'<div class="gallery-item-container" style="display:inline-flex; flex-direction:column; align-items: center;margin-left:15px;"><a href="#" style="display:block; width:50px; height:50px;background-color: #d2d2d2;border-radius: 3px;padding:5px"><img src="' + attachment.attributes.url + '" alt="" style="width:100%;height:100%;display:block;"/></a><input type="hidden" name="' + targetFieldName + '[]" class="gallery-item" id="anony-gallery-thumb-' + attachment.id + '" value="' + attachment.id + '" /><a href="#" class="anony_remove_gallery_image" style="display:block">Remove</a></div>'
 								);
 								i++;
 							}
 						);
-
+						attachment_ids_string = attachment_ids_string.replace(/,\s*$/, "");
+						activeFileUploadContext.find( '#' + targetID ).val(attachment_ids_string).trigger('change');
 						jQuery( '.anony-opts-clear-gallery' ).attr( 'style', 'display:inline-block!important' );
 
 					}

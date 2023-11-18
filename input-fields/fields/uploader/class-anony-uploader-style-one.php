@@ -43,7 +43,21 @@ class ANONY_Uploader_Style_One {
 	 * @return string Preview output.
 	 */
 	public function uploads_preview_priv() {
-		return '<div class="uploads-wrapper">';
+		$image_exts   = array( 'jpg', 'jpeg', 'jpe', 'gif', 'png', 'svg', 'webp' );
+		$img_ext_preg = '/\.(' . join( '|', $image_exts ) . ')$/i';
+		$src          = wp_get_attachment_url( $this->uploader->parent_obj->value );
+		$src_exists   = ! empty( $this->uploader->parent_obj->value ) && wp_http_validate_url( $src );
+		$is_image     = preg_match( $img_ext_preg, $src );
+		if ( $src_exists ) {
+			if ( $is_image ) {
+				$style = ' style="background-image:url(' . $src . ')"';
+			} else {
+				$style = ' style="background-image:url(' . ANOE_URI . 'assets/images/placeholders/file.png)"';
+			}
+		} else {
+			$style = ' style="background-image:url(' . ANOE_URI . 'assets/images/placeholders/browse.png)"';
+		}
+		return '<div class="uploads-wrapper style-one"' . $style . '>';
 	}
 
 	/**
@@ -90,6 +104,42 @@ class ANONY_Uploader_Style_One {
 		wp_enqueue_script(
 			'anony-opts-field-upload-one-nopriv-js',
 			ANONY_FIELDS_URI . 'uploader/js/one/field_upload_nopriv.js',
+			array( 'jquery' ),
+			time(),
+			true
+		);
+	}
+
+	/**
+	 * Scripts for private input.
+	 *
+	 * @return void
+	 */
+	public function user_can_upload_files_scripts() {
+		$wp_version = floatval( get_bloginfo( 'version' ) );
+		if ( $wp_version < '3.5' ) {
+			wp_enqueue_script(
+				'anony-opts-field-upload-js',
+				ANONY_FIELDS_URI . 'uploader/js/default/field_upload_3_4.js',
+				array( 'jquery', 'thickbox', 'media-upload' ),
+				time(),
+				true
+			);
+			wp_enqueue_style( 'thickbox' );
+		} else {
+			wp_enqueue_script(
+				'anony-opts-field-upload-js',
+				ANONY_FIELDS_URI . 'uploader/js/default/field_upload.js',
+				array( 'jquery' ),
+				time(),
+				true
+			);
+			wp_enqueue_media();
+		}
+		
+		wp_enqueue_script(
+			'anony-opts-field-upload-one-js',
+			ANONY_FIELDS_URI . 'uploader/js/one/field_upload.js',
 			array( 'jquery' ),
 			time(),
 			true

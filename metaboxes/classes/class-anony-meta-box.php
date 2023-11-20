@@ -230,7 +230,17 @@ if ( ! class_exists( 'ANONY_Meta_Box' ) ) {
 					continue;
 				}
 
-				$render_field = new ANONY_Input_Field( $field, $this->id, 'meta', $p_id );
+				if ( class_exists( 'ANONY_Input_Base' ) && class_exists( 'ANONY_Meta_Input_Field' ) ) {
+					$args = array(
+						'field'   => $field,
+						'form_id' => $this->id,
+						'object_id' => $p_id,
+					);
+
+					$render_field = new ANONY_Meta_Input_Field( $args );
+				} else {
+					$render_field = new ANONY_Input_Field( $field, $this->id, 'meta', $p_id );
+				}
 
 				// phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
 				echo $render_field->field_init();

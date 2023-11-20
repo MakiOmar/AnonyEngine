@@ -405,8 +405,16 @@ if ( ! class_exists( 'ANONY_Theme_Settings' ) ) {
 			if ( isset( $field['type'] ) ) {
 
 				$field['option_name'] = $this->args['opt_name'];
+				if ( class_exists( 'ANONY_Input_Base' ) && class_exists( 'ANONY_Option_Input_Field' ) ) {
+					$args = array(
+						'field'   => $field,
+						'form_id' => $this->args['opt_name'],
+					);
 
-				$render_field = new ANONY_Input_Field( $field );
+					$render_field = new ANONY_Option_Input_Field( $args );
+				} else {
+					$render_field = new ANONY_Input_Field( $field );
+				}
 
 				//phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
 				echo $render_field->field_init();

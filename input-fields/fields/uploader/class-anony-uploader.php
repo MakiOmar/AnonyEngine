@@ -33,7 +33,7 @@ class ANONY_Uploader {
 	 *
 	 * @var string
 	 */
-	private $style;
+	private $style = 'default';
 
 	/**
 	 * Output style class.
@@ -53,7 +53,7 @@ class ANONY_Uploader {
 	 */
 	public function __construct( $parent_obj = null, $field = false ) {
 		if ( $field ) {
-			$this->style = ! empty( $field['style'] ) ? $field['style'] : false;
+			$this->style = ! empty( $field['style'] ) ? $field['style'] : 'default';
 		} else {
 			$this->style = ! empty( $parent_obj->field['style'] ) ? $parent_obj->field['style'] : 'default';
 		}

@@ -507,9 +507,10 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 				$object_type    = $this->form['defaults']['object_type'];
 				$object_id_from = $this->form['defaults']['object_id_from'];
 				$object_id      = $this->get_object_id( $object_type, $object_id_from );
-			}
-			if ( $object_id && ! $this->can_edit( $object_id ) ) {
-				$errors[] = 'post_author';
+
+				if ( $object_id && ! $this->can_edit( $object_id ) ) {
+					$errors[] = 'post_author';
+				}
 			}
 
 			if ( empty( $form['conditions'] ) || ! is_array( $form['conditions'] ) ) {
@@ -637,20 +638,15 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 				<?php
 				//phpcs:enable.
 				foreach ( $fields as $field ) :
+					if ( class_exists( 'ANONY_Input_Base' ) && class_exists( 'ANONY_Form_Input_Field' ) ) {
+						$args = array(
+							'form'    => $this->form,
+							'field'   => $field,
+							'form_id' => $this->id,
+						);
 
-					$args = array(
-						'form'       => $this->form,
-						'field'      => $field,
-						'context'    => 'form',
-						'metabox_id' => $this->id,
-					);
-
-					if ( class_exists( 'ANONY_Input' ) ) {
-
-						$render_field = new ANONY_Input( $args );
-
+						$render_field = new ANONY_Form_Input_Field( $args );
 					} else {
-						// Deprecated ANONY_Input_Field.
 						$render_field = new ANONY_Input_Field( $field, $this->id, 'form' );
 					}
 

@@ -136,7 +136,7 @@ class ANONY_Uploader_Style_One {
 			);
 			wp_enqueue_media();
 		}
-		
+
 		wp_enqueue_script(
 			'anony-opts-field-upload-one-js',
 			ANONY_FIELDS_URI . 'uploader/js/one/field_upload.js',

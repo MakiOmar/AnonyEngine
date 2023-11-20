@@ -203,7 +203,7 @@ if ( ! class_exists( 'ANONY_TERM_HELP' ) ) {
 				return $terms_object->terms;
 			}
 
-			return '';
+			return array();
 		}
 		/**
 		 * Gets post terms from child up to first parent

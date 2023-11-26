@@ -27,9 +27,32 @@ if ( ! class_exists( 'ANONY_IMAGES_HELP' ) ) {
 	class ANONY_IMAGES_HELP extends ANONY_HELP {
 
 		/**
+		 * Get dimensions from image url.
+		 * Example: /image-60x60.png. Dimensions are 60x60
+		 * @param string $image_url
+		 * @return array|bool Dimesions array if URL has dimensions otherwise false.
+		 */
+		public function thumb_get_dimensions($image_url) {
+			$pattern = '/-(\d+)x(\d+)\.jpg$/i';
+			preg_match($pattern, $image_url, $matches);
+			
+			if (count($matches) === 3) {
+				$width = intval($matches[1]);
+				$height = intval($matches[2]);
+				
+				return array(
+					'width' => $width,
+					'height' => $height
+				);
+			}
+			
+			return false;
+		}
+		/**
 		 * Add images missing dimensions.
 		 *
 		 * @param string $content HTML content that contains images.
+		 * @param bool   $lazyload Weather to enable lazyload or not. Default False.
 		 * @return string
 		 */
 		public static function add_missing_dimensions( $content, $lazyload = false ) {
@@ -60,41 +83,43 @@ if ( ! class_exists( 'ANONY_IMAGES_HELP' ) ) {
 				}
 
 				if ( false === strpos( $img, ' width' ) && false === strpos( $img, ' height' ) ) {
+					
 					$img_url = $imgs[1][ $i ];
 					if ( ANONY_LINK_HELP::linkExists( $img_url ) && function_exists( 'getimagesize' ) ) {
 						$img_size = getimagesize( $img_url );
 					} else {
 						$img_size = false;
 					}
-
+					
 					if ( false !== $img_size ) {
 						$replaced_img = str_replace( '<img ', '<img style="width:' . $img_size[0] . ';max-height:' . $img_size[1] . '"' . $img_size[3] . ' ', $replaced_img );
 					}
 				} else {
+					
 					$img_url = $imgs[1][ $i ];
 					if ( ANONY_LINK_HELP::linkExists( $img_url ) && function_exists( 'getimagesize' ) ) {
 						$img_size = getimagesize( $img_url );
 					} else {
 						$img_size = false;
 					}
-
+					
 					if ( false !== $img_size ) {
 
 						if ( preg_match( '/<img[^>]+style=["\']([^"\']+)["\']/', $replaced_img, $matches ) ) {
-							// The img element has a style attribute
+							// The img element has a style attribute.
 							$style_attribute = $matches[1];
 
 							if ( ! preg_match( '/\bwidth\s*:\s*[^;]+/', $style_attribute ) ) {
-								// Width is not set in style attribute, add it
+								// Width is not set in style attribute, add it.
 								$style_attribute .= ' width: ' . $img_size[0] . 'px;';
 							}
 
 							if ( ! preg_match( '/\bmax-height\s*:\s*[^;]+/', $style_attribute ) ) {
-								// Height is not set in style attribute, add it
+								// Height is not set in style attribute, add it.
 								$style_attribute .= ' max-height: ' . $img_size[1] . 'px;';
 							}
 
-							// Replace the updated style attribute in the HTML
+							// Replace the updated style attribute in the HTML.
 							$replaced_img = str_replace( $matches[1], $style_attribute, $replaced_img );
 						} else {
 

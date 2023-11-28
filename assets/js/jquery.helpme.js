@@ -98,7 +98,9 @@ jQuery( document ).ready(
 								* This functions's name should replace the callback paramenter of $.fn.AnonyObserve. Note that the name should be passed without quotes.
 								*/
 								if (typeof callback === "function") {
-									callback( querySelector );
+									setTimeout( function(){
+										callback( querySelector );
+									}, 200 );
 								}
 
 							}
@@ -107,7 +109,6 @@ jQuery( document ).ready(
 					);
 				}
 			);
-
 			if ($( querySelector ).length !== 0) {
 
 				const subSelected = document.querySelector( querySelector );
@@ -116,7 +117,8 @@ jQuery( document ).ready(
 					subSelected,
 					{
 
-						childList: true
+						childList: true,
+						subtree  : true,
 
 					}
 				);

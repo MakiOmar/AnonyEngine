@@ -42,8 +42,12 @@ define( 'ANOE_LIBS_URI', ANOE_DIR . 'libs/' );
  */
 define( 'ANOE_FUNC_DIR', ANOE_DIR . 'functions/' );
 
-
-require ANOE_DIR . 'vendor/autoload.php';
+add_action(
+	'wp_loaded',
+	function () {
+		require ANOE_DIR . 'vendor/autoload.php';
+	}
+);
 
 require ANOE_DIR . 'plugin-update-checker/plugin-update-checker.php';
 
@@ -175,5 +179,17 @@ add_action(
 );
 
 add_action( 'wp_head', 'anony_head_scripts' );
+
+add_action(
+	'deactivate_plugin',
+	function ( $plugin ) {
+		$template = get_option( 'template' );
+
+		if ( 'anonyengine/anonyengine.php' === $plugin && 'smartpage' === $template ) {
+			wp_die( 'Sorry, you cannot deactivate this plugin. Because it is mandatory for SmartPage theme.', 'anonyengine' );
+		}
+	},
+	10
+);
 
 do_action( 'anonyengine_loaded' );

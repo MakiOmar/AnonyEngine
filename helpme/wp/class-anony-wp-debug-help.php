@@ -113,6 +113,7 @@ if ( ! class_exists( 'ANONY_Wp_Debug_Help' ) ) {
 			add_filter( 'deprecated_argument_trigger_error', '__return_false' );
 			add_filter( 'deprecated_file_trigger_error', '__return_false' );
 			add_filter( 'deprecated_hook_trigger_error', '__return_false' );
+			add_filter('doing_it_wrong_trigger_error', '__return_false');
 		}
 	}
 }

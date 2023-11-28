@@ -635,24 +635,13 @@ if ( ! class_exists( 'ANONY_Theme_Settings' ) ) {
 
 			wp_enqueue_script( 'anony-options-js', ANONY_OPTIONS_URI . 'js/options.js', array( 'jquery', 'backbone' ), time(), true );
 
-			foreach ( $this->sections as $k => $section ) {
+			/*foreach ( $this->sections as $k => $section ) {
 
 				if ( isset( $section['fields'] ) ) {
 
-					foreach ( $section['fields'] as $field_key => $field ) {
-
-						if ( isset( $field['type'] ) ) {
-
-							$field_class = 'ANONY_optf__' . ucfirst( $field['type'] );
-
-							if ( class_exists( $field_class ) && method_exists( $field_class, 'enqueue' ) ) {
-								$enqueue = new $field_class( '', '', $this );
-								$enqueue->enqueue();
-							}
-						}
-					}
+					new ANONY_Fields_Scripts( $section['fields'] );
 				}
-			}
+			}*/
 		}
 
 		/**

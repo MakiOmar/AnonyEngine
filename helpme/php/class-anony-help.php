@@ -108,13 +108,13 @@ if ( ! class_exists( 'ANONY_HELP' ) ) {
 		/**
 		 * Buffer output of a function.
 		 *
-		 * @param string $function Function name.
+		 * @param string $function_name Function name.
 		 * @param array  $args Function arguments.
 		 * @return string
 		 */
-		public static function ob_get( $function, $args = array() ) {
+		public static function ob_get( $function_name, $args = array() ) {
 			ob_start();
-			call_user_func_array( $function, $args );
+			call_user_func_array( $function_name, $args );
 			return ob_get_clean();
 		}
 

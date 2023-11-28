@@ -78,6 +78,8 @@ if ( ! class_exists( 'ANONY_Fields_Scripts' ) ) {
 					}
 
 					$added[] = $field['type'];
+				} elseif ( in_array( $field['type'], $added, true ) && isset( $field['fields'] ) && is_array( $field['fields'] )) {
+					$this->enqueue_fields_scripts( $field['fields'] );
 				}
 			}
 		}

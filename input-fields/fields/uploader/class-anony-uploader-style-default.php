@@ -109,6 +109,30 @@ class ANONY_Uploader_Style_Default {
 			$upload = ' style="display:none;"';
 		}
 
+		return $this->buttons( $remove, $upload );
+	}
+
+	/**
+	 * Output button as template.
+	 *
+	 * @return string Output button.
+	 */
+	public function button_as_template() {
+
+		$remove = ' style="display:none;"';
+		$upload = '';
+
+		return $this->buttons( $remove, $upload );
+	}
+
+	/**
+	 * Render upload buttons
+	 *
+	 * @param string $remove Style attribute for remove button.
+	 * @param string $upload Style attribute for upload button.
+	 * @return string
+	 */
+	protected function buttons( $remove, $upload ) {
 		$html = sprintf(
 			' <a href="javascript:void(0);" data-id="%3$s" data-choose="Choose a File" data-update="Select File" class="anony-opts-upload uploader-trigger"%1$s><span></span>%2$s</a>',
 			$upload,

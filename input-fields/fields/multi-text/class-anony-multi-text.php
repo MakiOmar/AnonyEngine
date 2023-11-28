@@ -1,6 +1,8 @@
 <?php
 /**
  * Multi text field class
+ * 
+ * A text input that allows you to store a multiple value in an array.
  *
  * @package Anonymous theme
  * @author Makiomar

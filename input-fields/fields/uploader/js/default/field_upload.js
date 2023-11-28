@@ -1,19 +1,20 @@
-;(function ($) {
+jQuery(document).ready(function($) {
 	"use strict";
-	$( "img[src='']" ).attr( "src", anony_upload.url );
+	function AnonyUploader() {
+		$( "img[src='']" ).attr( "src", anony_upload.url );
 
-	$( ".anony-opts-upload" ).click(
-		function ( event ) {
+		$('fieldset').on( "click", ".anony-opts-upload", function ( event ) {
 			event.preventDefault();
-
+			
 			var activeFileUploadContext = $( this ).parent();
 			var custom_file_frame       = null;
 			var clicked                 = $( this ).data( 'id' );
-
+			
 			if (custom_file_frame) {
 					custom_file_frame.open();
 					return;
 			}
+			
 			// Create the media frame.
 			custom_file_frame = wp.media.frames.customHeader = wp.media(
 				{
@@ -26,7 +27,7 @@
 					}
 				}
 			);
-
+			console.log(custom_file_frame);
 			custom_file_frame.on(
 				"select",
 				function () {
@@ -52,24 +53,23 @@
 			);
 
 			custom_file_frame.open();
-		}
-	);
+		});
 
-	$( ".anony-opts-upload-remove" ).click(
-		function ( event ) {
-			event.preventDefault();
+		$('fieldset').on( "click", ".anony-opts-upload-remove" , function ( event ) {
+				event.preventDefault();
 
-			var activeFileUploadContext = $( this ).parent();
+				var activeFileUploadContext = $( this ).parent();
 
-			var clicked = $( this ).data( 'id' );
+				var clicked = $( this ).data( 'id' );
 
-			$( '#' + clicked ).val( '' ).trigger( 'change' );
-			$( this ).prev().fadeIn( 'slow' );
-			$( '.anony-opts-screenshot', activeFileUploadContext ).fadeOut( 'slow' );
-			$( '.uploaded-file-name', activeFileUploadContext ).fadeOut( 'slow' );
-			$( this ).fadeOut( 'slow' );
-			$( '.anony-opts-upload', activeFileUploadContext ).show();
-		}
-	);
-
-})( jQuery );
+				$( '#' + clicked ).val( '' ).trigger( 'change' );
+				$( this ).prev().fadeIn( 'slow' );
+				$( '.anony-opts-screenshot', activeFileUploadContext ).fadeOut( 'slow' );
+				$( '.uploaded-file-name', activeFileUploadContext ).fadeOut( 'slow' );
+				$( this ).fadeOut( 'slow' );
+				$( '.anony-opts-upload', activeFileUploadContext ).show();
+			}
+		);
+	}
+	AnonyUploader();
+});

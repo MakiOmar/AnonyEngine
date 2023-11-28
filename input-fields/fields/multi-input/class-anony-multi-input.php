@@ -32,7 +32,6 @@ class ANONY_Multi_Input {
 		if ( ! is_object( $parent_obj ) ) {
 			return;
 		}
-
 		$this->parent_obj = $parent_obj;
 
 		if ( ! isset( $this->parent_obj->field['fields'] ) ) {
@@ -85,7 +84,22 @@ class ANONY_Multi_Input {
 					foreach ( $this->parent_obj->field['fields'] as $nested_field ) {
 
 						if ( $nested_field['id'] === $field_id ) {
-							$render_field = new ANONY_Input_Field( $nested_field, $this->parent_obj->metabox_id, 'meta', $this->parent_obj->post_id, false, $field_value, $index );
+							$args = array(
+								'field'       => $nested_field,
+								'field_value' => $field_value,
+								'form_id'     => $this->parent_obj->form_id,
+								'object_id'   => $this->parent_obj->post_id,
+								'index'       => $index,
+							);
+
+							if ( class_exists( 'ANONY_Input_Base' ) ) {
+
+								$render_field = new ANONY_Input_Base( $args );
+
+							} else {
+								// Deprecated ANONY_Input_Field.
+								$render_field = new ANONY_Input_Field( $nested_field, $this->parent_obj->form_id, 'meta', $this->parent_obj->post_id, false, $field_value, $index );
+							}
 
 							$html .= $render_field->field_init();
 
@@ -100,8 +114,20 @@ class ANONY_Multi_Input {
 			$html .= "<div class='anony-multi-value-flex'>";
 			foreach ( $this->parent_obj->field['fields'] as $nested_field ) {
 
-				$render_field = new ANONY_Input_Field( $nested_field, $this->parent_obj->metabox_id, 'meta', $this->parent_obj->post_id, false );
+				$args = array(
+					'field'       => $nested_field,
+					'form_id'     => $this->parent_obj->form_id,
+					'object_id'   => $this->parent_obj->object_id,
+				);
 
+				if ( class_exists( 'ANONY_Input_Base' ) ) {
+
+					$render_field = new ANONY_Input_Base( $args );
+
+				} else {
+					// Deprecated ANONY_Input_Field.
+					$render_field = new ANONY_Input_Field( $nested_field, $this->parent_obj->metabox_id, 'meta', $this->parent_obj->post_id, false );
+				}
 				$html .= $render_field->field_init();
 
 			}

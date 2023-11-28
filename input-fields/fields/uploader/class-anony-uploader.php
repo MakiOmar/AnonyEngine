@@ -78,7 +78,10 @@ class ANONY_Uploader {
 	 * @return string HTML output
 	 */
 	public function render() {
-		if ( current_user_can( 'upload_files' ) ) {
+
+		if ( $this->parent_obj->as_template ) {
+			return $this->render_as_template();
+		} elseif ( current_user_can( 'upload_files' ) ) {
 			return $this->render_priv();
 		} else {
 			return $this->render_nopriv();
@@ -137,6 +140,22 @@ class ANONY_Uploader {
 			'<input id="%4$s" type="hidden" name="%1$s" value="%2$s" class="%3$s" />',
 			$this->parent_obj->input_name,
 			$this->parent_obj->value,
+			$this->parent_obj->class_attr,
+			esc_attr( $this->parent_obj->field['id'] )
+		);
+	}
+
+	/**
+	 * Output input for private users.
+	 *
+	 * @param string $html The output.
+	 * @return void
+	 */
+	protected function input_as_template( &$html ) {
+		$html .= sprintf(
+			'<input id="%4$s" type="hidden" name="%1$s" value="%2$s" class="%3$s" />',
+			$this->parent_obj->input_name,
+			'',
 			$this->parent_obj->class_attr,
 			esc_attr( $this->parent_obj->field['id'] )
 		);
@@ -204,6 +223,16 @@ class ANONY_Uploader {
 	}
 
 	/**
+	 * Output button as template.
+	 *
+	 * @param string $html The output.
+	 * @return void
+	 */
+	protected function button_as_template( &$html ) {
+
+		$this->load_style_html_method( $html, 'button_as_template' );
+	}
+	/**
 	 * Output close preview markup.
 	 *
 	 * @param string $html The output.
@@ -251,6 +280,24 @@ class ANONY_Uploader {
 		$this->description( $html );
 		$this->close_fieldset( $html );
 
+		return $html;
+	}
+	/**
+	 * Render as a template
+	 *
+	 * @return string
+	 */
+	protected function render_as_template() {
+		$html = '';
+		$this->note( $html );
+		$this->fieldset_open( $html );
+		$this->label( $html );
+		$this->input_as_template( $html );
+		$this->uploads_preview_priv( $html );
+		$this->button_as_template( $html );
+		$this->close_preview( $html );
+		$this->description( $html );
+		$this->close_fieldset( $html );
 		return $html;
 	}
 
@@ -311,9 +358,14 @@ class ANONY_Uploader {
 	 * @return void
 	 */
 	protected function load_style_scripts_method( $method ) {
-		require_once ANONY_FIELDS_DIR . 'uploader/class-anony-uploader-style-' . $this->style . '.php';
-		$class_name = 'ANONY_Uploader_Style_' . ucfirst( $this->style );
-		if ( class_exists( $class_name ) && method_exists( $class_name, $method ) ) {
+		if ( ! $this->style || '' === $this->style ) {
+	        $field_style = 'default';
+	    } else {
+	        $field_style = $this->style;
+	    }
+	    require_once ANONY_FIELDS_DIR . 'uploader/class-anony-uploader-style-' . $field_style . '.php';
+	    $class_name = 'ANONY_Uploader_Style_' . ucfirst( $field_style );
+	    if ( class_exists( $class_name ) && method_exists( $class_name, $method ) ) {
 			$style = new $class_name( $this );
 			$style->$method();
 		}

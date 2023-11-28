@@ -2,8 +2,9 @@ jQuery( document ).ready(
 	function ($) {
 		'use strict';
 
-		$( '.multi-value-btn' ).on(
+		$( 'fieldset' ).on(
 			'click',
+			'.multi-value-btn',
 			function () {
 				var thisBtn = $( this );
 

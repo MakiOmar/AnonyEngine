@@ -48,4 +48,4 @@ define( 'ANONY_HLP_WP', wp_normalize_path( ANONY_HLP_PATH . 'wp/' ) );
  */
 define( 'ANOE_HELPER_CLASSES', wp_normalize_path( ANONY_HLP_PATH . 'helper-classes/' ) );
 
-require_once 'wp-hooks.php';
+//require_once 'wp-hooks.php';

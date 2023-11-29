@@ -1,6 +1,6 @@
 <?php
 /**
- * Multi text field class
+ * Multi value field class
  *
  * @package Anonymous theme
  * @author Makiomar
@@ -84,7 +84,7 @@ class ANONY_Multi_Value {
 					foreach ( $this->parent_obj->field['fields'] as $nested_field ) {
 
 						if ( $nested_field['id'] === $field_id ) {
-							$render_field = new ANONY_Input_Field( $nested_field, 'meta', $this->parent_obj->post_id, false, $field_value, $index );
+							$render_field = new ANONY_Input_Field( $nested_field, 'meta', $this->parent_obj->object_id, false, $field_value, $index );
 
 							$html .= $render_field->field_init();
 
@@ -94,20 +94,18 @@ class ANONY_Multi_Value {
 
 				$html .= '</div>';
 			}
-
-			$html .= sprintf( '<div id="%1$s-add" class="%1$s-add"></div>', $this->parent_obj->field['id'] );
-
-			$html .= sprintf(
-				'<a href="javascript:void(0);" class="multi-value-btn btn-blue" rel-id="%1$s" rel-name="%2$s[]" rel-class="%2$s-wrapper">%3$s</a>',
-				$this->parent_obj->field['id'],
-				$this->parent_obj->input_name,
-				$button_text
-			);
-
-			$html .= '</fieldset>';
 		}
+		$html .= sprintf( '<div id="%1$s-add" class="%1$s-add anony-multi-values-wrapper"></div>', $this->parent_obj->field['id'] );
 
-		$default = sprintf( '<script id = "%s-default" type="text/template">', $this->parent_obj->field['id'] );
+		$html .= sprintf(
+			'<a href="javascript:void(0);" class="multi-value-btn btn-blue" rel-id="%1$s" rel-name="%2$s[]" rel-class="%2$s-wrapper">%3$s</a>',
+			$this->parent_obj->field['id'],
+			$this->parent_obj->input_name,
+			$button_text
+		);
+
+		$html   .= '</fieldset>';
+		$default = sprintf( '<script id="%s-default" type="text/html">', $this->parent_obj->field['id'] );
 
 		$default .= sprintf(
 			'<div class="%1$s-template anony-multi-value-flex">',
@@ -117,7 +115,7 @@ class ANONY_Multi_Value {
 		foreach ( $this->parent_obj->field['fields'] as $nested_field ) {
 
 			// render default template. Passed true as fourth parameter to ANONY_Input_Field.
-			$render_default = new ANONY_Input_Field( $nested_field, 'meta', $this->parent_obj->post_id, true, '', ( $counter + 1 ) );
+			$render_default = new ANONY_Input_Field( $nested_field, 'meta', $this->parent_obj->object_id, true, true, ( $counter + 1 ) );
 			$default       .= $render_default->field_init();
 		}
 

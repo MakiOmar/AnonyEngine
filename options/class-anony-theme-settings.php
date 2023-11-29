@@ -440,7 +440,9 @@ if ( ! class_exists( 'ANONY_Theme_Settings' ) ) {
 			if ( self::$called <= 1 ) {
 
 				$validated = array();
-
+				// phpcs:disable WordPress.Security.NonceVerification.Missing
+				$req = $_POST;
+				// phpcs:enable.
 				foreach ( $this->sections as $sec_key => $section ) {
 
 					if ( isset( $section['fields'] ) ) {
@@ -449,7 +451,6 @@ if ( ! class_exists( 'ANONY_Theme_Settings' ) ) {
 							if ( empty( $field['id'] ) ) {
 								continue;
 							}
-
 							$field_i_d = $field['id'];
 
 							// Current value in database.
@@ -460,34 +461,61 @@ if ( ! class_exists( 'ANONY_Theme_Settings' ) ) {
 								$this->options->delete_option( $field_i_d );
 								continue;
 							}
-
-							if ( $current_value === $not_validated[ $field_i_d ] ) {
+							// multi input field defaults to an empty value and second condition my be met so we need to skip this type from this check.
+							if ( ! isset( $field['fields'] ) && $current_value === $not_validated[ $field_i_d ] ) {
 
 								$validated[ $field_i_d ] = $current_value;
 
 								continue;
 							}
 
-							// Check if validation required.
-							if ( isset( $field['validate'] ) ) {
+							if ( isset( $field['fields'] ) ) {
 
-								$args = array(
-									'field'     => $field,
-									'new_value' => $not_validated[ $field_i_d ],
-								);
+								foreach ( $field['fields'] as  $nested_field ) {
+									if ( empty( $req[ $nested_field['id'] ] ) ) {
+										continue;
+									}
+									// Check if validation required.
+									if ( isset( $field['validate'] ) ) {
+										$args = array(
+											'field'     => $nested_field,
+											'new_value' => $req[ $nested_field['id'] ],
+										);
 
-								$this->validate = new ANONY_Validate_Inputs( $args );
+										$this->validate = new ANONY_Validate_Inputs( $args );
 
-								// Add to errors if not valid.
-								if ( ! empty( $this->validate->errors ) ) {
+										// Add to errors if not valid.
+										if ( ! empty( $this->validate->errors ) ) {
 
-									$this->errors = array_merge( (array) $this->errors, (array) $this->validate->errors );
+											$this->errors = array_merge( (array) $this->errors, (array) $this->validate->errors );
 
-									continue;// We will not add to $validated.
+											continue;// We will not add to $validated.
+										}
+
+										$validated[ $field_i_d ][ $nested_field['id'] ] = $this->validate->value;
+									} else {
+										$validated[ $field_i_d ][ $nested_field['id'] ] = $req[ $nested_field['id'] ];
+									}
 								}
+								// Check if validation required.
+							} elseif ( isset( $field['validate'] ) ) {
 
-								$validated[ $field_i_d ] = $this->validate->value;
+									$args = array(
+										'field'     => $field,
+										'new_value' => $not_validated[ $field_i_d ],
+									);
 
+									$this->validate = new ANONY_Validate_Inputs( $args );
+
+									// Add to errors if not valid.
+									if ( ! empty( $this->validate->errors ) ) {
+
+										$this->errors = array_merge( (array) $this->errors, (array) $this->validate->errors );
+
+										continue;// We will not add to $validated.
+									}
+
+									$validated[ $field_i_d ] = $this->validate->value;
 							} else {
 
 								$validated[ $field_i_d ] = $not_validated[ $field_i_d ];
@@ -525,7 +553,6 @@ if ( ! class_exists( 'ANONY_Theme_Settings' ) ) {
 						'updated'
 					);
 				}
-
 				return $validated;
 			}
 		}
@@ -634,14 +661,6 @@ if ( ! class_exists( 'ANONY_Theme_Settings' ) ) {
 			}
 
 			wp_enqueue_script( 'anony-options-js', ANONY_OPTIONS_URI . 'js/options.js', array( 'jquery', 'backbone' ), time(), true );
-
-			/*foreach ( $this->sections as $k => $section ) {
-
-				if ( isset( $section['fields'] ) ) {
-
-					new ANONY_Fields_Scripts( $section['fields'] );
-				}
-			}*/
 		}
 
 		/**
@@ -673,17 +692,17 @@ if ( ! class_exists( 'ANONY_Theme_Settings' ) ) {
 		 */
 		public function admin_styles() {
 			if ( get_current_screen()->id === 'appearance_page_' . $this->args['opt_name'] ) {
-				?>
-				<style>
-					#setting-error-<?php echo esc_html( $this->args['opt_name'] ); ?>{
+
+				echo '<style>
+					#setting-error-' . esc_html( $this->args['opt_name'] ) . '{
 						background-color: #d_1354b;
 						color: #fff;
 					}
-					#setting-error-<?php echo esc_html( $this->args['opt_name'] ); ?> .notice-dismiss, #setting-error-<?php echo esc_html( $this->args['opt_name'] ); ?> .notice-dismiss:before{
+					#setting-error-' . esc_html( $this->args['opt_name'] ) . ' .notice-dismiss, #setting-error-' . esc_html( $this->args['opt_name'] ) . ' .notice-dismiss:before{
 						color: #fff;
 					}
-				</style>
-			<?php }
+				</style>';
+			}
 		}
 
 		/**

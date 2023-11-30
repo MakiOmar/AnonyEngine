@@ -34,7 +34,12 @@ jQuery( document ).ready(
 						return targetName + '[' + b + ']';
 					}
 				);
-
+				var x = x.replace(
+					/id="(.*?)"/g,
+					function ( a, b ) {
+						return 'id="' + b + '-' + targetCounter + '"';
+					}
+				);
 				$( '#' + targetId + '-add' ).append( x );
 
 			}

@@ -98,7 +98,7 @@ class ANONY_Multi_Value {
 		$html .= sprintf( '<div id="%1$s-add" class="%1$s-add anony-multi-values-wrapper"></div>', $this->parent_obj->field['id'] );
 
 		$html .= sprintf(
-			'<a href="javascript:void(0);" class="multi-value-btn btn-blue" rel-id="%1$s" rel-name="%2$s[#index#]" rel-class="%2$s-wrapper">%3$s</a>',
+			'<a href="javascript:void(0);" class="anony-anchor-button multi-value-btn btn-blue" rel-id="%1$s" rel-name="%2$s[#index#]" rel-class="%2$s-wrapper"><span class="dashicons dashicons-insert"></span> %3$s</a>',
 			$this->parent_obj->field['id'],
 			$this->parent_obj->input_name,
 			$button_text
@@ -115,7 +115,7 @@ class ANONY_Multi_Value {
 		foreach ( $this->parent_obj->field['fields'] as $nested_field ) {
 
 			// render default template. Passed true as fourth parameter to ANONY_Input_Field.
-			$render_default = new ANONY_Input_Field( $nested_field, null, 'meta', $this->parent_obj->object_id, true, true, ( $counter + 1 ) );
+			$render_default = new ANONY_Input_Field( $nested_field, null, 'meta', $this->parent_obj->object_id, true, true );
 			$default       .= $render_default->field_init();
 		}
 

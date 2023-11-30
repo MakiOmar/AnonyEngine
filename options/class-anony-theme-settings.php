@@ -468,37 +468,7 @@ if ( ! class_exists( 'ANONY_Theme_Settings' ) ) {
 
 								continue;
 							}
-
-							if ( isset( $field['fields'] ) ) {
-
-								foreach ( $field['fields'] as  $nested_field ) {
-									if ( empty( $req[ $nested_field['id'] ] ) ) {
-										continue;
-									}
-									// Check if validation required.
-									if ( isset( $field['validate'] ) ) {
-										$args = array(
-											'field'     => $nested_field,
-											'new_value' => $req[ $nested_field['id'] ],
-										);
-
-										$this->validate = new ANONY_Validate_Inputs( $args );
-
-										// Add to errors if not valid.
-										if ( ! empty( $this->validate->errors ) ) {
-
-											$this->errors = array_merge( (array) $this->errors, (array) $this->validate->errors );
-
-											continue;// We will not add to $validated.
-										}
-
-										$validated[ $field_i_d ][ $nested_field['id'] ] = $this->validate->value;
-									} else {
-										$validated[ $field_i_d ][ $nested_field['id'] ] = $req[ $nested_field['id'] ];
-									}
-								}
-								// Check if validation required.
-							} elseif ( isset( $field['validate'] ) ) {
+							if ( isset( $field['validate'] ) ) {
 
 									$args = array(
 										'field'     => $field,

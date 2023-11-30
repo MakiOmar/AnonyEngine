@@ -185,7 +185,7 @@
 	text-shadow: 0 -1px 1px #d1354b,1px 0 1px #d1354b,0 1px 1px #d1354b,-1px 0 1px #d1354b;
 }
 
-.wp-person a:focus .gravatar, a:focus, a:focus .media-icon img {
+.wp-person a:focus .gravatar, a:focus .media-icon img {
 	color: #ffffff;
 	box-shadow: none;
 	outline: none;

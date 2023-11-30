@@ -171,7 +171,18 @@ a.anony-metabox-tab-item{
 	color: #fff;
 	border-radius: 5px;
 }
-
+.anony-anchor-button{
+	padding: 5px 10px;
+    background-color: green;
+    color: #fff;
+    margin: 10px 0;
+    border-radius: 3px;
+    display: inline-block;
+}
+.anony-anchor-button:hover, .anony-anchor-button:focus, .anony-anchor-button:visited, .anony-anchor-button:active{
+	color: #fff;
+	background-color: rgb(4, 86, 4);
+}
 .multi-text-btn:focus,.anony-btn-close:focus, .anony-remove-tab:focus{
 	color:#b73a4c;
 }

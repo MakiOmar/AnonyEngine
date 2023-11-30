@@ -7,10 +7,8 @@ jQuery( document ).ready(
 			function () {
 				var thisBtn = $( this );
 
-				var targetId = thisBtn.attr( 'rel-id' );
-
-				// Target element to be duplicated.
-				var targetClass = thisBtn.attr( 'rel-class' );
+				var targetId   = thisBtn.attr( 'rel-id' );
+				var targetName = thisBtn.attr( 'rel-name' );
 
 				// set new count.
 				$( '#' + targetId + '-counter' ).val( parseInt( $( '#' + targetId + '-counter' ).val() ) + 1 );
@@ -18,15 +16,22 @@ jQuery( document ).ready(
 				// Counter for duplication.
 				var targetCounter = $( '#' + targetId + '-counter' ).val();
 
+				var targetName = targetName.replace(
+					/(#index#)/g,
+					function (a, b) {
+						return 'item-' + targetCounter;
+					}
+				);
+
 				// Template id.
 				var defaultId = targetId + '-default';
 
 				var dafaultHtml = $( '#' + defaultId ).html();
 
 				var x = dafaultHtml.replace(
-					/(\w+)\[(\d+)\]/g,
-					function (a, b, c) {
-						return b + '[' + targetCounter + ']';
+					/\[(\w+)\]/g,
+					function ( a, b ) {
+						return targetName + '[' + b + ']';
 					}
 				);
 

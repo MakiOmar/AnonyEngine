@@ -359,13 +359,13 @@ class ANONY_Uploader {
 	 */
 	protected function load_style_scripts_method( $method ) {
 		if ( ! $this->style || '' === $this->style ) {
-	        $field_style = 'default';
-	    } else {
-	        $field_style = $this->style;
-	    }
-	    require_once ANONY_FIELDS_DIR . 'uploader/class-anony-uploader-style-' . $field_style . '.php';
-	    $class_name = 'ANONY_Uploader_Style_' . ucfirst( $field_style );
-	    if ( class_exists( $class_name ) && method_exists( $class_name, $method ) ) {
+			$field_style = 'default';
+		} else {
+			$field_style = $this->style;
+		}
+		require_once ANONY_FIELDS_DIR . 'uploader/class-anony-uploader-style-' . $field_style . '.php';
+		$class_name = 'ANONY_Uploader_Style_' . ucfirst( $field_style );
+		if ( class_exists( $class_name ) && method_exists( $class_name, $method ) ) {
 			$style = new $class_name( $this );
 			$style->$method();
 		}

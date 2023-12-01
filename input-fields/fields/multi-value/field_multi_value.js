@@ -25,22 +25,22 @@ jQuery( document ).ready(
 
 				// Template id.
 				var defaultId = targetId + '-default';
-
+				
 				var dafaultHtml = $( '#' + defaultId ).html();
-
-				var x = dafaultHtml.replace(
-					/\[(\w+)\]/g,
-					function ( a, b ) {
-						return targetName + '[' + b + ']';
+				var dafaultHtml = dafaultHtml.replace(
+					/(#index#)/g,
+					function (a, b) {
+						return 'item-' + targetCounter;
 					}
 				);
-				var x = x.replace(
+
+				var dafaultHtml = dafaultHtml.replace(
 					/id="(.*?)"/g,
 					function ( a, b ) {
 						return 'id="' + b + '-' + targetCounter + '"';
 					}
 				);
-				$( '#' + targetId + '-add' ).append( x );
+				$( '#' + targetId + '-add' ).append( dafaultHtml );
 
 			}
 		);

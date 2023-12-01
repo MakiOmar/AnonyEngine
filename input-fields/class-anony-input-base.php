@@ -139,6 +139,13 @@ if ( ! class_exists( 'ANONY_Input_Base' ) ) {
 		public $metabox_id;
 
 		/**
+		 * Parent field ID if nested field.
+		 *
+		 * @var string
+		 */
+		public $parent_field_id;
+
+		/**
 		 * Field width . Default is 12 columns
 		 *
 		 * @var string
@@ -156,15 +163,16 @@ if ( ! class_exists( 'ANONY_Input_Base' ) ) {
 				return;
 			}
 
-			$this->field       = $args['field'];
-			$this->form_id     = $args['form_id'];
-			$this->as_template = ! empty( $args['as_template'] ) ? $args['as_template'] : false;
-			$this->field_value = ! empty( $args['field_value'] ) ? $args['field_value'] : false;
-			$this->index       = ! empty( $args['index'] ) ? $args['index'] : null;
-			$this->object_id   = ! empty( $args['object_id'] ) ? $args['object_id'] : null;
-			$this->default     = ! empty( $this->field['default'] ) ? $this->field['default'] : '';
-			$this->class_attr  = isset( $this->field['class'] ) ? $this->field['class'] : 'anony-input-field';
-			$this->width       = isset( $this->field['width'] ) ? ' anony-grid-col-' . $this->field['width'] : $this->width;
+			$this->field           = $args['field'];
+			$this->form_id         = $args['form_id'];
+			$this->as_template     = ! empty( $args['as_template'] ) ? $args['as_template'] : false;
+			$this->field_value     = ! empty( $args['field_value'] ) ? $args['field_value'] : false;
+			$this->index           = ! empty( $args['index'] ) ? $args['index'] : null;
+			$this->parent_field_id = ! empty( $args['parent_field_id'] ) ? $args['parent_field_id'] : null;
+			$this->object_id       = ! empty( $args['object_id'] ) ? $args['object_id'] : null;
+			$this->default         = ! empty( $this->field['default'] ) ? $this->field['default'] : '';
+			$this->class_attr      = isset( $this->field['class'] ) ? $this->field['class'] : 'anony-input-field';
+			$this->width           = isset( $this->field['width'] ) ? ' anony-grid-col-' . $this->field['width'] : $this->width;
 			$this->set_field_data();
 			$this->select_field();
 			$this->enqueue_scripts();
@@ -175,7 +183,11 @@ if ( ! class_exists( 'ANONY_Input_Base' ) ) {
 		 * Set field data depending on the context
 		 */
 		public function set_field_data() {
-			$this->input_name = $this->field['id'];
+			if ( $this->index && ! is_null( $this->index ) && $this->parent_field_id && ! is_null( $this->parent_field_id ) ) {
+				$this->input_name = $this->form_id . '[' . $this->parent_field_id . '][' . $this->index . '][' . $this->field['id'] . ']';
+			} else {
+				$this->input_name = $this->field['id'];
+			}
 		}
 
 		/**

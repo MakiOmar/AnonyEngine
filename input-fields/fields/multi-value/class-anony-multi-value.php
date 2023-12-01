@@ -71,11 +71,11 @@ class ANONY_Multi_Value {
 			$this->parent_obj->input_name,
 			$this->parent_obj->field['id']
 		);
-		$counter = 0;
-		ANONY_Wp_Debug_Help::neat_var_dump($this->parent_obj->value);
+		$counter = is_array( $this->parent_obj->value ) ? count( $this->parent_obj->value ) : 0;
+
 		if ( is_array( $this->parent_obj->value ) && ! empty( $this->parent_obj->value ) ) {
-			
-			foreach ( $this->parent_obj->value as $field_id => $value ) {
+
+			foreach ( $this->parent_obj->value as $item_index => $multi_vals ) {
 
 				$html .= "<div class='anony-multi-value-flex'>";
 
@@ -84,7 +84,21 @@ class ANONY_Multi_Value {
 					foreach ( $this->parent_obj->field['fields'] as $nested_field ) {
 
 						if ( $nested_field['id'] === $field_id ) {
-							$render_field = new ANONY_Input_Field( $nested_field, null, 'meta', $this->parent_obj->object_id, false, $field_value, $index );
+
+							if ( class_exists( 'ANONY_Input_Base' ) ) {
+								$args = array(
+									'field'           => $nested_field,
+									'form_id'         => $this->parent_obj->form_id,
+									'object_id'       => $this->parent_obj->object_id,
+									'field_value'     => $field_value,
+									'index'           => $item_index,
+									'parent_field_id' => $this->parent_obj->field['id'],
+								);
+
+								$render_field = new ANONY_Input_Base( $args );
+							} else {
+								$render_field = new ANONY_Input_Field( $nested_field, $this->parent_obj->form_id, 'meta', $this->parent_obj->object_id, false, $field_value, $item_index, $this->parent_obj->field['id'] );
+							}
 
 							$html .= $render_field->field_init();
 
@@ -93,6 +107,7 @@ class ANONY_Multi_Value {
 				}
 
 				$html .= '</div>';
+				+ + $counter;
 			}
 		}
 		$html .= sprintf( '<div id="%1$s-add" class="%1$s-add anony-multi-values-wrapper"></div>', $this->parent_obj->field['id'] );
@@ -113,10 +128,20 @@ class ANONY_Multi_Value {
 		);
 
 		foreach ( $this->parent_obj->field['fields'] as $nested_field ) {
+			if ( class_exists( 'ANONY_Input_Base' ) ) {
+				$args = array(
+					'field'           => $nested_field,
+					'form_id'         => $this->parent_obj->form_id,
+					'index'           => '#index#',
+					'parent_field_id' => $this->parent_obj->field['id'],
+				);
 
-			// render default template. Passed true as fourth parameter to ANONY_Input_Field.
-			$render_default = new ANONY_Input_Field( $nested_field, null, 'meta', $this->parent_obj->object_id, true, true );
-			$default       .= $render_default->field_init();
+				$render_default = new ANONY_Input_Base( $args );
+			} else {
+				// render default template. Passed true as fourth parameter to ANONY_Input_Field.
+				$render_default = new ANONY_Input_Field( $nested_field, null, 'meta', $this->parent_obj->object_id, true, true );
+			}
+			$default .= $render_default->field_init();
 		}
 
 		$default .= '</div></script>';

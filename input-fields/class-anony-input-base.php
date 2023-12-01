@@ -173,6 +173,9 @@ if ( ! class_exists( 'ANONY_Input_Base' ) ) {
 			$this->default         = ! empty( $this->field['default'] ) ? $this->field['default'] : '';
 			$this->class_attr      = isset( $this->field['class'] ) ? $this->field['class'] : 'anony-input-field';
 			$this->width           = isset( $this->field['width'] ) ? ' anony-grid-col-' . $this->field['width'] : $this->width;
+			if ( $this->field_value ) {
+				$this->value = $this->field_value;
+			}
 			$this->set_field_data();
 			$this->select_field();
 			$this->enqueue_scripts();

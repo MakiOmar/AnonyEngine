@@ -92,6 +92,7 @@ class ANONY_Multi_Value {
 									'object_id'       => $this->parent_obj->object_id,
 									'field_value'     => $field_value,
 									'index'           => $item_index,
+									'context'         => 'meta',
 									'parent_field_id' => $this->parent_obj->field['id'],
 								);
 
@@ -135,6 +136,7 @@ class ANONY_Multi_Value {
 					'index'           => '#index#',
 					'context'         => 'meta',
 					'parent_field_id' => $this->parent_obj->field['id'],
+					'as_template'     => true,
 				);
 
 				$render_default = new ANONY_Input_Base( $args );

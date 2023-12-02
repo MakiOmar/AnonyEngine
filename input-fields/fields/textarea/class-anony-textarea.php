@@ -57,8 +57,8 @@ class ANONY_Textarea {
 
 		if ( $this->parent_obj->as_template ) {
 			$html  = sprintf(
-				'<fieldset class="anony-row%2$s" id="fieldset_%1$s">',
-				$this->parent_obj->field['id'],
+				'<fieldset id="fieldset_%1$s" class="anony-row%2$s">',
+				$this->parent_obj->id_attr_value,
 				$this->parent_obj->width
 			);
 			$html .= sprintf(
@@ -76,8 +76,8 @@ class ANONY_Textarea {
 		}
 
 		$html = sprintf(
-			'<fieldset class="anony-row%2$s" id="fieldset_%1$s">',
-			$this->parent_obj->field['id'],
+			'<fieldset id="fieldset_%1$s" class="anony-row%2$s">',
+			$this->parent_obj->id_attr_value,
 			$this->parent_obj->width
 		);
 
@@ -85,7 +85,7 @@ class ANONY_Textarea {
 		if ( in_array( $this->parent_obj->context, array( 'meta', 'form' ), true ) && isset( $this->parent_obj->field['title'] ) ) {
 			$html .= sprintf(
 				'<label class="anony-label" for="anony_%1$s">%2$s</label>',
-				$this->parent_obj->field['id'],
+				$this->parent_obj->id_attr_value,
 				$this->parent_obj->field['title']
 			);
 		}

@@ -53,12 +53,12 @@ class ANONY_Color_Gradient {
 
 		$html = sprintf(
 			'<fieldset class="anony-row anony-row-inline" id="fieldset_%1$s">',
-			$this->parent_obj->field['id']
+			$this->parent_obj->id_attr_value
 		);
 		if ( 'meta' === $this->parent_obj->context && isset( $this->parent_obj->field['title'] ) ) {
 			$html .= sprintf(
 				'<label class="anony-label" for="%1$s">%2$s</label>',
-				$this->parent_obj->field['id'],
+				$this->parent_obj->id_attr_value,
 				$this->parent_obj->field['title']
 			);
 		}
@@ -68,7 +68,7 @@ class ANONY_Color_Gradient {
 
 			$html .= sprintf(
 				'<label class="anony-label-col" for="%1$s-from">%2$s</label>',
-				$this->parent_obj->field['id'],
+				$this->parent_obj->id_attr_value,
 				esc_html__( 'From', 'anonyengine' )
 			);
 
@@ -83,7 +83,7 @@ class ANONY_Color_Gradient {
 
 			$html .= sprintf(
 				'<label class="anony-label-col" for="%1$s-to">%2$s</label>',
-				$this->parent_obj->field['id'],
+				$this->parent_obj->id_attr_value,
 				esc_html__( 'To', 'anonyengine' )
 			);
 

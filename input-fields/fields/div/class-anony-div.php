@@ -49,7 +49,7 @@ class ANONY_Div {
 
 		$html = sprintf(
 			'<fieldset class="anony-row anony-row-inline" id="fieldset_%1$s">',
-			$this->parent_obj->field['id']
+			$this->parent_obj->id_attr_value
 		);
 
 		if ( isset( $this->parent_obj->field['note'] ) ) {
@@ -60,7 +60,7 @@ class ANONY_Div {
 			if ( isset( $this->parent_obj->field['title'] ) && ! empty( $this->parent_obj->field['title'] ) ) {
 				$html .= sprintf(
 					'<label class="anony-label" for="%1$s">%2$s</label>',
-					$this->parent_obj->field['id'],
+					$this->parent_obj->id_attr_value,
 					$this->parent_obj->field['title']
 				);
 			}
@@ -72,7 +72,7 @@ class ANONY_Div {
 			$div_content = $this->parent_obj->field['content'];
 		}
 
-		$html .= '<div id="' . $this->parent_obj->field['id'] . '">' . $div_content . '</div>';
+		$html .= '<div id="' . $this->parent_obj->id_attr_value . '">' . $div_content . '</div>';
 
 		$html .= '</fieldset>';
 

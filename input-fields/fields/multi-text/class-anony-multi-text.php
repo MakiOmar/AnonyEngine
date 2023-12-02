@@ -54,7 +54,7 @@ class ANONY_Multi_Text {
 
 		$html = sprintf(
 			'<fieldset class="anony-row anony-row-inline" id="fieldset_%1$s">',
-			$this->parent_obj->field['id']
+			$this->parent_obj->id_attr_value
 		);
 
 		if ( isset( $this->parent_obj->field['note'] ) ) {
@@ -63,7 +63,7 @@ class ANONY_Multi_Text {
 		if ( 'meta' === $this->parent_obj->context && isset( $this->parent_obj->field['title'] ) ) {
 			$html .= sprintf(
 				'<label class="anony-label" for="%1$s">%2$s</label>',
-				$this->parent_obj->field['id'],
+				$this->parent_obj->id_attr_value,
 				$this->parent_obj->field['title']
 			);
 		}
@@ -76,14 +76,14 @@ class ANONY_Multi_Text {
 
 		$html .= sprintf(
 			'<a href="javascript:void(0);" class="multi-text-btn btn-blue" rel-id="%1$s-ul" rel-name="%2$s[]">%3$s</a></div>',
-			$this->parent_obj->field['id'],
+			$this->parent_obj->id_attr_value,
 			$this->parent_obj->input_name,
 			$button_text
 		);
 
 		$html .= sprintf(
 			'<ul class="multi-text-ul" id="%1$s-ul">',
-			$this->parent_obj->field['id']
+			$this->parent_obj->id_attr_value
 		);
 
 		if ( isset( $this->parent_obj->value ) && is_array( $this->parent_obj->value ) ) {
@@ -98,7 +98,7 @@ class ANONY_Multi_Text {
 
 						$html .= sprintf(
 							'<input type="hidden" id="%1$s-%2$s" name="%3$s[]" value="%4$s" class="%5$s"/>',
-							$this->parent_obj->field['id'],
+							$this->parent_obj->id_attr_value,
 							$k,
 							$this->parent_obj->input_name,
 							$value,

@@ -137,14 +137,14 @@ class ANONY_Uploader_Style_Default {
 			' <a href="javascript:void(0);" data-id="%3$s" data-choose="Choose a File" data-update="Select File" class="anony-opts-upload uploader-trigger"%1$s><span></span>%2$s</a>',
 			$upload,
 			esc_html__( 'Browse', 'anonyengine' ),
-			esc_attr( $this->uploader->parent_obj->field['id'] )
+			esc_attr( $this->uploader->parent_obj->id_attr_value )
 		);
 
 		$html .= sprintf(
 			'<br><a href="javascript:void(0);" data-id="%3$s" class="anony-opts-upload-remove"%1$s>%2$s</a>',
 			$remove,
 			esc_html__( 'Remove Upload', 'anonyengine' ),
-			esc_attr( $this->uploader->parent_obj->field['id'] )
+			esc_attr( $this->uploader->parent_obj->id_attr_value )
 		);
 
 		return $html;

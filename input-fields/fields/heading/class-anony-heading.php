@@ -50,7 +50,7 @@ class ANONY_Heading {
 
 		$html = sprintf(
 			'<fieldset class="anony-row%2$s" id="fieldset_%1$s">',
-			$this->parent_obj->field['id'],
+			$this->parent_obj->id_attr_value,
 			$this->parent_obj->width
 		);
 

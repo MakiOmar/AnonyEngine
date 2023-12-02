@@ -58,7 +58,7 @@ class ANONY_Select2 {
 
 		$html = sprintf(
 			'<fieldset class="anony-row anony-row-inline" id="fieldset_%1$s">',
-			$this->parent_obj->field['id']
+			$this->parent_obj->id_attr_value
 		);
 
 		if ( isset( $this->parent_obj->field['note'] ) ) {
@@ -68,13 +68,13 @@ class ANONY_Select2 {
 		if ( 'meta' === $this->parent_obj->context && isset( $this->parent_obj->field['title'] ) ) {
 			$html .= sprintf(
 				'<label class="anony-label" for="%1$s">%2$s</label>',
-				$this->parent_obj->field['id'],
+				$this->parent_obj->id_attr_value,
 				$this->parent_obj->field['title']
 			);
 		}
 
 		$html .= sprintf(
-			'<select class="%1$s anony-select2" name="%2$s" id="' . $this->parent_obj->field['id'] . '" %3$s %4$s %5$s>',
+			'<select class="%1$s anony-select2" name="%2$s" id="' . $this->parent_obj->id_attr_value . '" %3$s %4$s %5$s>',
 			$this->parent_obj->class_attr,
 			$this->parent_obj->input_name,
 			$disabled,

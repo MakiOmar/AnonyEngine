@@ -51,12 +51,12 @@ class ANONY_Color_Farbtastic {
 
 		$html = sprintf(
 			'<fieldset class="anony-row anony-row-inline" id="fieldset_%1$s">',
-			$this->parent_obj->field['id']
+			$this->parent_obj->id_attr_value
 		);
 		if ( 'meta' === $this->parent_obj->context && isset( $this->parent_obj->field['title'] ) ) {
 			$html .= sprintf(
 				'<label class="anony-label" for="%1$s">%2$s</label>',
-				$this->parent_obj->field['id'],
+				$this->parent_obj->id_attr_value,
 				$this->parent_obj->field['title']
 			);
 		}
@@ -69,7 +69,7 @@ class ANONY_Color_Farbtastic {
 
 		$html .= sprintf(
 			'<input type="text" id="%1$s" name="%2$s" value="%3$s" class="%3$s popup-colorpicker"/>',
-			$this->parent_obj->field['id'],
+			$this->parent_obj->id_attr_value,
 			$this->parent_obj->input_name,
 			$this->parent_obj->value,
 			$this->parent_obj->class_attr
@@ -77,12 +77,12 @@ class ANONY_Color_Farbtastic {
 
 		$html .= sprintf(
 			'<div class="farb-popup"><div class="farb-popup-inside"><div id="%1$spicker" class="color-picker"></div></div></div>',
-			$this->parent_obj->field['id']
+			$this->parent_obj->id_attr_value
 		);
 
 		$html .= sprintf(
 			'<div class="color-prev prev-%1$s" style="background-color:%2$s;" rel="%1$s"></div>',
-			$this->parent_obj->field['id'],
+			$this->parent_obj->id_attr_value,
 			$this->parent_obj->value
 		);
 

@@ -76,23 +76,23 @@ class ANONY_Color_Gradient_Farbtastic {
 			echo '<p class=anony-warning>' . esc_html( $this->parent_obj->field['note'] ) . '<p>';
 		}
 
-		$html = '<div class="farb-popup-wrapper" id="' . $this->parent_obj->field['id'] . '">';
+		$html = '<div class="farb-popup-wrapper" id="' . $this->parent_obj->id_attr_value . '">';
 
 		$html .= sprintf(
 			'<fieldset class="anony-row anony-row-inline" id="fieldset_%1$s">',
-			$this->parent_obj->field['id']
+			$this->parent_obj->id_attr_value
 		);
 
 		// from field.
 		$html .= sprintf(
 			'<label for="%1$s-from" class="anony-input-lable">%2$s</label>',
-			$this->parent_obj->field['id'],
+			$this->parent_obj->id_attr_value,
 			esc_html__( 'From', 'anonyengine' )
 		);
 
 		$html .= sprintf(
 			'<input type="text" id="%1$s-from" name="%2$s[from]" value="%3$s" class="%4$spopup-colorpicker"/>',
-			$this->parent_obj->field['id'],
+			$this->parent_obj->id_attr_value,
 			$this->parent_obj->input_name,
 			$from_value,
 			$this->parent_obj->class_attr
@@ -100,25 +100,25 @@ class ANONY_Color_Gradient_Farbtastic {
 
 		$html .= sprintf(
 			'<div class="farb-popup"><div class="farb-popup-inside"><div id="%1$s-frompicker" class="color-picker"></div></div></div>',
-			$this->parent_obj->field['id']
+			$this->parent_obj->id_attr_value
 		);
 
 		$html .= sprintf(
 			'<div class="color-prev prev-%1$s-from" %2$s rel="%1$s-from"></div>',
-			$this->parent_obj->field['id'],
+			$this->parent_obj->id_attr_value,
 			$from_style
 		);
 
 		// to field.
 		$html .= sprintf(
 			'<label for="%1$s-to" class="anony-input-lable">%2$s</label>',
-			$this->parent_obj->field['id'],
+			$this->parent_obj->id_attr_value,
 			esc_html__( 'To', 'anonyengine' )
 		);
 
 		$html .= sprintf(
 			'<input type="text" id="%1$s-to" name="%2$s[to]" value="%3$s" class="%4$spopup-colorpicker"/>',
-			$this->parent_obj->field['id'],
+			$this->parent_obj->id_attr_value,
 			$this->parent_obj->input_name,
 			$to_value,
 			$this->parent_obj->class_attr
@@ -126,12 +126,12 @@ class ANONY_Color_Gradient_Farbtastic {
 
 		$html .= sprintf(
 			'<div class="farb-popup"><div class="farb-popup-inside"><div id="%1$s-topicker" class="color-picker"></div></div></div>',
-			$this->parent_obj->field['id']
+			$this->parent_obj->id_attr_value
 		);
 
 		$html .= sprintf(
 			'<div class="color-prev prev-%1$s-to" %2$s rel="%1$s-to"></div>',
-			$this->parent_obj->field['id'],
+			$this->parent_obj->id_attr_value,
 			$to_style
 		);
 

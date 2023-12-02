@@ -51,7 +51,7 @@ class ANONY_Multi_Input {
 
 		$html = sprintf(
 			'<fieldset class="anony-row anony-row-inline anony-multi-value-wrapper" id="fieldset_%1$s">',
-			$this->parent_obj->field['id']
+			$this->parent_obj->id_attr_value
 		);
 
 		if ( isset( $this->parent_obj->field['note'] ) ) {
@@ -60,7 +60,7 @@ class ANONY_Multi_Input {
 		if ( 'meta' === $this->parent_obj->context && isset( $this->parent_obj->field['title'] ) ) {
 			$html .= sprintf(
 				'<label class="anony-label" for="%1$s">%2$s</label>',
-				$this->parent_obj->field['id'],
+				$this->parent_obj->id_attr_value,
 				$this->parent_obj->field['title']
 			);
 		}
@@ -68,7 +68,7 @@ class ANONY_Multi_Input {
 		$html .= sprintf(
 			'<input type="hidden" name="%1$s" id="%2$s" value=""/>',
 			$this->parent_obj->input_name,
-			$this->parent_obj->field['id']
+			$this->parent_obj->id_attr_value
 		);
 
 		$counter = 0;
@@ -115,9 +115,9 @@ class ANONY_Multi_Input {
 			foreach ( $this->parent_obj->field['fields'] as $nested_field ) {
 
 				$args = array(
-					'field'       => $nested_field,
-					'form_id'     => $this->parent_obj->form_id,
-					'object_id'   => $this->parent_obj->object_id,
+					'field'     => $nested_field,
+					'form_id'   => $this->parent_obj->form_id,
+					'object_id' => $this->parent_obj->object_id,
 				);
 
 				if ( class_exists( 'ANONY_Input_Base' ) ) {
@@ -150,13 +150,13 @@ class ANONY_Multi_Input {
 		//phpcs:enable.
 		$html = sprintf(
 			'<fieldset class="anony-row anony-row-inline anony-multi-value-wrapper" id="fieldset_%1$s">',
-			$this->parent_obj->field['id']
+			$this->parent_obj->id_attr_value
 		);
 
 		if ( 'meta' === $this->parent_obj->context && isset( $this->parent_obj->field['title'] ) ) {
 			$html .= sprintf(
 				'<label class="anony-label" for="%1$s">%2$s</label>',
-				$this->parent_obj->field['id'],
+				$this->parent_obj->id_attr_value,
 				$this->parent_obj->field['title']
 			);
 		}

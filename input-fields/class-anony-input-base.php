@@ -31,6 +31,13 @@ if ( ! class_exists( 'ANONY_Input_Base' ) ) {
 		public $field_class;
 
 		/**
+		 * Field's ID
+		 *
+		 * @var string
+		 */
+		public $id_attr_value;
+
+		/**
 		 * Parent form ID
 		 *
 		 * @var string
@@ -159,14 +166,16 @@ if ( ! class_exists( 'ANONY_Input_Base' ) ) {
 		 */
 		public function __construct( $args ) {
 
-			if ( empty( $args['field'] ) ) {
+			if ( empty( $args['field'] ) || empty( $args['field']['id'] ) ) {
 				return;
 			}
 
 			$this->field           = $args['field'];
+			$this->id_attr_value   = $args['field']['id'];
 			$this->form_id         = $args['form_id'];
 			$this->as_template     = ! empty( $args['as_template'] ) ? $args['as_template'] : false;
 			$this->field_value     = ! empty( $args['field_value'] ) ? $args['field_value'] : false;
+			$this->context         = ! empty( $args['context'] ) ? $args['context'] : false;
 			$this->index           = ! empty( $args['index'] ) ? $args['index'] : null;
 			$this->parent_field_id = ! empty( $args['parent_field_id'] ) ? $args['parent_field_id'] : null;
 			$this->object_id       = ! empty( $args['object_id'] ) ? $args['object_id'] : null;
@@ -176,6 +185,7 @@ if ( ! class_exists( 'ANONY_Input_Base' ) ) {
 			if ( $this->field_value ) {
 				$this->value = $this->field_value;
 			}
+
 			$this->set_field_data();
 			$this->select_field();
 			$this->enqueue_scripts();
@@ -187,7 +197,8 @@ if ( ! class_exists( 'ANONY_Input_Base' ) ) {
 		 */
 		public function set_field_data() {
 			if ( $this->index && ! is_null( $this->index ) && $this->parent_field_id && ! is_null( $this->parent_field_id ) ) {
-				$this->input_name = $this->form_id . '[' . $this->parent_field_id . '][' . $this->index . '][' . $this->field['id'] . ']';
+				$this->input_name    = $this->form_id . '[' . $this->parent_field_id . '][' . $this->index . '][' . $this->field['id'] . ']';
+				$this->id_attr_value = $this->id_attr_value . '-' . $this->index;
 			} else {
 				$this->input_name = $this->field['id'];
 			}

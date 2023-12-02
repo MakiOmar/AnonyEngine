@@ -100,12 +100,12 @@ class ANONY_Date_Time {
 		if ( $this->parent_obj->as_template ) {
 			$html  = sprintf(
 				'<fieldset class="anony-row anony-row-inline" id="fieldset_%1$s">',
-				$this->parent_obj->field['id']
+				$this->parent_obj->id_attr_value
 			);
 			$html .= sprintf(
 				'<input type="text" name="%1$s" class="anony-%2$s %3$s"%4$s/>',
 				$this->parent_obj->input_name,
-				$this->parent_obj->field['id'],
+				$this->parent_obj->id_attr_value,
 				$this->parent_obj->class_attr,
 				$placeholder
 			);
@@ -117,13 +117,13 @@ class ANONY_Date_Time {
 
 		$html = sprintf(
 			'<fieldset class="anony-row anony-row-inline" id="anony_fieldset_%1$s">',
-			$this->parent_obj->field['id']
+			$this->parent_obj->id_attr_value
 		);
 
 		if ( 'meta' === $this->parent_obj->context && isset( $this->parent_obj->field['title'] ) ) {
 			$html .= sprintf(
 				'<label class="anony-label" for="%1$s">%2$s</label>',
-				$this->parent_obj->field['id'],
+				$this->parent_obj->id_attr_value,
 				$this->parent_obj->field['title']
 			);
 		}
@@ -137,7 +137,7 @@ class ANONY_Date_Time {
 		$html .= sprintf(
 			'<input type="text" name="%1$s" id="anony-%2$s" value="%3$s" class="anony-%2$s %4$s"%5$s/>',
 			$this->parent_obj->input_name,
-			$this->parent_obj->field['id'],
+			$this->parent_obj->id_attr_value,
 			$this->parent_obj->value,
 			$this->parent_obj->class_attr,
 			$placeholder
@@ -182,7 +182,7 @@ class ANONY_Date_Time {
 		<script type="text/javascript">
 			jQuery(document).ready(function($){
 
-				var fieldClass = <?php echo '".anony-' . esc_js( $this->parent_obj->field['id'] ) . '"'; ?>;
+				var fieldClass = <?php echo '".anony-' . esc_js( $this->parent_obj->id_attr_value ) . '"'; ?>;
 				//console.log(fieldClass);
 
 				var DateTimeOptions = {<?php echo esc_js( $options ); ?>};

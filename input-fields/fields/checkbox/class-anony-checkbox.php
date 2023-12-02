@@ -50,7 +50,7 @@ class ANONY_Checkbox {
 
 			'note'     => isset( $this->parent_obj->field['note'] ) ? esc_html( $this->parent_obj->field['note'] ) : false,
 
-			'id'       => esc_attr( $this->parent_obj->field['id'] ),
+			'id'       => esc_attr( $this->parent_obj->id_attr_value ),
 
 			'context'  => $this->parent_obj->context,
 

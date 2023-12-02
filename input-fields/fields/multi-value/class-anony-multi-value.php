@@ -52,7 +52,7 @@ class ANONY_Multi_Value {
 
 		$html = sprintf(
 			'<fieldset class="anony-row anony-row-inline anony-multi-value-wrapper" id="fieldset_%1$s">',
-			$this->parent_obj->field['id']
+			$this->parent_obj->id_attr_value
 		);
 
 		if ( isset( $this->parent_obj->field['note'] ) ) {
@@ -61,7 +61,7 @@ class ANONY_Multi_Value {
 		if ( 'meta' === $this->parent_obj->context && isset( $this->parent_obj->field['title'] ) ) {
 			$html .= sprintf(
 				'<label class="anony-label" for="%1$s">%2$s</label>',
-				$this->parent_obj->field['id'],
+				$this->parent_obj->id_attr_value,
 				$this->parent_obj->field['title']
 			);
 		}
@@ -69,7 +69,7 @@ class ANONY_Multi_Value {
 		$html   .= sprintf(
 			'<input type="hidden" name="%1$s" id="%2$s" value=""/>',
 			$this->parent_obj->input_name,
-			$this->parent_obj->field['id']
+			$this->parent_obj->id_attr_value
 		);
 		$counter = is_array( $this->parent_obj->value ) ? count( $this->parent_obj->value ) : 0;
 
@@ -110,17 +110,17 @@ class ANONY_Multi_Value {
 				+ + $counter;
 			}
 		}
-		$html .= sprintf( '<div id="%1$s-add" class="%1$s-add anony-multi-values-wrapper"></div>', $this->parent_obj->field['id'] );
+		$html .= sprintf( '<div id="%1$s-add" class="%1$s-add anony-multi-values-wrapper"></div>', $this->parent_obj->id_attr_value );
 
 		$html .= sprintf(
 			'<a href="javascript:void(0);" class="anony-anchor-button multi-value-btn btn-blue" rel-id="%1$s" rel-name="%2$s[#index#]" rel-class="%2$s-wrapper"><span class="dashicons dashicons-insert"></span> %3$s</a>',
-			$this->parent_obj->field['id'],
+			$this->parent_obj->id_attr_value,
 			$this->parent_obj->input_name,
 			$button_text
 		);
 
 		$html   .= '</fieldset>';
-		$default = sprintf( '<script id="%s-default" type="text/html">', $this->parent_obj->field['id'] );
+		$default = sprintf( '<script id="%s-default" type="text/html">', $this->parent_obj->id_attr_value );
 
 		$default .= sprintf(
 			'<div class="%1$s-template anony-multi-value-flex">',
@@ -133,6 +133,7 @@ class ANONY_Multi_Value {
 					'field'           => $nested_field,
 					'form_id'         => $this->parent_obj->form_id,
 					'index'           => '#index#',
+					'context'         => 'meta',
 					'parent_field_id' => $this->parent_obj->field['id'],
 				);
 

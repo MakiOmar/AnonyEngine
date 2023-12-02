@@ -120,7 +120,7 @@ if ( ! class_exists( 'ANONY_Tel' ) ) {
 
 			$html = sprintf(
 				'<fieldset class="anony-row anony-row-inline%2$s" id="fieldset_%1$s">',
-				$this->parent_obj->field['id'],
+				$this->parent_obj->id_attr_value,
 				$this->parent_obj->width
 			);
 
@@ -131,14 +131,14 @@ if ( ! class_exists( 'ANONY_Tel' ) ) {
 			if ( in_array( $this->parent_obj->context, array( 'meta', 'form' ), true ) && isset( $this->parent_obj->field['title'] ) ) {
 				$html .= sprintf(
 					'<label class="anony-label" for="%1$s">%2$s</label>',
-					$this->parent_obj->field['id'],
+					$this->parent_obj->id_attr_value,
 					$this->parent_obj->field['title']
 				);
 			}
 
 			$html .= sprintf(
 				'<div style="position:relative"><input id="%1$s" type="%2$s" name="%3$s" value="%4$s" class="%5$s"%6$s%7$s/>',
-				$this->parent_obj->field['id'],
+				$this->parent_obj->id_attr_value,
 				$this->parent_obj->field['type'],
 				$this->parent_obj->input_name,
 				$this->parent_obj->value,
@@ -170,8 +170,8 @@ if ( ! class_exists( 'ANONY_Tel' ) ) {
 		public function as_template_field() {
 
 			$html  = sprintf(
-				'<fieldset class="anony-row anony-row-inline%2$s">',
-				$this->parent_obj->field['id'],
+				'<fieldset id="fieldset_%1$s" class="anony-row anony-row-inline%2$s">',
+				$this->parent_obj->id_attr_value,
 				$this->parent_obj->width
 			);
 			$html .= sprintf(
@@ -205,20 +205,20 @@ if ( ! class_exists( 'ANONY_Tel' ) ) {
 
 			$html = sprintf(
 				'<div class="anony-row anony-row-inline" id="fieldset_%1$s">',
-				$this->parent_obj->field['id']
+				$this->parent_obj->id_attr_value
 			);
 
 			if ( 'meta' === $this->parent_obj->context && isset( $this->parent_obj->field['title'] ) ) {
 				$html .= sprintf(
 					'<label class="anony-label" for="%1$s">%2$s</label>',
-					$this->parent_obj->field['id'],
+					$this->parent_obj->id_attr_value,
 					$this->parent_obj->field['title']
 				);
 			}
 
 			$html .= sprintf(
 				'<span id="%1$s" class="%2$s">%3$s</span>',
-				$this->parent_obj->field['id'],
+				$this->parent_obj->id_attr_value,
 				$this->parent_obj->class_attr,
 				$this->parent_obj->value
 			);

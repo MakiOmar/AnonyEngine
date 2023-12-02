@@ -78,8 +78,8 @@ class ANONY_Radio {
 		}
 
 		$html = sprintf(
-			'<fieldset class="anony-row%2$s" id="fieldset_%1$s">',
-			$this->parent_obj->field['id'],
+			'<fieldset id="fieldset_%1$s" class="anony-row%2$s">',
+			$this->parent_obj->id_attr_value,
 			$this->parent_obj->width
 		);
 
@@ -89,7 +89,7 @@ class ANONY_Radio {
 
 			$html .= sprintf(
 				'<label class="anony-label" for="anony_%1$s">%2$s%3$s</label>',
-				$this->parent_obj->field['id'],
+				$this->parent_obj->id_attr_value,
 				$label_prefix,
 				$this->parent_obj->field['title']
 			);
@@ -115,14 +115,14 @@ class ANONY_Radio {
 				$html .= sprintf(
 					'<label class="anony-radio%1$s anony-radio-%2$s" for="%2$s_%3$s">',
 					$selected,
-					$this->parent_obj->field['id'],
+					$this->parent_obj->id_attr_value,
 					$search
 				);
 
 					$html .= sprintf(
 						'<input %1$s type="radio" id="%2$s_%3$s" name="%4$s" class="%5$s anony-radio-input" value="%6$s" %7$s />',
 						$radio_class,
-						$this->parent_obj->field['id'],
+						$this->parent_obj->id_attr_value,
 						$search,
 						$this->parent_obj->input_name,
 						$this->parent_obj->class_attr,
@@ -133,7 +133,7 @@ class ANONY_Radio {
 				$html .= '</label>';
 
 			if ( 'yes' === $this->show_only_labels ) {
-				$html .= sprintf( '<span class="radio-title anony-for-hidden-radio" data-id="%1$s_%3$s">%2$s</span>', $this->parent_obj->field['id'], $v['title'], $search );
+				$html .= sprintf( '<span class="radio-title anony-for-hidden-radio" data-id="%1$s_%3$s">%2$s</span>', $this->parent_obj->id_attr_value, $v['title'], $search );
 			} else {
 				$html .= '<span class="radio-title">' . $v['title'] . '</span>';
 			}

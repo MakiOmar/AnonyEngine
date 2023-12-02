@@ -54,7 +54,7 @@ class ANONY_Group_Start {
 		$html = sprintf(
 			'<%1$s class="anony-form-group-heading-tag"><a class="anony-form-group-heading" href="#" data-id="%2$s" %3$s>%4$s%5$s</a></%1$s>',
 			$tag,
-			$this->parent_obj->field['id'],
+			$this->parent_obj->id_attr_value,
 			$heading_link_style,
 			$this->parent_obj->field['title'],
 			$collapsible
@@ -62,7 +62,7 @@ class ANONY_Group_Start {
 
 		$html .= sprintf(
 			'<div class="anony-form-group-container%2$s" id="form-group-%1$s">',
-			$this->parent_obj->field['id'],
+			$this->parent_obj->id_attr_value,
 			isset( $this->parent_obj->field['collapsible'] ) ? ' collapsible' : ''
 		);
 

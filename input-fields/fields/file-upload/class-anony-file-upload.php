@@ -53,7 +53,7 @@ class ANONY_File_Upload {
 		$download_text = __( 'Download', 'anonyengine' );
 
 		$note       = isset( $this->parent_obj->field['note'] ) ? $this->parent_obj->field['note'] : '';
-		$id         = $this->parent_obj->field['id'];
+		$id         = $this->parent_obj->id_attr_value;
 		$is_meta    = ( 'meta' === $this->parent_obj->context ) ? true : false;
 		$has_title  = ( isset( $this->parent_obj->field['title'] ) ) ? true : false;
 		$label      = $has_title ? $this->parent_obj->field['title'] : '';

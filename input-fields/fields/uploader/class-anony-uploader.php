@@ -108,8 +108,9 @@ class ANONY_Uploader {
 	 */
 	protected function fieldset_open( &$html ) {
 		$html .= sprintf(
-			'<fieldset class="anony-row anony-row-inline" id="fieldset_%1$s">',
-			$this->parent_obj->field['id']
+			'<fieldset id="fieldset_%1$s" class="anony-row %2$s">',
+			$this->parent_obj->id_attr_value,
+			$this->parent_obj->width
 		);
 	}
 
@@ -123,7 +124,7 @@ class ANONY_Uploader {
 		if ( ( 'meta' === $this->parent_obj->context || 'form' === $this->parent_obj->context ) && isset( $this->parent_obj->field['title'] ) ) {
 			$html .= sprintf(
 				'<label class="anony-label" for="%1$s">%2$s</label>',
-				esc_attr( $this->parent_obj->field['id'] ),
+				esc_attr( $this->parent_obj->id_attr_value ),
 				esc_html( $this->parent_obj->field['title'] )
 			);
 		}
@@ -141,7 +142,7 @@ class ANONY_Uploader {
 			$this->parent_obj->input_name,
 			$this->parent_obj->value,
 			$this->parent_obj->class_attr,
-			esc_attr( $this->parent_obj->field['id'] )
+			esc_attr( $this->parent_obj->id_attr_value )
 		);
 	}
 
@@ -157,7 +158,7 @@ class ANONY_Uploader {
 			$this->parent_obj->input_name,
 			'',
 			$this->parent_obj->class_attr,
-			esc_attr( $this->parent_obj->field['id'] )
+			esc_attr( $this->parent_obj->id_attr_value )
 		);
 	}
 
@@ -169,8 +170,8 @@ class ANONY_Uploader {
 	 */
 	protected function input_nopriv( &$html ) {
 		$html .= sprintf(
-			'<input type="file" id="%1$s" class="anony-uploader" name="%1$s" style="display:none"/>',
-			esc_attr( $this->parent_obj->field['id'] ),
+			'<input type="file" id="%1$s" class="anony-uploader" name="%2$s" style="display:none"/>',
+			esc_attr( $this->parent_obj->id_attr_value ),
 			$this->parent_obj->input_name,
 		);
 	}

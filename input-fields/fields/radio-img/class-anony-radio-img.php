@@ -53,12 +53,12 @@ class ANONY_Radio_Img {
 
 		$html .= sprintf(
 			'<fieldset class="anony-row anony-row-inline" id="fieldset_%1$s">',
-			$this->parent_obj->field['id']
+			$this->parent_obj->id_attr_value
 		);
 		if ( 'meta' === $this->parent_obj->context && isset( $this->parent_obj->field['title'] ) ) {
 			$html .= sprintf(
 				'<label class="anony-label" for="%1$s">%2$s</label>',
-				$this->parent_obj->field['id'],
+				$this->parent_obj->id_attr_value,
 				$this->parent_obj->field['title']
 			);
 		}
@@ -79,13 +79,13 @@ class ANONY_Radio_Img {
 				$html .= sprintf(
 					'<label class="anony-radio-img%1$s anony-radio-img-%2$s" for="%2$s_%3$s">',
 					$selected,
-					$this->parent_obj->field['id'],
+					$this->parent_obj->id_attr_value,
 					$search
 				);
 
 					$html .= sprintf(
 						'<input type="radio" id="%1$s_%2$s" name="%3$s" class="%4$s" value="%5$s" %6$s/>',
-						$this->parent_obj->field['id'],
+						$this->parent_obj->id_attr_value,
 						$search,
 						$this->parent_obj->input_name,
 						$this->parent_obj->class_attr,
@@ -97,7 +97,7 @@ class ANONY_Radio_Img {
 						'<img src="%1$s" alt="%2$s" onclick="jQuery:anony_radio_img_select(\'%3$s_%4$s\', \'%3$s\');" />',
 						$v['img'],
 						$v['title'],
-						$this->parent_obj->field['id'],
+						$this->parent_obj->id_attr_value,
 						$search
 					);
 

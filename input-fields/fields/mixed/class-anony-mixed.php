@@ -94,8 +94,8 @@ class ANONY_Mixed {
 
 		if ( $this->parent_obj->as_template ) {
 			$html  = sprintf(
-				'<fieldset class="anony-row anony-row-inline"%2$s%3$s>',
-				$this->parent_obj->field['id'],
+				'<fieldset id="%1$s" class="anony-row anony-row-inline"%2$s%3$s>',
+				$this->parent_obj->id_attr_value,
 				'hidden' === $this->parent_obj->field['type'] ? ' style="display:none"' : '',
 				$this->parent_obj->width
 			);
@@ -123,7 +123,7 @@ class ANONY_Mixed {
 
 		$html = sprintf(
 			'<fieldset class="anony-row anony-row-inline%3$s" id="fieldset_%1$s"%2$s>',
-			$this->parent_obj->field['id'],
+			$this->parent_obj->id_attr_value,
 			'hidden' === $this->parent_obj->field['type'] ? ' style="display:none"' : '',
 			$this->parent_obj->width
 		);
@@ -135,7 +135,7 @@ class ANONY_Mixed {
 		if ( in_array( $this->parent_obj->context, array( 'meta', 'form' ), true ) && isset( $this->parent_obj->field['title'] ) ) {
 			$html .= sprintf(
 				'<label class="anony-label" for="%1$s">%2$s</label>',
-				$this->parent_obj->field['id'],
+				$this->parent_obj->id_attr_value,
 				$this->parent_obj->field['title']
 			);
 		}
@@ -145,7 +145,7 @@ class ANONY_Mixed {
 
 		$html .= sprintf(
 			'<div style="position:relative"><input id="%1$s" type="%2$s" name="%3$s" value="%4$s" class="%5$s" %6$s %7$s %8$s%9$s%10$s%11$s/>',
-			$this->parent_obj->field['id'],
+			$this->parent_obj->id_attr_value,
 			$this->parent_obj->field['type'],
 			$this->parent_obj->input_name,
 			$this->parent_obj->value,
@@ -182,20 +182,20 @@ class ANONY_Mixed {
 		//phpcs:enable.
 		$html = sprintf(
 			'<div class="anony-row anony-row-inline" id="fieldset_%1$s">',
-			$this->parent_obj->field['id']
+			$this->parent_obj->id_attr_value
 		);
 
 		if ( 'meta' === $this->parent_obj->context && isset( $this->parent_obj->field['title'] ) ) {
 			$html .= sprintf(
 				'<label class="anony-label" for="%1$s">%2$s</label>',
-				$this->parent_obj->field['id'],
+				$this->parent_obj->id_attr_value,
 				$this->parent_obj->field['title']
 			);
 		}
 
 		$html .= sprintf(
 			'<span id="%1$s" class="%2$s">%3$s</span>',
-			$this->parent_obj->field['id'],
+			$this->parent_obj->id_attr_value,
 			$this->parent_obj->class_attr,
 			$this->parent_obj->value
 		);

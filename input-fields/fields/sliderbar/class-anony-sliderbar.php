@@ -55,25 +55,25 @@ class ANONY_Sliderbar {
 
 		$html .= sprintf(
 			'<fieldset class="anony-row anony-row-inline anony-tabs" id="fieldset_%1$s">',
-			$this->parent_obj->field['id']
+			$this->parent_obj->id_attr_value
 		);
 		if ( 'meta' === $this->parent_obj->context && isset( $this->parent_obj->field['title'] ) ) {
 			$html .= sprintf(
 				'<label class="anony-label" for="%1$s">%2$s</label>',
-				$this->parent_obj->field['id'],
+				$this->parent_obj->id_attr_value,
 				$this->parent_obj->field['title']
 			);
 		}
 
 		$html .= sprintf(
 			'<div class="anony-options-row"><div id="%1$s_sliderbar" class="sliderbar %2$s" rel="%1$s"></div>',
-			$this->parent_obj->field['id'],
+			$this->parent_obj->id_attr_value,
 			$this->parent_obj->class_attr
 		);
 
 		$html .= sprintf(
 			'<input type="text" id="%1$s" name="%2$s" value="%3$s" class="sliderbar_input %4$s" readonly="readonly"/></div>',
-			$this->parent_obj->field['id'],
+			$this->parent_obj->id_attr_value,
 			$this->parent_obj->input_name,
 			$this->parent_obj->value,
 			$this->parent_obj->class_attr

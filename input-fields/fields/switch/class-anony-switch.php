@@ -57,8 +57,8 @@ class ANONY_Switch {
 		}
 
 		$html .= sprintf(
-			'<fieldset class="anony-row%2$s" id="fieldset_%1$s">',
-			$this->parent_obj->field['id'],
+			'<fieldset id="fieldset_%1$s" class="anony-row%2$s" >',
+			$this->parent_obj->id_attr_value,
 			$this->parent_obj->width
 		);
 
@@ -70,7 +70,7 @@ class ANONY_Switch {
 		if ( in_array( $this->parent_obj->context, array( 'meta', 'form' ), true ) && isset( $this->parent_obj->field['title'] ) ) {
 			$html .= sprintf(
 				'<label class="anony-label" for="anony_%1$s">%2$s</label>',
-				$this->parent_obj->field['id'],
+				$this->parent_obj->id_attr_value,
 				$this->parent_obj->field['title']
 			);
 		}
@@ -81,7 +81,7 @@ class ANONY_Switch {
 
 		$html .= sprintf(
 			'<input type="checkbox" data-toggle="switch" id="%1$s" name="%2$s" %3$s value="1" %4$s />',
-			$this->parent_obj->field['id'],
+			$this->parent_obj->id_attr_value,
 			$this->parent_obj->input_name,
 			$this->parent_obj->class_attr,
 			checked( $this->parent_obj->value, 1, false )

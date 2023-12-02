@@ -69,7 +69,7 @@ class ANONY_Gallery {
 	protected function fieldset_open( &$html ) {
 		$html .= sprintf(
 			'<fieldset class="anony-row anony-row-inline" id="fieldset_%1$s">',
-			$this->parent_obj->field['id']
+			$this->parent_obj->id_attr_value
 		);
 	}
 
@@ -83,7 +83,7 @@ class ANONY_Gallery {
 		if ( 'option' !== $this->parent_obj->context && isset( $this->parent_obj->field['title'] ) ) {
 			$html .= sprintf(
 				'<label class="anony-label" for="%1$s">%2$s</label>',
-				$this->parent_obj->field['id'],
+				$this->parent_obj->id_attr_value,
 				$this->parent_obj->field['title']
 			);
 		}
@@ -98,7 +98,7 @@ class ANONY_Gallery {
 	protected function input_priv( &$html ) {
 		$html .= sprintf(
 			'<input type="text" style="display:none" id="%1$s" name="%2$s" value="" class="%3$s" />',
-			$this->parent_obj->field['id'],
+			$this->parent_obj->id_attr_value,
 			$this->parent_obj->input_name,
 			$this->parent_obj->class_attr
 		);
@@ -126,7 +126,7 @@ class ANONY_Gallery {
 	 */
 	protected function uploads_preview( &$html ) {
 		$ids   = array();
-		$html .= '<div class="anony-gallery-thumbs-wrap" id="anony-gallery-thumbs-' . $this->parent_obj->field['id'] . '">';
+		$html .= '<div class="anony-gallery-thumbs-wrap" id="anony-gallery-thumbs-' . $this->parent_obj->id_attr_value . '">';
 		$html .= '<div class="anony-gallery-thumbs">';
 		if ( ! empty( $this->parent_obj->value ) ) {
 			if ( is_array( $this->parent_obj->value ) ) {
@@ -182,12 +182,12 @@ class ANONY_Gallery {
 		$style = 'display:none;';
 		$html .= '<div class="anony-gallery-buttons">';
 		$html .= sprintf(
-			'<a href="javascript:void(0);" data-id="' . $this->parent_obj->field['id'] . '" data-name="' . $this->parent_obj->input_name . '" data-choose="Choose a File" data-update="Select File" class="anony-opts-gallery button button-primary button-large"><span></span>%1$s</a>',
+			'<a href="javascript:void(0);" data-id="' . $this->parent_obj->id_attr_value . '" data-name="' . $this->parent_obj->input_name . '" data-choose="Choose a File" data-update="Select File" class="anony-opts-gallery button button-primary button-large"><span></span>%1$s</a>',
 			$this->button_text
 		);
 
 		$html .= sprintf(
-			' <a href="javascript:void(0);" data-id="' . $this->parent_obj->field['id'] . '" data-name="' . $this->parent_obj->input_name . '" class="anony-opts-clear-gallery button button-primary button-large" style="' . $style . '"><span></span>%1$s</a>',
+			' <a href="javascript:void(0);" data-id="' . $this->parent_obj->id_attr_value . '" data-name="' . $this->parent_obj->input_name . '" class="anony-opts-clear-gallery button button-primary button-large" style="' . $style . '"><span></span>%1$s</a>',
 			esc_html__( 'Remove all', 'anonyengine' )
 		);
 		$html .= '</div>';

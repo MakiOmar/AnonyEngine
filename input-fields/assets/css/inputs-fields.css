@@ -231,17 +231,6 @@ fieldset .anony-form-heading{
 	align-items: center;
 }
 
-.anony-multi-value-flex{
-	align-items: baseline;
-	justify-content: space-between!important;
-}
-.anony-multi-value-flex{
-	display: flex;
-	flex-wrap: wrap;
-}
-.anony-multi-value-wrapper{
-	display: block;
-}
 [id*='fieldset_anony'] input[type= "checkbox"]{
 	margin: 0 5px;
 	border-radius: 2px !important;
@@ -615,7 +604,23 @@ button{
 	border: none;
 	display: flex;
 	flex-direction: column;
-	align-items: center;
+	align-items: start;
+	margin-bottom: 10px;
+}
+
+.anony-multi-value-flex{
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	justify-content: space-between!important;
+	margin-bottom:10px;
+	background-color: #d9d9d933;
+	border-radius: 10px;
+	padding: 20px;
+}
+
+.anony-multi-value-wrapper{
+	display: block;
 }
 
 .anony-flex-column{

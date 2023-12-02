@@ -74,7 +74,7 @@ class ANONY_Select {
 						jQuery( document ).ready( function($) {
 							var dataObject = <?php echo wp_json_encode( $data ); ?>;
 
-							$( 'body' ).on( 'change', '#<?php echo esc_js( $this->parent_obj->field['id'] ); ?>', function() {
+							$( 'body' ).on( 'change', '#<?php echo esc_js( $this->parent_obj->id_attr_value ); ?>', function() {
 								var selectedId = $( this ).val();
 								dataObject.term_id = selectedId;
 
@@ -128,7 +128,7 @@ class ANONY_Select {
 
 		$html = sprintf(
 			'<fieldset class="anony-row anony-row-inline" id="fieldset_%1$s">',
-			$this->parent_obj->field['id']
+			$this->parent_obj->id_attr_value
 		);
 
 		if ( isset( $this->parent_obj->field['note'] ) ) {
@@ -138,13 +138,13 @@ class ANONY_Select {
 		if ( in_array( $this->parent_obj->context, array( 'meta', 'form' ), true ) && isset( $this->parent_obj->field['title'] ) ) {
 			$html .= sprintf(
 				'<label class="anony-label" for="%1$s">%2$s</label>',
-				$this->parent_obj->field['id'],
+				$this->parent_obj->id_attr_value,
 				$this->parent_obj->field['title']
 			);
 		}
 
 		$html .= sprintf(
-			'<select class="%1$s" name="%2$s" id="' . $this->parent_obj->field['id'] . '" %3$s %4$s %5$s>',
+			'<select class="%1$s" name="%2$s" id="' . $this->parent_obj->id_attr_value . '" %3$s %4$s %5$s>',
 			$this->parent_obj->class_attr,
 			$this->parent_obj->input_name,
 			$disabled,

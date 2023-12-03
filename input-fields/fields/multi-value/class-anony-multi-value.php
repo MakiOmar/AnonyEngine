@@ -66,6 +66,8 @@ class ANONY_Multi_Value {
 			);
 		}
 
+		$remove = '<a href="#" class="anony-remove-multi-value-item" data-index="#index#" data-id="' . $this->parent_obj->id_attr_value . '"><span class="dashicons dashicons-dismiss"></span></a>';
+
 		$html   .= sprintf(
 			'<input type="hidden" name="%1$s" id="%2$s" value=""/>',
 			$this->parent_obj->input_name,
@@ -77,7 +79,8 @@ class ANONY_Multi_Value {
 
 			foreach ( $this->parent_obj->value as $item_index => $multi_vals ) {
 
-				$html .= "<div class='anony-multi-value-flex'>";
+				$html .= "<div class='anony-multi-value-flex' data-index='" . $item_index . "'>";
+				$html .= str_replace( '#index#', $item_index, $remove );
 
 				foreach ( $multi_vals as $field_id => $field_value ) {
 
@@ -124,9 +127,11 @@ class ANONY_Multi_Value {
 		$default = sprintf( '<script id="%s-default" type="text/html">', $this->parent_obj->id_attr_value );
 
 		$default .= sprintf(
-			'<div class="%1$s-template anony-multi-value-flex">',
+			'<div class="%1$s-template anony-multi-value-flex" data-index="#index#">',
 			$this->parent_obj->id_attr_value
 		);
+
+		$default .= $remove;
 
 		foreach ( $this->parent_obj->field['fields'] as $nested_field ) {
 			if ( class_exists( 'ANONY_Input_Base' ) ) {

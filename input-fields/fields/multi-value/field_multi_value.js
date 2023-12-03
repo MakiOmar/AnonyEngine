@@ -33,13 +33,6 @@ jQuery( document ).ready(
 						return 'item-' + targetCounter;
 					}
 				);
-
-				var dafaultHtml = dafaultHtml.replace(
-					/id="(.*?)"/g,
-					function ( a, b ) {
-						return 'id="' + b + '-' + targetCounter + '"';
-					}
-				);
 				$( '#' + targetId + '-add' ).append( dafaultHtml );
 
 			}

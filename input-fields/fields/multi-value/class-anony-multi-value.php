@@ -125,7 +125,7 @@ class ANONY_Multi_Value {
 
 		$default .= sprintf(
 			'<div class="%1$s-template anony-multi-value-flex">',
-			$this->parent_obj->input_name
+			$this->parent_obj->id_attr_value
 		);
 
 		foreach ( $this->parent_obj->field['fields'] as $nested_field ) {

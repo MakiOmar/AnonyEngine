@@ -34,19 +34,19 @@ jQuery(document).ready(function($) {
 
 					if (imageExtensions.includes( attachment.attributes.subtype )) {
 							// Update value of the targetfield input with the attachment url.
-							$('#fieldset_' + clicked).find( '.anony-opts-screenshot', activeFileUploadContext ).attr( 'src', attachment.attributes.url );
+							$( '.anony-opts-screenshot', activeFileUploadContext ).attr( 'src', attachment.attributes.url );
 					} else {
-						$('#fieldset_' + clicked).find( '.anony-opts-screenshot', activeFileUploadContext ).attr( 'src', anony_upload.url );
-						$('#fieldset_' + clicked).find( '.uploaded-file-name', activeFileUploadContext ).text( attachment.attributes.filename );
-						$('#fieldset_' + clicked).find( '.uploaded-file-name', activeFileUploadContext ).show();
+						$( '.anony-opts-screenshot', activeFileUploadContext ).attr( 'src', anony_upload.url );
+						$( '.uploaded-file-name', activeFileUploadContext ).text( attachment.attributes.filename );
+						$( '.uploaded-file-name', activeFileUploadContext ).show();
 					}
 
 					$( '#' + clicked ).val( attachment.attributes.id ).trigger( 'change' );
 
-					$('#fieldset_' + clicked).find( '.anony-opts-upload', activeFileUploadContext ).hide();
-					$('#fieldset_' + clicked).find( '.anony-opts-screenshot', activeFileUploadContext ).show();
-					$('#fieldset_' + clicked).find( '.anony-opts-screenshot' ).parent().show();
-					$('#fieldset_' + clicked).find( '.anony-opts-upload-remove', activeFileUploadContext ).show();
+					$( '.anony-opts-upload', activeFileUploadContext ).hide();
+					$( '.anony-opts-screenshot', activeFileUploadContext ).show();
+					$( '.anony-opts-screenshot' ).parent().show();
+					$( '.anony-opts-upload-remove', activeFileUploadContext ).show();
 				}
 			);
 			custom_file_frame.open();
@@ -61,9 +61,9 @@ jQuery(document).ready(function($) {
 				var clicked = $( this ).data( 'id' );
 
 				$( '#' + clicked ).val( '' ).trigger( 'change' );
-				$('#fieldset_' + clicked).find('.anony-opts-upload').fadeIn( 'slow' );
-				$('#fieldset_' + clicked).find( '.anony-opts-screenshot', activeFileUploadContext ).fadeOut( 'slow' );
-				$('#fieldset_' + clicked).find( '.uploaded-file-name', activeFileUploadContext ).fadeOut( 'slow' );
+				$('.anony-opts-upload', activeFileUploadContext ).fadeIn( 'slow' );
+				$( '.anony-opts-screenshot', activeFileUploadContext ).fadeOut( 'slow' );
+				$( '.uploaded-file-name', activeFileUploadContext ).fadeOut( 'slow' );
 				$( this ).fadeOut( 'slow' );
 			}
 		);

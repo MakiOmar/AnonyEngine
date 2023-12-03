@@ -2,19 +2,17 @@ jQuery(document).ready(function($) {
 	"use strict";
 	function AnonyUploader() {
 		$( "img[src='']" ).attr( "src", anony_upload.url );
-
+		var custom_file_frame = null;
 		$('fieldset').on( "click", ".anony-opts-upload", function ( event ) {
 			event.preventDefault();
 			
 			var activeFileUploadContext = $( this ).parent();
-			var custom_file_frame       = null;
 			var clicked                 = $( this ).data( 'id' );
 			
 			if (custom_file_frame) {
-					custom_file_frame.open();
-					return;
+				custom_file_frame.open();
+				return;
 			}
-			
 			// Create the media frame.
 			custom_file_frame = wp.media.frames.customHeader = wp.media(
 				{
@@ -27,7 +25,6 @@ jQuery(document).ready(function($) {
 					}
 				}
 			);
-			console.log(custom_file_frame);
 			custom_file_frame.on(
 				"select",
 				function () {
@@ -37,22 +34,23 @@ jQuery(document).ready(function($) {
 
 					if (imageExtensions.includes( attachment.attributes.subtype )) {
 							// Update value of the targetfield input with the attachment url.
-							$( '.anony-opts-screenshot', activeFileUploadContext ).attr( 'src', attachment.attributes.url );
+							$('#fieldset_' + clicked).find( '.anony-opts-screenshot', activeFileUploadContext ).attr( 'src', attachment.attributes.url );
 					} else {
-						$( '.anony-opts-screenshot', activeFileUploadContext ).attr( 'src', anony_upload.url );
-						$( '.uploaded-file-name', activeFileUploadContext ).text( attachment.attributes.filename );
-						$( '.uploaded-file-name', activeFileUploadContext ).show();
+						$('#fieldset_' + clicked).find( '.anony-opts-screenshot', activeFileUploadContext ).attr( 'src', anony_upload.url );
+						$('#fieldset_' + clicked).find( '.uploaded-file-name', activeFileUploadContext ).text( attachment.attributes.filename );
+						$('#fieldset_' + clicked).find( '.uploaded-file-name', activeFileUploadContext ).show();
 					}
 
 					$( '#' + clicked ).val( attachment.attributes.id ).trigger( 'change' );
 
-					$( '.anony-opts-upload', activeFileUploadContext ).hide();
-					$( '.anony-opts-screenshot', activeFileUploadContext ).show();
-					$( '.anony-opts-upload-remove', activeFileUploadContext ).show();
+					$('#fieldset_' + clicked).find( '.anony-opts-upload', activeFileUploadContext ).hide();
+					$('#fieldset_' + clicked).find( '.anony-opts-screenshot', activeFileUploadContext ).show();
+					$('#fieldset_' + clicked).find( '.anony-opts-screenshot' ).parent().show();
+					$('#fieldset_' + clicked).find( '.anony-opts-upload-remove', activeFileUploadContext ).show();
 				}
 			);
-
 			custom_file_frame.open();
+
 		});
 
 		$('fieldset').on( "click", ".anony-opts-upload-remove" , function ( event ) {
@@ -63,11 +61,10 @@ jQuery(document).ready(function($) {
 				var clicked = $( this ).data( 'id' );
 
 				$( '#' + clicked ).val( '' ).trigger( 'change' );
-				$( this ).prev().fadeIn( 'slow' );
-				$( '.anony-opts-screenshot', activeFileUploadContext ).fadeOut( 'slow' );
-				$( '.uploaded-file-name', activeFileUploadContext ).fadeOut( 'slow' );
+				$('#fieldset_' + clicked).find('.anony-opts-upload').fadeIn( 'slow' );
+				$('#fieldset_' + clicked).find( '.anony-opts-screenshot', activeFileUploadContext ).fadeOut( 'slow' );
+				$('#fieldset_' + clicked).find( '.uploaded-file-name', activeFileUploadContext ).fadeOut( 'slow' );
 				$( this ).fadeOut( 'slow' );
-				$( '.anony-opts-upload', activeFileUploadContext ).show();
 			}
 		);
 	}

@@ -10,10 +10,7 @@ function AnonyUpload(){
 				var activeFileUploadContext = jQuery( this ).closest('fieldset');
 				var targetID                = $(this).data( 'id' );
 				var targetFieldName         = $(this).data( 'name' );
-				custom_file_frame           = null;
-
-				item_clicked = jQuery( this );
-
+				var custom_file_frame = null;
 				// Create the media frame.
 				custom_file_frame = wp.media.frames.customHeader = wp.media(
 					{

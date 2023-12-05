@@ -51,7 +51,7 @@ function AnonyUpload(){
 						);
 						attachment_ids_string = attachment_ids_string.replace(/,\s*$/, "");
 						activeFileUploadContext.find( '#' + targetID ).val(attachment_ids_string).trigger('change');
-						jQuery( '.anony-opts-clear-gallery' ).attr( 'style', 'display:inline-block!important' );
+						( '.anony-opts-clear-gallery', activeFileUploadContext ).attr( 'style', 'display:inline-block!important' );
 
 					}
 				);

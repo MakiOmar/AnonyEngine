@@ -232,8 +232,8 @@ if ( ! class_exists( 'ANONY_Meta_Box' ) ) {
 
 				if ( class_exists( 'ANONY_Input_Base' ) && class_exists( 'ANONY_Meta_Input_Field' ) ) {
 					$args = array(
-						'field'   => $field,
-						'form_id' => $this->id,
+						'field'     => $field,
+						'form_id'   => $this->id,
 						'object_id' => $p_id,
 					);
 

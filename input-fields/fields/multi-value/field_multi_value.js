@@ -38,7 +38,7 @@ jQuery( document ).ready(
 			}
 		);
 
-		$('.anony-remove-multi-value-item').on( 'click', function(e){
+		$('fieldset').on( 'click', '.anony-remove-multi-value-item' ,function(e){
 			e.preventDefault();
 			var targetId = $(this).data( 'id' );
 			// set new count.

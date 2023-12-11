@@ -82,32 +82,21 @@ class ANONY_Multi_Value {
 				$html .= "<div class='anony-multi-value-flex' data-index='" . $item_index . "'>";
 				$html .= str_replace( '#index#', $item_index, $remove );
 
-				foreach ( $multi_vals as $field_id => $field_value ) {
-
-					foreach ( $this->parent_obj->field['fields'] as $nested_field ) {
-
-						if ( $nested_field['id'] === $field_id ) {
-
-							if ( class_exists( 'ANONY_Input_Base' ) ) {
-								$args = array(
-									'field'           => $nested_field,
-									'form_id'         => $this->parent_obj->form_id,
-									'object_id'       => $this->parent_obj->object_id,
-									'field_value'     => $field_value,
-									'index'           => $item_index,
-									'context'         => 'meta',
-									'parent_field_id' => $this->parent_obj->field['id'],
-								);
-
-								$render_field = new ANONY_Input_Base( $args );
-							} else {
-								$render_field = new ANONY_Input_Field( $nested_field, $this->parent_obj->form_id, 'meta', $this->parent_obj->object_id, false, $field_value, $item_index, $this->parent_obj->field['id'] );
-							}
-
-							$html .= $render_field->field_init();
-
-						}
+				foreach ( $this->parent_obj->field['fields'] as $nested_field ) {
+					$args = array(
+						'field'           => $nested_field,
+						'form_id'         => $this->parent_obj->form_id,
+						'object_id'       => $this->parent_obj->object_id,
+						'index'           => $item_index,
+						'context'         => 'meta',
+						'parent_field_id' => $this->parent_obj->field['id'],
+					);
+					if ( isset( $multi_vals[ $nested_field['id'] ] ) ) {
+						$args['field_value'] = $multi_vals[ $nested_field['id'] ];
 					}
+					$render_field = new ANONY_Input_Base( $args );
+
+					$html .= $render_field->field_init();
 				}
 
 				$html .= '</div>';

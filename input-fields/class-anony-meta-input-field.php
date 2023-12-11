@@ -15,8 +15,6 @@ if ( ! class_exists( 'ANONY_Meta_Input_Field' ) ) {
 	 * A class that renders input fields for an metabox
 	 */
 	class ANONY_Meta_Input_Field extends ANONY_Input_Base {
-
-
 		/**
 		 * Set field data depending on the context
 		 */
@@ -28,7 +26,6 @@ if ( ! class_exists( 'ANONY_Meta_Input_Field' ) ) {
 		 * Set metabox field data
 		 */
 		public function meta_field_data() {
-
 			if ( isset( $this->field['nested-to'] ) && ! empty( $this->field['nested-to'] ) ) {
 				$index = ( is_integer( $this->index ) ) ? $this->index : 0;
 
@@ -60,7 +57,6 @@ if ( ! class_exists( 'ANONY_Meta_Input_Field' ) ) {
 		 * Initialize options field
 		 */
 		public function field_init() {
-
 			if ( ! is_null( $this->field_class ) && class_exists( $this->field_class ) ) {
 
 				$field_class = $this->field_class;
@@ -102,7 +98,7 @@ if ( ! class_exists( 'ANONY_Meta_Input_Field' ) ) {
 					return $field->render();
 				}
 			} else {
-				return $this->field_class . esc_html__( ' class doesn\'t exist' );
+				return esc_html__( 'Something went wrong' );
 			}
 		}
 	}

@@ -1314,17 +1314,17 @@ if ( ! class_exists( 'ANONY_Woo_Help' ) ) {
 				return;
 			}
 
-			// Create the order
+			// Create the order.
 			$order_data = array(
 				'customer_id' => $customer_id,
 				'status'      => 'processing',
 			);
 
-			// Create the order
+			// Create the order.
 			$order = wc_create_order( $order_data );
 			if ( $order ) {
 
-				// add products
+				// add products.
 				$order->add_product(
 					$product,
 					1,
@@ -1334,10 +1334,10 @@ if ( ! class_exists( 'ANONY_Woo_Help' ) ) {
 					)
 				);
 
-				// Get an instance of the WC_Customer Object from the user ID
+				// Get an instance of the WC_Customer Object from the user ID.
 				$customer = new WC_Customer( $customer_id );
 
-				// add billing and shipping addresses
+				// add billing and shipping addresses.
 				$address = array(
 					'first_name' => $customer->get_billing_first_name(),
 					'last_name'  => $customer->get_billing_last_name(),
@@ -1359,7 +1359,12 @@ if ( ! class_exists( 'ANONY_Woo_Help' ) ) {
 				$order->save();
 			}
 		}
-
+		/**
+		 * Eender products loop
+		 *
+		 * @param array $args Loop's arguments.
+		 * @return void
+		 */
 		public static function products_loop( $args = array() ) {
 			$default = array(
 				'is_shop' => false,
@@ -1381,7 +1386,6 @@ if ( ! class_exists( 'ANONY_Woo_Help' ) ) {
 				'orderby'  => 'date',
 				'order'    => 'DESC',
 			);
-			$products_ids = wc_get_products( $loop_args );
 
 			if ( $settings['is_shop'] ) {
 				$ordering            = WC()->query->get_catalog_ordering_args();
@@ -1396,8 +1400,13 @@ if ( ! class_exists( 'ANONY_Woo_Help' ) ) {
 				$loop_args['orderby'] = $ordering['orderby'];
 				$loop_args['order']   = $ordering['order'];
 			} else {
-				$loop_args['page']    = 1;
+				$loop_args['page'] = 1;
 			}
+
+			if ( ! empty( $settings['loop_args'] ) ) {
+				$loop_args = wp_parse_args( $loop_args, $settings['loop_args'] );
+			}
+			$products_ids = wc_get_products( $loop_args );
 
 			if ( $settings['is_shop'] ) {
 				wc_set_loop_prop( 'current_page', $paged );

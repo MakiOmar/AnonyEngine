@@ -29,6 +29,13 @@ if ( ! class_exists( 'ANONY_Fields_Scripts' ) ) {
 		public $mixed_types = array( 'text', 'number', 'email', 'password', 'url', 'hidden' );
 
 		/**
+		 * Enqueued scripts
+		 *
+		 * @var array
+		 */
+		public static $enqueued = array();
+
+		/**
 		 * Constructor
 		 *
 		 * @param array $fields An array of fields.
@@ -65,9 +72,8 @@ if ( ! class_exists( 'ANONY_Fields_Scripts' ) ) {
 		 * @return void
 		 */
 		protected function enqueue_fields_scripts( $fields ) {
-			$added = array();
 			foreach ( $fields as $field ) {
-				if ( ! in_array( $field['type'], $added, true ) ) {
+				if ( ! in_array( $field['type'], self::$enqueued, true ) ) {
 					if ( $this->select_field( $field ) ) {
 						$class = $this->select_field( $field );
 
@@ -77,9 +83,10 @@ if ( ! class_exists( 'ANONY_Fields_Scripts' ) ) {
 						}
 					}
 
-					$added[] = $field['type'];
-				} elseif ( in_array( $field['type'], $added, true ) && isset( $field['fields'] ) && is_array( $field['fields'] )) {
-					$this->enqueue_fields_scripts( $field['fields'] );
+					self::$enqueued[] = $field['type'];
+					if ( isset( $field['fields'] ) && is_array( $field['fields'] ) ) {
+						$this->enqueue_fields_scripts( $field['fields'] );
+					}
 				}
 			}
 		}

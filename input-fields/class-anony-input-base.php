@@ -166,7 +166,7 @@ if ( ! class_exists( 'ANONY_Input_Base' ) ) {
 		 */
 		public function __construct( $args ) {
 
-			if ( empty( $args['field'] ) || empty( $args['field']['id'] ) ) {
+			if ( empty( $args['field'] ) ) {
 				return;
 			}
 
@@ -215,8 +215,13 @@ if ( ! class_exists( 'ANONY_Input_Base' ) ) {
 				if ( in_array( $this->field['type'], $this->mixed_types, true ) ) {
 					$this->field_class = 'ANONY_Mixed';
 				} else {
-					$this->field_class = str_replace( '-', '_', 'ANONY_' . ucfirst( $this->field['type'] ) );
+					// Convert underscores to spaces and capitalize each word.
+					$string = str_replace( '_', ' ', $this->field['type'] );
+					$string = ucwords( $string );
 
+					// Convert spaces back to underscores and remove spaces.
+					$string            = str_replace( ' ', '_', $string );
+					$this->field_class = str_replace( '-', '_', 'ANONY_' . $string );
 				}
 			}
 			return $this->field_class;

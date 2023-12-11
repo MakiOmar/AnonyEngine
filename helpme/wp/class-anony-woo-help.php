@@ -408,20 +408,20 @@ if ( ! class_exists( 'ANONY_Woo_Help' ) ) {
 			sprintf(
 				'
 
-				<div class="coupon-form-wrapper">
-					<div class="coupon-form" style="margin-bottom:20px;">
-		        		<p>%1$s</p>
-				        <p class="form-row form-row-first woocommerce-validated">
-				            <input type="text" name="coupon_code" class="input-text" placeholder="%2$s" id="coupon_code" value="">
-				        </p>
-				        <p class="form-row form-row-last">
-				            <button type="button" class="button" name="apply_coupon" value="%3$s">%4$s</button>
-				        </p>
-		        		<div class="clear"></div>
-		    		</div>
-		    	</div>
+					<div class="coupon-form-wrapper">
+						<div class="coupon-form" style="margin-bottom:20px;">
+							<p>%1$s</p>
+							<p class="form-row form-row-first woocommerce-validated">
+								<input type="text" name="coupon_code" class="input-text" placeholder="%2$s" id="coupon_code" value="">
+							</p>
+							<p class="form-row form-row-last">
+								<button type="button" class="button" name="apply_coupon" value="%3$s">%4$s</button>
+							</p>
+							<div class="clear"></div>
+						</div>
+					</div>
 
-				',
+					',
 				esc_html__( 'If you own a discount coupon code, please apply it below', 'anonyengine' ),
 				esc_attr__( 'Coupon code', 'anonyengine' ),
 				esc_attr__( 'Apply coupon', 'anonyengine' ),
@@ -434,31 +434,31 @@ if ( ! class_exists( 'ANONY_Woo_Help' ) ) {
 		 */
 		public static function custom_checkout_jquery_script() {
 			if ( is_checkout() && ! is_wc_endpoint_url() ) :?>
-				<script type="text/javascript">
-				jQuery( function($){
-					// $('.coupon-form').css("display", "none"); // Be sure coupon field is hidden.
+					<script type="text/javascript">
+					jQuery( function($){
+						// $('.coupon-form').css("display", "none"); // Be sure coupon field is hidden.
 
-					// Show or Hide coupon field.
-					$('.checkout-coupon-toggle .show-coupon').on( 'click', function(e){
-						$('.coupon-form').toggle(200);
-						e.preventDefault();
-					})
+						// Show or Hide coupon field.
+						$('.checkout-coupon-toggle .show-coupon').on( 'click', function(e){
+							$('.coupon-form').toggle(200);
+							e.preventDefault();
+						})
 
-					// Copy the inputed coupon code to WooCommerce hidden default coupon field.
-					$('.coupon-form input[name="coupon_code"]').on( 'input change', function(){
-						$('form.checkout_coupon input[name="coupon_code"]').val($(this).val());
-						// console.log($(this).val()); // Uncomment for testing.
+						// Copy the inputed coupon code to WooCommerce hidden default coupon field.
+						$('.coupon-form input[name="coupon_code"]').on( 'input change', function(){
+							$('form.checkout_coupon input[name="coupon_code"]').val($(this).val());
+							// console.log($(this).val()); // Uncomment for testing.
+						});
+
+						// On button click, submit WooCommerce hidden default coupon form.
+						$('.coupon-form button[name="apply_coupon"]').on( 'click', function(){
+							$('form.checkout_coupon').submit();
+							// console.log('click: submit form'); // Uncomment for testing.
+						});
 					});
-
-					// On button click, submit WooCommerce hidden default coupon form.
-					$('.coupon-form button[name="apply_coupon"]').on( 'click', function(){
-						$('form.checkout_coupon').submit();
-						// console.log('click: submit form'); // Uncomment for testing.
-					});
-				});
-				</script>
-				<?php
-			endif;
+					</script>
+					<?php
+				endif;
 		}
 
 		/**
@@ -614,18 +614,18 @@ if ( ! class_exists( 'ANONY_Woo_Help' ) ) {
 			if ( ! $variation_purchasable ) {
 				wc_enqueue_js(
 					"
-				jQuery('.variations_form')
-				.on( 'woocommerce_variation_select_change', function( event ) {
-				jQuery('.wc-nonpurchasable-message').hide();
-				})
-				.on( 'found_variation', function( event, variation ) {
-				jQuery('.wc-nonpurchasable-message').hide();
-				if ( ! variation.is_purchasable ) {
-				jQuery( '.wc-nonpurchasable-message.js-variation-' + variation.variation_id ).show();
-				}
-				})
-				.find( '.variations select' ).change();
-				"
+					jQuery('.variations_form')
+					.on( 'woocommerce_variation_select_change', function( event ) {
+					jQuery('.wc-nonpurchasable-message').hide();
+					})
+					.on( 'found_variation', function( event, variation ) {
+					jQuery('.wc-nonpurchasable-message').hide();
+					if ( ! variation.is_purchasable ) {
+					jQuery( '.wc-nonpurchasable-message.js-variation-' + variation.variation_id ).show();
+					}
+					})
+					.find( '.variations select' ).change();
+					"
 				);
 			}
 		}
@@ -684,16 +684,16 @@ if ( ! class_exists( 'ANONY_Woo_Help' ) ) {
 				$results = $wpdb->get_col(
 					$wpdb->prepare(
 						"SELECT DISTINCT p.ID FROM {$wpdb->prefix}posts AS p
-				        INNER JOIN {$wpdb->prefix}postmeta AS pm ON p.ID = pm.post_id
-				        INNER JOIN {$wpdb->prefix}woocommerce_order_items AS woi ON p.ID = woi.order_id
-				        INNER JOIN {$wpdb->prefix}woocommerce_order_itemmeta AS woim ON woi.order_item_id = woim.order_item_id
+							INNER JOIN {$wpdb->prefix}postmeta AS pm ON p.ID = pm.post_id
+							INNER JOIN {$wpdb->prefix}woocommerce_order_items AS woi ON p.ID = woi.order_id
+							INNER JOIN {$wpdb->prefix}woocommerce_order_itemmeta AS woim ON woi.order_item_id = woim.order_item_id
 
-				        WHERE p.post_status IN ( " . implode( ',', $statuses ) . " )
-				        AND pm.meta_key = '_customer_user'
-				        AND pm.meta_value = %d
-				        AND woim.meta_key IN ( '_product_id', '_variation_id' )
-				        $meta_query_line
-					    ", 
+							WHERE p.post_status IN ( " . implode( ',', $statuses ) . " )
+							AND pm.meta_key = '_customer_user'
+							AND pm.meta_value = %d
+							AND woim.meta_key IN ( '_product_id', '_variation_id' )
+							$meta_query_line
+							", 
 						$customer_id
 					)
 				);
@@ -1083,19 +1083,19 @@ if ( ! class_exists( 'ANONY_Woo_Help' ) ) {
 		public static function single_order( $order_id ) {
 
 			?>
-			<table>
-				<thead>
-				<tr>
-					<th>Order Number</th>
-					<th>Status</th>
-					<th>Date Created</th>
-					<th>Billing Information</th>
-					<th>Shipping Information</th>
-					<th>Line Items</th>
-					<th>Total</th>
-				</tr>
-				</thead>
-				<tbody>
+				<table>
+					<thead>
+					<tr>
+						<th>Order Number</th>
+						<th>Status</th>
+						<th>Date Created</th>
+						<th>Billing Information</th>
+						<th>Shipping Information</th>
+						<th>Line Items</th>
+						<th>Total</th>
+					</tr>
+					</thead>
+					<tbody>
 				<?php
 					$order_details = get_order_details( $order_id );
 
@@ -1117,9 +1117,9 @@ if ( ! class_exists( 'ANONY_Woo_Help' ) ) {
 					echo '<tr><td colspan="7">Order not found</td></tr>';
 				}
 				?>
-				</tbody>
-			</table>
-			<?php
+					</tbody>
+				</table>
+				<?php
 		}
 		/**
 		 * Adds a form after orders table, so we can get total savings per month of year.
@@ -1132,28 +1132,28 @@ if ( ! class_exists( 'ANONY_Woo_Help' ) ) {
 				$selected_month = isset( $_POST['month'] ) ? sanitize_text_field( $_POST['month'] ) : false;
 				$selected_year  = isset( $_POST['year'] ) ? sanitize_text_field( $_POST['year'] ) : false;
 				?>
-				<form method="post" action="">
-					<label for="month">Select a month:</label>
-					<select name="month" id="month">
+					<form method="post" action="">
+						<label for="month">Select a month:</label>
+						<select name="month" id="month">
 						<?php
 						for ( $i = 1; $i <= 12; $i++ ) {
 							$month = date( 'F', mktime( 0, 0, 0, $i, 1 ) );
 							echo '<option value="' . $month . '" ' . selected( $selected_month, $month, false ) . '>' . $month . '</option>';
 						}
 						?>
-					</select>
-					<label for="year">Select a year:</label>
-					<select name="year" id="year">
+						</select>
+						<label for="year">Select a year:</label>
+						<select name="year" id="year">
 						<?php
 						$current_year = date( 'Y' );
 						for ( $i = $current_year; $i >= 2020; $i-- ) {
 							echo '<option value="' . $i . '" ' . selected( $selected_year, $i, false ) . '>' . $i . '</option>';
 						}
 						?>
-					</select>
-					<input type="submit" name="submit" value="Show Total Savings">
-				</form>
-				<?php
+						</select>
+						<input type="submit" name="submit" value="Show Total Savings">
+					</form>
+					<?php
 			}
 		}
 		/**
@@ -1359,14 +1359,73 @@ if ( ! class_exists( 'ANONY_Woo_Help' ) ) {
 				$order->save();
 			}
 		}
+
+		public static function products_loop( $args = array() ) {
+			$default = array(
+				'is_shop' => false,
+			);
+
+			$settings = wp_parse_args( $args, $default );
+
+			if ( ! function_exists( 'wc_get_products' ) ) {
+				return;
+			}
+
+			$products_per_page = apply_filters( 'loop_shop_per_page', wc_get_default_products_per_row() * wc_get_default_product_rows_per_page() );
+
+			$loop_args    = array(
+				'status'   => 'publish',
+				'limit'    => $products_per_page,
+				'return'   => 'ids',
+				'paginate' => true,
+				'orderby'  => 'date',
+				'order'    => 'DESC',
+			);
+			$products_ids = wc_get_products( $loop_args );
+
+			if ( $settings['is_shop'] ) {
+				$ordering            = WC()->query->get_catalog_ordering_args();
+				$ordering['orderby'] = array_shift( explode( ' ', $ordering['orderby'] ) );
+				$ordering['orderby'] = stristr( $ordering['orderby'], 'price' ) ? 'meta_value_num' : $ordering['orderby'];
+				/**
+				 * If your custom loop is on a static front page then check for the query var 'page' instead of 'paged'.
+				 * See https://developer.wordpress.org/reference/classes/wp_query/#pagination-parameters.
+				 */
+				$paged                = ( get_query_var( 'paged' ) ) ? absint( get_query_var( 'paged' ) ) : 1;
+				$loop_args['page']    = $paged;
+				$loop_args['orderby'] = $ordering['orderby'];
+				$loop_args['order']   = $ordering['order'];
+			} else {
+				$loop_args['page']    = 1;
+			}
+
+			if ( $settings['is_shop'] ) {
+				wc_set_loop_prop( 'current_page', $paged );
+				wc_set_loop_prop( 'is_paginated', wc_string_to_bool( true ) );
+				wc_set_loop_prop( 'total', $products_ids->total );
+				wc_set_loop_prop( 'total_pages', $products_ids->max_num_pages );
+			}
+			wc_set_loop_prop( 'page_template', get_page_template_slug() );
+			wc_set_loop_prop( 'per_page', $products_per_page );
+
+			if ( $products_ids ) {
+				if ( $settings['is_shop'] ) {
+					do_action( 'woocommerce_before_shop_loop' );
+				}
+				woocommerce_product_loop_start();
+				foreach ( $products_ids->products as $featured_product ) {
+					$post_object = get_post( $featured_product );
+					setup_postdata( $GLOBALS['post'] =& $post_object );
+					wc_get_template_part( 'content', 'product' );
+				}
+				wp_reset_postdata();
+				woocommerce_product_loop_end();
+				if ( $settings['is_shop'] ) {
+					do_action( 'woocommerce_after_shop_loop' );
+				}
+			} else {
+				do_action( 'woocommerce_no_products_found' );
+			}
+		}
 	}
-
-
 }
-
-
-
-
-
-
-

@@ -62,27 +62,6 @@ if ( ! class_exists( 'ANONY_IMAGES_HELP' ) ) {
 			$no_dimensions = array();
 			foreach ( $imgs[0] as $i => $img ) {
 
-				if ( $lazyload ) {
-					// Use Defer.js to lazyload.
-					// https://github.com/shinsenter/defer.js/#Defer.lazy.
-					if ( false === strpos( $imgs[0][ $i ], 'data-src' ) ) {
-						$replaced_img = preg_replace( '/<img([^>]*)src=("|\')([^"\']*)(\2)([^>]*)>/', '<img$1data-src=$2$3$4$5 src="' . ANOE_URI . 'assets/images/placeholders/lazyload-placeholder.svg">', $imgs[0][ $i ] );
-					} else {
-						$replaced_img = $imgs[0][ $i ];
-					}
-
-					if ( false === strpos( $replaced_img, 'data-srcset' ) ) {
-						$replaced_img = preg_replace( '/<img([^>]*)srcset=("|\')([^"\']*)(\2)([^>]*)>/', '<img$1data-srcset=$2$3$4$5>', $replaced_img );
-					}
-
-					$replaced_img = str_replace( '<img ', '<img loading="lazy" ', $replaced_img );
-
-				} else {
-					$replaced_img = $imgs[0][ $i ];
-				}
-
-				$content = str_replace( $img, $replaced_img, $content );
-
 				$img_url    = $imgs[1][ $i ];
 				$dimensions = self::thumb_get_dimensions( $img_url );
 
@@ -100,9 +79,25 @@ if ( ! class_exists( 'ANONY_IMAGES_HELP' ) ) {
 				} else {
 
 					$img_size = false;
-
 				}
+
 				if ( false !== $img_size ) {
+					$replaced_img = $imgs[0][ $i ];
+					if ( $lazyload ) {
+						// Use Defer.js to lazyload.
+						// https://github.com/shinsenter/defer.js/#Defer.lazy.
+						if ( false === strpos( $imgs[0][ $i ], 'data-src' ) ) {
+							$replaced_img = preg_replace( '/<img([^>]*)src=("|\')([^"\']*)(\2)([^>]*)>/', '<img$1data-src=$2$3$4$5 src="data:image/svg+xml,%3Csvg%20xmlns=\'http://www.w3.org/2000/svg\'%20viewBox=\'0%200%20225%20225\'%3E%3C/svg%3E">', $imgs[0][ $i ] );
+						}
+
+						if ( false === strpos( $replaced_img, 'data-srcset' ) ) {
+							$replaced_img = preg_replace( '/<img([^>]*)srcset=("|\')([^"\']*)(\2)([^>]*)>/', '<img$1data-srcset=$2$3$4$5>', $replaced_img );
+						}
+
+						$replaced_img = str_replace( '<img ', '<img loading="lazy" ', $replaced_img );
+
+					}
+
 					$dimension_attributes = 'width="' . $img_size[0] . '" height="' . $img_size[1] . '"';
 					if ( empty( $img_size[3] ) ) {
 						$img_size[3] = $dimension_attributes;
@@ -131,9 +126,8 @@ if ( ! class_exists( 'ANONY_IMAGES_HELP' ) ) {
 					} else {
 						$replaced_img = str_replace( '<img ', '<img style="width:' . $img_size[0] . 'px;max-height:' . $img_size[1] . 'px" ', $replaced_img );
 					}
+					$content = str_replace( $img, $replaced_img, $content );
 				}
-
-				$content = str_replace( $img, $replaced_img, $content );
 			}
 			return $content;
 		}

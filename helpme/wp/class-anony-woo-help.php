@@ -244,7 +244,32 @@ if ( ! class_exists( 'ANONY_Woo_Help' ) ) {
 
 			return $customer_orders;
 		}
+		/**
+		 * Get products by meta key/value
+		 *
+		 * @param string $meta_key Meta key.
+		 * @param string $meta_vlaue Meta value.
+		 * @return array
+		 */
+		public static function get_products_by_usermeta( $meta_key, $meta_vlaue ) {
+			global$wpdb;
+			$products_ids = ANONY_Wp_Db_Help::get_result(
+				$wpdb->prepare(
+					"SELECT p.ID FROM {$wpdb->prefix}posts AS p
+                    INNER JOIN {$wpdb->prefix}users AS u ON p.post_author = u.ID
+                    INNER JOIN {$wpdb->prefix}usermeta AS um ON u.ID = um.user_id
+                    WHERE p.post_type = 'product'
+                    AND p.post_status = 'publish'
+                    AND um.meta_key = %s
+                    AND CAST(um.meta_value AS CHAR CHARACTER SET utf8mb4) LIKE %s",
+					$meta_key,
+					'%' . $meta_vlaue . '%'
+				),
+				'anony_products_by_' . $meta_key
+			);
 
+			return $products_ids;
+		}
 		/**
 		 * Handles order custom meta query var
 		 *
@@ -1372,13 +1397,13 @@ if ( ! class_exists( 'ANONY_Woo_Help' ) ) {
 
 			$settings = wp_parse_args( $args, $default );
 
-			if ( ! function_exists( 'wc_get_products' ) ) {
+			if ( ! function_exists( 'wc_get_products' ) || is_admin() ) {
 				return;
 			}
 
 			$products_per_page = apply_filters( 'loop_shop_per_page', wc_get_default_products_per_row() * wc_get_default_product_rows_per_page() );
 
-			$loop_args    = array(
+			$loop_args = array(
 				'status'   => 'publish',
 				'limit'    => $products_per_page,
 				'return'   => 'ids',

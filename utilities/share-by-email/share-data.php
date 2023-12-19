@@ -36,7 +36,7 @@ add_action(
 );
 
 add_action(
-	'anony_after_page_footer',
+	'wp_footer',
 	function () {
 
 		$titel      = esc_html__( 'Share by email', 'anonyengine' );

@@ -3,7 +3,7 @@
  * Plugin Name: AnonyEngine
  * Plugin URI: https://makiomar.com
  * Description: With AnonyEngine you can add any kind of metaboxes and options pages and forms easily and supper fast
- * Version: 1.0.0192
+ * Version: 1.0.0193
  *
  * @package  AnonyEngine
  * Author: Mohammad Omar
@@ -102,7 +102,7 @@ function anony_common_scripts() {
 /**
  * AnonyEngine common scripts.
  */
-//add_action( 'wp_enqueue_scripts', 'anony_common_scripts' );
+// add_action( 'wp_enqueue_scripts', 'anony_common_scripts' );.
 add_action( 'admin_enqueue_scripts', 'anony_common_scripts' );
 
 

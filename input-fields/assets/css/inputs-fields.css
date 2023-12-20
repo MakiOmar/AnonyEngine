@@ -697,11 +697,13 @@ button{
 	position: relative;
 	top: -20px;
 	padding: 20px;
+	background-position: center;
+	background-size: cover;
 }
 .uploads-wrapper.style-two span.anony-uploaded-preview svg{
 	z-index: 2;
 }
-.uploads-wrapper.style-two span.anony-uploaded-preview::after{
+.uploads-wrapper.style-two:not(.has-value) span.anony-uploaded-preview::after{
 	content: '';
 	display: flex;
 	position: absolute;

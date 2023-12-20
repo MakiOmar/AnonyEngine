@@ -278,17 +278,31 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 		/**
 		 * Check if current user can edit the post
 		 *
-		 * @param integer $post_id Post's ID.
+		 * @param integer $object_id Object's ID.
+		 * @param integer $object_type Object's type.
 		 * @return boolean
 		 */
-		protected function can_edit( $post_id ) {
-			$post_author = get_post_field( 'post_author', $post_id );
+		protected function can_edit( $object_id, $object_type ) {
 
-			if ( empty( $post_author ) || ! is_numeric( $post_author ) || absint( $post_author ) !== get_current_user_id() ) {
-				return false;
+			switch ( $object_type ) {
+				case ( 'post' ):
+					$post_author = get_post_field( 'post_author', $object_id );
+
+					if ( empty( $post_author ) || ! is_numeric( $post_author ) || absint( $post_author ) !== get_current_user_id() ) {
+						$condition = false;
+					}
+					break;
+				case ( 'user' ):
+					$condition = get_current_user_id() === $object_id;
+					break;
+
+				case ( 'term' ):
+					$condition = current_user_can( 'manage_options' );
+					break;
+				default:
+					$condition = true;
 			}
-
-			return true;
+			return $condition;
 		}
 
 		/**
@@ -301,7 +315,7 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 		 */
 		protected function set_post_default_values( &$fields, $configs, $post_id ) {
 
-			if ( ! $this->can_edit( $post_id ) ) {
+			if ( ! $this->can_edit( $post_id, 'post' ) ) {
 				return;
 			}
 
@@ -508,8 +522,8 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 				$object_id_from = $this->form['defaults']['object_id_from'];
 				$object_id      = $this->get_object_id( $object_type, $object_id_from );
 
-				if ( $object_id && ! $this->can_edit( $object_id ) ) {
-					$errors[] = 'post_author';
+				if ( $object_id && ! $this->can_edit( $object_id, $object_type ) ) {
+					$errors[] = 'not_allowed';
 				}
 			}
 
@@ -613,6 +627,7 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 		 */
 		public function create( array $fields ) {
 			$condition_errors = $this->check_conditions( $this->form );
+
 			if ( ! empty( $condition_errors ) ) {
 				$this->render_conditions_errors( $condition_errors );
 
@@ -846,7 +861,7 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 					$msg = esc_html__( 'You are not allowed to do this.', 'anonyengine' );
 					break;
 
-				case 'post_author':
+				case 'not_allowed':
 					$msg = esc_html__( 'You are not allowed to edit this.', 'anonyengine' );
 					break;
 			}

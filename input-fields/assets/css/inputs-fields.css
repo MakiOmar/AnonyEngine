@@ -281,8 +281,7 @@ input[type=tel]{
 	border-bottom: 1px solid;
 	box-sizing: border-box;
 	align-items: center;
-	flex-direction: row-reverse;
-	justify-content: flex-end;
+	align-items: center;
 }
 
 

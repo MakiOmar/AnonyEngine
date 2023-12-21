@@ -562,17 +562,17 @@ if ( ! class_exists( 'ANONY_Theme_Settings' ) ) {
 
 				foreach ( $this->menu as $nav => $details ) {
 					if ( isset( $details['sections'] ) ) {
-							echo '<li><div><a id="' . esc_attr( $nav ) . '-nav" href="#"  class="anony-nav-item nav-toggle" role="' . esc_attr( $nav ) . '">' . esc_html( $details['title'] ) . '<span class="icon" data-icon="y"></a></div>';
+							echo '<li><div><a id="' . esc_attr( $nav ) . '-nav" href="#"  class="anony-nav-item nav-toggle" role="' . esc_attr( $nav ) . '"><span class="icon" data-icon="y"></span>' . esc_html( $details['title'] ) . '</a></div>';
 							echo '<ul id="' . esc_attr( $nav ) . '-dropdown" class="anony-dropdown">';
 
 						foreach ( $details['sections'] as $sec ) {
-							echo '<li class="anony-nav-item"><a id="' . esc_attr( $sec ) . '" href="#anony-section/' . esc_attr( $sec ) . '" class="anony-nav-link">' . ( isset( $this->sections[ $sec ] ) ? esc_html( $this->sections[ $sec ]['title'] ) : esc_html( ucfirst( str_replace( '-', ' ', $sec ) ) ) ) . '<span class="icon" data-icon="' . esc_attr( $this->sections[ $sec ]['icon'] ) . '"></span></a></li>';
+							echo '<li class="anony-nav-item"><a id="' . esc_attr( $sec ) . '" href="#anony-section/' . esc_attr( $sec ) . '" class="anony-nav-link"><span class="icon" data-icon="' . esc_attr( $this->sections[ $sec ]['icon'] ) . '"></span>' . ( isset( $this->sections[ $sec ] ) ? esc_html( $this->sections[ $sec ]['title'] ) : esc_html( ucfirst( str_replace( '-', ' ', $sec ) ) ) ) . '</a></li>';
 						}
 
 							echo '</ul></li>';
 
 					} else {
-						echo '<li class="anony-nav-item"><a id="' . esc_attr( $nav ) . '" href="#anony-section/' . esc_attr( $nav ) . '" class="anony-nav-link">' . ( isset( $this->sections[ $nav ] ) ? esc_html( $this->sections[ $nav ]['title'] ) : esc_html( ucfirst( str_replace( '-', ' ', $nav ) ) ) ) . '<span class="icon" data-icon="' . esc_attr( $this->sections[ $nav ]['icon'] ) . '"></span></a></li>';
+						echo '<li class="anony-nav-item"><a id="' . esc_attr( $nav ) . '" href="#anony-section/' . esc_attr( $nav ) . '" class="anony-nav-link"><span class="icon" data-icon="' . esc_attr( $this->sections[ $nav ]['icon'] ) . '"></span>' . ( isset( $this->sections[ $nav ] ) ? esc_html( $this->sections[ $nav ]['title'] ) : esc_html( ucfirst( str_replace( '-', ' ', $nav ) ) ) ) . '</a></li>';
 
 					}
 				}

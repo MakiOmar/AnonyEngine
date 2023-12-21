@@ -235,6 +235,7 @@ if ( ! class_exists( 'ANONY_Meta_Box' ) ) {
 						'field'     => $field,
 						'form_id'   => $this->id,
 						'object_id' => $p_id,
+						'context'   => 'meta',
 					);
 
 					$render_field = new ANONY_Meta_Input_Field( $args );

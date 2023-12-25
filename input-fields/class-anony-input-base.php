@@ -241,7 +241,7 @@ if ( ! class_exists( 'ANONY_Input_Base' ) ) {
 				return $field->render();
 
 			} else {
-				return $this->field_class . esc_html__( ' class doesn\'t exist' );
+				return $this->field_class . esc_html__( ' class doesn\'t exist', 'anonyengine' );
 			}
 		}
 

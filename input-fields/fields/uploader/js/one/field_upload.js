@@ -1,14 +1,14 @@
 ;(function ($) {
 	"use strict";
-	$( "img[src='']" ).attr( "src", anony_upload.url );
-
-	$( ".anony-opts-upload" ).click(
+	var custom_file_frame = null;
+	var activeFileUploadContext, clicked;
+	$('body').on(
+		"click",
+		".anony-opts-upload.style-one",
 		function ( event ) {
 			event.preventDefault();
-
-			var activeFileUploadContext = $( this ).parent();
-			var custom_file_frame       = null;
-			var clicked                 = $( this ).data( 'id' );
+			activeFileUploadContext = $( this ).parent();
+			clicked                 = $( this ).data( 'id' );
 
 			if (custom_file_frame) {
 					custom_file_frame.open();
@@ -32,10 +32,9 @@
 				function () {
 					var attachment = custom_file_frame.state().get( "selection" ).first();
 
-					var imageExtensions = [ 'jpg', 'jpeg', 'jpe', 'gif', 'png', 'svg' ];
+					var imageExtensions = [ 'jpg', 'jpeg', 'jpe', 'gif', 'png', 'svg', 'svg+xml' ];
 
 					if (imageExtensions.includes( attachment.attributes.subtype )) {
-							// Update value of the targetfield input with the attachment url.
 							$( '.anony-opts-screenshot', activeFileUploadContext ).attr( 'src', attachment.attributes.url );
 					} else {
 						$( '.anony-opts-screenshot', activeFileUploadContext ).attr( 'src', anony_upload.url );
@@ -55,7 +54,8 @@
 		}
 	);
 
-	$( ".anony-opts-upload-remove" ).click(
+	$('body').on(
+		".anony-opts-upload-remove",
 		function ( event ) {
 			event.preventDefault();
 

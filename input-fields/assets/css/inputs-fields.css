@@ -71,7 +71,10 @@ select{
 	font-weight: bold;
 	border-radius: 10px;
 }
-
+.menu-item-settings fieldset.anony-row{
+	display: flex;
+    flex-direction: column;
+}
 fieldset{
 	border:none;
 	position:relative;

@@ -45,17 +45,21 @@ class ANONY_Uploader_Style_One {
 	public function uploads_preview_priv() {
 		$image_exts   = array( 'jpg', 'jpeg', 'jpe', 'gif', 'png', 'svg', 'webp' );
 		$img_ext_preg = '/\.(' . join( '|', $image_exts ) . ')$/i';
-		$src          = wp_get_attachment_url( $this->uploader->parent_obj->value );
-		$src_exists   = ! empty( $this->uploader->parent_obj->value ) && wp_http_validate_url( $src );
-		$is_image     = preg_match( $img_ext_preg, $src );
-		if ( $src_exists ) {
-			if ( $is_image ) {
-				$style = ' style="background-image:url(' . $src . ')"';
-			} else {
-				$style = ' style="background-image:url(' . ANOE_URI . 'assets/images/placeholders/file.png)"';
+		if ( is_numeric( $this->uploader->parent_obj->value ) ) {
+			$src = wp_get_attachment_url( $this->uploader->parent_obj->value );
+			if ( ! $src ) {
+				$src = '';
 			}
+		} elseif ( filter_var( $this->uploader->parent_obj->value, FILTER_VALIDATE_URL ) !== false ) {
+			$src = $this->uploader->parent_obj->value;
 		} else {
-			$style = ' style="background-image:url(' . ANOE_URI . 'assets/images/placeholders/browse.png)"';
+			return '';
+		}
+		$is_image = preg_match( $img_ext_preg, $src );
+		if ( $is_image ) {
+			$style = ' style="background-image:url(' . $src . ')"';
+		} else {
+			$style = ' style="background-image:url(' . ANOE_URI . 'assets/images/placeholders/file.png)"';
 		}
 		return '<div class="uploads-wrapper style-one"' . $style . '>';
 	}
@@ -66,21 +70,7 @@ class ANONY_Uploader_Style_One {
 	 * @return string Output input for nonprivate users.
 	 */
 	public function uploads_preview_nopriv() {
-		$image_exts   = array( 'jpg', 'jpeg', 'jpe', 'gif', 'png', 'svg', 'webp' );
-		$img_ext_preg = '/\.(' . join( '|', $image_exts ) . ')$/i';
-		$src          = wp_get_attachment_url( $this->uploader->parent_obj->value );
-		$src_exists   = ! empty( $this->uploader->parent_obj->value ) && wp_http_validate_url( $src );
-		$is_image     = preg_match( $img_ext_preg, $src );
-		if ( $src_exists ) {
-			if ( $is_image ) {
-				$style = ' style="background-image:url(' . $src . ')"';
-			} else {
-				$style = ' style="background-image:url(' . ANOE_URI . 'assets/images/placeholders/file.png)"';
-			}
-		} else {
-			$style = ' style="background-image:url(' . ANOE_URI . 'assets/images/placeholders/browse.png)"';
-		}
-		return '<div class="uploads-wrapper style-one"' . $style . '>';
+		return self::uploads_preview_priv();
 	}
 
 	/**

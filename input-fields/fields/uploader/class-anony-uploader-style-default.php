@@ -44,23 +44,34 @@ class ANONY_Uploader_Style_Default {
 	 * @return string Preview output.
 	 */
 	public function uploads_preview_priv() {
-		$html         = '<div class="uploads-wrapper">';
-		$image_exts   = array( 'jpg', 'jpeg', 'jpe', 'gif', 'png', 'svg', 'webp' );
-		$img_ext_preg = '/\.(' . join( '|', $image_exts ) . ')$/i';
-		$src          = wp_get_attachment_url( $this->uploader->parent_obj->value );
-		if ( ! empty( $this->uploader->parent_obj->value ) && wp_http_validate_url( $src ) ) {
-			if ( preg_match( $img_ext_preg, $this->uploader->parent_obj->value ) ) {
+		$image_exts       = array( 'jpg', 'jpeg', 'jpe', 'gif', 'png', 'svg', 'webp' );
+		$img_ext_preg     = '/\.(' . join( '|', $image_exts ) . ')$/i';
+		$default_preview  = '<img class="anony-opts-screenshot" style="max-width:80px;" src="' . ANOE_URI . 'assets/images/placeholders/browse.png"/>';
+		$default_preview .= '<span class="uploaded-file-name"></span>';
+
+		if ( ! empty( $this->uploader->parent_obj->value ) ) {
+			$html = '<div class="uploads-wrapper">';
+			if ( is_numeric( $this->uploader->parent_obj->value ) ) {
+				$src = wp_get_attachment_url( $this->uploader->parent_obj->value );
+				if ( ! $src ) {
+					$src = '';
+				}
+			} elseif ( filter_var( $this->uploader->parent_obj->value, FILTER_VALIDATE_URL ) !== false ) {
+				$src = $this->uploader->parent_obj->value;
+			} else {
+				$src = '';
+			}
+			if ( preg_match( $img_ext_preg, $src ) ) {
 				$html .= '<img class="anony-opts-screenshot" style="max-width:80px;" src="' . $src . '" />';
 			} else {
-				$file_basename = wp_basename( $src );
+				$file_basename = ! empty( $src ) ? wp_basename( $src ) : esc_html__( 'No files found.', 'smartpage' );
 				$html         .= '<a href="' . $src . '">';
 				$html         .= '<img class="anony-opts-screenshot" style="max-width:80px;" src="' . ANOE_URI . 'assets/images/placeholders/file.png"/><br>';
 				$html         .= '<span class="uploaded-file-name">' . $file_basename . '</span>';
 				$html         .= '</a>';
 			}
 		} else {
-			$html .= '<img class="anony-opts-screenshot" style="max-width:80px;" src="' . ANOE_URI . 'assets/images/placeholders/browse.png"/>';
-			$html .= '<span class="uploaded-file-name"></span>';
+			$html = $default_preview;
 		}
 		return $html;
 	}
@@ -71,28 +82,7 @@ class ANONY_Uploader_Style_Default {
 	 * @return string Output input for nonprivate users.
 	 */
 	public function uploads_preview_nopriv() {
-		$image_exts   = array( 'jpg', 'jpeg', 'jpe', 'gif', 'png', 'svg', 'webp' );
-		$img_ext_preg = '/\.(' . join( '|', $image_exts ) . ')$/i';
-		$src          = wp_get_attachment_url( $this->uploader->parent_obj->value );
-		$src_exists   = ! empty( $this->uploader->parent_obj->value ) && wp_http_validate_url( $src );
-		$is_image     = preg_match( $img_ext_preg, $src );
-		$html         = '<div class="uploads-wrapper">';
-		if ( $src_exists ) {
-			if ( $is_image ) {
-				$html .= '<img class="anony-opts-screenshot" style="max-width:80px;" src="' . $src . '" />';
-			} else {
-				$file_basename = wp_basename( $src );
-				$html         .= '<a href="' . $src . '">';
-				$html         .= '<img class="anony-opts-screenshot" style="max-width:80px;" src="' . ANOE_URI . 'assets/images/placeholders/file.png"/><br>';
-				$html         .= '<span class="uploaded-file-name">' . $file_basename . '</span>';
-				$html         .= '</a>';
-			}
-		} else {
-			$html .= '<img class="anony-opts-screenshot" style="max-width:80px;" src="' . ANOE_URI . 'assets/images/placeholders/browse.png"/>';
-			$html .= '<span class="uploaded-file-name"></span>';
-		}
-
-		return $html;
+		return self::uploads_preview_priv();
 	}
 
 	/**
@@ -101,7 +91,7 @@ class ANONY_Uploader_Style_Default {
 	 * @return string Output button.
 	 */
 	public function button() {
-		if ( '' === $this->uploader->parent_obj->value ) {
+		if ( ! $this->uploader->parent_obj->value || '' === $this->uploader->parent_obj->value ) {
 			$remove = ' style="display:none;"';
 			$upload = '';
 		} else {

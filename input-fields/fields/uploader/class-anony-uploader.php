@@ -57,7 +57,6 @@ class ANONY_Uploader {
 		} else {
 			$this->style = ! empty( $parent_obj->field['style'] ) ? $parent_obj->field['style'] : 'default';
 		}
-
 		if ( ! is_object( $parent_obj ) ) {
 			return;
 		}

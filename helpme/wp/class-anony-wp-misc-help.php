@@ -25,6 +25,19 @@ if ( ! class_exists( 'ANONY_Wp_Misc_Help' ) ) {
 	 * @link     https:// makiomar.com/anonyengine
 	 */
 	class ANONY_Wp_Misc_Help extends ANONY_HELP {
+
+		/**
+		 * Remove type attribute from styles/scripts.
+		 *
+		 * **Description: ** It is recommended to remove type attribute from styles/scripts that has a link|src attribute.
+		 *
+		 * @param  string $tag style|script tag.
+		 * @param  string $handle style|script handle defined with wp_register_style|wp_register_script.
+		 * @return string styles/scripts tags with no type attribute.
+		 */
+		public static function anony_remove_type_attr( $tag, $handle ) {
+			return preg_replace( "/type=['\"]text\/(javascript|css)['\"]/", '', $tag );
+		}
 		/**
 		 * Gets revolution slider list of silders.
 		 *

@@ -145,7 +145,13 @@ if ( ! class_exists( 'ANONY_DATE_HELP' ) ) {
 
 			return false;
 		}
-
+		/**
+		 * Get time elapsed
+		 *
+		 * @param string  $datetime Date/time.
+		 * @param boolean $full Weather to return the full text.
+		 * @return string
+		 */
 		public static function time_elapsed_string( $datetime, $full = false ) {
 			$now  = new \DateTime();
 			$ago  = new \DateTime( $datetime );

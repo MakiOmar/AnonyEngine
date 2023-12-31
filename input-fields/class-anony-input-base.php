@@ -200,7 +200,7 @@ if ( ! class_exists( 'ANONY_Input_Base' ) ) {
 				$this->input_name    = $this->form_id . '[' . $this->parent_field_id . '][' . $this->index . '][' . $this->field['id'] . ']';
 				$this->id_attr_value = $this->id_attr_value . '-' . $this->index;
 			} else {
-				$this->input_name = $this->field['id'];
+				$this->input_name = ! empty( $this->field['name'] ) ? $this->field['name'] : $this->field['id'];
 			}
 		}
 

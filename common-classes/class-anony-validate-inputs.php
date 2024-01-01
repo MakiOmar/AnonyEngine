@@ -211,7 +211,6 @@ if ( ! class_exists( 'ANONY_Validate_Inputs' ) ) {
 		public function single_validation( $validation = '' ) {
 
 			$method = $this->select_method( $validation );
-
 			// Apply validation method.
 			if ( method_exists( $this, $method ) ) {
 				$this->$method();
@@ -250,12 +249,12 @@ if ( ! class_exists( 'ANONY_Validate_Inputs' ) ) {
 
 				foreach ( $this->value as $key => $value ) {
 
-					$temp_value[ $key ] = $sanitization( $value );
+					$temp_value[ $key ] = $sanitization( urldecode( $this->value ) );
 				}
 				$this->value = $temp_value;
 
 			} else {
-				$this->value = $sanitization( $this->value );
+				$this->value = $sanitization( urldecode( $this->value ) );
 			}
 
 			return $this->value;
@@ -482,13 +481,8 @@ if ( ! class_exists( 'ANONY_Validate_Inputs' ) ) {
 					}// if level 2.
 				}// foreach.
 
-			} else {
-
-				if ( ! $this->is_hex_color( $this->value ) ) {
-
-					$this->valid = false;
-
-				}// if level 2.
+			} elseif ( ! $this->is_hex_color( $this->value ) ) {
+				$this->valid = false;
 			}
 
 			if ( ! $this->valid ) {
@@ -496,21 +490,21 @@ if ( ! class_exists( 'ANONY_Validate_Inputs' ) ) {
 			}
 
 			$this->sanitize();
-		}//end valid_hex_color()
+		}
 
 		/**
 		 * Check if a string is hex color.
 		 *
-		 * @param string $string String to be check.
+		 * @param string $_string String to be check.
 		 * @return bool  Returns true if is valid hex or false if not.
 		 */
-		public function is_hex_color( $string ) {
+		public function is_hex_color( $_string ) {
 
-			if ( empty( $string ) ) {
+			if ( empty( $_string ) ) {
 				return true;
 			}
 
-			$check_hex = preg_match( '/^#[a-f0-9]{3,6}$/i', $string );
+			$check_hex = preg_match( '/^#[a-f0-9]{3,6}$/i', $_string );
 
 			if ( ! $check_hex || 0 === $check_hex ) {
 				return false;

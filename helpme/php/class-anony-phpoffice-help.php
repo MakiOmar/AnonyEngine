@@ -32,6 +32,7 @@ if ( ! class_exists( 'ANONY_PHPOFFICE_HELP' ) ) {
 
 		/**
 		 * Writes array content into xlsx spread sheet.
+		 * Please note: If the spreadsheet will contain arabic user: $wpdb->set_charset($wpdb->dbh, 'utf8', 'utf8_general_ci') before you get the data from the database.
 		 *
 		 * @param  array $array Data array.
 		 * @return void

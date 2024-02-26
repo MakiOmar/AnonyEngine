@@ -1385,6 +1385,63 @@ if ( ! class_exists( 'ANONY_Woo_Help' ) ) {
 			}
 		}
 		/**
+		 * Process Order Refund through Code
+		 *
+		 * @param int    $order_id The ID of the order to refund.
+		 * @param string $refund_reason The reason for the refund (optional).
+		 *
+		 * @return WC_Order_Refund|WP_Error
+		 */
+		public static function refund_order( $order_id, $refund_reason = '' ) {
+			$order = wc_get_order( $order_id );
+
+			// Ensure the provided ID corresponds to a valid WC_Order.
+			if ( ! is_a( $order, 'WC_Order' ) ) {
+				return new WP_Error( 'wc-order', esc_html__( 'Provided ID is not a WC Order', 'anony-jet-appointments' ) );
+			}
+
+			// Check if the order has already been refunded.
+			if ( 'refunded' === $order->get_status() ) {
+				return new WP_Error( 'wc-order', esc_html__( 'Order has already been refunded', 'anony-jet-appointments' ) );
+			}
+
+			// Get the order items.
+			$order_items = $order->get_items();
+
+			// Initialize variables for refund amount and line items.
+			$refund_amount = 0;
+			$line_items    = array();
+
+			// Process each order item.
+			foreach ( $order_items as $item_id => $item ) {
+				$refund_tax = wc_get_order_item_meta( $item_id, '_line_tax' );
+				$line_total = wc_get_order_item_meta( $item_id, '_line_total' );
+
+				// Calculate the refund amount for each item.
+				$refund_amount += wc_format_decimal( $line_total );
+
+				// Prepare line items for refund.
+				$line_items[ $item_id ] = array(
+					'qty'          => 1, // You can adjust the quantity as needed.
+					'refund_total' => wc_format_decimal( $line_total ),
+					'refund_tax'   => $refund_tax,
+				);
+			}
+
+			// Create the refund.
+			$refund = wc_create_refund(
+				array(
+					'amount'         => $refund_amount,
+					'reason'         => $refund_reason,
+					'order_id'       => $order_id,
+					'line_items'     => $line_items,
+					'refund_payment' => false, // Set to true if you want to refund the payment as well.
+				)
+			);
+
+			return $refund;
+		}
+		/**
 		 * Eender products loop
 		 *
 		 * @param array $args Loop's arguments.
@@ -1446,6 +1503,7 @@ if ( ! class_exists( 'ANONY_Woo_Help' ) ) {
 				if ( $settings['is_shop'] ) {
 					do_action( 'woocommerce_before_shop_loop' );
 				}
+				do_action( 'anony_woocommerce_before_products_loop', $settings );
 				woocommerce_product_loop_start();
 				foreach ( $products_ids->products as $featured_product ) {
 					$post_object = get_post( $featured_product );
@@ -1454,6 +1512,7 @@ if ( ! class_exists( 'ANONY_Woo_Help' ) ) {
 				}
 				wp_reset_postdata();
 				woocommerce_product_loop_end();
+				do_action( 'anony_woocommerce_after_products_loop', $settings );
 				if ( $settings['is_shop'] ) {
 					do_action( 'woocommerce_after_shop_loop' );
 				}

@@ -115,8 +115,7 @@ if ( ! class_exists( 'ANONY_TERM_HELP' ) ) {
 						ON 
 							tax.term_id = t.term_id 
 						WHERE 
-							tax.taxonomy %s %s",
-						$operator,
+							tax.taxonomy {$operator} %s",
 						$taxonomy
 					)
 				);
@@ -128,6 +127,48 @@ if ( ! class_exists( 'ANONY_TERM_HELP' ) ) {
 
 			return $result;
 		}
+
+		/**
+		 * Query terms by taxonomy.
+		 *
+		 * @param  int    $parent_id Parent term id.
+		 * @param  string $taxonomy taxonomy to get terms from.
+		 * @return array            An array of terms objects.
+		 */
+		public static function anony_query_children_terms_by_taxonomy( $parent_id, $taxonomy ) {
+			global $wpdb;
+
+			$cache_key = 'anony_children_terms_by_taxonomy_' . $taxonomy;
+
+			$result = wp_cache_get( $cache_key );
+
+			if ( false === $result ) {
+				// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery
+				$result = $wpdb->get_results(
+					$wpdb->prepare(
+						"SELECT 
+							* 
+						FROM 
+							$wpdb->terms AS t 
+						INNER JOIN 
+							$wpdb->term_taxonomy AS tax 
+						ON 
+							tax.term_id = t.term_id 
+						WHERE 
+							tax.taxonomy = %s 
+						AND tax.parent = %d",
+						$taxonomy,
+						$parent_id
+					)
+				);
+
+				// phpcs:enable.
+				wp_cache_set( $cache_key, $result );
+			}
+
+			return $result;
+		}
+
 
 		/**
 		 * Get terms using WP_Term_Query class.
@@ -447,6 +488,28 @@ if ( ! class_exists( 'ANONY_TERM_HELP' ) ) {
 					}
 
 					$select .= '</optgroup>';
+				}
+			}
+		}
+		/**
+		 * Get term thumbnail
+		 *
+		 * @param int    $term_id Terms's ID.
+		 * @param string $meta_key Meta key that stores the thumbnail's ID.
+		 * @return string
+		 */
+		public static function get_term_thumbnail( $term_id, $meta_key ) {
+
+			$thumbnail_value = get_term_meta( $term_id, $meta_key, true );
+
+			// Check if the thumbnail value is numeric.
+			if ( is_numeric( $thumbnail_value ) ) {
+				// Get the attachment image URL using the attachment ID.
+				$image_url = wp_get_attachment_image_url( $thumbnail_value, 'full' );
+
+				// Display the image.
+				if ( $image_url ) {
+					return '<img src="' . esc_url( $image_url ) . '" alt="Thumbnail Image">';
 				}
 			}
 		}

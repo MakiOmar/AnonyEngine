@@ -43,10 +43,6 @@ input[type="search"], input[type="tel"], input[type="text"], input[type="email"]
 	border: 1px solid #d7d7d7;
 	width: calc(100% - 10px);
 }
-select{
-	background-color: #fff;
-	min-width: 250px
-}
 
 /* -------------- .multi-text -------------- */
 [id*='fieldset_anony']  input.multi-text-add { margin-right:10px;}
@@ -602,15 +598,16 @@ button{
 .anony-multi-value{
 	margin: 5px 0;
 }
-.anony-multi-value-flex fieldset{
+.anony-multi-value-flex fieldset, .anony-multi-value-flex fieldset > div{
 	border: none;
 	display: flex;
 	flex-direction: column;
 	align-items: start;
 	margin-bottom: 10px;
+	flex-grow: 1;
 }
-
 .anony-multi-value-flex{
+	position: relative;
 	display: flex;
 	flex-wrap: wrap;
 	align-items: baseline;
@@ -620,11 +617,17 @@ button{
 	border-radius: 10px;
 	padding: 20px;
 }
-
-.anony-multi-value-wrapper{
-	display: block;
+.anony-multi-values-wrapper{
+	flex-direction:column;
 }
 
+.anony-multi-value-wrapper{
+	display: flex;
+}
+.anony-remove-multi-value-item{
+	position: absolute;
+	top: 5px;
+}
 .anony-flex-column{
 	display: flex;
 	flex-direction: column;

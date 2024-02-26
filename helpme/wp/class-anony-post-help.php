@@ -606,5 +606,27 @@ if ( ! class_exists( 'ANONY_Post_Help' ) ) {
 				register_post_type( lcfirst( $custom_post ), apply_filters( "anony_{$custom_post}_args", $args ) );
 			}
 		}
+
+		/**
+		 * Get term thumbnail for a post
+		 *
+		 * @param int    $post_id Post's ID.
+		 * @param string $taxonomy Taxonomy.
+		 * @param string $meta_key Meta key that stores the thumbnail's ID.
+		 * @return string
+		 */
+		public static function get_post_term_thumbnail( $post_id, $taxonomy, $meta_key ) {
+
+			// Get the terms in the "advertisement_categories" taxonomy for the current post.
+			$terms = wp_get_post_terms( $post_id, $taxonomy );
+
+			// Check if there are any terms.
+			if ( ! empty( $terms ) ) {
+				// Get the first term from the array.
+				$first_term = reset( $terms );
+
+				return ANONY_TERM_HELP::get_term_thumbnail( $first_term->term_id, $meta_key );
+			}
+		}
 	}
 }

@@ -83,7 +83,7 @@ if ( ! class_exists( 'ANONY_IMAGES_HELP' ) ) {
 
 				if ( false !== $img_size ) {
 					$replaced_img = $imgs[0][ $i ];
-					if ( $lazyload ) {
+					if ( $lazyload && false === strpos( $replaced_img, 'no-lazyload' ) ) {
 						// Use Defer.js to lazyload.
 						// https://github.com/shinsenter/defer.js/#Defer.lazy.
 						if ( false === strpos( $imgs[0][ $i ], 'data-src' ) ) {

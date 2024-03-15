@@ -249,7 +249,7 @@ if ( ! class_exists( 'ANONY_Validate_Inputs' ) ) {
 
 				foreach ( $this->value as $key => $value ) {
 
-					$temp_value[ $key ] = $sanitization( urldecode( $this->value ) );
+					$temp_value[ $key ] = $sanitization( urldecode( $value ) );
 				}
 				$this->value = $temp_value;
 

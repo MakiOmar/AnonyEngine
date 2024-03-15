@@ -42,12 +42,7 @@ define( 'ANOE_LIBS_URI', ANOE_DIR . 'libs/' );
  */
 define( 'ANOE_FUNC_DIR', ANOE_DIR . 'functions/' );
 
-add_action(
-	'wp_loaded',
-	function () {
-		require ANOE_DIR . 'vendor/autoload.php';
-	}
-);
+require ANOE_DIR . 'vendor/autoload.php';
 
 require ANOE_DIR . 'plugin-update-checker/plugin-update-checker.php';
 

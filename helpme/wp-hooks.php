@@ -40,7 +40,7 @@ function anony_remove_thumb_style_dimensions( $html, $post_id, $post_image_id ) 
 
 	return preg_replace( '/(width|height)="\d+"\s/', '', $html );
 }
-add_filter( 'post_thumbnail_html', 'anony_remove_thumb_style_dimensions', 10, 3 );
+
 
 
 /**
@@ -161,4 +161,4 @@ function anony_loop_proper_thumb_size( $html, $post_id, $post_thumbnail_id, $siz
 	return $html;
 }
 
-add_filter( 'post_thumbnail_html', 'anony_loop_proper_thumb_size', 10, 5 );
+//add_filter( 'post_thumbnail_html', 'anony_loop_proper_thumb_size', 10, 5 );

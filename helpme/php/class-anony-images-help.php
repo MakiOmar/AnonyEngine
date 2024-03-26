@@ -50,6 +50,26 @@ if ( ! class_exists( 'ANONY_IMAGES_HELP' ) ) {
 			return false;
 		}
 		/**
+		 * Generate svg placeholder
+		 *
+		 * @param string $image_url Thumbnail URL.
+		 * @param string $type Placeholder type.
+		 * @return string
+		 */
+		public static function create_base64_string( $image_url, $type = 'svg' ) {
+			list( $width, $height ) = self::thumb_get_dimensions( $image_url );
+
+			$svg  = '<svg';
+			$svg .= ' viewBox="0 0 ' . $width . ' ' . $height . '"';
+			$svg .= ' xmlns="http://www.w3.org/2000/svg"';
+			$svg .= '></svg>';
+			if ( 'base64' === $type ) {
+				//phpcs:disable WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode
+				return 'data:image/svg+xml;base64,' . base64_encode( $svg );
+			}
+			return 'data:image/svg+xml,' . rawurlencode( $svg );
+		}
+		/**
 		 * Add images missing dimensions.
 		 *
 		 * @param string $content HTML content that contains images.
@@ -68,6 +88,7 @@ if ( ! class_exists( 'ANONY_IMAGES_HELP' ) ) {
 				if ( ! $dimensions && function_exists( 'getimagesize' ) ) {
 					$no_dimensions[] = $img;
 					if ( false === strpos( $img, ' width' ) && false === strpos( $img, ' height' ) ) {
+						//phpcs:disable WordPress.PHP.NoSilencedErrors.Discouraged
 						$img_size = @getimagesize( $img_url );
 					} else {
 						$img_size = false;
@@ -83,6 +104,7 @@ if ( ! class_exists( 'ANONY_IMAGES_HELP' ) ) {
 
 				if ( false !== $img_size ) {
 					$replaced_img = $imgs[0][ $i ];
+
 					if ( $lazyload && false === strpos( $replaced_img, 'no-lazyload' ) ) {
 						// Use Defer.js to lazyload.
 						// https://github.com/shinsenter/defer.js/#Defer.lazy.
@@ -95,6 +117,12 @@ if ( ! class_exists( 'ANONY_IMAGES_HELP' ) ) {
 						}
 
 						$replaced_img = str_replace( '<img ', '<img loading="lazy" ', $replaced_img );
+
+					}
+
+					if ( $lazyload && false !== strpos( $replaced_img, 'no-lazyload' ) ) {
+						// Disable wp lazyload.
+						$replaced_img = str_replace( ' loading="lazy"', '', $replaced_img );
 
 					}
 
@@ -125,6 +153,9 @@ if ( ! class_exists( 'ANONY_IMAGES_HELP' ) ) {
 						$replaced_img = str_replace( $matches[1], $style_attribute, $replaced_img );
 					} else {
 						$replaced_img = str_replace( '<img ', '<img style="width:' . $img_size[0] . 'px;max-height:' . $img_size[1] . 'px" ', $replaced_img );
+					}
+					if ( false !== strpos( $replaced_img, 'no-lazyload' ) ) {
+						$replaced_img = str_replace( ' decoding="async"', '', $replaced_img );
 					}
 					$content = str_replace( $img, $replaced_img, $content );
 				}

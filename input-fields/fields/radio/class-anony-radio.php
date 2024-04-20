@@ -142,7 +142,7 @@ class ANONY_Radio {
 		}
 		$html .= '</div>';
 
-		$html .= ( isset( $this->parent_obj->field['desc'] ) && ! empty( $this->parent_obj->field['desc'] ) ) ? '<br style="clear:both;"/><div class="description">' . $this->parent_obj->field['desc'] . '</div>' : '';
+		$html .= ( isset( $this->parent_obj->field['desc'] ) && ! empty( $this->parent_obj->field['desc'] ) ) ? '<br style="clear:both;"/><div class="input-field-description">' . $this->parent_obj->field['desc'] . '</div>' : '';
 
 		$html .= '</fieldset>';
 

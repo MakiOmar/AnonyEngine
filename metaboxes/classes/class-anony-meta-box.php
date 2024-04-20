@@ -146,8 +146,10 @@ if ( ! class_exists( 'ANONY_Meta_Box' ) ) {
 			new ANONY_Mb_Admin( $this, $this->metabox );
 
 			new ANONY_Mb_Shortcode( $this, $this->metabox );
-
-			new ANONY_Mb_Single( $this, $this->metabox );
+			$show_on_front = false;
+			if ( $show_on_front ) {
+				new ANONY_Mb_Single( $this, $this->metabox );
+			}
 		}
 
 		/**

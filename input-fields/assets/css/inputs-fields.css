@@ -601,6 +601,7 @@ button{
 .anony-multi-value-flex fieldset, .anony-multi-value-flex fieldset > div{
 	border: none;
 	display: flex;
+	width:100%;
 	flex-direction: column;
 	align-items: start;
 	margin-bottom: 10px;
@@ -610,6 +611,7 @@ button{
 	position: relative;
 	display: flex;
 	flex-wrap: wrap;
+	flex-direction: column;
 	align-items: baseline;
 	justify-content: space-between!important;
 	margin-bottom:10px;
@@ -622,7 +624,7 @@ button{
 }
 
 .anony-multi-value-wrapper{
-	display: flex;
+	display: block;
 }
 .anony-remove-multi-value-item{
 	position: absolute;

@@ -84,14 +84,14 @@ class ANONY_Textarea {
 		$html .= '<div>';
 		if ( in_array( $this->parent_obj->context, array( 'meta', 'form' ), true ) && isset( $this->parent_obj->field['title'] ) ) {
 			$html .= sprintf(
-				'<label class="anony-label" for="anony_%1$s">%2$s</label>',
+				'<label class="anony-label" for="anony_%1$s">%2$s',
 				$this->parent_obj->id_attr_value,
 				$this->parent_obj->field['title']
 			);
 		}
 
 		if ( isset( $this->parent_obj->field['note'] ) ) {
-			$html .= '<p class=anony-warning>' . esc_html( $this->parent_obj->field['note'] ) . '<p>';
+			$html .= '<p class=anony-warning>' . esc_html( $this->parent_obj->field['note'] ) . '</p></label>';
 		}
 
 		$html .= sprintf(

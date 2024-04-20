@@ -87,7 +87,7 @@ if ( ! class_exists( 'ANONY_IMAGES_HELP' ) ) {
 
 				if ( ! $dimensions && function_exists( 'getimagesize' ) ) {
 					$no_dimensions[] = $img;
-					if ( false === strpos( $img, ' width' ) && false === strpos( $img, ' height' ) ) {
+					if ( false === strpos( $img, 'width' ) && false === strpos( $img, 'height' ) ) {
 						//phpcs:disable WordPress.PHP.NoSilencedErrors.Discouraged
 						$img_size = @getimagesize( $img_url );
 					} else {
@@ -126,13 +126,13 @@ if ( ! class_exists( 'ANONY_IMAGES_HELP' ) ) {
 
 					}
 
-					$dimension_attributes = 'width="' . $img_size[0] . '" height="' . $img_size[1] . '"';
+					$dimension_attributes = 'width="' . $img_size[0] . 'px" height="' . $img_size[1] . 'px"';
 					if ( empty( $img_size[3] ) ) {
 						$img_size[3] = $dimension_attributes;
 					}
 
-					if ( false === strpos( $img, ' width' ) && false === strpos( $img, ' height' ) ) {
-						$replaced_img = str_replace( '<img ', '<img style="width:' . $img_size[0] . ';max-height:' . $img_size[1] . '"' . $img_size[3] . ' ', $replaced_img );
+					if ( false === strpos( $replaced_img, 'width' ) && false === strpos( $replaced_img, 'height' ) ) {
+						$replaced_img = str_replace( '<img ', '<img style="width:' . $img_size[0] . 'px;max-height:' . $img_size[1] . 'px"' . $img_size[3] . ' ', $replaced_img );
 
 					} elseif ( preg_match( '/<img[^>]+style=["\']([^"\']+)["\']/', $replaced_img, $matches ) ) {
 

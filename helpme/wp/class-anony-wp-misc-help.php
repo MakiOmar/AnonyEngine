@@ -185,7 +185,12 @@ if ( ! class_exists( 'ANONY_Wp_Misc_Help' ) ) {
 			</script>
 			<?php
 		}
-
+		/**
+		 * Google map address
+		 *
+		 * @param array $args Arguments.
+		 * @return void
+		 */
 		public static function anony_google_map_address_init( array $args ) {
 
 			if ( empty( $args['target_id'] ) || empty( $args['address'] ) ) {
@@ -314,10 +319,10 @@ if ( ! class_exists( 'ANONY_Wp_Misc_Help' ) ) {
 		 */
 		public static function get_post_scripts( $post_id ) {
 
-			// Let's get the content of post number 123
+			// Let's get the content of post number.
 			$response = wp_remote_get( get_the_permalink( $post_id ) . '?list_scripts=1' );
 
-			// An empty array to store all the 'srcs'
+			// An empty array to store all the 'srcs'.
 			$scripts_array = array();
 
 			if ( is_array( $response ) ) {
@@ -336,14 +341,59 @@ if ( ! class_exists( 'ANONY_Wp_Misc_Help' ) ) {
 				foreach ( $document->getElementsByTagName( 'script' ) as $script ) {
 
 					if ( $script->hasAttribute( 'src' ) ) {
-
-						$scripts_array[ $script->getAttribute( 'src' ) ] = $script->getAttribute( 'src' );
+						$_link     = explode( '?', $script->getAttribute( 'src' ) );
+						$the_link  = $_link[0];
+						$scripts_array[ $the_link ] = $the_link;
 
 					}
 				}
 			}
 
 			return $scripts_array;
+		}
+
+		/**
+		 * Get list of CSS files loaded with a post/page.
+		 *
+		 * @param int $post_id Post's ID.
+		 *
+		 * @return array An array of CSS file URLs.
+		 */
+		public static function get_post_stylesheets( $post_id ) {
+
+			// Let's get the content of the post.
+			$response = wp_remote_get( get_the_permalink( $post_id ) . '?list_stylesheets=1' );
+
+			// An empty array to store all the 'hrefs'.
+			$stylesheets_array = array();
+
+			if ( is_array( $response ) ) {
+
+				$content = $response['body'];
+
+				if ( ! $content || empty( $content ) ) {
+					return $stylesheets_array;
+				}
+
+				$document = new DOMDocument();
+
+				@$document->loadHTML( $content );
+
+				// Store every stylesheet's href inside the array.
+				foreach ( $document->getElementsByTagName( 'link' ) as $link ) {
+
+					if ( $link->hasAttribute( 'rel' ) && $link->getAttribute( 'rel' ) === 'stylesheet' &&
+						$link->hasAttribute( 'href' ) ) {
+						$_link    = explode( '?', $link->getAttribute( 'href' ) );
+						$the_link = $_link[0];
+
+						$stylesheets_array[ $the_link ] = $the_link;
+
+					}
+				}
+			}
+
+			return $stylesheets_array;
 		}
 
 		public static function list_post_scripts() {
@@ -357,6 +407,22 @@ if ( ! class_exists( 'ANONY_Wp_Misc_Help' ) ) {
 
 				if ( ! empty( $scripts ) ) {
 					return $scripts;
+				}
+			}
+
+			return array();
+		}
+		public static function list_post_stylesheets() {
+			if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
+				return;
+			}
+
+			if ( ! empty( $_GET['post'] ) ) {
+
+				$styles = self::get_post_stylesheets( $_GET['post'] );
+
+				if ( ! empty( $styles ) ) {
+					return $styles;
 				}
 			}
 

@@ -114,12 +114,16 @@ if ( ! class_exists( 'ANONY_IMAGES_HELP' ) ) {
 					}
 
 					$replaced_img = str_replace( '<img ', '<img loading="lazy" ', $replaced_img );
+					$replaced_img = str_replace( 'decoding="async"', '', $replaced_img );
 				}
 
 				if ( $lazyload && false !== strpos( $replaced_img, 'no-lazyload' ) && false === strpos( $replaced_img, 'loading="lazy"' ) ) {
 					// Disable wp lazyload.
 					$replaced_img = str_replace( ' loading="lazy"', '', $replaced_img );
 
+				}
+				if ( $lazyload ) {
+					$content = str_replace( $img, $replaced_img, $content );
 				}
 				if ( false !== $img_size ) {
 					$dimension_attributes = 'width="' . $img_size[0] . 'px" height="' . $img_size[1] . 'px"';

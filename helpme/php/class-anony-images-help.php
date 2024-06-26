@@ -110,7 +110,7 @@ if ( ! class_exists( 'ANONY_IMAGES_HELP' ) ) {
 						//phpcs:disable WordPress.PHP.NoSilencedErrors.Discouraged
 						$img_size = @getimagesize( $img_url );
 					} else {
-						$img_size = array_values( self::extract_img_dimentions( $imgs[0][ $i ] ) );
+						$img_size = is_array( self::extract_img_dimentions( $imgs[0][ $i ] ) ) ? array_values( self::extract_img_dimentions( $imgs[0][ $i ] ) ) : false;
 					}
 				} elseif ( is_array( $dimensions ) ) {
 
@@ -141,7 +141,7 @@ if ( ! class_exists( 'ANONY_IMAGES_HELP' ) ) {
 
 						if ( ! preg_match( '/\bmax-height\s*:\s*[^;]+/', $style_attribute ) ) {
 							// Height is not set in style attribute, add it.
-							$style_attribute .= ' max-height: ' . $img_size[1] . 'px;';
+							$style_attribute .= ';max-height: ' . $img_size[1] . 'px;';
 						}
 						// Replace the updated style attribute in the HTML.
 						$replaced_img = str_replace( $matches[1], $style_attribute, $replaced_img );

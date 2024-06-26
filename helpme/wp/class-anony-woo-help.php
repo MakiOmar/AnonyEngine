@@ -24,7 +24,55 @@ if ( ! class_exists( 'ANONY_Woo_Help' ) ) {
 	 * @link     https:// makiomar.com/anonyengine.
 	 */
 	class ANONY_Woo_Help extends ANONY_HELP {
+		/**
+		 * Recursive function to get category breadcrumbs
+		 *
+		 * @param int    $term_id Term ID.
+		 * @param string $taxonomy Taxonomy slug.
+		 * @return string
+		 */
+		public static function get_category_breadcrumbs( $term_id, $taxonomy ) {
+			$term        = get_term( $term_id, $taxonomy );
+			$breadcrumbs = '';
 
+			if ( $term && ! is_wp_error( $term ) ) {
+				// Check if the term has a parent.
+				if ( $term->parent > 0 ) {
+					$parent_breadcrumbs = self::get_category_breadcrumbs( $term->parent, $taxonomy );
+					$breadcrumbs       .= $parent_breadcrumbs . ' / ';
+				}
+
+				$breadcrumbs .= '<a href="' . esc_url( get_term_link( $term->term_id ) ) . '" title="' . esc_attr( $term->name ) . '">' . esc_html( $term->name ) . '</a>';
+			}
+
+			return $breadcrumbs;
+		}
+		/**
+		 * Render category breadcrumps
+		 *
+		 * @return void
+		 */
+		public static function render_category_breadcrumps() {
+			global $post;
+			// Get the product categories.
+			$categories = get_the_terms( $post->ID, 'product_cat' );
+
+			// Check if categories exist.
+			if ( $categories && ! is_wp_error( $categories ) ) {
+				$category_breadcrumbs = array();
+
+				// Loop through each category.
+				foreach ( $categories as $category ) {
+					$category_breadcrumbs[] = self::get_category_breadcrumbs( $category->term_id, 'product_cat' );
+				}
+				echo '<nav class="woocommerce-breadcrumb anony-woocommerce-breadcrumb" aria-label="Breadcrumb">';
+				// Output the breadcrumbs.
+				//phpcs:disable
+				echo implode( ' / ', $category_breadcrumbs );
+				//phpcs:enable
+				echo '</nav>';
+			}
+		}
 		/**
 		 * Search products by meta key OR title.
 		 *

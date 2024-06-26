@@ -70,6 +70,26 @@ if ( ! class_exists( 'ANONY_IMAGES_HELP' ) ) {
 			return 'data:image/svg+xml,' . rawurlencode( $svg );
 		}
 		/**
+		 * Extract image dimentions
+		 *
+		 * @param string $html Image html.
+		 * @return mixed
+		 */
+		public static function extract_img_dimentions( $html ) {
+			$pattern = '/<img[^>]+width=["\']([^"\']+)["\'][^>]+height=["\']([^"\']+)["\']/i';
+			preg_match( $pattern, $html, $matches );
+
+			if ( count( $matches ) === 3 ) {
+				$width  = $matches[1];
+				$height = $matches[2];
+				return array(
+					'width'  => $width,
+					'height' => $height,
+				);
+			}
+			return false;
+		}
+		/**
 		 * Add images missing dimensions.
 		 *
 		 * @param string $content HTML content that contains images.
@@ -84,14 +104,13 @@ if ( ! class_exists( 'ANONY_IMAGES_HELP' ) ) {
 
 				$img_url    = $imgs[1][ $i ];
 				$dimensions = self::thumb_get_dimensions( $img_url );
-
 				if ( ! $dimensions && function_exists( 'getimagesize' ) ) {
 					$no_dimensions[] = $img;
-					if ( false === strpos( $img, 'width' ) && false === strpos( $img, 'height' ) ) {
+					if ( false === strpos( $imgs[0][ $i ], 'width' ) && false === strpos( $imgs[0][ $i ], 'height' ) ) {
 						//phpcs:disable WordPress.PHP.NoSilencedErrors.Discouraged
 						$img_size = @getimagesize( $img_url );
 					} else {
-						$img_size = false;
+						$img_size = array_values( self::extract_img_dimentions( $imgs[0][ $i ] ) );
 					}
 				} elseif ( is_array( $dimensions ) ) {
 
@@ -102,29 +121,6 @@ if ( ! class_exists( 'ANONY_IMAGES_HELP' ) ) {
 					$img_size = false;
 				}
 				$replaced_img = $imgs[0][ $i ];
-				if ( $lazyload && false === strpos( $replaced_img, 'no-lazyload' ) ) {
-					// Use Defer.js to lazyload.
-					// https://github.com/shinsenter/defer.js/#Defer.lazy.
-					if ( false === strpos( $imgs[0][ $i ], 'data-src' ) ) {
-						$replaced_img = preg_replace( '/<img([^>]*)src=("|\')([^"\']*)(\2)([^>]*)>/', '<img$1data-src=$2$3$4$5 src="data:image/svg+xml,%3Csvg%20xmlns=\'http://www.w3.org/2000/svg\'%20viewBox=\'0%200%20225%20225\'%3E%3C/svg%3E">', $imgs[0][ $i ] );
-					}
-
-					if ( false === strpos( $replaced_img, 'data-srcset' ) ) {
-						$replaced_img = preg_replace( '/<img([^>]*)srcset=("|\')([^"\']*)(\2)([^>]*)>/', '<img$1data-srcset=$2$3$4$5>', $replaced_img );
-					}
-
-					$replaced_img = str_replace( '<img ', '<img loading="lazy" ', $replaced_img );
-					$replaced_img = str_replace( 'decoding="async"', '', $replaced_img );
-				}
-
-				if ( $lazyload && false !== strpos( $replaced_img, 'no-lazyload' ) && false === strpos( $replaced_img, 'loading="lazy"' ) ) {
-					// Disable wp lazyload.
-					$replaced_img = str_replace( ' loading="lazy"', '', $replaced_img );
-
-				}
-				if ( $lazyload ) {
-					$content = str_replace( $img, $replaced_img, $content );
-				}
 				if ( false !== $img_size ) {
 					$dimension_attributes = 'width="' . $img_size[0] . 'px" height="' . $img_size[1] . 'px"';
 					if ( empty( $img_size[3] ) ) {
@@ -138,7 +134,6 @@ if ( ! class_exists( 'ANONY_IMAGES_HELP' ) ) {
 
 						// The img element has a style attribute.
 						$style_attribute = $matches[1];
-
 						if ( ! preg_match( '/\bwidth\s*:\s*[^;]+/', $style_attribute ) ) {
 							// Width is not set in style attribute, add it.
 							$style_attribute .= ' width: ' . $img_size[0] . 'px;';
@@ -148,17 +143,31 @@ if ( ! class_exists( 'ANONY_IMAGES_HELP' ) ) {
 							// Height is not set in style attribute, add it.
 							$style_attribute .= ' max-height: ' . $img_size[1] . 'px;';
 						}
-
 						// Replace the updated style attribute in the HTML.
 						$replaced_img = str_replace( $matches[1], $style_attribute, $replaced_img );
 					} else {
 						$replaced_img = str_replace( '<img ', '<img style="width:' . $img_size[0] . 'px;max-height:' . $img_size[1] . 'px" ', $replaced_img );
 					}
-					if ( false !== strpos( $replaced_img, 'no-lazyload' ) ) {
-						$replaced_img = str_replace( ' decoding="async"', '', $replaced_img );
-					}
+					if ( $lazyload ) {
+						if ( false === strpos( $replaced_img, 'no-lazyload' ) ) {
+							// Use Defer.js to lazyload.
+							// https://github.com/shinsenter/defer.js/#Defer.lazy.
+							if ( false === strpos( $imgs[0][ $i ], 'data-src' ) ) {
+								$replaced_img = preg_replace( '/<img([^>]*)src=("|\')([^"\']*)(\2)([^>]*)>/', '<img$1data-src=$2$3$4$5 src="data:image/svg+xml,%3Csvg%20xmlns=\'http://www.w3.org/2000/svg\'%20viewBox=\'0%200%20225%20225\'%3E%3C/svg%3E">', $replaced_img );
+							}
 
-					$content = str_replace( $img, $replaced_img, $content );
+							if ( false === strpos( $replaced_img, 'data-srcset' ) ) {
+								$replaced_img = preg_replace( '/<img([^>]*)srcset=("|\')([^"\']*)(\2)([^>]*)>/', '<img$1data-srcset=$2$3$4$5>', $replaced_img );
+							}
+
+							$replaced_img = str_replace( '<img ', '<img loading="lazy" ', $replaced_img );
+							$replaced_img = str_replace( 'decoding="async"', '', $replaced_img );
+						} elseif ( false !== strpos( $replaced_img, 'no-lazyload' ) ) {
+							// Disable wp lazyload.
+							$replaced_img = str_replace( ' loading="lazy"', '', $replaced_img );
+						}
+					}
+					$content = str_replace( $imgs[0][ $i ], $replaced_img, $content );
 				}
 			}
 			return $content;

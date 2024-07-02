@@ -26,26 +26,26 @@ if ( ! class_exists( 'ANONY_ARRAY_HELP' ) ) {
 		/**
 		 * Checks if an array is sequentially indexed
 		 *
-		 * @param  array $array To be checked array.
+		 * @param  array $_arr To be checked array.
 		 * @return bool
 		 */
-		public static function is_sequentially_indexed( array $array ) {
+		public static function is_sequentially_indexed( array $_arr ) {
 
-			if ( array() === $array ) {
+			if ( array() === $_arr ) {
 				return false;
 			}
 
-			return array_keys( $array ) === range( 0, count( $array ) - 1 );
+			return array_keys( $_arr ) === range( 0, count( $_arr ) - 1 );
 		}
 
 		/**
 		 * Checks if an array is indexed
 		 *
-		 * @param  array $array To be checked array.
+		 * @param  array $_arr To be checked array.
 		 * @return bool
 		 */
-		public static function is_indexed( $array ) {
-			if ( empty( array_filter( array_keys( $array ), 'is_string' ) ) ) {
+		public static function is_indexed( $_arr ) {
+			if ( empty( array_filter( array_keys( $_arr ), 'is_string' ) ) ) {
 				return true;
 			}
 			return false;
@@ -54,14 +54,14 @@ if ( ! class_exists( 'ANONY_ARRAY_HELP' ) ) {
 		/**
 		 * Checks if an array is associative
 		 *
-		 * @param  array $array To be checked array.
+		 * @param  array $_arr To be checked array.
 		 * @return bool
 		 */
-		public static function is_assoc( $array ) {
-			if ( ! self::is_indexed( $array ) ) {
+		public static function is_assoc( $_arr ) {
+			if ( ! self::is_indexed( $_arr ) ) {
 				return true;
 			}
-			if ( ! self::is_sequentially_indexed( $array ) ) {
+			if ( ! self::is_sequentially_indexed( $_arr ) ) {
 				return true;
 			}
 			return false;
@@ -72,21 +72,21 @@ if ( ! class_exists( 'ANONY_ARRAY_HELP' ) ) {
 		 *
 		 * Useful where a select input field has dynamic options.
 		 *
-		 * @param object $objects_array The array of objects to loop through.
+		 * @param object $_objs_array The array of objects to loop through.
 		 * @param string $key           The property that should be used as a key.
 		 * @param string $value         The property that should be used as a value.
 		 * @param bool   $is_associative  Weather the to convert to associative array or indexed one. Default 'yes'.
 		 * @return array                An array of properties as key/value pairs.
 		 */
-		public static function object_to_associative_array( $objects_array, $key, $value, $is_associative = 'yes' ) {
+		public static function object_to_associative_array( $_objs_array, $key, $value, $is_associative = 'yes' ) {
 
 			$arr = array();
 
-			foreach ( $objects_array as $object ) {
+			foreach ( $_objs_array as $_obj ) {
 				if ( 'yes' === $is_associative && ! empty( $key ) ) {
-					$arr[ $object->$key ] = $object->$value;
+					$arr[ $_obj->$key ] = $_obj->$value;
 				} else {
-					$arr[] = $object->$value;
+					$arr[] = $_obj->$value;
 				}
 			}
 
@@ -124,11 +124,11 @@ if ( ! class_exists( 'ANONY_ARRAY_HELP' ) ) {
 		/**
 		 *  Check if an array is a multidimensional array.
 		 *
-		 *  @param   array $array  The array to check.
+		 *  @param   array $_arr  The array to check.
 		 *  @return  boolean     Whether the the array is a multidimensional array or not.
 		 */
-		public static function is_multi_dimensional( $array ) {
-			if ( count( array_filter( $array, 'is_array' ) ) > 0 ) {
+		public static function is_multi_dimensional( $_arr ) {
+			if ( count( array_filter( $_arr, 'is_array' ) ) > 0 ) {
 				return true;
 			}
 			return false;
@@ -137,16 +137,21 @@ if ( ! class_exists( 'ANONY_ARRAY_HELP' ) ) {
 		/**
 		 *  Convert an object to an array.
 		 *
-		 *  @param   array $object  The object to convert.
+		 *  @param   array $_obj  The object to convert.
 		 *  @return  array          The converted array.
 		 */
-		public static function to_array( $object ) {
-			if ( ! is_object( $object ) || ! is_array( $object ) ) {
-				return $object;
+		public static function to_array( $_obj ) {
+			if ( ! is_object( $_obj ) || ! is_array( $_obj ) ) {
+				return $_obj;
 			}
-			return array_map( array( self, 'convert_object_to_array' ), (array) $object );
+			return array_map( array( 'ANONY_ARRAY_HELP', 'convert_object_to_array' ), (array) $_obj );
 		}
-
+		/**
+		 * Convert object to array
+		 *
+		 * @param object $data Object.
+		 * @return array
+		 */
 		public static function convert_object_to_array( $data ) {
 
 			if ( is_object( $data ) ) {
@@ -188,15 +193,10 @@ if ( ! class_exists( 'ANONY_ARRAY_HELP' ) ) {
 					}
 
 					return false;
-				} else {
-					// Normal array.
-					if ( ! $strict ) {
-						return $needle === $haystack;
-					} else {
-
-						return $needle === $haystack;
-					}
+				} elseif ( ! $strict ) {
+					return $needle === $haystack;
 				}
+				return $needle === $haystack;
 			}
 
 			return false;
@@ -205,22 +205,23 @@ if ( ! class_exists( 'ANONY_ARRAY_HELP' ) ) {
 		/**
 		 * Insertes new key/value pairs after a specific key.
 		 *
+		 * @param  array  $_arr The array.
 		 * @param  string $key Insert after this key.
-		 * @param  array  $insert_array To be inserted array.
-		 * @param  array  $original_array Original array.
+		 * @param  array  $new_key The new key.
+		 * @param  array  $new_value The new value.
 		 * @return array  Array after insertion.
 		 */
-		public static function insert_after_assoc_key( $array, $key, $new_key, $new_value ) {
+		public static function insert_after_assoc_key( $_arr, $key, $new_key, $new_value ) {
 
-			$keys  = array_keys( $array );
-			$index = array_search( $key, $keys );
-			if ( $index !== false ) {
-				$result = array_slice( $array, 0, $index + 1, true ) +
+			$keys  = array_keys( $_arr );
+			$index = array_search( $key, $keys, true );
+			if ( false !== $index ) {
+				$result = array_slice( $_arr, 0, $index + 1, true ) +
 							array( $new_key => $new_value ) +
-							array_slice( $array, $index + 1, count( $array ) - 1, true );
+							array_slice( $_arr, $index + 1, count( $_arr ) - 1, true );
 				return $result;
 			}
-			return $array;
+			return $_arr;
 		}
 
 		/**
@@ -247,17 +248,17 @@ if ( ! class_exists( 'ANONY_ARRAY_HELP' ) ) {
 		 * Sorts multi-dimensional array by a given key value.
 		 *
 		 * @param  string $key Sorting key.
-		 * @param  array  $array Array to be sorted.
+		 * @param  array  $_arr Array to be sorted.
 		 * @param  string $flag Sorting flag ( Refere to: https://www.php.net/manual/en/function.array-multisort.php ).
 		 * @return array Sorted array.
 		 */
-		public static function array_multisort_by_key( $key, $array, $flag = SORT_DESC ) {
+		public static function array_multisort_by_key( $key, $_arr, $flag = SORT_DESC ) {
 
-			$sort_country = array_column( $array, $key );
+			$sort_country = array_column( $_arr, $key );
 
-			array_multisort( $sort_country, $flag, $array );
+			array_multisort( $sort_country, $flag, $_arr );
 
-			return $array;
+			return $_arr;
 		}
 
 		/**
@@ -279,12 +280,63 @@ if ( ! class_exists( 'ANONY_ARRAY_HELP' ) ) {
 
 			return $result;
 		}
+		/**
+		 * Sort assotiative array based on keys order of another array.
+		 *
+		 * @param array $_arr Array to be sorted.
+		 * @param array $key_order Array that contains ordered keys.
+		 * @return array
+		 */
+		public static function sort_array_by_key_order( $_arr, $key_order ) {
+			// Custom sorting function using the specified key order.
+			uksort(
+				$_arr,
+				function ( $a, $b ) use ( $key_order ) {
+					$pos_a = array_search( $a, $key_order, true );
+					$pos_b = array_search( $b, $key_order, true );
+
+					// Handle cases where keys are not found in $key_order.
+					if ( false === $pos_a ) {
+						$pos_a = PHP_INT_MAX;
+					}
+					if ( false === $pos_b ) {
+						$pos_b = PHP_INT_MAX;
+					}
+
+					return $pos_a - $pos_b;
+				}
+			);
+			return $_arr;
+		}
+
+		/**
+		 * Sort $_arr_b items according to their position in $_arr_a
+		 *
+		 * @param array $_arr_a Array A.
+		 * @param array $_arr_b Array B.
+		 * @return array
+		 */
+		public static function b_sort_from_a( $_arr_a, $_arr_b ) {
+			// Custom comparison function to sort according to the position in array A.
+			usort(
+				$_arr_b,
+				function ( $a, $b ) use ( $_arr_a ) {
+					// Find the positions of $a and $b in array A.
+					$pos_a = array_search( $a, $_arr_a, true );
+					$pos_b = array_search( $b, $_arr_a, true );
+
+					// Compare positions.
+					return $pos_a - $pos_b;
+				}
+			);
+			return $_arr_b;
+		}
 
 		/**
 		 * Get first key/value pair.
 		 *
 		 * @param array $my_array Target array.
-		 * @param array
+		 * @return array
 		 */
 		public static function array_1st_element( $my_array ) {
 			if ( empty( $my_array ) ) {
@@ -299,11 +351,20 @@ if ( ! class_exists( 'ANONY_ARRAY_HELP' ) ) {
 
 			return $result;
 		}
-
-		public static function array_to_cookie( $array, $cookie_name, $expiry ) {
-			$serialized_result = serialize( $array );
+		/**
+		 * Store array in acookie
+		 *
+		 * @param array  $_arr The array.
+		 * @param string $cookie_name Cookie's name.
+		 * @param string $expiry Cookie expiry.
+		 * @return void
+		 */
+		public static function array_to_cookie( $_arr, $cookie_name, $expiry ) {
+			//phpcs:disable
+			$serialized_result = serialize( $_arr );
 			$encoded_values    = urlencode( $serialized_result );
 			setcookie( $cookie_name, $encoded_values, $expiry, '/' );
+			//phpcs:enable
 		}
 	}
 }

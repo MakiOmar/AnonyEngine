@@ -447,20 +447,20 @@ if ( ! class_exists( 'ANONY_Woo_Help' ) ) {
 		 */
 		public static function coupon_form_in_order_details() {
 			// Just hide default woocommerce coupon field.
-			add_action( 'woocommerce_before_checkout_form', array( self, 'hide_checkout_coupon_form' ), 5 );
+			add_action( 'woocommerce_before_checkout_form', array( 'ANONY_Woo_Help', 'hide_checkout_coupon_form' ), 5 );
 
 			// Add a custom coupon field before checkout payment section.
-			add_action( 'woocommerce_review_order_before_payment', array( self, 'custom_checkout_coupon_form' ) );
+			add_action( 'woocommerce_review_order_before_payment', array( 'ANONY_Woo_Help', 'custom_checkout_coupon_form' ) );
 
 			// jQuery code.
-			add_action( 'wp_footer', array( self, 'custom_checkout_jquery_script' ) );
+			add_action( 'wp_footer', array( 'ANONY_Woo_Help', 'custom_checkout_jquery_script' ) );
 		}
 
 		/**
 		 * Hides checkout coupon form.
 		 */
 		public static function hide_checkout_coupon_form() {
-			echo '<style>.woocommerce-form-coupon-toggle {display:none;}</style>';
+			echo '<style>.woocommerce-form-coupon-toggle, .coupon-form {display:none;}</style>';
 		}
 
 		/**
@@ -470,15 +470,11 @@ if ( ! class_exists( 'ANONY_Woo_Help' ) ) {
 
 			// phpcs:disable
 
-			/**
-			echo '<div class="checkout-coupon-toggle"><div class="woocommerce-info">' . sprintf(
-				__("Have a coupon? %s"), '<a href="#" class="show-coupon">' . __("Click here to enter your code") . '</a>'
-			) . '</div></div>';
-			*/
+			echo '<div class="checkout-coupon-toggle"><div class="woocommerce-info">' . esc_html__( 'Have a coupon?', 'woocommerce' ) . ' <a href="#" class="show-coupon">' . esc_html__( 'Click here to enter your code', 'woocommerce' ) . '</a>' . '</div></div>';
 
 			// phpcs:enable.
 
-			sprintf(
+			printf(
 				'
 
 					<div class="coupon-form-wrapper">
@@ -495,7 +491,7 @@ if ( ! class_exists( 'ANONY_Woo_Help' ) ) {
 					</div>
 
 					',
-				esc_html__( 'If you own a discount coupon code, please apply it below', 'anonyengine' ),
+				esc_html__( 'If you have a coupon code, please apply it below.', 'woocommerce' ),
 				esc_attr__( 'Coupon code', 'anonyengine' ),
 				esc_attr__( 'Apply coupon', 'anonyengine' ),
 				esc_html__( 'Apply coupon', 'anonyengine' )
@@ -509,8 +505,7 @@ if ( ! class_exists( 'ANONY_Woo_Help' ) ) {
 			if ( is_checkout() && ! is_wc_endpoint_url() ) :?>
 					<script type="text/javascript">
 					jQuery( function($){
-						// $('.coupon-form').css("display", "none"); // Be sure coupon field is hidden.
-
+						$('form.checkout_coupon input[name="coupon_code"]').val($('.coupon-form input[name="coupon_code"]').val());
 						// Show or Hide coupon field.
 						$('.checkout-coupon-toggle .show-coupon').on( 'click', function(e){
 							$('.coupon-form').toggle(200);
@@ -525,6 +520,7 @@ if ( ! class_exists( 'ANONY_Woo_Help' ) ) {
 
 						// On button click, submit WooCommerce hidden default coupon form.
 						$('.coupon-form button[name="apply_coupon"]').on( 'click', function(){
+							$('form.checkout_coupon input[name="coupon_code"]').val($('.coupon-form input[name="coupon_code"]').val());
 							$('form.checkout_coupon').submit();
 							// console.log('click: submit form'); // Uncomment for testing.
 						});
@@ -572,8 +568,8 @@ if ( ! class_exists( 'ANONY_Woo_Help' ) ) {
 		 * Show highest variation price
 		 */
 		public static function show_only_highest_variation_price() {
-			add_filter( 'woocommerce_variable_sale_price_html', array( self, 'highest_variation_price_format' ), 10, 2 );
-			add_filter( 'woocommerce_variable_price_html', array( self, 'highest_variation_price_format' ), 10, 2 );
+			add_filter( 'woocommerce_variable_sale_price_html', array( 'ANONY_Woo_Help', 'highest_variation_price_format' ), 10, 2 );
+			add_filter( 'woocommerce_variable_price_html', array( 'ANONY_Woo_Help', 'highest_variation_price_format' ), 10, 2 );
 		}
 
 		/**
@@ -604,8 +600,8 @@ if ( ! class_exists( 'ANONY_Woo_Help' ) ) {
 		 * Disable customer repeat purchase.
 		 */
 		public static function disable_customer_repeat_purchase() {
-			add_filter( 'woocommerce_is_purchasable', array( self, 'disable_repeat_purchase' ), 10, 2 );
-			add_action( 'woocommerce_single_product_summary', array( self, 'purchase_disabled_message' ), 31 );
+			add_filter( 'woocommerce_is_purchasable', array( 'ANONY_Woo_Help', 'disable_repeat_purchase' ), 10, 2 );
+			add_action( 'woocommerce_single_product_summary', array( 'ANONY_Woo_Help', 'purchase_disabled_message' ), 31 );
 		}
 
 		/**
@@ -706,8 +702,8 @@ if ( ! class_exists( 'ANONY_Woo_Help' ) ) {
 		 * Remove customer details from email.
 		 */
 		public static function removing_customer_details_in_emails() {
-			add_action( 'woocommerce_email_customer_details', array( self, 'removing_customer_details_in_emails_cb' ), 5, 4 );
-			add_action( 'woocommerce_email_after_order_table', array( self, 'removing_customer_details_in_emails_cb' ), 10, 2 );
+			add_action( 'woocommerce_email_customer_details', array( 'ANONY_Woo_Help', 'removing_customer_details_in_emails_cb' ), 5, 4 );
+			add_action( 'woocommerce_email_after_order_table', array( 'ANONY_Woo_Help', 'removing_customer_details_in_emails_cb' ), 10, 2 );
 		}
 
 		/**
@@ -782,7 +778,7 @@ if ( ! class_exists( 'ANONY_Woo_Help' ) ) {
 		 * Allow remove items within checkout.
 		 */
 		public static function checkout_remove_items() {
-			add_filter( 'woocommerce_cart_item_name', array( self, 'checkout_remove_items_cb' ), 10, 3 );
+			add_filter( 'woocommerce_cart_item_name', array( 'ANONY_Woo_Help', 'checkout_remove_items_cb' ), 10, 3 );
 		}
 		/**
 		 * Allows to remove products in checkout page.

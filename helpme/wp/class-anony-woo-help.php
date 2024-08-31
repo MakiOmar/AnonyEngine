@@ -68,7 +68,7 @@ if ( ! class_exists( 'ANONY_Woo_Help' ) ) {
 				echo '<nav class="woocommerce-breadcrumb anony-woocommerce-breadcrumb" aria-label="Breadcrumb">';
 				// Output the breadcrumbs.
 				//phpcs:disable
-				echo implode( ' / ', $category_breadcrumbs );
+				echo implode( ' / ', apply_filters( 'anony_woocommerce_category_breadcrumps', $category_breadcrumbs ) );
 				//phpcs:enable
 				echo '</nav>';
 			}

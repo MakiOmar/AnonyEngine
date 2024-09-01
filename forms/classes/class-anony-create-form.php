@@ -30,6 +30,12 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 		 * @var string
 		 */
 		public $id = null;
+		/**
+		 * Object's ID.
+		 *
+		 * @var int
+		 */
+		public $object_id = false;
 
 		/**
 		 * An array of inputs that have same HTML markup.
@@ -37,6 +43,13 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 		 * @var array
 		 */
 		public $mixed_types = array( 'text', 'number', 'email', 'password', 'url', 'hidden' );
+
+		/**
+		 * An array of objects IDs that the form will be use in.
+		 *
+		 * @var array
+		 */
+		public $used_in = array();
 
 		/**
 		 * A list of actions the form should perfom.
@@ -96,6 +109,13 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 		public $fields;
 
 		/**
+		 * Form context.
+		 *
+		 * @var string
+		 */
+		public $context;
+
+		/**
 		 * Form fields layout.
 		 *
 		 * @var array
@@ -146,9 +166,14 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 		 */
 		public function __construct( array $form ) {
 
-			$this->form   = $form;
-			$this->id     = ! empty( $this->form['id'] ) ? $this->form['id'] : '';
-			$this->fields = ! empty( $this->form['fields'] ) ? $this->form['fields'] : array();
+			$this->form    = $form;
+			$this->id      = ! empty( $this->form['id'] ) ? $this->form['id'] : '';
+			$this->context = ! empty( $this->form['context'] ) ? $this->form['context'] : 'form';
+			$this->fields  = ! empty( $this->form['fields'] ) ? $this->form['fields'] : array();
+			$this->used_in = ! empty( $this->form['used_in'] ) ? $this->form['used_in'] : array();
+			if ( ! empty( $this->form['defaults'] ) && ! empty( $this->form['defaults']['object_type'] ) && ! empty( $this->form['defaults']['object_id'] ) ) {
+				$this->object_id = absint( $this->form['defaults']['object_id'] );
+			}
 			$this->default_values();
 
 			$this->form_attributes = $this->form_attributes( $this->form );
@@ -161,7 +186,6 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 			if ( isset( $this->form['action_list'] ) && is_array( $this->form['action_list'] ) ) {
 				$this->action_list = $this->form['action_list'];
 			}
-
 			if (
 				count( array_intersect( $this->form_init, array_keys( $this->form ) ) ) !== count( $this->form_init )
 				||
@@ -231,6 +255,9 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 		 * @return int Object ID.
 		 */
 		protected function get_object_id( $object_type, $object_id_from ) {
+			if ( $this->object_id ) {
+				return $this->object_id;
+			}
 			$object_id = false;
 			switch ( $object_type ) {
 				case 'post':
@@ -290,6 +317,8 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 
 					if ( empty( $post_author ) || ! is_numeric( $post_author ) || absint( $post_author ) !== get_current_user_id() ) {
 						$condition = false;
+					} else {
+						$condition = true;
 					}
 					break;
 				case ( 'user' ):
@@ -433,20 +462,22 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 						$object_type    = $this->form['defaults']['object_type'];
 						$object_id_from = $this->form['defaults']['object_id_from'];
 						$object_id      = $this->get_object_id( $object_type, $object_id_from );
+					} elseif ( ! empty( $this->form['defaults'] ) && ! empty( $this->form['defaults']['object_type'] ) && ! empty( $this->form['defaults']['object_id'] ) ) {
+						$object_type = $this->form['defaults']['object_type'];
+						$object_id   = absint( $this->form['defaults']['object_id'] );
+					}
+					if ( isset( $object_id ) && is_numeric( $object_id ) ) {
+						switch ( $object_type ) {
+							case 'post':
+								$this->set_post_default_values( $fields, $configs, $object_id );
+								break;
+							case 'term':
+								$this->set_term_default_values( $fields, $configs, $object_id );
+								break;
+							case 'user':
+								$this->set_user_default_values( $fields, $configs, $object_id );
 
-						if ( $object_id && $object_id > 0 ) {
-							switch ( $object_type ) {
-								case 'post':
-									$this->set_post_default_values( $fields, $configs, $object_id );
-									break;
-								case 'term':
-									$this->set_term_default_values( $fields, $configs, $object_id );
-									break;
-								case 'user':
-									$this->set_user_default_values( $fields, $configs, $object_id );
-
-									break;
-							}
+								break;
 						}
 					}
 				}
@@ -583,10 +614,15 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 		/**
 		 * Render form fields
 		 *
-		 * @return void
+		 * @param bool $_echo Weather to echo or return.
+		 * @return mixed
 		 */
-		public function render() {
-			$this->create( $this->fields );
+		public function render( $_echo = true ) {
+			if ( $_echo ) {
+				$this->create( $this->fields );
+			} else {
+				return $this->create_shortcode();
+			}
 		}
 
 		/**
@@ -658,6 +694,7 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 							'form'    => $this->form,
 							'field'   => $field,
 							'form_id' => $this->id,
+							'context' => $this->context,
 						);
 
 						$render_field = new ANONY_Form_Input_Field( $args );
@@ -801,7 +838,6 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 		public function form_submitted() {
 
 			$not_validated = wp_unslash( $_REQUEST );
-
 			if ( ! isset( $not_validated[ 'submit-' . $this->id ] ) ) {
 				return;
 			}
@@ -810,7 +846,6 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 			if ( ! isset( $not_validated[ 'anony_form_submit_nonce_' . $this->id ] ) || ! wp_verify_nonce( $not_validated[ 'anony_form_submit_nonce_' . $this->id ], 'anony_form_submit_' . $this->id ) ) {
 				return;
 			}
-
 			// Validation.
 			$this->validate_form_fields( $this->fields ); // Validation problem because fields' ids looks like field[key].
 
@@ -876,8 +911,7 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 		 */
 		public function enqueue_scripts() {
 			global $post;
-
-			if ( ANONY_Post_Help::has_shortcode( $post, $this->id ) ) {
+			if ( ANONY_Post_Help::has_shortcode( $post, $this->id ) || ( ! empty( $this->used_in ) && in_array( $post->ID, $this->used_in, true ) ) ) {
 				anony_enqueue_styles();
 				// Enqueue fields scripts.
 				new ANONY_Fields_Scripts( $this->fields );

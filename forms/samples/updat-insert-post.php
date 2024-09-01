@@ -1,6 +1,7 @@
 <?php //phpcs:disable
 $form = array(
 	'id'              => 'user_insert_profile',
+	'used_in'         => array(),// An array of objects IDs that the form will be used in.
 	'fields_layout'   => 'columns',
 	'form_attributes' => array(
 		'action'  => '',

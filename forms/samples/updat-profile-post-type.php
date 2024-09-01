@@ -2,6 +2,7 @@
 $form = array(
 	'id'              => 'user_profile',
 	'fields_layout'   => 'columns',
+	'used_in'         => array(),// An array of objects IDs that the form will be used in.
 	'form_attributes' => array(
 		'action'  => '',
 		'method'  => 'post',

@@ -310,7 +310,7 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 		 * @return boolean
 		 */
 		protected function can_edit( $object_id, $object_type ) {
-
+			$condition = false;
 			switch ( $object_type ) {
 				case ( 'post' ):
 					$post_author = get_post_field( 'post_author', $object_id );
@@ -911,7 +911,7 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 		 */
 		public function enqueue_scripts() {
 			global $post;
-			if ( ANONY_Post_Help::has_shortcode( $post, $this->id ) || ( ! empty( $this->used_in ) && in_array( $post->ID, $this->used_in, true ) ) ) {
+			if ( $post && ( ANONY_Post_Help::has_shortcode( $post, $this->id ) || ( ! empty( $this->used_in ) && in_array( $post->ID, $this->used_in, true ) ) ) ) {
 				anony_enqueue_styles();
 				// Enqueue fields scripts.
 				new ANONY_Fields_Scripts( $this->fields );

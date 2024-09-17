@@ -81,7 +81,7 @@ if ( ! class_exists( 'ANONY_Woo_Help' ) ) {
 		public static function anony_search_products_by_metakey_or_title( $query ) {
 			add_action(
 				'pre_get_posts',
-				function () {
+				function ( $query ) {
 					if ( ! is_admin() && is_search( $query ) ) {
 
 						$init = apply_filters( 'anony_search_products_by_metakey_or_title', false );
@@ -116,7 +116,7 @@ if ( ! class_exists( 'ANONY_Woo_Help' ) ) {
 
 									// Only run once.
 									static $nr = 0;
-									// phpcs:disable WordPress.PHP.StrictComparisons.LooseComparison
+									// phpcs:disable
 									if ( 0 != $nr++ ) {
 										return $sql;
 									}
@@ -195,20 +195,38 @@ if ( ! class_exists( 'ANONY_Woo_Help' ) ) {
 			);
 		}
 
-
+		/**
+		 * Removes automatic order status change notes from WooCommerce order notes.
+		 *
+		 * This function prevents adding the automatic notes that WooCommerce generates
+		 * when an order status is changed from one status to another.
+		 *
+		 * @return void
+		 */
 		public static function remove_order_status_change_notes() {
 			add_action(
 				'woocommerce_order_status_changed',
 				function ( $order_id, $status_from, $status_to ) {
-					$transition_note = sprintf( __( 'Order status changed from %1$s to %2$s.', 'woocommerce' ), wc_get_order_status_name( $status_from ), wc_get_order_status_name( $status_to ) );
+					// Create the transition note string to match against.
+					$transition_note = sprintf(
+						/* translators: 1: previous status, 2: new status */
+						__( 'Order status changed from %1$s to %2$s.', 'woocommerce' ),
+						wc_get_order_status_name( $status_from ),
+						wc_get_order_status_name( $status_to )
+					);
+
+					// Filter the order notes to exclude the transition note.
 					add_filter(
 						'woocommerce_new_order_note_data',
 						function ( $args ) use ( $transition_note ) {
-							if ( $args['comment_content'] === $transition_note ) {
+							// Check if the note content matches the transition note.
+							if ( isset( $args['comment_content'] ) && $args['comment_content'] === $transition_note ) {
+								// Return an empty array to prevent the note from being added.
 								return array();
-							} else {
-								return $args;
 							}
+
+							// Return the original arguments if the note doesn't match.
+							return $args;
 						}
 					);
 				},
@@ -216,6 +234,7 @@ if ( ! class_exists( 'ANONY_Woo_Help' ) ) {
 				3
 			);
 		}
+
 
 		/**
 		 * Get all approved WooCommerce order notes.
@@ -573,26 +592,53 @@ if ( ! class_exists( 'ANONY_Woo_Help' ) ) {
 		}
 
 		/**
-		 * Highest variation markup.
+		 * Format the highest variation price for variable products.
+		 *
+		 * This function formats the highest and lowest prices for variable products,
+		 * displaying a range if the prices are different or a single price if they are the same.
+		 *
+		 * @param string     $price   The original price HTML.
+		 * @param WC_Product $product The WooCommerce product object.
+		 * @return string The formatted price HTML.
 		 */
-		public static function highest_variation_price_format() {
+		public static function highest_variation_price_format( $price, $product ) {
 
-			// Main Price.
-			$prices = array( $product->get_variation_price( 'max', true ), $product->get_variation_price( 'min', true ) );
+			// Get the maximum and minimum variation prices, including sales.
+			$variation_prices = array(
+				$product->get_variation_price( 'max', true ),
+				$product->get_variation_price( 'min', true ),
+			);
 
-			// translators: %1$s is variation price.
-			$price = $prices[0] !== $prices[1] ? sprintf( __( 'Up To: %1$s', 'woocommerce' ), wc_price( $prices[0] ) ) : wc_price( $prices[0] );
+			// Display the price as a range if max and min prices differ.
+			$price = $variation_prices[0] !== $variation_prices[1]
+			// Translators: price.
+				? sprintf( __( 'Up To: %1$s', 'woocommerce' ), wc_price( max( $variation_prices ) ) )
+				: wc_price( max( $variation_prices ) );
 
-			// Sale Price.
-			$prices = array( $product->get_variation_regular_price( 'max', true ), $product->get_variation_regular_price( 'min', true ) );
-			sort( $prices );
+			// Get the regular (non-sale) variation prices.
+			$regular_prices = array(
+				$product->get_variation_regular_price( 'max', true ),
+				$product->get_variation_regular_price( 'min', true ),
+			);
+			sort( $regular_prices );
 
-			// translators: %1$s is variation sale price.
-			$saleprice = $prices[0] !== $prices[1] ? sprintf( __( 'Up To: %1$s', 'woocommerce' ), wc_price( $prices[0] ) ) : wc_price( $prices[0] );
+			// Display the regular price as a range if max and min regular prices differ.
+			$regular_price = $regular_prices[0] !== $regular_prices[1]
+			// Translators: price.
+				? sprintf( __( 'Up To: %1$s', 'woocommerce' ), wc_price( max( $regular_prices ) ) )
+				: wc_price( max( $regular_prices ) );
 
-			if ( $price !== $saleprice ) {
-				$price = '<del>' . $saleprice . $product->get_price_suffix() . '</del> <ins>' . $price . $product->get_price_suffix() . '</ins>';
+			// If the main price differs from the regular price, format it as a sale price.
+			if ( $price !== $regular_price ) {
+				$price = sprintf(
+					'<del>%1$s%2$s</del> <ins>%3$s%4$s</ins>',
+					esc_html( $regular_price ),
+					esc_html( $product->get_price_suffix() ),
+					esc_html( $price ),
+					esc_html( $product->get_price_suffix() )
+				);
 			}
+
 			return $price;
 		}
 
@@ -880,120 +926,121 @@ if ( ! class_exists( 'ANONY_Woo_Help' ) ) {
 		}
 
 		/**
-		 * Get best selling products.
+		 * Get best-selling products.
 		 *
-		 * @return Object WP_Query object.
+		 * @param int $posts_per_page Number of products to display.
+		 * @return WP_Query WP_Query object containing the best-selling products.
 		 */
 		public static function best_sellers( $posts_per_page = 4 ) {
 			$args = array(
 				'post_type'      => 'product',
 				'meta_key'       => 'total_sales',
 				'orderby'        => 'meta_value_num',
-				'posts_per_page' => $posts_per_page,
+				'posts_per_page' => absint( $posts_per_page ),
 			);
 
 			$query = new WP_Query( $args );
-			wp_reset_query();
+			wp_reset_postdata(); // Corrected function to reset post data.
 			return $query;
 		}
-		public static function anony_custom_sale_badge( $html, $post, $product ) {
 
+		/**
+		 * Custom sale badge for WooCommerce products.
+		 *
+		 * @param string     $html    The HTML markup for the sale badge.
+		 * @param WP_Post    $post    The current product post object.
+		 * @param WC_Product $product The current product object.
+		 * @return string Modified HTML markup for the sale badge.
+		 */
+		public static function anony_custom_sale_badge( $html, $post, $product ) {
 			$anony_options = ANONY_Options_Model::get_instance();
 
 			$custom_sale_badge = get_post_meta( $post->ID, 'custom-sale-badge', true );
 
 			if ( $custom_sale_badge && ! empty( $custom_sale_badge ) ) {
-				return sprintf( '<span class="onsale on-sale-text">%s</span>', $custom_sale_badge );
+				return sprintf( '<span class="onsale on-sale-text">%s</span>', esc_html( $custom_sale_badge ) );
 			}
-			if ( $product->is_type( 'variable' ) ) {
-				$percentages    = array();
-				$regular_prices = array();
 
-				// Get all variation prices
+			$percentage     = '';
+			$regular_price  = 0;
+			$sale_price     = 0;
+			$saved          = 0;
+			$percentages    = array();
+			$regular_prices = array();
+			$sale_prices    = array();
+
+			// Handling different product types.
+			if ( $product->is_type( 'variable' ) ) {
 				$prices = $product->get_variation_prices();
 
-				// Loop through variation prices
 				foreach ( $prices['price'] as $key => $price ) {
-					// Only on sale variations
 					if ( $prices['regular_price'][ $key ] !== $price ) {
-						// Calculate and set in the array the percentage for each variation on sale
-						$percentages[] = round( 100 - ( floatval( $prices['sale_price'][ $key ] ) / floatval( $prices['regular_price'][ $key ] ) * 100 ) );
-
-						$sale_prices[] = floatval( $prices['sale_price'][ $key ] );
-
+						$percentages[]    = round( 100 - ( floatval( $prices['sale_price'][ $key ] ) / floatval( $prices['regular_price'][ $key ] ) * 100 ) );
+						$sale_prices[]    = floatval( $prices['sale_price'][ $key ] );
 						$regular_prices[] = floatval( $prices['regular_price'][ $key ] );
 					}
 				}
-				// We keep the highest value
+
 				$percentage    = max( $percentages ) . '%';
 				$regular_price = max( $regular_prices );
 				$sale_price    = max( $sale_prices );
-
-				$saved = $regular_price - $sale_price;
+				$saved         = $regular_price - $sale_price;
 
 			} elseif ( $product->is_type( 'grouped' ) ) {
-				$percentages    = array();
-				$regular_prices = array();
-
-				// Get all variation prices
 				$children_ids = $product->get_children();
 
-				// Loop through variation prices
 				foreach ( $children_ids as $child_id ) {
 					$child_product = wc_get_product( $child_id );
-
 					$regular_price = (float) $child_product->get_regular_price();
 					$sale_price    = (float) $child_product->get_sale_price();
 
-					if ( $sale_price != 0 || ! empty( $sale_price ) ) {
-						// Calculate and set in the array the percentage for each child on sale
-						$percentages[] = round( 100 - ( $sale_price / $regular_price * 100 ) );
-
+					if ( 0 !== $sale_price ) {
+						$percentages[]    = round( 100 - ( $sale_price / $regular_price * 100 ) );
 						$regular_prices[] = $regular_price;
 						$sale_prices[]    = $sale_price;
 					}
 				}
-				// We keep the highest value
-				$percentage = max( $percentages ) . '%';
 
+				$percentage    = max( $percentages ) . '%';
 				$regular_price = max( $regular_prices );
-
-				$sale_price = max( $sale_prices );
-
-				$saved = $regular_price - $sale_price;
+				$sale_price    = max( $sale_prices );
+				$saved         = $regular_price - $sale_price;
 
 			} else {
 				$regular_price = (float) $product->get_regular_price();
 				$sale_price    = (float) $product->get_sale_price();
 
-				if ( $sale_price != 0 || ! empty( $sale_price ) ) {
+				if ( 0 !== $sale_price ) {
 					$percentage = round( 100 - ( $sale_price / $regular_price * 100 ) ) . '%';
-
-					$saved = $regular_price - $sale_price;
+					$saved      = $regular_price - $sale_price;
 				} else {
 					return $html;
 				}
 			}
 
-			$sale_badge_type = 'percentage';
-
+			$sale_badge_type = $anony_options->sale_badge_type ?? 'percentage';
 			$sale_badge_text = $percentage;
+			$class           = 'on-sale-percent';
 
-			$class = 'on-sale-percent';
-
-			if ( 'text' === $anony_options->sale_badge_type ) {
+			if ( 'text' === $sale_badge_type ) {
+				// Translators: 1 price, 2 currency.
 				$sale_badge_text = sprintf( esc_html__( 'Save %1$s %2$s', 'smartpage' ), round( $saved ), get_woocommerce_currency_symbol() );
-
-				$class = 'on-sale-text';
+				$class           = 'on-sale-text';
 			}
 
-			return sprintf( '<span class="onsale %1$s">%2$s</span>', $class, $sale_badge_text );
+			return sprintf( '<span class="onsale %1$s">%2$s</span>', esc_attr( $class ), esc_html( $sale_badge_text ) );
 		}
 
+		/**
+		 * Display a sales report for the current user's products.
+		 *
+		 * @param array $atts Shortcode attributes.
+		 * @return string HTML output of the sales report table.
+		 */
 		public static function display_sales_report( $atts ) {
 			$user_id = get_current_user_id();
 
-			// Retrieve all products for the user
+			// Retrieve all products for the user.
 			$products = wc_get_products(
 				array(
 					'limit'  => -1,
@@ -1004,7 +1051,7 @@ if ( ! class_exists( 'ANONY_Woo_Help' ) ) {
 
 			$sales_data = array();
 
-			// Loop through each product and get the sales data
+			// Loop through each product and get the sales data.
 			foreach ( $products as $product ) {
 				$product_id        = $product->get_id();
 				$product_name      = $product->get_name();
@@ -1012,54 +1059,55 @@ if ( ! class_exists( 'ANONY_Woo_Help' ) ) {
 
 				$quantity_sold = 0;
 				$total_sales   = 0;
-				$pending_sales = 0; // Initialize pending sales
+				$pending_sales = 0;
 
+				// Retrieve orders for the current user.
 				$orders = wc_get_orders(
 					array(
 						'limit'    => -1,
-						'status'   => 'completed',
+						'status'   => array( 'completed', 'pending' ),
 						'customer' => $user_id,
 					)
 				);
 
-				// Loop through each order and get the sales data for the product
+				// Loop through each order and get the sales data for the product.
 				foreach ( $orders as $order ) {
 					$items = $order->get_items( 'line_item' );
 
 					foreach ( $items as $item ) {
-						$product = $item->get_product();
+						$item_product = $item->get_product();
 
-						if ( $product->get_id() == $product_id ) {
+						if ( $item_product && $item_product->get_id() === $product_id ) {
 							$quantity_sold += $item->get_quantity();
 							$total_sales   += $item->get_total();
 
-							// Check if the order is pending
-							if ( $order->get_status() == 'pending' ) {
+							// Check if the order is pending.
+							if ( 'pending' === $order->get_status() ) {
 								$pending_sales += $item->get_total();
 							}
 						}
 					}
 				}
 
-				// Subtract 10% from the total sales
+				// Subtract 10% from the total sales and pending sales.
 				$total_sales   *= 0.9;
-				$pending_sales *= 0.9; // Subtract 10% from pending sales
+				$pending_sales *= 0.9;
 
-				// Get the current currency symbol
+				// Get the current currency symbol.
 				$currency_symbol = get_woocommerce_currency_symbol();
 
-				// Add the sales data to the sales_data array
+				// Add the sales data to the sales_data array.
 				$sales_data[] = array(
 					'product_name'      => $product_name,
 					'product_permalink' => $product_permalink,
 					'quantity_sold'     => $quantity_sold,
-					'pending_sales'     => $pending_sales, // Add pending sales value before total sales
+					'pending_sales'     => $pending_sales,
 					'total_sales'       => $total_sales,
 					'currency_symbol'   => $currency_symbol,
 				);
 			}
 
-			// Sort the sales data array by total sales in descending order
+			// Sort the sales data array by total sales in descending order.
 			usort(
 				$sales_data,
 				function ( $a, $b ) {
@@ -1067,24 +1115,44 @@ if ( ! class_exists( 'ANONY_Woo_Help' ) ) {
 				}
 			);
 
-			// Display the sales data as a table
+			// Display the sales data as a table.
 			$output  = '<table>';
-			$output .= '<tr><th>Product Name</th><th>Quantity Sold</th><th>Pending Sales</th><th>Total Sales</th></tr>'; // Change column order
+			$output .= '<tr><th>' . esc_html__( 'Product Name', 'smartpage' ) . '</th><th>' . esc_html__( 'Quantity Sold', 'smartpage' ) . '</th><th>' . esc_html__( 'Pending Sales', 'smartpage' ) . '</th><th>' . esc_html__( 'Total Sales', 'smartpage' ) . '</th></tr>';
+
 			foreach ( $sales_data as $product ) {
-				$output .= '<tr><td><a href="' . $product['product_permalink'] . '">' . $product['product_name'] . '</a></td><td>' . $product['quantity_sold'] . '</td><td>' . number_format( $product['pending_sales'], 2 ) . ' ' . $product['currency_symbol'] . '</td><td>' . number_format( $product['total_sales'], 2 ) . ' ' . $product['currency_symbol'] . '</td></tr>'; // Change column order
+				$output .= sprintf(
+					'<tr><td><a href="%1$s">%2$s</a></td><td>%3$d</td><td>%4$s %5$s</td><td>%6$s %7$s</td></tr>',
+					esc_url( $product['product_permalink'] ),
+					esc_html( $product['product_name'] ),
+					esc_html( $product['quantity_sold'] ),
+					esc_html( number_format( $product['pending_sales'], 2 ) ),
+					esc_html( $product['currency_symbol'] ),
+					esc_html( number_format( $product['total_sales'], 2 ) ),
+					esc_html( $product['currency_symbol'] )
+				);
 			}
+
 			$output .= '</table>';
+
 			return $output;
 		}
 
-		public static function current_user_sales_orders_table( $atts ) {
+		/**
+		 * Retrieve the details of a WooCommerce order including items, billing, and shipping information.
+		 *
+		 * @param int $order_id The ID of the WooCommerce order.
+		 * @return array|false The order details array or false if the order is not found.
+		 */
+		public static function current_user_sales_orders_table( $order_id ) {
 			$order = wc_get_order( $order_id );
+
 			if ( ! $order ) {
 				return false;
 			}
 
-				$items = array();
-			foreach ( $order->get_items() as $item_id => $item ) {
+			// Get order items.
+			$items = array();
+			foreach ( $order->get_items() as $item ) {
 				$product = $item->get_product();
 				$items[] = array(
 					'name'        => $item->get_name(),
@@ -1095,7 +1163,8 @@ if ( ! class_exists( 'ANONY_Woo_Help' ) ) {
 				);
 			}
 
-				$billing = array();
+			// Get billing information.
+			$billing = array();
 			if ( $order->get_billing_first_name() ) {
 				$billing['first_name'] = $order->get_billing_first_name();
 			}
@@ -1109,7 +1178,8 @@ if ( ! class_exists( 'ANONY_Woo_Help' ) ) {
 				$billing['phone'] = $order->get_billing_phone();
 			}
 
-				$shipping = array();
+			// Get shipping information.
+			$shipping = array();
 			if ( $order->get_shipping_first_name() ) {
 				$shipping['first_name'] = $order->get_shipping_first_name();
 			}
@@ -1135,110 +1205,85 @@ if ( ! class_exists( 'ANONY_Woo_Help' ) ) {
 				$shipping['country'] = $order->get_shipping_country();
 			}
 
-				$order_data = array(
-					'order_id'     => $order->get_id(),
-					'order_number' => $order->get_order_number(),
-					'status'       => $order->get_status(),
-					'date_created' => $order->get_date_created(),
-					'billing'      => $billing,
-					'shipping'     => $shipping,
-					'items'        => $items,
-					'total'        => $order->get_total(),
-				);
+			// Compile order data.
+			$order_data = array(
+				'order_id'     => $order->get_id(),
+				'order_number' => $order->get_order_number(),
+				'status'       => $order->get_status(),
+				'date_created' => $order->get_date_created(),
+				'billing'      => $billing,
+				'shipping'     => $shipping,
+				'items'        => $items,
+				'total'        => $order->get_total(),
+			);
 
-				return $order_data;
+			return $order_data;
 		}
 
-		public static function single_order( $order_id ) {
-
-			?>
-				<table>
-					<thead>
-					<tr>
-						<th>Order Number</th>
-						<th>Status</th>
-						<th>Date Created</th>
-						<th>Billing Information</th>
-						<th>Shipping Information</th>
-						<th>Line Items</th>
-						<th>Total</th>
-					</tr>
-					</thead>
-					<tbody>
-				<?php
-					$order_details = get_order_details( $order_id );
-
-				if ( $order_details ) {
-					echo '<tr>';
-					echo '<td>' . $order_details['order_number'] . '</td>';
-					echo '<td>' . $order_details['status'] . '</td>';
-					echo '<td>' . $order_details['date_created']->format( 'Y-m-d H:i:s' ) . '</td>';
-					echo '<td>' . $order_details['billing']['first_name'] . ' ' . $order_details['billing']['last_name'] . '<br>' . $order_details['billing']['email'] . '<br>' . $order_details['billing']['phone'] . '</td>';
-					echo '<td>' . $order_details['shipping']['first_name'] . ' ' . $order_details['shipping']['last_name'] . '<br>' . $order_details['shipping']['address_1'] . '<br>' . $order_details['shipping']['city'] . ', ' . $order_details['shipping']['state'] . ' ' . $order_details['shipping']['postcode'] . '<br>' . $order_details['shipping']['country'] . '</td>';
-					echo '<td>';
-					foreach ( $order_details['items'] as $item ) {
-						echo $item['name'] . ' x ' . $item['quantity'] . '<br>';
-					}
-					echo '</td>';
-					echo '<td>' . wc_price( $order_details['total'] ) . '</td>';
-					echo '</tr>';
-				} else {
-					echo '<tr><td colspan="7">Order not found</td></tr>';
-				}
-				?>
-					</tbody>
-				</table>
-				<?php
-		}
 		/**
-		 * Adds a form after orders table, so we can get total savings per month of year.
-		 * Should be hooked with `woocommerce_account_orders_endpoint`
+		 * Display a table with details of a single order.
 		 *
+		 * @param int $order_id The ID of the WooCommerce order.
 		 * @return void
 		 */
-		public static function orders_display_total_savings_form() {
-			if ( is_wc_endpoint_url( 'orders' ) ) {
-				$selected_month = isset( $_POST['month'] ) ? sanitize_text_field( $_POST['month'] ) : false;
-				$selected_year  = isset( $_POST['year'] ) ? sanitize_text_field( $_POST['year'] ) : false;
-				?>
-					<form method="post" action="">
-						<label for="month">Select a month:</label>
-						<select name="month" id="month">
-						<?php
-						for ( $i = 1; $i <= 12; $i++ ) {
-							$month = date( 'F', mktime( 0, 0, 0, $i, 1 ) );
-							echo '<option value="' . $month . '" ' . selected( $selected_month, $month, false ) . '>' . $month . '</option>';
-						}
-						?>
-						</select>
-						<label for="year">Select a year:</label>
-						<select name="year" id="year">
-						<?php
-						$current_year = date( 'Y' );
-						for ( $i = $current_year; $i >= 2020; $i-- ) {
-							echo '<option value="' . $i . '" ' . selected( $selected_year, $i, false ) . '>' . $i . '</option>';
-						}
-						?>
-						</select>
-						<input type="submit" name="submit" value="Show Total Savings">
-					</form>
-					<?php
+		public static function single_order( $order_id ) {
+			?>
+	<table>
+		<thead>
+			<tr>
+				<th><?php esc_html_e( 'Order Number', 'anonyengine' ); ?></th>
+				<th><?php esc_html_e( 'Status', 'anonyengine' ); ?></th>
+				<th><?php esc_html_e( 'Date Created', 'anonyengine' ); ?></th>
+				<th><?php esc_html_e( 'Billing Information', 'anonyengine' ); ?></th>
+				<th><?php esc_html_e( 'Shipping Information', 'anonyengine' ); ?></th>
+				<th><?php esc_html_e( 'Line Items', 'anonyengine' ); ?></th>
+				<th><?php esc_html_e( 'Total', 'anonyengine' ); ?></th>
+			</tr>
+		</thead>
+		<tbody>
+			<?php
+			$order_details = self::current_user_sales_orders_table( $order_id );
+
+			if ( $order_details ) {
+				echo '<tr>';
+				echo '<td>' . esc_html( $order_details['order_number'] ) . '</td>';
+				echo '<td>' . esc_html( wc_get_order_status_name( $order_details['status'] ) ) . '</td>';
+				echo '<td>' . esc_html( $order_details['date_created']->date( 'Y-m-d H:i:s' ) ) . '</td>';
+				echo '<td>' . esc_html( $order_details['billing']['first_name'] . ' ' . $order_details['billing']['last_name'] ) . '<br>' . esc_html( $order_details['billing']['email'] ) . '<br>' . esc_html( $order_details['billing']['phone'] ) . '</td>';
+				echo '<td>' . esc_html( $order_details['shipping']['first_name'] . ' ' . $order_details['shipping']['last_name'] ) . '<br>' . esc_html( $order_details['shipping']['address_1'] ) . '<br>' . esc_html( $order_details['shipping']['city'] . ', ' . $order_details['shipping']['state'] . ' ' . $order_details['shipping']['postcode'] ) . '<br>' . esc_html( $order_details['shipping']['country'] ) . '</td>';
+				echo '<td>';
+				foreach ( $order_details['items'] as $item ) {
+					echo esc_html( $item['name'] ) . ' x ' . esc_html( $item['quantity'] ) . '<br>';
+				}
+				echo '</td>';
+				echo '<td>' . wp_kses_post( wc_price( $order_details['total'] ) ) . '</td>';
+				echo '</tr>';
+			} else {
+				echo '<tr><td colspan="7">' . esc_html__( 'Order not found', 'anonyengine' ) . '</td></tr>';
 			}
+			?>
+		</tbody>
+	</table>
+			<?php
 		}
+
+
 		/**
 		 * Get savings based on regular and sale prices.
 		 *
-		 * @param object $order
-		 * @return int
+		 * @param WC_Order $order WooCommerce order object.
+		 * @return float Total savings amount.
 		 */
 		public static function pricing_based_order_total_savings( $order ) {
 			$total_savings = 0;
-			foreach ( $order->get_items() as $item_id => $item ) {
+
+			foreach ( $order->get_items() as $item ) {
 				$product = $item->get_product();
-				if ( $product->is_on_sale() ) {
-					$regular_price  = $product->get_regular_price( 'edit' );
-					$sale_price     = $product->get_sale_price( 'edit' );
-					$quantity       = $item->get_quantity();
+
+				if ( $product && $product->is_on_sale() ) {
+					$regular_price  = (float) $product->get_regular_price( 'edit' );
+					$sale_price     = (float) $product->get_sale_price( 'edit' );
+					$quantity       = (int) $item->get_quantity();
 					$item_savings   = ( $regular_price - $sale_price ) * $quantity;
 					$total_savings += $item_savings;
 				}
@@ -1247,72 +1292,84 @@ if ( ! class_exists( 'ANONY_Woo_Help' ) ) {
 			return $total_savings;
 		}
 
+		/**
+		 * Display total savings for customer orders based on selected month and year.
+		 *
+		 * @return void
+		 */
 		public static function display_total_savings_for_customer_orders() {
 			if ( is_wc_endpoint_url( 'orders' ) ) {
-				$customer_id    = get_current_user_id();
-				$total_savings  = 0;
-				$selected_month = isset( $_POST['month'] ) ? sanitize_text_field( $_POST['month'] ) : false;
-				$selected_year  = isset( $_POST['year'] ) ? sanitize_text_field( $_POST['year'] ) : false;
+				$customer_id   = get_current_user_id();
+				$total_savings = 0;
+				//phpcs:disable WordPress.Security.NonceVerification.Missing
+				$selected_month = isset( $_POST['month'] ) ? sanitize_text_field( wp_unslash( $_POST['month'] ) ) : false;
+				$selected_year  = isset( $_POST['year'] ) ? sanitize_text_field( wp_unslash( $_POST['year'] ) ) : false;
 
 				$args = array(
 					'customer' => $customer_id,
 					'status'   => array( 'completed', 'delivered' ),
 				);
 
-				$result_msg = 'Total Savings for all orders: ';
-				if ( $selected_month && $selected_year ) {
-					$first_day_of_month = date( 'Y-m-01', strtotime( $selected_month . ' ' . $selected_year ) );
-					$last_day_of_month  = date( 'Y-m-t', strtotime( $first_day_of_month ) );
+				$result_msg = __( 'Total Savings for all orders:', 'anonyengine' );
 
-					// To get products between to dates, use the following format.
+				if ( $selected_month && $selected_year ) {
+					$first_day_of_month = gmdate( 'Y-m-01', strtotime( $selected_month . ' ' . $selected_year ) );
+					$last_day_of_month  = gmdate( 'Y-m-t', strtotime( $first_day_of_month ) );
+
+					// To get products between two dates, use the following format.
 					$args['date_created'] = $first_day_of_month . '...' . $last_day_of_month;
 
-					$result_msg = 'Total Savings for all orders of ' . $selected_month . ' ' . $selected_year . ' is: ';
+					/* translators: %1$s: selected month, %2$s: selected year */
+					$result_msg = sprintf( __( 'Total Savings for all orders of %1$s %2$s is:', 'anonyengine' ), esc_html( $selected_month ), esc_html( $selected_year ) );
 				}
 
 				$orders = wc_get_orders( $args );
+
 				foreach ( $orders as $order ) {
 					$total_savings += self::pricing_based_order_total_savings( $order );
 				}
+
 				if ( $total_savings > 0 ) {
-					echo '<p><strong>' . $result_msg . '</strong> ' . wc_price( $total_savings ) . '</p>';
+					echo '<p><strong>' . esc_html( $result_msg ) . '</strong> ' . wp_kses_post( wc_price( $total_savings ) ) . '</p>';
 				}
 			}
 		}
 
 		/**
-		 * Validate cart so as to have single seller per order.
+		 * Validate the cart to ensure that only products from a single seller can be added per order.
 		 */
 		public static function cart_exclusive_seller() {
 			/**
-			 * @param boolean $passed True if the item passed validation.
-			 * @param integer $product_id        Product ID being validated.
-			 * @param integer $quantity          Quantity added to the cart.
-			 * @return void
+			 * Validate the product being added to the cart to ensure it is from the same seller.
+			 *
+			 * @param bool $passed     True if the item passed validation.
+			 * @param int  $product_id Product ID being validated.
+			 * @param int  $quantity   Quantity added to the cart.
+			 * @return bool True if validation passes, false otherwise.
 			 */
-			add_action(
+			add_filter(
 				'woocommerce_add_to_cart_validation',
 				function ( $passed, $product_id, $quantity ) {
-					// Get the author ID of the product being added
+					// Get the author ID of the product being added.
 					$product_author_id = get_post_field( 'post_author', $product_id );
 
-					// Loop through the cart items to check for products from a different author
-					foreach ( WC()->cart->get_cart() as $cart_item_key => $cart_item ) {
-						// Get the product ID and author ID of the cart item
+					// Loop through the cart items to check for products from different authors.
+					foreach ( WC()->cart->get_cart() as $cart_item ) {
+						// Get the product ID and author ID of the cart item.
 						$cart_item_product_id = $cart_item['product_id'];
 						$cart_item_author_id  = get_post_field( 'post_author', $cart_item_product_id );
 
-						// Check if the cart item has a different author than the product being added
-						if ( $cart_item_author_id !== $product_author_id ) {
-							// Set an error message
-							wc_add_notice( __( 'You cannot add products from different seller to the cart.', 'anonyengine' ), 'error' );
+						// Check if the cart item has a different author than the product being added.
+						if ( intval( $cart_item_author_id ) !== intval( $product_author_id ) ) {
+							// Set an error message.
+							wc_add_notice( __( 'You cannot add products from different sellers to the cart.', 'anonyengine' ), 'error' );
 
-							// Prevent the product from being added to the cart
+							// Prevent the product from being added to the cart.
 							return false;
 						}
 					}
 
-					// If no products from a different author were found, allow the product to be added to the cart
+					// If no products from a different author were found, allow the product to be added to the cart.
 					return $passed;
 				},
 				10,
@@ -1320,23 +1377,32 @@ if ( ! class_exists( 'ANONY_Woo_Help' ) ) {
 			);
 		}
 
+
+		/**
+		 * Adds a custom column to display the product type in the WooCommerce Products admin page.
+		 */
 		public static function product_type_column() {
-			// Add a new column to the Products admin page
+			// Add a new column to the Products admin page.
 			add_filter(
 				'manage_edit-product_columns',
 				function ( $columns ) {
-					$columns['product_type'] = __( 'Product Type', 'anonyengine' );
+					$columns['product_type'] = esc_html__( 'Product Type', 'anonyengine' );
 					return $columns;
 				}
 			);
 
-			// Populate the Product Type column with the product type
+			// Populate the Product Type column with the product type.
 			add_action(
 				'manage_product_posts_custom_column',
 				function ( $column, $post_id ) {
-					if ( $column == 'product_type' ) {
+					if ( 'product_type' === $column ) {
 						$product = wc_get_product( $post_id );
-						echo $product->get_type();
+
+						// Check if the product is valid before attempting to display the type.
+						if ( $product instanceof WC_Product ) {
+							// Escaping output to ensure safety.
+							echo esc_html( $product->get_type() );
+						}
 					}
 				},
 				10,
@@ -1344,27 +1410,33 @@ if ( ! class_exists( 'ANONY_Woo_Help' ) ) {
 			);
 		}
 
+
+		/**
+		 * Prevent adding out-of-stock products or variations to the cart.
+		 *
+		 * This function hooks into WooCommerce's add-to-cart validation to prevent
+		 * customers from adding products or variations that are out of stock or do not have
+		 * sufficient stock quantity.
+		 */
 		public static function cart_prevent_add_out_of_stock() {
 			add_filter(
 				'woocommerce_add_to_cart_validation',
 				function ( $passed, $product_id, $quantity ) {
 					$product = wc_get_product( $product_id );
 
+					// Check if the product is a variable product.
 					if ( $product->is_type( 'variable' ) ) {
-						// For variable products, we need to check the stock quantity of the selected variation.
-						$variation_id = $_POST['variation_id'];
+						// For variable products, check the stock quantity of the selected variation.
+						$variation_id = isset( $_POST['variation_id'] ) ? intval( $_POST['variation_id'] ) : 0; // Sanitizing input.
 						$variation    = wc_get_product( $variation_id );
 
-						if ( ! $variation->is_in_stock() || $quantity > $variation->get_stock_quantity() ) {
-							wc_add_notice( 'This variation is out of stock or there is not enough stock quantity.', 'error' );
+						if ( $variation && ( ! $variation->is_in_stock() || $quantity > $variation->get_stock_quantity() ) ) {
+							wc_add_notice( __( 'This variation is out of stock or there is not enough stock quantity.', 'textdomain' ), 'error' );
 							$passed = false;
 						}
-					} else {
-						// For simple and other product types, we can check the global stock quantity.
-						if ( ! $product->is_in_stock() || $quantity > $product->get_stock_quantity() ) {
-							wc_add_notice( 'This product is out of stock or there is not enough stock quantity.', 'error' );
-							$passed = false;
-						}
+					} elseif ( ! $product->is_in_stock() || $quantity > $product->get_stock_quantity() ) {
+						wc_add_notice( __( 'This product is out of stock or there is not enough stock quantity.', 'textdomain' ), 'error' );
+						$passed = false;
 					}
 
 					return $passed;
@@ -1374,39 +1446,52 @@ if ( ! class_exists( 'ANONY_Woo_Help' ) ) {
 			);
 		}
 
+		/**
+		 * Creates a WooCommerce order for a given customer and product.
+		 *
+		 * This function creates an order, adds a product to it, and sets the customer's billing
+		 * and shipping address from their profile.
+		 *
+		 * @param int   $customer_id The ID of the customer.
+		 * @param int   $product_id  The ID of the product to add to the order.
+		 * @param float $total     The total price of the order. Default is 0.
+		 * @return void
+		 */
 		public static function create_order( $customer_id, $product_id, $total = 0 ) {
+			// Validate and get the product and user objects.
 			$product = wc_get_product( $product_id );
+			$user    = get_user_by( 'id', $customer_id );
 
-			$user = get_user_by( 'id', $customer_id );
-
-			if ( ! $product && ! $user ) {
+			// Return early if either the product or the user is not found.
+			if ( ! $product || ! $user ) {
 				return;
 			}
 
-			// Create the order.
+			// Prepare the order data array.
 			$order_data = array(
 				'customer_id' => $customer_id,
 				'status'      => 'processing',
 			);
 
-			// Create the order.
+			// Create the WooCommerce order.
 			$order = wc_create_order( $order_data );
-			if ( $order ) {
 
-				// add products.
+			// Proceed if the order is successfully created.
+			if ( is_a( $order, 'WC_Order' ) ) {
+				// Add the product to the order.
 				$order->add_product(
 					$product,
 					1,
 					array(
-						'subtotal' => $total,
-						'total'    => $total,
+						'subtotal' => wc_format_decimal( $total ),
+						'total'    => wc_format_decimal( $total ),
 					)
 				);
 
-				// Get an instance of the WC_Customer Object from the user ID.
+				// Get customer details.
 				$customer = new WC_Customer( $customer_id );
 
-				// add billing and shipping addresses.
+				// Prepare the billing and shipping address data.
 				$address = array(
 					'first_name' => $customer->get_billing_first_name(),
 					'last_name'  => $customer->get_billing_last_name(),
@@ -1418,16 +1503,16 @@ if ( ! class_exists( 'ANONY_Woo_Help' ) ) {
 					'country'    => $customer->get_billing_country(),
 				);
 
+				// Set billing and shipping addresses.
 				$order->set_address( $address, 'billing' );
-
 				$order->set_address( $address, 'shipping' );
 
-				// calculate and save
+				// Calculate totals and save the order.
 				$order->calculate_totals();
-
 				$order->save();
 			}
 		}
+
 		/**
 		 * Process Order Refund through Code
 		 *
@@ -1551,7 +1636,9 @@ if ( ! class_exists( 'ANONY_Woo_Help' ) ) {
 				woocommerce_product_loop_start();
 				foreach ( $products_ids->products as $featured_product ) {
 					$post_object = get_post( $featured_product );
+					//phpcs:disable
 					setup_postdata( $GLOBALS['post'] =& $post_object );
+					//phpcs:enable
 					wc_get_template_part( 'content', 'product' );
 				}
 				wp_reset_postdata();
@@ -1563,6 +1650,44 @@ if ( ! class_exists( 'ANONY_Woo_Help' ) ) {
 			} else {
 				do_action( 'woocommerce_no_products_found' );
 			}
+		}
+		/**
+		 * Retrieve tag names for a given WooCommerce product.
+		 *
+		 * This function fetches the names of tags associated with a WooCommerce product.
+		 *
+		 * @param int|WC_Product $product Product ID or WooCommerce product object.
+		 * @return array List of tag names associated with the product.
+		 */
+		public static function get_product_tag_names( $product ) {
+			// Get the product object if only the product ID is provided.
+			if ( is_numeric( $product ) ) {
+				$product = wc_get_product( $product );
+			}
+
+			// Return an empty array if the product is not valid.
+			if ( ! $product instanceof WC_Product ) {
+				return array();
+			}
+
+			// Retrieve the tag IDs associated with the product.
+			$tag_ids = $product->get_tag_ids();
+
+			// Initialize an empty array to store tag names.
+			$tag_names = array();
+
+			// Loop through each tag ID and retrieve the term name.
+			foreach ( $tag_ids as $tag_id ) {
+				$term = get_term( $tag_id );
+
+				// Check if the term is valid and add its name to the array.
+				if ( $term && ! is_wp_error( $term ) ) {
+					$tag_names[] = $term->name;
+				}
+			}
+
+			// Return the array of tag names.
+			return $tag_names;
 		}
 	}
 }

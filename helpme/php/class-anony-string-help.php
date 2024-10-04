@@ -64,5 +64,19 @@ if ( ! class_exists( 'ANONY_STRING_HELP' ) ) {
 
 			return explode( "\r\n", trim( $content ) );
 		}
+		/**
+		 * English number
+		 *
+		 * @param string $input The string.
+		 * @return string
+		 */
+		public static function to_english_numbers( $input ) {
+
+			$arabic_numbers = array( '٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩' );
+
+			$english_numbers = array( '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' );
+
+			return str_replace( $arabic_numbers, $english_numbers, $input );
+		}
 	}
 }

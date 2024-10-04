@@ -157,8 +157,8 @@ if ( ! class_exists( 'ANONY_DATE_HELP' ) ) {
 			$ago  = new \DateTime( $datetime );
 			$diff = $now->diff( $ago );
 
-			$diff->w  = floor( $diff->d / 7 );
-			$diff->d -= $diff->w * 7;
+			$weeks    = floor( $diff->d / 7 );
+			$diff->d -= $weeks * 7;
 
 			$string = array(
 				'y' => esc_html__( 'year', 'anonyengine' ),
@@ -181,6 +181,47 @@ if ( ! class_exists( 'ANONY_DATE_HELP' ) ) {
 				$string = array_slice( $string, 0, 1 );
 			}
 			return $string ? implode( ', ', $string ) . esc_html__( ' ago', 'anonyengine' ) : esc_html__( 'just now', 'anonyengine' );
+		}
+		/**
+		 * Localize an English date string to Arabic.
+		 *
+		 * @param string $date_string The date string in English format.
+		 * @return string The localized Arabic date string.
+		 */
+		public static function localize_date_to_arabic( $date_string ) {
+			// English to Arabic day and month names.
+			$days = array(
+				'Saturday'  => 'السبت',
+				'Sunday'    => 'الأحد',
+				'Monday'    => 'الإثنين',
+				'Tuesday'   => 'الثلاثاء',
+				'Wednesday' => 'الأربعاء',
+				'Thursday'  => 'الخميس',
+				'Friday'    => 'الجمعة',
+			);
+
+			$months = array(
+				'January'   => 'يناير',
+				'February'  => 'فبراير',
+				'March'     => 'مارس',
+				'April'     => 'أبريل',
+				'May'       => 'مايو',
+				'June'      => 'يونيو',
+				'July'      => 'يوليو',
+				'August'    => 'أغسطس',
+				'September' => 'سبتمبر',
+				'October'   => 'أكتوبر',
+				'November'  => 'نوفمبر',
+				'December'  => 'ديسمبر',
+			);
+
+			// Replace English day names with Arabic.
+			$localized_date = str_replace( array_keys( $days ), $days, $date_string );
+
+			// Replace English month names with Arabic.
+			$localized_date = str_replace( array_keys( $months ), $months, $localized_date );
+
+			return $localized_date;
 		}
 	}
 }

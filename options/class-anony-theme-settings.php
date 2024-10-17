@@ -25,7 +25,12 @@ if ( ! class_exists( 'ANONY_Theme_Settings' ) ) {
 	 * @link     https:// makiomar.com/anonyengine_elements..
 	 */
 	class ANONY_Theme_Settings {
-
+		/**
+		 * Directory for storing JSON files.
+		 *
+		 * @var string
+		 */
+		private $json_dir;
 		/**
 		 * Array of input fields errors. array('field_id' => 'error').
 		 *
@@ -149,6 +154,19 @@ if ( ! class_exists( 'ANONY_Theme_Settings' ) ) {
 			$this->default_values();
 
 			$this->hooks();
+
+			// Set the JSON directory path.
+			$upload_dir     = wp_upload_dir();
+			$this->json_dir = $upload_dir['basedir'] . '/anony-options';
+
+			// Create the JSON directory if it doesn't exist.
+			$this->create_json_dir();
+
+			// Ensure the folder is protected.
+			$this->protect_json_dir();
+
+			// Hook into the update_option action to save the options as JSON.
+			add_action( 'update_option_' . $this->args['opt_name'], array( $this, 'save_options_to_json' ), 10, 2 );
 		}
 
 		/**
@@ -681,6 +699,75 @@ if ( ! class_exists( 'ANONY_Theme_Settings' ) ) {
 		public function admin_notices() {
 
 			settings_errors( $this->args['opt_name'] );
+		}
+
+		/**
+		 * Save the options to a JSON file in the uploads/anony-options directory.
+		 *
+		 * @param array $old_value The old option value.
+		 * @param array $new_value The new option value.
+		 */
+		public function save_options_to_json( $old_value, $new_value ) {
+			global $wp_filesystem;
+
+			// Initialize the WP_Filesystem.
+			if ( ! function_exists( 'WP_Filesystem' ) ) {
+				require_once ABSPATH . 'wp-admin/includes/file.php';
+			}
+
+			WP_Filesystem();
+
+			// Prepare the file path.
+			$file_path = $this->json_dir . '/' . $this->args['opt_name'] . '.json';
+			$json_data = wp_json_encode( $new_value, JSON_PRETTY_PRINT );
+
+			// Write the JSON file using WP_Filesystem.
+			if ( ! $wp_filesystem->put_contents( $file_path, $json_data, FS_CHMOD_FILE ) ) {
+				//phpcs:disable
+				error_log( 'Failed to save JSON file: ' . $file_path );
+				//phpcs:enable
+			}
+		}
+
+		/**
+		 * Create the JSON directory if it does not exist.
+		 */
+		private function create_json_dir() {
+			global $wp_filesystem;
+
+			// Initialize the WP_Filesystem.
+			if ( ! function_exists( 'WP_Filesystem' ) ) {
+				require_once ABSPATH . 'wp-admin/includes/file.php';
+			}
+
+			WP_Filesystem();
+
+			// Create the directory if it doesn't exist.
+			if ( ! $wp_filesystem->is_dir( $this->json_dir ) ) {
+				$wp_filesystem->mkdir( $this->json_dir, FS_CHMOD_DIR );
+			}
+		}
+
+		/**
+		 * Protect the JSON directory by adding an .htaccess file to deny access.
+		 */
+		private function protect_json_dir() {
+			global $wp_filesystem;
+
+			// Initialize the WP_Filesystem.
+			if ( ! function_exists( 'WP_Filesystem' ) ) {
+				require_once ABSPATH . 'wp-admin/includes/file.php';
+			}
+
+			WP_Filesystem();
+
+			$htaccess_path = $this->json_dir . '/.htaccess';
+
+			// Add protection rules if .htaccess doesn't exist.
+			if ( ! $wp_filesystem->exists( $htaccess_path ) ) {
+				$rules = "Order Deny,Allow\nDeny from all\n";
+				$wp_filesystem->put_contents( $htaccess_path, $rules, FS_CHMOD_FILE );
+			}
 		}
 	}
 }

@@ -95,6 +95,7 @@ class ANONY_Woo_Archive_Sub_Cat_Filter {
 			'posts_per_page' => $posts_per_page,
 			'paged'          => $paged,
 			'tax_query'      => array(
+				'relation' => 'AND',
 				array(
 					'taxonomy' => 'product_cat',
 					'field'    => 'term_id',
@@ -105,12 +106,11 @@ class ANONY_Woo_Archive_Sub_Cat_Filter {
 
 		$current_user = wp_get_current_user();
 		if ( ! is_user_logged_in() || in_array( 'customer', (array) $current_user->roles, true ) ) {
-			$args['meta_query'] = array(
-				array(
-					'key'     => '_visibility',
-					'value'   => 'visible',
-					'compare' => '=',
-				),
+			$args['tax_query'][] = array(
+				'taxonomy' => 'product_visibility',
+				'terms'    => array( 'exclude-from-catalog' ),
+				'field'    => 'name',
+				'operator' => 'NOT IN',
 			);
 		}
 

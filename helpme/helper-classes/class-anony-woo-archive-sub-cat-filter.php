@@ -94,8 +94,10 @@ class ANONY_Woo_Archive_Sub_Cat_Filter {
 			'post_status'    => 'publish',
 			'posts_per_page' => $posts_per_page,
 			'paged'          => $paged,
+			'orderby'        => 'meta_value_num',
+			'meta_key'       => '_price',
+			'order'          => 'ASC',
 			'tax_query'      => array(
-				'relation' => 'AND',
 				array(
 					'taxonomy' => 'product_cat',
 					'field'    => 'term_id',
@@ -133,7 +135,7 @@ class ANONY_Woo_Archive_Sub_Cat_Filter {
 		$pagination_html = '';
 
 		if ( $total_pages > 1 ) {
-			$pagination_html .= '<nav class="woocommerce-pagination" aria-label="Product Pagination">';
+			$pagination_html .= '<nav class="woocommerce-pagination active-filter" aria-label="Product Pagination">';
 			$pagination_html .= '<ul class="page-numbers">';
 
 			if ( $paged > 1 ) {
@@ -195,9 +197,17 @@ class ANONY_Woo_Archive_Sub_Cat_Filter {
 							success: function(response) {
 								if (response.success) {
 									$('ul.products').html(response.data.products);
-									if (response.data.pagination) {
+									if (response.data.pagination && $( '.active-filter' ).length < 1  ) {
 										$('ul.products').after(response.data.pagination);
 									}
+									$(document).on('click', '.active-filter .page-numbers', function(e) {
+										e.preventDefault();
+										var page = $(this).data('page');
+										var subcategoryId = $('#subcategory-filter').val();
+										if (page) {
+											loadProducts(subcategoryId, page);
+										}
+									});
 									$(document.body).trigger('wc_fragments_loaded');
 								}
 							}
@@ -207,15 +217,6 @@ class ANONY_Woo_Archive_Sub_Cat_Filter {
 					$('#subcategory-filter').on('change', function() {
 						var subcategoryId = $(this).val();
 						loadProducts(subcategoryId);
-					});
- 
-					$(document).on('click', '.woocommerce-pagination .page-numbers', function(e) {
-						e.preventDefault();
-						var page = $(this).data('page');
-						var subcategoryId = $('#subcategory-filter').val();
-						if (page) {
-							loadProducts(subcategoryId, page);
-						}
 					});
 				});
 			</script>

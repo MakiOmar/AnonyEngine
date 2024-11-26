@@ -1,6 +1,7 @@
 {
     "require": {
         "phpoffice/phpspreadsheet": "^1.10",
-        "10quality/wp-query-builder": "^1.0"
+        "10quality/wp-query-builder": "^1.0",
+        "dbout/wp-orm": "^3.3"
     }
 }

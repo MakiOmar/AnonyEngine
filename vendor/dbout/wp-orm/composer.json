@@ -1,0 +1,76 @@
+{
+  "name": "dbout/wp-orm",
+  "description": "WordPress ORM with Eloquent and Phinx.",
+  "type": "package",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Dimitri BOUTEILLE",
+      "email": "bonjour@dimitri-bouteille.fr",
+      "homepage": "https://github.com/dimitriBouteille",
+      "role": "Developer"
+    }
+  ],
+  "keywords": ["wordpress", "wp", "orm", "database", "eloquent", "db", "sql", "migration", "phinx"],
+  "homepage": "https://github.com/dimitriBouteille/wp-orm",
+  "support": {
+    "issues": "https://github.com/dimitriBouteille/wp-orm/issues",
+    "source": "https://github.com/dimitriBouteille/wp-orm/"
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "require": {
+    "php": ">=8.1",
+    "robmorgan/phinx": "^0.12.5",
+    "illuminate/database": "^10.0"
+  },
+  "suggest": {
+    "illuminate/events": "Add events to your models"
+  },
+  "autoload": {
+    "files": [
+      "src/includes/migrations.php"
+    ],
+    "psr-4": {
+      "Dbout\\WpOrm\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Dbout\\WpOrm\\Tests\\": "tests/"
+    }
+  },
+  "require-dev": {
+    "friendsofphp/php-cs-fixer": "^3.28",
+    "phpstan/phpstan": ">=1.10.59",
+    "phpstan/phpstan-phpunit": "^1.3",
+    "phpstan/extension-installer": "^1.3",
+    "rector/rector": "^1.0",
+    "szepeviktor/phpstan-wordpress": "^1.3",
+    "phpunit/phpunit": "^9.6",
+    "yoast/phpunit-polyfills": "^2.0",
+    "roots/wordpress": "^6.5"
+  },
+  "config": {
+    "allow-plugins": {
+      "phpstan/extension-installer": true,
+      "roots/wordpress-core-installer": true
+    }
+  },
+  "extra": {
+    "phpstan": {
+      "includes": [
+        "extension.neon"
+      ]
+    },
+    "wordpress-install-dir": "web/wordpress"
+  },
+  "scripts": {
+    "rector": "vendor/bin/rector process src --dry-run",
+    "phpstan": "vendor/bin/phpstan analyse -c phpstan.neon",
+    "test:unit": "vendor/bin/phpunit --no-coverage",
+    "test:wordPress": "vendor/bin/phpunit -c phpunit-wp.xml --no-coverage",
+    "csFixer": "vendor/bin/php-cs-fixer fix --verbose --diff --dry-run",
+    "fix:csFixer": "vendor/bin/php-cs-fixer fix"
+  }
+}

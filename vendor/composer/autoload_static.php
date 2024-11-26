@@ -67,12 +67,18 @@ class ComposerStaticInit854dec4e4f91d890cf8431cbe192ef19
         '8d37dad4703fab45bfec9dd0bbf3278e' => __DIR__ . '/..' . '/markbaker/matrix/classes/src/Operations/multiply.php',
         '4888a6f58c08148ebe17682f9ce9b2a8' => __DIR__ . '/..' . '/markbaker/matrix/classes/src/Operations/divideby.php',
         'eef6fa3879d3efa347cd24d5eb348f85' => __DIR__ . '/..' . '/markbaker/matrix/classes/src/Operations/divideinto.php',
+        '11298418fac2d36d6d38c7c3efc5b206' => __DIR__ . '/..' . '/10quality/wp-query-builder/src/Lib/functions.php',
     );
 
     public static $prefixLengthsPsr4 = array (
         'Z' => 
         array (
             'ZipStream\\' => 10,
+        ),
+        'T' => 
+        array (
+            'TenQuality\\WP\\Database\\' => 23,
+            'TenQuality\\Data\\' => 16,
         ),
         'S' => 
         array (
@@ -100,6 +106,14 @@ class ComposerStaticInit854dec4e4f91d890cf8431cbe192ef19
         'ZipStream\\' => 
         array (
             0 => __DIR__ . '/..' . '/maennchen/zipstream-php/src',
+        ),
+        'TenQuality\\WP\\Database\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/10quality/wp-query-builder/src',
+        ),
+        'TenQuality\\Data\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/10quality/php-data-model/src',
         ),
         'Symfony\\Polyfill\\Mbstring\\' => 
         array (

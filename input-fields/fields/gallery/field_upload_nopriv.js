@@ -3,7 +3,7 @@ function AnonyUpload(){
 
 		$( "img[src='']" ).attr( "src", anony_gallery.url );
 
-		$( "body" ).on(
+		$( document ).on(
 			'click',
 			'.anony-opts-gallery',
 			function ( event ) {
@@ -16,7 +16,7 @@ function AnonyUpload(){
 			}
 		);
 
-		$( "body" ).on(
+		$( document ).on(
 			'change',
 			'.anony_gallery' ,
 			function (event) {

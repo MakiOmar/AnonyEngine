@@ -3,7 +3,7 @@ function AnonyUpload(){
 
 		jQuery( "img[src='']" ).attr( "src", anony_gallery.url );
 
-		jQuery( "fieldset" ).on(
+		jQuery( document ).on(
 			'click',
 			".anony-opts-gallery",
 			function ( event ) {
@@ -59,7 +59,7 @@ function AnonyUpload(){
 			}
 		);
 
-		jQuery( document.body ).on(
+		jQuery( document ).on(
 			"click",
 			".anony_remove_gallery_image" ,
 			function ( event ) {
@@ -95,7 +95,7 @@ function AnonyUpload(){
 			}
 		);
 
-		jQuery( "fieldset" ).on(
+		jQuery( document ).on(
 			"click",
 			".anony-opts-clear-gallery",
 			function (event) {

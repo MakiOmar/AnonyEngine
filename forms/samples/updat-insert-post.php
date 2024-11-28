@@ -142,7 +142,7 @@ $form = array(
 	),
 	'defaults'        => array(
 		'object_type'    => 'post', // Accepts post, term, user
-		'object_id_from' => 'query_variable', // Accepts current_user, current_term, current_post or query_variable
+		'object_id_from' => 'query_variable', // Accepts current_user, current_term, current_post , query_variable or shortcode_attr
 		'query_variable' => '_post_id',
 	),
 );

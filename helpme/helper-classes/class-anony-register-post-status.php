@@ -15,7 +15,6 @@ defined( 'ABSPATH' ) || die(); // Exit if accessed direct.
 // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
 if ( ! class_exists( 'ANONY_Register_Post_Status' ) ) {
 
-
 	/**
 	 * Register custom status for post type class.
 	 *
@@ -27,11 +26,32 @@ if ( ! class_exists( 'ANONY_Register_Post_Status' ) ) {
 	 * @link     https:// makiomar.com/anonyengine.
 	 */
 	class ANONY_Register_Post_Status {
+		/**
+		 * Status name.
+		 *
+		 * @var string
+		 */
+		private $status_name;
+
+		/**
+		 * Status label.
+		 *
+		 * @var string
+		 */
+		private $label;
+
+		/**
+		 * Post type.
+		 *
+		 * @var string
+		 */
+		private $post_type;
 
 		/**
 		 * Class instructor.
 		 *
 		 * @param string $status_name status's name.
+		 * @param string $label status's label.
 		 * @param string $post_type Post's type's name.
 		 */
 		public function __construct( $status_name, $label, $post_type ) {
@@ -146,7 +166,7 @@ if ( ! class_exists( 'ANONY_Register_Post_Status' ) ) {
 				$uppercase = $this->label;
 
 				ob_start();?>
-					jQuery(document).ready(function($){
+				jQuery(document).ready(function($){
 					$("select#post_status").append("<option value='<?php echo $this->status_name; ?>' <?php echo $complete; ?>><?php echo $uppercase; ?></option>");
 					   
 					if( '<?php echo $post->post_status; ?>' === '<?php echo $this->status_name; ?>' ){
@@ -154,15 +174,27 @@ if ( ! class_exists( 'ANONY_Register_Post_Status' ) ) {
 						$("input#save-post").val("Save <?php echo $uppercase; ?>");
 					}
 					var jSelect = $("select#post_status");
-
-					$("a.save-post-status").on("click", function(){
-
-						if( jSelect.val() === '<?php echo $this->status_name; ?>' ){
-
+					var initialStatus = "<?php echo $post->post_status; ?>"; // Store the initial status.
+					var initialLabel = "<?php echo $label; ?>"; // Store the initial label.
+			
+					// Update button text when a status is selected.
+					$("a.save-post-status").on("click", function() {
+						if (jSelect.val() === "<?php echo $this->status_name; ?>") {
 							$("input#save-post").val("Save <?php echo $uppercase; ?>");
 						}
 					});
+			
+					// Restore the initial button text and label when "Cancel" is clicked.
+					$("a.cancel-post-status").on("click", function() {
+						jSelect.val(initialStatus); // Revert the dropdown to the initial status.
+						$("span#post-status-display").html(initialLabel); // Revert the display label.
+						if (initialStatus === "<?php echo $this->status_name; ?>") {
+							$("input#save-post").val("Save <?php echo $uppercase; ?>");
+						} else {
+							$("input#save-post").val("Save Draft"); // Default fallback.
+						}
 					});
+				});
 				<?php
 
 				$script = ob_get_clean();
@@ -173,3 +205,4 @@ if ( ! class_exists( 'ANONY_Register_Post_Status' ) ) {
 	}
 
 }
+new ANONY_Register_Post_Status( 'confirmed', 'حجز مؤكد', 'clinic_booking' );

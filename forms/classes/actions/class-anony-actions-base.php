@@ -62,7 +62,8 @@ if ( ! class_exists( 'ANONY_Actions_Base' ) ) {
 		 */
 		protected function get_field( $value ) {
 			if ( is_string( $value ) && strpos( $value, '#' ) !== false ) {
-
+				preg_match( '/#\w+/', $value, $match );
+				$value       = $match[0];
 				$input_field = str_replace( '#', '', $value );
 
 				foreach ( $this->form->fields as $field ) {
@@ -114,7 +115,8 @@ if ( ! class_exists( 'ANONY_Actions_Base' ) ) {
 		 */
 		protected function get_field_value( $value, $field = false ) {
 			if ( strpos( $value, '#' ) !== false ) {
-
+				preg_match( '/#\w+/', $value, $match );
+				$value       = $match[0];
 				$input_field = str_replace( '#', '', $value );
 				//phpcs:disable WordPress.Security.NonceVerification.Missing
 				if ( $field && isset( $_FILES[ $input_field ] ) ) {

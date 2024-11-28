@@ -202,7 +202,6 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 				}
 
 				$this->submit_label = ! empty( $this->form['submit_label'] ) ? $this->form['submit_label'] : __( 'Submit', 'anonyengine' );
-
 				add_shortcode( $this->id, array( $this, 'create_shortcode' ) );
 
 				// Submitted form.
@@ -458,26 +457,30 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 						if ( $profile_id && ! empty( $profile_id ) ) {
 							$this->set_post_default_values( $fields, $configs, $profile_id );
 						}
-					} elseif ( ! empty( $this->form['defaults'] ) && ! empty( $this->form['defaults']['object_type'] ) && ! empty( $this->form['defaults']['object_id_from'] ) ) {
-						$object_type    = $this->form['defaults']['object_type'];
-						$object_id_from = $this->form['defaults']['object_id_from'];
-						$object_id      = $this->get_object_id( $object_type, $object_id_from );
-					} elseif ( ! empty( $this->form['defaults'] ) && ! empty( $this->form['defaults']['object_type'] ) && ! empty( $this->form['defaults']['object_id'] ) ) {
+					} elseif ( ! empty( $this->form['defaults'] ) ) {
 						$object_type = $this->form['defaults']['object_type'];
-						$object_id   = absint( $this->form['defaults']['object_id'] );
-					}
-					if ( isset( $object_id ) && is_numeric( $object_id ) ) {
-						switch ( $object_type ) {
-							case 'post':
-								$this->set_post_default_values( $fields, $configs, $object_id );
-								break;
-							case 'term':
-								$this->set_term_default_values( $fields, $configs, $object_id );
-								break;
-							case 'user':
-								$this->set_user_default_values( $fields, $configs, $object_id );
-
-								break;
+						if ( ! $this->object_id ) {
+							if ( ! empty( $this->form['defaults']['object_id'] ) ) {
+								$object_id = absint( $this->form['defaults']['object_id'] );
+							} else {
+								$object_id_from = $this->form['defaults']['object_id_from'];
+								$object_id      = $this->get_object_id( $object_type, $object_id_from );
+							}
+						} else {
+							$object_id = $this->object_id;
+						}
+						if ( isset( $object_id ) && is_numeric( $object_id ) ) {
+							switch ( $object_type ) {
+								case 'post':
+									$this->set_post_default_values( $fields, $configs, $object_id );
+									break;
+								case 'term':
+									$this->set_term_default_values( $fields, $configs, $object_id );
+									break;
+								case 'user':
+									$this->set_user_default_values( $fields, $configs, $object_id );
+									break;
+							}
 						}
 					}
 				}
@@ -614,26 +617,43 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 		/**
 		 * Render form fields
 		 *
-		 * @param bool $_echo Weather to echo or return.
+		 * @param bool  $_echo Weather to echo or return.
+		 * @param array $args Optional arguments.
 		 * @return mixed
 		 */
-		public function render( $_echo = true ) {
+		public function render( $_echo = true, $args = array() ) {
+			if ( ! empty( $args['id'] ) ) {
+				$this->object_id = absint( $args['id'] );
+				$this->default_values();
+			}
 			if ( $_echo ) {
 				$this->create( $this->fields );
 			} else {
-				return $this->create_shortcode();
+				return $this->create_shortcode( $args );
 			}
 		}
 
 		/**
 		 * Form render shortcode callback.
 		 *
+		 * @param array $atts Shortcode arguments.
 		 * @return string Rendered form.
 		 */
-		public function create_shortcode() {
+		public function create_shortcode( $atts ) {
+			$atts = shortcode_atts(
+				array(
+					'id' => '',
+				),
+				$atts
+			);
+			if ( ! empty( $atts['id'] ) ) {
+				$this->object_id = absint( $atts['id'] );
+				$this->default_values();
+			}
 			ob_start();
 			$this->create( $this->fields );
-			return ob_get_clean();
+			$output = ob_get_clean();
+			return $output;
 		}
 
 		/**
@@ -690,14 +710,14 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 				//phpcs:enable.
 				foreach ( $fields as $field ) :
 					if ( class_exists( 'ANONY_Input_Base' ) && class_exists( 'ANONY_Form_Input_Field' ) ) {
-						$args = array(
+						$attrs = array(
 							'form'    => $this->form,
 							'field'   => $field,
 							'form_id' => $this->id,
 							'context' => $this->context,
 						);
 
-						$render_field = new ANONY_Form_Input_Field( $args );
+						$render_field = new ANONY_Form_Input_Field( $attrs );
 					} else {
 						$render_field = new ANONY_Input_Field( $field, $this->id, 'form' );
 					}
@@ -836,12 +856,12 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 		 * Form submition proccessing.
 		 */
 		public function form_submitted() {
-
 			$not_validated = wp_unslash( $_REQUEST );
-			if ( ! isset( $not_validated[ 'submit-' . $this->id ] ) ) {
+			//phpcs:disable
+			if ( ! 'POST' === $_SERVER['REQUEST_METHOD'] && ! isset( $not_validated[ 'submit-' . $this->id ] ) ) {
+				//phpcs:enable
 				return;
 			}
-
 			// Verify nonce.
 			if ( ! isset( $not_validated[ 'anony_form_submit_nonce_' . $this->id ] ) || ! wp_verify_nonce( $not_validated[ 'anony_form_submit_nonce_' . $this->id ], 'anony_form_submit_' . $this->id ) ) {
 				return;
@@ -860,7 +880,6 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 				foreach ( $this->action_list as $action => $action_data ) {
 					$class_name = "ANONY_{$action}";
 					if ( class_exists( $class_name ) ) :
-
 						$obj = new $class_name( $this->validated, $action_data, $this );
 
 						if ( isset( $obj->result ) && $obj->result ) {

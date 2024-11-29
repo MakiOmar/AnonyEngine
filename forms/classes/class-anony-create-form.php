@@ -704,19 +704,19 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 			}
 			//phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
 			?>
-			<form id="<?php echo esc_attr( $this->id ); ?>" class="anony-form"  <?php echo $this->form_attributes; ?>>
+			<form id="<?php echo esc_attr( $this->id ); ?>" class="anony-form"<?php echo $this->object_id ? ' data-object-id="' . $this->object_id . '"' : ''; ?>  <?php echo $this->form_attributes; ?>>
 
 				<?php
 				//phpcs:enable.
 				foreach ( $fields as $field ) :
 					if ( class_exists( 'ANONY_Input_Base' ) && class_exists( 'ANONY_Form_Input_Field' ) ) {
-						$attrs = array(
-							'form'    => $this->form,
-							'field'   => $field,
-							'form_id' => $this->id,
-							'context' => $this->context,
+						$attrs        = array(
+							'form'      => $this->form,
+							'field'     => $field,
+							'form_id'   => $this->id,
+							'context'   => $this->context,
+							'object_id' => $this->object_id,
 						);
-
 						$render_field = new ANONY_Form_Input_Field( $attrs );
 					} else {
 						$render_field = new ANONY_Input_Field( $field, $this->id, 'form' );

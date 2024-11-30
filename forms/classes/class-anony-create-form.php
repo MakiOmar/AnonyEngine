@@ -730,6 +730,11 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 				if ( ! empty( $mappings_data ) ) {
 					echo '<input id="data-' . esc_attr( $this->id ) . '" type="hidden" data-value="' . esc_attr( rawurlencode( wp_json_encode( $mappings_data ) ) ) . '"/>';
 				}
+				if ( $this->object_id ) {
+					?>
+					<input type="hidden" name="object_id" value="<?php echo esc_attr( $this->object_id ); ?>">
+					<?php
+				}
 				wp_nonce_field( 'anony_form_submit_' . $this->id, 'anony_form_submit_nonce_' . $this->id );
 				do_action( 'anony_form_fields', $fields );
 				?>
@@ -880,6 +885,9 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 				foreach ( $this->action_list as $action => $action_data ) {
 					$class_name = "ANONY_{$action}";
 					if ( class_exists( $class_name ) ) :
+						if ( isset( $_REQUEST['object_id'] ) ) {
+							$this->validated['object_id'] = absint( $_REQUEST['object_id'] );
+						}
 						$obj = new $class_name( $this->validated, $action_data, $this );
 
 						if ( isset( $obj->result ) && $obj->result ) {

@@ -66,6 +66,13 @@ if ( ! class_exists( 'ANONY_Post_Action_Base' ) ) {
 		public $object_id = false;
 
 		/**
+		 * Request
+		 *
+		 * @var array
+		 */
+		public $requested;
+
+		/**
 		 * Constructor.
 		 *
 		 * @param array  $validated_data $_POST after validation.
@@ -74,7 +81,6 @@ if ( ! class_exists( 'ANONY_Post_Action_Base' ) ) {
 		 */
 		public function __construct( $validated_data, $action_data, $form ) {
 			parent::__construct( $validated_data, $form );
-
 			if ( ! is_user_logged_in() ) {
 				$url = add_query_arg( array( 'status' => 'not-allowed' ), home_url( wp_get_referer() ) );
 				wp_safe_redirect( $url );
@@ -86,7 +92,7 @@ if ( ! class_exists( 'ANONY_Post_Action_Base' ) ) {
 				//phpcs:enable
 				return;
 			}
-
+			$this->requested   = $validated_data;
 			$this->post_data   = $action_data['post_data'];
 			$this->action_data = $action_data;
 			// Argumnets sent from the form.
@@ -161,6 +167,9 @@ if ( ! class_exists( 'ANONY_Post_Action_Base' ) ) {
 		 * @return int|bool
 		 */
 		protected function get_object_id() {
+			if ( isset( $this->requested['object_id'] ) ) {
+				return absint( $this->requested['object_id'] );
+			}
 			return false;
 		}
 

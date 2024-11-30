@@ -42,7 +42,7 @@ class ANONY_Gallery {
 		if ( ! is_object( $parent_obj ) ) {
 			return;
 		}
-		$this->parent_obj = $parent_obj;
+		$this->parent_obj  = $parent_obj;
 		$this->button_text = ! empty( $this->parent_obj->field['button_text'] ) ? $this->parent_obj->field['button_text'] : esc_html__( 'Browse', 'anonyengine' );
 	}
 
@@ -123,9 +123,10 @@ class ANONY_Gallery {
 	 * @return void
 	 */
 	protected function uploads_preview( &$html ) {
-		$ids   = array();
-		$html .= '<div class="anony-gallery-thumbs-wrap" id="anony-gallery-thumbs-' . $this->parent_obj->id_attr_value . '">';
-		$html .= '<div class="anony-gallery-thumbs">';
+		$ids       = array();
+		$unique_id = $this->parent_obj->object_id ? $this->parent_obj->object_id : time() . wp_rand( 1000, 9999 );
+		$html     .= '<div class="anony-gallery-thumbs-wrap" id="anony-gallery-thumbs-' . $this->parent_obj->id_attr_value . '-' . $unique_id . '">';
+		$html     .= '<div class="anony-gallery-thumbs">';
 		if ( ! empty( $this->parent_obj->value ) ) {
 			if ( is_array( $this->parent_obj->value ) ) {
 				$ids = $this->parent_obj->value;
@@ -142,7 +143,7 @@ class ANONY_Gallery {
 					'<input class="gallery-item" type="hidden" name="%1$s[]" id="anony-gallery-thumb-%2$s-%3$s" value="%2$s" />',
 					$this->parent_obj->input_name,
 					$attachment_id,
-					$this->parent_obj->object_id ? $this->parent_obj->object_id : time() . wp_rand( 1000, 9999 )
+					$unique_id . '-' . $attachment_id
 				);
 				$html .= '<a href="#" class="anony_remove_gallery_image" style="display:block" data-field-id="' . $this->parent_obj->input_name . '" rel-id="' . $attachment_id . '">Remove</a>';
 				$html .= '</div>';

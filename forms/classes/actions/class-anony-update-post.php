@@ -36,6 +36,12 @@ if ( ! class_exists( 'ANONY_Update_Post' ) ) {
 		 * @var mixed
 		 */
 		public $result = false;
+		/**
+		 * Request
+		 *
+		 * @var array
+		 */
+		public $requested;
 
 		/**
 		 * Constructor.
@@ -46,7 +52,8 @@ if ( ! class_exists( 'ANONY_Update_Post' ) ) {
 		 */
 		public function __construct( $validated_data, $action_data, $form ) {
 			parent::__construct( $validated_data, $action_data, $form );
-			$this->result = $this->post_id;
+			$this->requested = $validated_data;
+			$this->result    = $this->post_id;
 		}
 
 		/**
@@ -58,6 +65,8 @@ if ( ! class_exists( 'ANONY_Update_Post' ) ) {
 			//phpcs:disable WordPress.Security.NonceVerification.Recommended
 			if ( ! empty( $_GET['_post_id'] ) && is_numeric( $_GET['_post_id'] ) ) {
 				return absint( $_GET['_post_id'] );
+			} elseif ( isset( $this->requested['object_id'] ) ) {
+				return absint( $this->requested['object_id'] );
 			}
 			//phpcs:enable.
 

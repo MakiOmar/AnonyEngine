@@ -91,13 +91,13 @@ function anony_common_scripts() {
 		wp_register_style( $script, ANOE_URI . 'assets/js/' . $script . '.js', array( 'jquery', 'jquery-ui-slider' ), filemtime( wp_normalize_path( ANOE_DIR . '/assets/js/' . $script . '.js' ) ), true );
 	}
 
-	wp_localize_script( 'jquery.helpme', 'AnonyLoc', array( 'ajaxUrl' => ANONY_Wpml_Help::get_ajax_url() ) );
+	wp_localize_script( 'jquery', 'AnonyLoc', array( 'ajaxUrl' => ANONY_Wpml_Help::get_ajax_url() ) );
 }
 
 /**
  * AnonyEngine common scripts.
  */
-// add_action( 'wp_enqueue_scripts', 'anony_common_scripts' );.
+add_action( 'wp_enqueue_scripts', 'anony_common_scripts' );
 add_action( 'admin_enqueue_scripts', 'anony_common_scripts' );
 
 

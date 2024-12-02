@@ -704,19 +704,19 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 			}
 			//phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
 			?>
-			<form id="<?php echo esc_attr( $this->id ); ?>" class="anony-form"  <?php echo $this->form_attributes; ?>>
+			<form id="<?php echo esc_attr( $this->id ); ?>" class="anony-form"<?php echo $this->object_id ? ' data-object-id="' . $this->object_id . '"' : ''; ?>  <?php echo $this->form_attributes; ?>>
 
 				<?php
 				//phpcs:enable.
 				foreach ( $fields as $field ) :
 					if ( class_exists( 'ANONY_Input_Base' ) && class_exists( 'ANONY_Form_Input_Field' ) ) {
-						$attrs = array(
-							'form'    => $this->form,
-							'field'   => $field,
-							'form_id' => $this->id,
-							'context' => $this->context,
+						$attrs        = array(
+							'form'      => $this->form,
+							'field'     => $field,
+							'form_id'   => $this->id,
+							'context'   => $this->context,
+							'object_id' => $this->object_id,
 						);
-
 						$render_field = new ANONY_Form_Input_Field( $attrs );
 					} else {
 						$render_field = new ANONY_Input_Field( $field, $this->id, 'form' );
@@ -729,6 +729,11 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 				endforeach;
 				if ( ! empty( $mappings_data ) ) {
 					echo '<input id="data-' . esc_attr( $this->id ) . '" type="hidden" data-value="' . esc_attr( rawurlencode( wp_json_encode( $mappings_data ) ) ) . '"/>';
+				}
+				if ( $this->object_id ) {
+					?>
+					<input type="hidden" name="object_id" value="<?php echo esc_attr( $this->object_id ); ?>">
+					<?php
 				}
 				wp_nonce_field( 'anony_form_submit_' . $this->id, 'anony_form_submit_nonce_' . $this->id );
 				do_action( 'anony_form_fields', $fields );
@@ -880,6 +885,9 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 				foreach ( $this->action_list as $action => $action_data ) {
 					$class_name = "ANONY_{$action}";
 					if ( class_exists( $class_name ) ) :
+						if ( isset( $_REQUEST['object_id'] ) ) {
+							$this->validated['object_id'] = absint( $_REQUEST['object_id'] );
+						}
 						$obj = new $class_name( $this->validated, $action_data, $this );
 
 						if ( isset( $obj->result ) && $obj->result ) {

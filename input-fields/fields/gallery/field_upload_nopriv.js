@@ -88,8 +88,8 @@ function AnonyUpload(){
 			function ( event ) {
 				event.preventDefault();
 				if (confirm( 'Are you sure you want to remove this image?' )) {
-					var attachmentID = jQuery( this ). attr( 'rel-id' );
-					var fieldID      = $(this).data('field-id');
+					var attachmentID = $( this ). attr( 'rel-id' );
+					var fieldID      = $( this ).data('field-id');
 					
 					var parentForm = $(this).closest('.anony-form');
 					var objectType = parentForm.data('object-type');
@@ -97,19 +97,19 @@ function AnonyUpload(){
 					var formID     = parentForm.attr('id');
 					var nonce      = $( '#anony_form_submit_nonce_' + formID ).val();
 					var formData   = JSON.parse( decodeURIComponent( $('#data-' + formID ).data('value') ) );
-
+					let data = {
+						object_type   : objectType,
+						object_id     : objectID,
+						form_id       : formID,
+						attachment_id : attachmentID,
+						action        : 'remove_gallery_item',
+						field_config  : formData[fieldID],
+						nonce         : nonce,
+					};
 					if ( parentForm.data('object-type') !== undefined && parentForm.data('object-id') !== undefined ) {
 						$.ajax({
 							type : "POST",
-							data: {
-								object_type   : objectType,
-								object_id     : objectID,
-								form_id       : formID,
-								attachment_id : attachmentID,
-								action        : 'remove_gallery_item',
-								field_config  : formData[fieldID],
-								nonce         : nonce,
-							},
+							data: data,
 							url : AnonyLoc.ajaxUrl,
 							beforeSend: function( jqXHR, settings ) {
 								

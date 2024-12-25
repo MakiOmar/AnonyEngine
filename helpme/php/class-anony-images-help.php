@@ -176,5 +176,54 @@ if ( ! class_exists( 'ANONY_IMAGES_HELP' ) ) {
 			}
 			return $content;
 		}
+		/**
+		 * Get the MIME type of a file from its URL.
+		 *
+		 * @param string $url The URL of the file.
+		 * @return string|null The MIME type, or null if it cannot be determined.
+		 */
+		public static function get_mime_type_from_url( string $url ): ?string {
+			try {
+				$file_info     = new finfo( FILEINFO_MIME_TYPE );
+				$file_contents = file_get_contents( $url );
+				if ( ! $file_contents ) {
+					return null; // Failed to fetch the file contents.
+				}
+				return $file_info->buffer( $file_contents );
+			} catch ( Exception $e ) {
+				return null; // Handle any exceptions gracefully.
+			}
+		}
+		/**
+		 * Get the dimensions of an image from its URL.
+		 *
+		 * @param string $url The URL of the image.
+		 * @return array|null An array with 'width' and 'height', or null if the dimensions cannot be determined.
+		 */
+		function get_image_dimensions_from_url( string $url ): ?array {
+			try {
+				$image_data = file_get_contents( $url );
+				if ( false === $image_data ) {
+					return null; // Failed to fetch the image.
+				}
+
+				$image = imagecreatefromstring( $image_data );
+				if ( ! $image ) {
+					return null; // Invalid image data.
+				}
+
+				$width  = imagesx( $image );
+				$height = imagesy( $image );
+
+				imagedestroy( $image ); // Free up memory.
+
+				return array(
+					'width'  => $width,
+					'height' => $height,
+				);
+			} catch ( Exception $e ) {
+				return null; // Handle any exceptions gracefully.
+			}
+		}
 	}
 }

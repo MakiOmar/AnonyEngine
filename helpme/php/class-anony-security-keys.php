@@ -24,7 +24,7 @@ if ( ! class_exists( 'ANONY_SECURITY_KRYS' ) ) {
 	 * @license  https:// makiomar.com AnonyEngine Licence.
 	 * @link     https:// makiomar.com/anonyengine
 	 */
-	class ANONY_SECURITY_KRYS extends ANONY_HELP {
+	class ANONY_SECURITY_KEYS extends ANONY_HELP {
 		/**
 		 * Generate a unique token.
 		 *

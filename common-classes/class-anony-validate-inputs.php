@@ -6,9 +6,15 @@
  *
  * @package  AnonyEngine
  * @author   Makiomar <info@makiomar.com>
- * @license  https:// makiomar.com AnonyEngine Licence.
- * @link     https:// makiomar.com/anonyengine_elements.
+ * @license  GPL-2.0-or-later
+ * @link     https://makiomar.com/anonyengine_elements
+ * @since    1.0.0
  */
+
+// Prevent direct access.
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 if ( ! class_exists( 'ANONY_Validate_Inputs' ) ) {
 	/**
@@ -16,41 +22,47 @@ if ( ! class_exists( 'ANONY_Validate_Inputs' ) ) {
 	 *
 	 * @package    AnonyEngine fields
 	 * @author     Makiomar <info@makiomar.com>
-	 * @license    https:// makiomar.com AnonyEngine Licence.
-	 * @link       https:// makiomar.com.
+	 * @license    GPL-2.0-or-later
+	 * @link       https://makiomar.com
+	 * @since      1.0.0
 	 */
 	class ANONY_Validate_Inputs {
 		/**
-		 * Holds an array of fields and there corresponding error code as key/value pairs.
+		 * Holds an array of fields and their corresponding error codes as key/value pairs.
 		 *
+		 * @since 1.0.0
 		 * @var array
 		 */
 		public $errors = array();
 
 		/**
-		 * Holds an array of fields and there corresponding warning code as key/value pairs.
+		 * Holds an array of fields and their corresponding warning codes as key/value pairs.
 		 *
+		 * @since 1.0.0
 		 * @var array
 		 */
 		public $warnings = array();
 
 		/**
-		 * Decide if valid input. Default is <code>false</code>.
+		 * Decide if input is valid. Default is true.
 		 *
-		 * @var boolean
+		 * @since 1.0.0
+		 * @var bool
 		 */
 		public $valid = true;
 
 		/**
-		 * Inputs value.
+		 * Input value.
 		 *
-		 * @var string
+		 * @since 1.0.0
+		 * @var mixed
 		 */
 		public $value;
 
 		/**
-		 * Validations limits.
+		 * Validation limits.
 		 *
+		 * @since 1.0.0
 		 * @var string
 		 */
 		public $limits = '';
@@ -58,71 +70,133 @@ if ( ! class_exists( 'ANONY_Validate_Inputs' ) ) {
 		/**
 		 * Field data.
 		 *
+		 * @since 1.0.0
 		 * @var array
 		 */
-		public $field;
+		public $field = array();
 
 		/**
 		 * Field's validation type.
 		 *
+		 * @since 1.0.0
 		 * @var string
 		 */
-		public $validation;
+		public $validation = '';
 
 		/**
 		 * Field's sanitization function name.
 		 *
+		 * @since 1.0.0
 		 * @var string
 		 */
-		public $sanitization;
+		public $sanitization = '';
 
 		/**
 		 * Field's title.
 		 *
+		 * @since 1.0.0
 		 * @var string
 		 */
-		public $field_title;
+		public $field_title = '';
 
 		/**
 		 * Constructor.
 		 *
-		 * @param string|array $args An array of field's date required for validation.<br/>**Note: **Empty $args so the class can be instantiated without $args if needed.
+		 * @since 1.0.0
+		 * @param string|array $args An array of field's data required for validation.
+		 *                           Empty $args so the class can be instantiated without $args if needed.
 		 */
 		public function __construct( $args = '' ) {
+			if ( ! is_array( $args ) || empty( $args ) ) {
+				return;
+			}
 
-			if ( is_array( $args ) && ! empty( $args ) ) {
+			// Set field's value to the new value before validation.
+			$this->value = $args['new_value'];
 
-				// Set field's value to the new value before validation.
-				$this->value = $args['new_value'];
+			// Skip validation if value is empty and field is not required.
+			if ( empty( $this->value ) && ! $this->is_required_field( $args['field'] ) ) {
+				return;
+			}
 
-				if ( empty( $this->value ) && strpos( $args['field']['validate'], 'required' ) === false ) {
-					return;// if level 2-1.
-				}
+			$this->field = $this->sanitize_field_data( $args['field'] );
 
-				$this->field = $args['field'];
+			// Set field title.
+			$this->field_title = $this->get_field_title( $args['field'] );
 
-				// translators: %s is for field's id.
-				$this->field_title = ! empty( $this->field['title'] ) ? $this->field['title'] : sprintf( __( 'Field with id %s', 'anonyengine' ), $this->field['id'] );
-
-				if ( isset( $this->field['validate'] ) ) {
-
-					$this->select_sanitization();
-
-					$this->validation = $this->field['validate'];
-
-					$this->validate_inputs();
-				}
-			}// if level 1.
-		}//end __construct()
+			// Process validation if specified.
+			if ( ! empty( $this->field['validate'] ) ) {
+				$this->select_sanitization();
+				$this->validation = sanitize_text_field( $this->field['validate'] );
+				$this->validate_inputs();
+			}
+		}
 
 		/**
-		 * Select sanitization function name for a field
+		 * Check if field is required.
 		 *
+		 * @since 1.0.0
+		 * @param array $field Field data.
+		 * @return bool True if field is required, false otherwise.
+		 */
+		private function is_required_field( $field ) {
+			return ! empty( $field['validate'] ) && strpos( $field['validate'], 'required' ) !== false;
+		}
+
+		/**
+		 * Sanitize field data.
+		 *
+		 * @since 1.0.0
+		 * @param array $field Field data.
+		 * @return array Sanitized field data.
+		 */
+		private function sanitize_field_data( $field ) {
+			if ( ! is_array( $field ) ) {
+				return array();
+			}
+
+			$sanitized_field = array();
+			foreach ( $field as $key => $value ) {
+				if ( is_string( $value ) ) {
+					$sanitized_field[ $key ] = sanitize_text_field( $value );
+				} else {
+					$sanitized_field[ $key ] = $value;
+				}
+			}
+
+			return $sanitized_field;
+		}
+
+		/**
+		 * Get field title.
+		 *
+		 * @since 1.0.0
+		 * @param array $field Field data.
+		 * @return string Field title.
+		 */
+		private function get_field_title( $field ) {
+			if ( ! empty( $field['title'] ) ) {
+				return sanitize_text_field( $field['title'] );
+			}
+
+			$field_id = ! empty( $field['id'] ) ? sanitize_text_field( $field['id'] ) : 'unknown';
+			return sprintf(
+				/* translators: %s is for field's id. */
+				__( 'Field with id %s', 'anonyengine' ),
+				$field_id
+			);
+		}
+
+		/**
+		 * Select sanitization function name for a field.
+		 *
+		 * @since 1.0.0
 		 * @return void
 		 */
 		public function select_sanitization() {
+			$field_type = ! empty( $this->field['type'] ) ? sanitize_text_field( $this->field['type'] ) : 'text';
 
-			switch ( $this->field['type'] ) {
+			switch ( $field_type ) {
 				case 'textarea':
 					$this->sanitization = 'sanitize_textarea_field';
 					break;
@@ -143,63 +217,60 @@ if ( ! class_exists( 'ANONY_Validate_Inputs' ) ) {
 					$this->sanitization = 'sanitize_text_field';
 					break;
 			}
-		}//end select_sanitization()
+		}
 
 		/**
-		 * Inputs validation base function
+		 * Inputs validation base function.
 		 *
-		 * **Description: **Invoke the corresponding validtion function according to the <code>$args['validate']</code>.<br>
-		 * **Note: **<br/>
-		 * * <code>$args['validate']</code> value can be equal to <code>'int|file_type:pdf,doc,docx'</code>.
-		 * * validation types are separated with <code>|</code> and if the validation has any limits like supported file types, so sholud be followd by <code>:</code> then the limits.
-		 * * Limits should be separated with <code>,</code>.
+		 * Invoke the corresponding validation function according to the $args['validate'].
+		 * Note: $args['validate'] value can be equal to 'int|file_type:pdf,doc,docx'.
+		 * Validation types are separated with '|' and if the validation has any limits
+		 * like supported file types, so should be followed by ':' then the limits.
+		 * Limits should be separated with ','.
 		 *
-		 * @return void  Just set field's value after validation
+		 * @since 1.0.0
+		 * @return void
 		 */
 		public function validate_inputs() {
-
 			// Start checking if validation is needed.
-			if ( ! is_null( $this->validation ) || ! empty( $this->validation ) ) {
+			if ( empty( $this->validation ) ) {
+				return;
+			}
 
-				// Check if need multiple validations.
-				if ( strpos( $this->validation, '|' ) !== false ) {
-					$this->multiple_validation( $this->validation );
-
-				} else {
-
-					$this->single_validation( $this->validation );
-				}// if level 2.
-
-			}// if level 1.
-		}//end validate_inputs()
+			// Check if need multiple validations.
+			if ( strpos( $this->validation, '|' ) !== false ) {
+				$this->multiple_validation( $this->validation );
+			} else {
+				$this->single_validation( $this->validation );
+			}
+		}
 
 		/**
 		 * Decide which validation method should be called and sets validation limits.
 		 *
+		 * @since 1.0.0
 		 * @param string $value String that contains validation and its limits.
-		 * @return string Returns validation method name
+		 * @return string Returns validation method name.
 		 */
 		public function select_method( $value = '' ) {
+			$value = sanitize_text_field( $value );
+
 			// Check if validation has limits.
 			if ( strpos( $value, ':' ) !== false ) {
+				$validation_parts = explode( ':', $value, 2 );
 
-				$vald = explode( ':', $value );
-
-				// Set Validation limits.
-				$this->limits = $vald[1];
+				// Set validation limits.
+				$this->limits = sanitize_text_field( $validation_parts[1] );
 
 				// Validation method name.
-				$method = 'valid_' . $vald[0];
-
+				$method = 'valid_' . sanitize_text_field( $validation_parts[0] );
 			} else {
-
 				// Validation method name.
 				$method = 'valid_' . $value;
-
-			}// if level 1.
+			}
 
 			return $method;
-		}//end select_method()
+		}
 
 		/**
 		 * Call validation method if the validation is single. e.g. url

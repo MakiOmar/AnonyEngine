@@ -3,7 +3,7 @@
  * Plugin Name: AnonyEngine
  * Plugin URI: https://makiomar.com
  * Description: With AnonyEngine you can add any kind of metaboxes and options pages and forms easily and super fast
- * Version: 1.0.0224
+ * Version: 1.0.0225
  * Requires at least: 5.0
  * Tested up to: 6.4
  * Requires PHP: 7.3
@@ -16,7 +16,7 @@
  * Network: false
  *
  * @package AnonyEngine
- * @version 1.0.0224
+ * @version 1.0.0225
  * @author Mohammad Omar <info@makiomar.com>
  * @license GPL-2.0-or-later
  * @link https://makiomar.com
@@ -41,7 +41,7 @@ if ( ! defined( 'ANOE_URI' ) ) {
 }
 
 if ( ! defined( 'ANOE_VERSION' ) ) {
-	define( 'ANOE_VERSION', '1.0.0224' );
+	define( 'ANOE_VERSION', '1.0.0225' );
 }
 
 if ( ! defined( 'ANOE_LIBS_URI' ) ) {

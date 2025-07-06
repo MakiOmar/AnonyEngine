@@ -306,7 +306,7 @@ define( 'ANOE_DIR', plugin_dir_path( __FILE__ ) );
 define( 'ANOE_URI', plugin_dir_url( __FILE__ ) );
 
 // Plugin version
-define( 'ANOE_VERSION', '1.0.0224' );
+define( 'ANOE_VERSION', '1.0.0225' );
 ```
 
 ### Autoloader Configuration
@@ -356,7 +356,7 @@ For support and questions:
 
 ## 🔄 Changelog
 
-### Version 1.0.0224
+### Version 1.0.0225
 - Enhanced security with input validation and sanitization
 - Improved performance with optimized autoloading
 - Better error handling and debugging

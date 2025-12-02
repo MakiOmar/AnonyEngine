@@ -80,7 +80,7 @@ function anony_remove_gallery_item() {
 						$meta_key   = $data['field_config']['mapped-to-field'];
 						$post_id    = absint( $data['object_id'] );
 						$meta_value = get_post_meta( $post_id, $meta_key, true );
-						anony_unset_gallery_item( $meta_value, $data['attachment_id'] );
+						anoe_unset_gallery_item( $meta_value, $data['attachment_id'] );
 						$updated = update_post_meta( $post_id, $meta_key, $meta_value );
 					}
 					break;
@@ -92,7 +92,7 @@ function anony_remove_gallery_item() {
 							true
 						);
 
-						anony_unset_gallery_item( $meta_value, $data['attachment_id'] );
+						anoe_unset_gallery_item( $meta_value, $data['attachment_id'] );
 
 						$updated = update_term_meta( absint( $data['object_id'] ), $data['field_config']['mapped-to-field'], $meta_value );
 					}
@@ -105,7 +105,7 @@ function anony_remove_gallery_item() {
 							true
 						);
 
-						anony_unset_gallery_item( $meta_value, $data['attachment_id'] );
+						anoe_unset_gallery_item( $meta_value, $data['attachment_id'] );
 
 						$updated = update_user_meta( absint( $data['object_id'] ), $data['field_config']['mapped-to-field'], $meta_value );
 					}

@@ -939,7 +939,7 @@ if ( ! class_exists( 'ANONY_Create_Form' ) ) {
 		public function enqueue_scripts() {
 			global $post;
 			if ( $post && ( ANONY_Post_Help::has_shortcode( $post, $this->id ) || ( ! empty( $this->used_in ) && in_array( $post->ID, $this->used_in, true ) ) ) ) {
-				anony_enqueue_styles();
+				anoe_enqueue_styles();
 				// Enqueue fields scripts.
 				new ANONY_Fields_Scripts( $this->fields );
 			}
